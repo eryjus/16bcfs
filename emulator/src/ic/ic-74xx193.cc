@@ -1,0 +1,126 @@
+//===================================================================================================================
+// ic-74xx193.cc -- This file implementes the a 74xx193 Up/Down Counter
+//
+//      Copyright (c) 2023 - Adam Clark
+//      License: Beerware
+//
+//      Date     Tracker  Version  Description
+//  -----------  -------  -------  ---------------------------------------------------------------------------------
+//  2023-Oct-25  Initial  v0.0.1   Initial Version
+//===================================================================================================================
+
+
+#include "16bcfs.hh"
+#include "ic-74xx193.moc.cc"
+
+
+//
+// -- This is the contructor for the UP/DOWN cnter, having 16 pins
+//    --------------------------------------------------------------
+IC_74xx193_t::IC_74xx193_t()
+{
+    pins[B] = LOW;
+    pins[QB] = LOW;
+    pins[QA] = LOW;
+    pins[DOWN] = HIGH;
+    pins[UP] = HIGH;
+    pins[QC] = LOW;
+    pins[QD] = LOW;
+    pins[D] = LOW;
+    pins[C] = LOW;
+    pins[LOADb] = HIGH;
+    pins[COb] = HIGH;
+    pins[BOb] = HIGH;
+    pins[CLR] = LOW;
+    pins[A] = LOW;
+
+    lastUp = LOW;
+    lastDown = LOW;
+
+    cnt = 0;
+}
+
+
+//
+// -- Update the outputs
+//    ------------------
+void IC_74xx193_t::UpdatesComplete(void)
+{
+    if (pins[UP] == LOW && pins[DOWN] == LOW) {
+        qDebug("Invalid state on 74xx193: Both UP and DOWN are LOW at the same time");
+    }
+
+
+    if (pins[CLR] == HIGH) {
+        cnt = 0;
+        goto updateOut;
+    }
+
+    if (pins[LOADb] == LOW) {
+        cnt = ((pins[D]==HIGH?1:0) << 3)
+                | ((pins[C]==HIGH?1:0) << 2)
+                | ((pins[B]==HIGH?1:0) << 1)
+                | ((pins[A]==HIGH?1:0) << 0);
+
+        goto updateOut;
+    }
+
+    if (lastUp == HIGH && pins[UP] == LOW && cnt == 15) {
+        // -- Count Up High-to-Low transition: Set COb low
+        pins[COb] = LOW;
+        emit CoUpdated(LOW);
+    }
+
+    if (lastDown == HIGH && pins[DOWN] == LOW && cnt == 0) {
+        // -- Count Up High-to-Low transition: Set BOb low
+        pins[BOb] = LOW;
+        emit BoUpdated(LOW);
+    }
+
+    if (lastUp == LOW && pins[UP] == HIGH) {
+        cnt ++;
+        pins[COb] = HIGH;
+        emit CoUpdated(HIGH);
+    }
+
+    if (lastDown == LOW && pins[DOWN] == HIGH) {
+        cnt --;
+        pins[BOb] = HIGH;
+        emit BoUpdated(HIGH);
+    }
+
+updateOut:
+    cnt &= 0xf;
+    lastUp = pins[UP];
+    lastDown = pins[DOWN];
+
+    pins[QA] = (cnt&0b0001?HIGH:LOW);
+    pins[QB] = (cnt&0b0010?HIGH:LOW);
+    pins[QC] = (cnt&0b0100?HIGH:LOW);
+    pins[QD] = (cnt&0b1000?HIGH:LOW);
+
+    emit QaUpdated(pins[QA]);
+    emit QbUpdated(pins[QB]);
+    emit QcUpdated(pins[QC]);
+    emit QdUpdated(pins[QD]);
+
+    emit AllUpdated();
+}
+
+
+// -- perform the initial calculation of state and push the results out to all subscribers
+void IC_74xx193_t::TriggerFirstUpdates(void)
+{
+    UpdatesComplete();
+
+    emit QaUpdated(pins[QA]);
+    emit QbUpdated(pins[QB]);
+    emit QcUpdated(pins[QC]);
+    emit QdUpdated(pins[QD]);
+    emit BoUpdated(pins[BOb]);
+    emit CoUpdated(pins[COb]);
+    emit AllUpdated();
+
+}
+
+

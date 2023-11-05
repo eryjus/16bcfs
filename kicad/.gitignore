@@ -1,0 +1,10 @@
+backup
+**/*backups
+**/gerber*
+
+**/*.csv
+**/fp-info-cache
+**/*.zip
+**/*.gbrjob
+**/*.cir
+**/*.bak

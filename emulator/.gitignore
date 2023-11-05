@@ -1,0 +1,8 @@
+.tup
+bin/emu*
+obj/*.o
+moc/*.moc.cc
+src/16bcfs.cc
+.vscode
+doc
+emulator.pro

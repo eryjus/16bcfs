@@ -52,8 +52,8 @@ GUI_ClockSpeed_t::GUI_ClockSpeed_t(HW_Oscillator_t *osc, QGroupBox *parent) : QG
     setLayout(layout);
 
 
-    connect(slider, &QDial::valueChanged, this, &GUI_ClockSpeed_t::UpdateSpeed);
-    connect(this, &GUI_ClockSpeed_t::SpeedChanged, osc, &HW_Oscillator_t::SetInterval);
+    connect(slider, &QDial::valueChanged, this, &GUI_ClockSpeed_t::ProcessUpdateSpeed);
+    connect(this, &GUI_ClockSpeed_t::SignalSpeedChanged, osc, &HW_Oscillator_t::ProcessSetInterval);
 }
 
 
@@ -61,9 +61,9 @@ GUI_ClockSpeed_t::GUI_ClockSpeed_t(HW_Oscillator_t *osc, QGroupBox *parent) : QG
 //
 // -- the value on the slider has changed; update the gui and subscribers
 //    -----------------------------------------------------------------
-void GUI_ClockSpeed_t::UpdateSpeed(int value)
+void GUI_ClockSpeed_t::ProcessUpdateSpeed(int value)
 {
     label->setText(QString::number(value));
-    emit SpeedChanged((10 - value) * 100);
+    emit SignalSpeedChanged((10 - value) * 100);
 }
 

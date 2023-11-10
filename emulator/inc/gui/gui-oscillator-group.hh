@@ -32,6 +32,6 @@ public:
 
 
 public slots:
-    void UpdateImage(TriState_t state)  { oscVisual->setPixmap(state?hi:lo); }
+    void ProcessUpdateImage(TriState_t state)  { oscVisual->setPixmap(state?hi:lo); }
 };
 

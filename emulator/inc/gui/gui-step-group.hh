@@ -29,12 +29,12 @@ public:
 
 
 public slots:
-    void PressedStep(void) { emit StepButtonChanged(HIGH); }
-    void ReleasedStep(void) { emit StepButtonChanged(LOW); }
+    void ProcessStepPressed(void) { emit SignalStepButtonChanged(HIGH); }
+    void ProcessStepReleased(void) { emit SignalStepButtonChanged(LOW); }
 
 
 signals:
-    void StepButtonChanged(TriState_t state);
+    void SignalStepButtonChanged(TriState_t state);
 };
 
 

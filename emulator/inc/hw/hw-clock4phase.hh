@@ -37,6 +37,7 @@ public:
 public:
     void TriggerFirstUpdates(void);
 
+
 public:
     IC_74xx574_t *GetClkControlLatch(void) const { return clkControlLatch; }
     IC_74xx08_t *GetClkControlAnd(void) const { return clkControlAnd; }
@@ -44,23 +45,15 @@ public:
 
 
 public slots:
-    void ClockStateChange(TriState_t state);
-
-    void Phase1StateChange(TriState_t state) { emit Phase1Changed(state); }
-    void Phase2StateChange(TriState_t state) { emit Phase2Changed(state); }
-
-    void ClockCycle1Change(TriState_t state) { emit Cycle1Changed(state); }
-    void ClockCycle2Change(TriState_t state) { emit Cycle2Changed(state); }
-    void ClockCycle3Change(TriState_t state) { emit Cycle3Changed(state); }
-    void ClockCycle4Change(TriState_t state) { emit Cycle4Changed(state); }
+    void ProcessClockStateChange(TriState_t state);
 
 
 signals:
-    void Phase1Changed(TriState_t state);
-    void Phase2Changed(TriState_t state);
+    void SignalPhase1Changed(TriState_t state);
+    void SignalPhase2Changed(TriState_t state);
 
-    void Cycle1Changed(TriState_t state);
-    void Cycle2Changed(TriState_t state);
-    void Cycle3Changed(TriState_t state);
-    void Cycle4Changed(TriState_t state);
+    void SignalCycle1Changed(TriState_t state);
+    void SignalCycle2Changed(TriState_t state);
+    void SignalCycle3Changed(TriState_t state);
+    void SignalCycle4Changed(TriState_t state);
 };

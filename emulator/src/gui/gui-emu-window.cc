@@ -34,6 +34,8 @@ void GUI_EmulationWindow_t::Initialize(void)
     grid->addWidget((g = new GUI_ClockFunctionGroup_t(computer->GetTriStateLatch(), computer->Get4PhaseClock())), 18, 37, 1, 2);
     grid->addWidget(new GUI_StepGroup_t(computer->Get4PhaseClock()), 18, 39);
     grid->addWidget(new GUI_ClockSpeed_t(computer->GetOscillator()), 17, 39);
+    grid->addWidget(new GUI_BusLeds_t(computer->GetFictitousBus()), 17, 34, 1, 3);
+    grid->addWidget(new GUI_BusTester_t(computer->GetBusDriver()), 18, 33, 1, 4);
 
     setLayout(grid);
 

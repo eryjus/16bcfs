@@ -44,7 +44,7 @@ GUI_OscillatorGroup_t::GUI_OscillatorGroup_t(HW_Oscillator_t *hardware, QWidget 
     setLayout(oscVLayout);
 
     // -- wire the oscillator state in the computer to its visual representation on the screen
-    connect(hardware, &HW_Oscillator_t::StateChanged, this, &GUI_OscillatorGroup_t::UpdateImage);
+    connect(hardware, &HW_Oscillator_t::SignalStateChanged, this, &GUI_OscillatorGroup_t::ProcessUpdateImage);
 }
 
 

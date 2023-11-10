@@ -1,5 +1,5 @@
 //===================================================================================================================
-// ic-74xx193.hh -- This class implements an Octal 74xx574 D-Type Latch
+// ic-74xx574.hh -- This class implements a 74xx574 Octal D-Type Latch
 //
 //      Copyright (c) 2023 - Adam Clark
 //      License: Beerware
@@ -14,7 +14,7 @@
 
 
 //
-// -- This class implements an Octal 74xx574 D-Type Latch
+// -- This class implements an 74xx574 Octal D-Type Latch
 //    ---------------------------------------------------
 class IC_74xx574_t : public QObject {
     Q_OBJECT
@@ -54,27 +54,27 @@ public:
 
 
 public slots:
-    void UpdateOE(TriState_t state);
-    void UpdateD1(TriState_t state) { pins[D1] = state; }
-    void UpdateD2(TriState_t state) { pins[D2] = state; }
-    void UpdateD3(TriState_t state) { pins[D3] = state; }
-    void UpdateD4(TriState_t state) { pins[D4] = state; }
-    void UpdateD5(TriState_t state) { pins[D5] = state; }
-    void UpdateD6(TriState_t state) { pins[D6] = state; }
-    void UpdateD7(TriState_t state) { pins[D7] = state; }
-    void UpdateD8(TriState_t state) { pins[D8] = state; }
-    void UpdateClk(TriState_t state);
+    void ProcessUpdateOE(TriState_t state);
+    void ProcessUpdateD1(TriState_t state) { pins[D1] = state; }
+    void ProcessUpdateD2(TriState_t state) { pins[D2] = state; }
+    void ProcessUpdateD3(TriState_t state) { pins[D3] = state; }
+    void ProcessUpdateD4(TriState_t state) { pins[D4] = state; }
+    void ProcessUpdateD5(TriState_t state) { pins[D5] = state; }
+    void ProcessUpdateD6(TriState_t state) { pins[D6] = state; }
+    void ProcessUpdateD7(TriState_t state) { pins[D7] = state; }
+    void ProcessUpdateD8(TriState_t state) { pins[D8] = state; }
+    void ProcessUpdateClk(TriState_t state);
 
 
 signals:
-    void Q1Updated(TriState_t state);
-    void Q2Updated(TriState_t state);
-    void Q3Updated(TriState_t state);
-    void Q4Updated(TriState_t state);
-    void Q5Updated(TriState_t state);
-    void Q6Updated(TriState_t state);
-    void Q7Updated(TriState_t state);
-    void Q8Updated(TriState_t state);
+    void SignalQ1Updated(TriState_t state);
+    void SignalQ2Updated(TriState_t state);
+    void SignalQ3Updated(TriState_t state);
+    void SignalQ4Updated(TriState_t state);
+    void SignalQ5Updated(TriState_t state);
+    void SignalQ6Updated(TriState_t state);
+    void SignalQ7Updated(TriState_t state);
+    void SignalQ8Updated(TriState_t state);
 };
 
 

@@ -37,12 +37,13 @@ void HW_Computer_t::Initialize(void)
     triStateLatch = new HW_TriStateLatch_t;
 
 
-    Build();
+    //
+    // -- Place the fictitious bus
+    //    ------------------------
+    bus = new HW_Bus_t(oscillator);
+    driver = new HW_BusDriver_t(bus);
+
+    connect(GetOscillator(), &HW_Oscillator_t::SignalStateChanged, this, &HW_Computer_t::SignalOscillatorStateChanged);
 }
 
 
-void HW_Computer_t::Build(void)
-{
-    // -- wire the oscillator to its state in the computer
-    connect(GetOscillator(), &HW_Oscillator_t::StateChanged, this, &HW_Computer_t::OscillatorStateChanged);
-}

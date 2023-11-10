@@ -28,8 +28,8 @@ GUI_Led_t::GUI_Led_t(LedWiring_t wire, Qt::GlobalColor on, QWidget *parent) : QL
     onColor = QPalette(QPalette::Window, on);
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Window);
-    setFixedSize(5, 10);
     setPalette(offColor);
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 }
 
 
@@ -41,7 +41,6 @@ GUI_Led_t::GUI_Led_t(QWidget *parent, LedWiring_t wire, Qt::GlobalColor on) : QL
     onColor = QPalette(QPalette::Window, on);
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Window);
-    setFixedSize(5, 10);
     setPalette(offColor);
 }
 

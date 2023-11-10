@@ -32,11 +32,11 @@ public:
 
 
 public slots:
-    void UpdateSpeed(int value);
+    void ProcessUpdateSpeed(int value);
 
 
 signals:
-    void SpeedChanged(int value);
+    void SignalSpeedChanged(int value);
 
 };
 

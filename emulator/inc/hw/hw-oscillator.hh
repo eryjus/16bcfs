@@ -32,14 +32,16 @@ public:
     void StartTimer(void) { start(); }
 
 public slots:
-    void ChangeTimerState(void) {
+    void ProcessTimerStateChange(void) {
         state = (state==HIGH?LOW:HIGH);
-        emit StateChanged(state);
+        emit SignalStateChanged(state);
+        emit SignalSanityCheck();
     }
-    void SetInterval(int interval) { QTimer::setInterval(interval); }
+    void ProcessSetInterval(int interval) { QTimer::setInterval(interval); }
 
 signals:
-    void StateChanged(TriState_t state);
+    void SignalStateChanged(TriState_t state);
+    void SignalSanityCheck(void);
 
 };
 

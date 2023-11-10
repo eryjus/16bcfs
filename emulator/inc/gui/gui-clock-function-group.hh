@@ -35,16 +35,16 @@ public:
     virtual ~GUI_ClockFunctionGroup_t() {}
 
 public slots:
-    void PressedRun(void) { emit RunButtonChanged(LOW); }
-    void ReleasedRun(void) { emit RunButtonChanged(HIGH); }
-    void PressedInstr(void) { emit InstrButtonChanged(LOW); }
-    void ReleasedInstr(void) { emit InstrButtonChanged(HIGH); }
-    void PressedCycle(void) { emit CycleButtonChanged(LOW); }
-    void ReleasedCycle(void) { emit CycleButtonChanged(HIGH); }
+    void ProcessPressedRun(void) { emit SignalRunButtonChanged(LOW); }
+    void ProcessReleasedRun(void) { emit SignalRunButtonChanged(HIGH); }
+    void ProcessPressedInstr(void) { emit SignalInstrButtonChanged(LOW); }
+    void ProcessReleasedInstr(void) { emit SignalInstrButtonChanged(HIGH); }
+    void ProcessPressedCycle(void) { emit SignalCycleButtonChanged(LOW); }
+    void ProcessReleasedCycle(void) { emit SignalCycleButtonChanged(HIGH); }
 
 
 signals:
-    void RunButtonChanged(TriState_t state);
-    void InstrButtonChanged(TriState_t state);
-    void CycleButtonChanged(TriState_t state);
+    void SignalRunButtonChanged(TriState_t state);
+    void SignalInstrButtonChanged(TriState_t state);
+    void SignalCycleButtonChanged(TriState_t state);
 };

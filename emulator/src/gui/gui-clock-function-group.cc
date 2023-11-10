@@ -78,25 +78,25 @@ GUI_ClockFunctionGroup_t::GUI_ClockFunctionGroup_t(HW_TriStateLatch_t *latch, HW
 
     setLayout(functionOptions);
 
-    connect(tristateRunButton, &QPushButton::pressed, this, &GUI_ClockFunctionGroup_t::PressedRun);
-    connect(tristateRunButton, &QPushButton::released, this, &GUI_ClockFunctionGroup_t::ReleasedRun);
-    connect(tristateInstrButton, &QPushButton::pressed, this, &GUI_ClockFunctionGroup_t::PressedInstr);
-    connect(tristateInstrButton, &QPushButton::released, this, &GUI_ClockFunctionGroup_t::ReleasedInstr);
-    connect(tristateCycleButton, &QPushButton::pressed, this, &GUI_ClockFunctionGroup_t::PressedCycle);
-    connect(tristateCycleButton, &QPushButton::released, this, &GUI_ClockFunctionGroup_t::ReleasedCycle);
+    connect(tristateRunButton, &QPushButton::pressed, this, &GUI_ClockFunctionGroup_t::ProcessPressedRun);
+    connect(tristateRunButton, &QPushButton::released, this, &GUI_ClockFunctionGroup_t::ProcessReleasedRun);
+    connect(tristateInstrButton, &QPushButton::pressed, this, &GUI_ClockFunctionGroup_t::ProcessPressedInstr);
+    connect(tristateInstrButton, &QPushButton::released, this, &GUI_ClockFunctionGroup_t::ProcessReleasedInstr);
+    connect(tristateCycleButton, &QPushButton::pressed, this, &GUI_ClockFunctionGroup_t::ProcessPressedCycle);
+    connect(tristateCycleButton, &QPushButton::released, this, &GUI_ClockFunctionGroup_t::ProcessReleasedCycle);
 
-    connect(this, &GUI_ClockFunctionGroup_t::RunButtonChanged, latch->GetTristateNand1(), &IC_74xx00_t::UpdateA1);
-    connect(this, &GUI_ClockFunctionGroup_t::InstrButtonChanged, latch->GetTristateNand1(), &IC_74xx00_t::UpdateA3);
-    connect(this, &GUI_ClockFunctionGroup_t::CycleButtonChanged, latch->GetTristateNand2(), &IC_74xx00_t::UpdateA1);
+    connect(this, &GUI_ClockFunctionGroup_t::SignalRunButtonChanged, latch->GetTristateNand1(), &IC_74xx00_t::ProcessUpdateA1);
+    connect(this, &GUI_ClockFunctionGroup_t::SignalInstrButtonChanged, latch->GetTristateNand1(), &IC_74xx00_t::ProcessUpdateA3);
+    connect(this, &GUI_ClockFunctionGroup_t::SignalCycleButtonChanged, latch->GetTristateNand2(), &IC_74xx00_t::ProcessUpdateA1);
 
-    connect(latch, &HW_TriStateLatch_t::Q1Changed, tristateLedRun, &GUI_Led_t::ChangeState);
-    connect(latch, &HW_TriStateLatch_t::Q2Changed, tristateLedInstr, &GUI_Led_t::ChangeState);
-    connect(latch, &HW_TriStateLatch_t::Q3Changed, tristateLedCycle, &GUI_Led_t::ChangeState);
+    connect(latch, &HW_TriStateLatch_t::SignalQ1Changed, tristateLedRun, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &HW_TriStateLatch_t::SignalQ2Changed, tristateLedInstr, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &HW_TriStateLatch_t::SignalQ3Changed, tristateLedCycle, &GUI_Led_t::ProcessStateChange);
 
     // -- connect the latches to the control inputs
-    connect(latch, &HW_TriStateLatch_t::Q1Changed, clock->GetClkControlLatch(), &IC_74xx574_t::UpdateD1);
-    connect(latch, &HW_TriStateLatch_t::Q2Changed, clock->GetClkControlLatch(), &IC_74xx574_t::UpdateD2);
-    connect(latch, &HW_TriStateLatch_t::Q3Changed, clock->GetClkControlLatch(), &IC_74xx574_t::UpdateD3);
+    connect(latch, &HW_TriStateLatch_t::SignalQ1Changed, clock->GetClkControlLatch(), &IC_74xx574_t::ProcessUpdateD1);
+    connect(latch, &HW_TriStateLatch_t::SignalQ2Changed, clock->GetClkControlLatch(), &IC_74xx574_t::ProcessUpdateD2);
+    connect(latch, &HW_TriStateLatch_t::SignalQ3Changed, clock->GetClkControlLatch(), &IC_74xx574_t::ProcessUpdateD3);
 
 
     tristateRunButton->pressed();

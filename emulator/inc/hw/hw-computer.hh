@@ -29,6 +29,10 @@ private:
     // -- Tristate Latch
     HW_TriStateLatch_t *triStateLatch;
 
+    // -- Fictitious Bus for Testing
+    HW_Bus_t *bus;
+    HW_BusDriver_t *driver;
+
 public:
     explicit HW_Computer_t(void) {};
     virtual ~HW_Computer_t() {};
@@ -39,17 +43,12 @@ public:
     HW_Oscillator_t *GetOscillator(void) const { return oscillator; }
     HW_Clock4Phase_t *Get4PhaseClock(void) const { return clk4Phase; }
     HW_TriStateLatch_t *GetTriStateLatch(void) const { return triStateLatch; }
-
-
-public slots:
-    void ChangeTimerState(TriState_t state) { emit OscillatorStateChanged(state); }
+    HW_Bus_t *GetFictitousBus(void) const { return bus; }
+    HW_BusDriver_t *GetBusDriver(void) const { return driver; }
 
 
 signals:
-    void OscillatorStateChanged(TriState_t state);
-
-private:
-    void Build(void);
+    void SignalOscillatorStateChanged(TriState_t state);
 };
 
 

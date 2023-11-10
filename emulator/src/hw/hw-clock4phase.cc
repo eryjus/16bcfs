@@ -26,77 +26,78 @@ HW_Clock4Phase_t::HW_Clock4Phase_t(HW_Oscillator_t *osc, QObject *parent) : QObj
     clkControlAnd = new IC_74xx08_t;
     clkControlOr = new IC_74xx32_t;
 
-    clkPhaseCnt->UpdateDown(VCC);
-    clkPhaseCnt->UpdateClr(GND);
-    clkPhaseCnt->UpdateLoad(VCC);
-    clkPhaseCnt->UpdateA(GND);
-    clkPhaseCnt->UpdateB(GND);
-    clkPhaseCnt->UpdateC(GND);
-    clkPhaseCnt->UpdateD(GND);
+    clkPhaseCnt->ProcessUpdateDown(VCC);
+    clkPhaseCnt->ProcessUpdateClr(GND);
+    clkPhaseCnt->ProcessUpdateLoad(VCC);
+    clkPhaseCnt->ProcessUpdateA(GND);
+    clkPhaseCnt->ProcessUpdateB(GND);
+    clkPhaseCnt->ProcessUpdateC(GND);
+    clkPhaseCnt->ProcessUpdateD(GND);
 
-    clkPhaseDemux->UpdateG1(VCC);
-    clkPhaseDemux->UpdateG2A(GND);
-    clkPhaseDemux->UpdateG2B(GND);
-    clkPhaseDemux->UpdateC(GND);
+    clkPhaseDemux->ProcessUpdateG1(VCC);
+    clkPhaseDemux->ProcessUpdateG2A(GND);
+    clkPhaseDemux->ProcessUpdateG2B(GND);
+    clkPhaseDemux->ProcessUpdateC(GND);
 
-    clkSignalShaper->UpdateA3(GND);
-    clkSignalShaper->UpdateB3(GND);
-    clkSignalShaper->UpdateA4(GND);
-    clkSignalShaper->UpdateB4(GND);
+    clkSignalShaper->ProcessUpdateA3(GND);
+    clkSignalShaper->ProcessUpdateB3(GND);
+    clkSignalShaper->ProcessUpdateA4(GND);
+    clkSignalShaper->ProcessUpdateB4(GND);
 
-    clkControlLatch->UpdateD4(GND);
-    clkControlLatch->UpdateD5(GND);
-    clkControlLatch->UpdateD6(GND);
-    clkControlLatch->UpdateD7(GND);
-    clkControlLatch->UpdateD8(GND);
-    clkControlLatch->UpdateOE(GND);
+    clkControlLatch->ProcessUpdateD4(GND);
+    clkControlLatch->ProcessUpdateD5(GND);
+    clkControlLatch->ProcessUpdateD6(GND);
+    clkControlLatch->ProcessUpdateD7(GND);
+    clkControlLatch->ProcessUpdateD8(GND);
+    clkControlLatch->ProcessUpdateOE(GND);
 
-    clkControlOr->UpdateA4(GND);
-    clkControlOr->UpdateB4(GND);
+    clkControlOr->ProcessUpdateA4(GND);
+    clkControlOr->ProcessUpdateB4(GND);
 
 
     // -- connect the control
-    connect(clkControlLatch, &IC_74xx574_t::Q1Updated, clkControlAnd, &IC_74xx08_t::UpdateA1);
-    connect(clkControlLatch, &IC_74xx574_t::Q2Updated, clkControlAnd, &IC_74xx08_t::UpdateA2);
-    connect(clkControlLatch, &IC_74xx574_t::Q3Updated, clkControlAnd, &IC_74xx08_t::UpdateA4);
-    connect(osc, &HW_Oscillator_t::StateChanged, clkControlLatch, &IC_74xx574_t::UpdateClk);
+    connect(clkControlLatch, &IC_74xx574_t::SignalQ1Updated, clkControlAnd, &IC_74xx08_t::ProcessUpdateA1);
+    connect(clkControlLatch, &IC_74xx574_t::SignalQ2Updated, clkControlAnd, &IC_74xx08_t::ProcessUpdateA2);
+    connect(clkControlLatch, &IC_74xx574_t::SignalQ3Updated, clkControlAnd, &IC_74xx08_t::ProcessUpdateA4);
+    connect(osc, &HW_Oscillator_t::SignalStateChanged, clkControlLatch, &IC_74xx574_t::ProcessUpdateClk);
 
     // -- connect to the oscillator
-//    connect(osc, &HW_Oscillator_t::StateChanged, this, &HW_Clock4Phase_t::ClockStateChange);
-    connect(osc, &HW_Oscillator_t::StateChanged, clkControlAnd, &IC_74xx08_t::UpdateB1);
-    connect(osc, &HW_Oscillator_t::StateChanged, clkControlAnd, &IC_74xx08_t::UpdateB2);
-    connect(clkControlOr, &IC_74xx32_t::Y3Updated, this, &HW_Clock4Phase_t::ClockStateChange);
+    connect(osc, &HW_Oscillator_t::SignalStateChanged, clkControlAnd, &IC_74xx08_t::ProcessUpdateB1);
+    connect(osc, &HW_Oscillator_t::SignalStateChanged, clkControlAnd, &IC_74xx08_t::ProcessUpdateB2);
+    connect(clkControlOr, &IC_74xx32_t::SignalY3Updated, this, &HW_Clock4Phase_t::ProcessClockStateChange);
 
     // -- Combine the clock control signals
-    connect(clkControlAnd, &IC_74xx08_t::Y1Updated, clkControlOr, &IC_74xx32_t::UpdateA2);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y0Updated, clkControlOr, &IC_74xx32_t::UpdateA1);
-    connect(clkControlOr, &IC_74xx32_t::Y1Updated, clkControlAnd, &IC_74xx08_t::UpdateB3);
-    connect(clkControlAnd, &IC_74xx08_t::Y2Updated, clkControlAnd, &IC_74xx08_t::UpdateA3);
-    connect(clkControlAnd, &IC_74xx08_t::Y3Updated, clkControlOr, &IC_74xx32_t::UpdateB2);
-    connect(clkControlOr, &IC_74xx32_t::Y2Updated, clkControlOr, &IC_74xx32_t::UpdateA3);
-    connect(clkControlAnd, &IC_74xx08_t::Y4Updated, clkControlOr, &IC_74xx32_t::UpdateB3);
+    connect(clkControlAnd, &IC_74xx08_t::SignalY1Updated, clkControlOr, &IC_74xx32_t::ProcessUpdateA2);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY0Updated, clkControlOr, &IC_74xx32_t::ProcessUpdateA1);
+    connect(clkControlOr, &IC_74xx32_t::SignalY1Updated, clkControlAnd, &IC_74xx08_t::ProcessUpdateB3);
+    connect(clkControlAnd, &IC_74xx08_t::SignalY2Updated, clkControlAnd, &IC_74xx08_t::ProcessUpdateA3);
+    connect(clkControlAnd, &IC_74xx08_t::SignalY3Updated, clkControlOr, &IC_74xx32_t::ProcessUpdateB2);
+    connect(clkControlOr, &IC_74xx32_t::SignalY2Updated, clkControlOr, &IC_74xx32_t::ProcessUpdateA3);
+    connect(clkControlAnd, &IC_74xx08_t::SignalY4Updated, clkControlOr, &IC_74xx32_t::ProcessUpdateB3);
 
     // -- connect the counter
-    connect(clkPhaseCnt, &IC_74xx193_t::QaUpdated, clkPhaseDemux, &IC_74xx138_t::UpdateA);
-    connect(clkPhaseCnt, &IC_74xx193_t::QbUpdated, clkPhaseDemux, &IC_74xx138_t::UpdateB);
-    connect(clkPhaseCnt, &IC_74xx193_t::AllUpdated, clkPhaseDemux, &IC_74xx138_t::UpdatesComplete);
+    connect(clkPhaseCnt, &IC_74xx193_t::SignalQaUpdated, clkPhaseDemux, &IC_74xx138_t::ProcessUpdateA);
+    connect(clkPhaseCnt, &IC_74xx193_t::SignalQbUpdated, clkPhaseDemux, &IC_74xx138_t::ProcessUpdateB);
+    connect(clkPhaseCnt, &IC_74xx193_t::SignalAllUpdated, clkPhaseDemux, &IC_74xx138_t::ProcessUpdatesComplete);
 
     // -- connect the inputs of the clock phases
-    connect(clkPhaseDemux, &IC_74xx138_t::Y1Updated, clkSignalShaper, &IC_74xx08_t::UpdateA1);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y2Updated, clkSignalShaper, &IC_74xx08_t::UpdateB1);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y2Updated, clkSignalShaper, &IC_74xx08_t::UpdateA2);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y3Updated, clkSignalShaper, &IC_74xx08_t::UpdateB2);
-    connect(clkPhaseDemux, &IC_74xx138_t::AllUpdated, clkSignalShaper, &IC_74xx08_t::UpdateGate1);
-    connect(clkPhaseDemux, &IC_74xx138_t::AllUpdated, clkSignalShaper, &IC_74xx08_t::UpdateGate2);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY1Updated, clkSignalShaper, &IC_74xx08_t::ProcessUpdateA1);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY2Updated, clkSignalShaper, &IC_74xx08_t::ProcessUpdateB1);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY2Updated, clkSignalShaper, &IC_74xx08_t::ProcessUpdateA2);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY3Updated, clkSignalShaper, &IC_74xx08_t::ProcessUpdateB2);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalAllUpdated, clkSignalShaper, &IC_74xx08_t::ProcessUpdateGate1);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalAllUpdated, clkSignalShaper, &IC_74xx08_t::ProcessUpdateGate2);
 
-    connect(clkPhaseDemux, &IC_74xx138_t::Y0Updated, this, &HW_Clock4Phase_t::Cycle1Changed);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y1Updated, this, &HW_Clock4Phase_t::Cycle2Changed);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y2Updated, this, &HW_Clock4Phase_t::Cycle3Changed);
-    connect(clkPhaseDemux, &IC_74xx138_t::Y3Updated, this, &HW_Clock4Phase_t::Cycle4Changed);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY0Updated, this, &HW_Clock4Phase_t::SignalCycle1Changed);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY1Updated, this, &HW_Clock4Phase_t::SignalCycle2Changed);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY2Updated, this, &HW_Clock4Phase_t::SignalCycle3Changed);
+    connect(clkPhaseDemux, &IC_74xx138_t::SignalY3Updated, this, &HW_Clock4Phase_t::SignalCycle4Changed);
 
     // -- connect the outputs from this class
-    connect(clkSignalShaper, &IC_74xx08_t::Y1Updated, this, &HW_Clock4Phase_t::Phase1Changed);
-    connect(clkSignalShaper, &IC_74xx08_t::Y2Updated, this, &HW_Clock4Phase_t::Phase2Changed);
+    connect(clkSignalShaper, &IC_74xx08_t::SignalY1Updated, this, &HW_Clock4Phase_t::SignalPhase1Changed);
+    connect(clkSignalShaper, &IC_74xx08_t::SignalY2Updated, this, &HW_Clock4Phase_t::SignalPhase2Changed);
+
+    TriggerFirstUpdates();
 }
 
 
@@ -117,8 +118,8 @@ void HW_Clock4Phase_t::TriggerFirstUpdates(void)
 //
 // -- On a clock state change, pass that new state on to the counter
 //    --------------------------------------------------------------
-inline void HW_Clock4Phase_t::ClockStateChange(TriState_t state) {
-    clkPhaseCnt->UpdateUp(state);
+inline void HW_Clock4Phase_t::ProcessClockStateChange(TriState_t state) {
+    clkPhaseCnt->ProcessUpdateUp(state);
 }
 
 

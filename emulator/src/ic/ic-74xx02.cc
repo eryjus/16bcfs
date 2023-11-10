@@ -40,10 +40,10 @@ IC_74xx02_t::IC_74xx02_t(void)
 void IC_74xx02_t::TriggerFirstUpdates(void)
 {
     UpdatesComplete();
-    emit Y1Updated(pins[Y1]);
-    emit Y2Updated(pins[Y2]);
-    emit Y3Updated(pins[Y3]);
-    emit Y4Updated(pins[Y4]);
+    emit SignalY1Updated(pins[Y1]);
+    emit SignalY2Updated(pins[Y2]);
+    emit SignalY3Updated(pins[Y3]);
+    emit SignalY4Updated(pins[Y4]);
 }
 
 
@@ -51,56 +51,56 @@ void IC_74xx02_t::TriggerFirstUpdates(void)
 //
 // -- Update the Y1 NOR Gates
 //    -----------------------
-void IC_74xx02_t::UpdateGate1(void)
+void IC_74xx02_t::ProcessUpdateGate1(void)
 {
     TriState_t last = pins[Y1];
 
     pins[Y1] = ((pins[A1]==HIGH)||(pins[B1]==HIGH)?LOW:HIGH);
 
     // -- protect against infinite recursion when nothing changes
-    if (pins[Y1] != last) emit Y1Updated(pins[Y1]);
+    if (pins[Y1] != last) emit SignalY1Updated(pins[Y1]);
 }
 
 
 //
 // -- Update the Y2 NAND Gates
 //    -----------------------
-void IC_74xx02_t::UpdateGate2(void)
+void IC_74xx02_t::ProcessUpdateGate2(void)
 {
     TriState_t last = pins[Y2];
 
     pins[Y2] = ((pins[A2]==HIGH)||(pins[B2]==HIGH)?LOW:HIGH);
 
     // -- protect against infinite recursion when nothing changes
-    if (pins[Y2] != last) emit Y2Updated(pins[Y2]);
+    if (pins[Y2] != last) emit SignalY2Updated(pins[Y2]);
 }
 
 
 //
 // -- Update the Y3 NAND Gates
 //    -----------------------
-void IC_74xx02_t::UpdateGate3(void)
+void IC_74xx02_t::ProcessUpdateGate3(void)
 {
     TriState_t last = pins[Y3];
 
     pins[Y3] = ((pins[A3]==HIGH)||(pins[B3]==HIGH)?LOW:HIGH);
 
     // -- protect against infinite recursion when nothing changes
-    if (pins[Y3] != last) emit Y3Updated(pins[Y3]);
+    if (pins[Y3] != last) emit SignalY3Updated(pins[Y3]);
 }
 
 
 //
 // -- Update the Y4 NAND Gates
 //    -----------------------
-void IC_74xx02_t::UpdateGate4(void)
+void IC_74xx02_t::ProcessUpdateGate4(void)
 {
     TriState_t last = pins[Y4];
 
     pins[Y4] = ((pins[A4]==HIGH)||(pins[B4]==HIGH)?LOW:HIGH);
 
     // -- protect against infinite recursion when nothing changes
-    if (pins[Y4] != last) emit Y4Updated(pins[Y4]);
+    if (pins[Y4] != last) emit SignalY4Updated(pins[Y4]);
 }
 
 

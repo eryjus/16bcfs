@@ -30,8 +30,13 @@ public:
     explicit GUI_Led_t(QWidget *parent, LedWiring_t wire = OnWhenHigh, Qt::GlobalColor on = Qt::green);
     virtual ~GUI_Led_t() {}
 
+
+public:
+    virtual QSize sizeHint(void) const override { return QSize(5, 8); }
+
+
 public slots:
-    void ChangeState(TriState_t state) { setPalette(!(state^onWhen)?onColor:offColor); }
+    void ProcessStateChange(TriState_t state) { setPalette(!(state^onWhen)?onColor:offColor); }
 
 private:
     QPalette onColor;

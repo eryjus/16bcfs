@@ -24,40 +24,40 @@ HW_TriStateLatch_t::HW_TriStateLatch_t(QObject *parent) : QObject(parent)
     tristateNand2 = new IC_74xx00_t;
     tristateNor = new IC_74xx02_t;
 
-    tristateNand2->UpdateA3(GND);
-    tristateNand2->UpdateB3(GND);
-    tristateNand2->UpdateA4(GND);
-    tristateNand2->UpdateB4(GND);
-    tristateNor->UpdateA4(GND);
-    tristateNor->UpdateB4(GND);
+    tristateNand2->ProcessUpdateA3(GND);
+    tristateNand2->ProcessUpdateB3(GND);
+    tristateNand2->ProcessUpdateA4(GND);
+    tristateNand2->ProcessUpdateB4(GND);
+    tristateNor->ProcessUpdateA4(GND);
+    tristateNor->ProcessUpdateB4(GND);
 
-    connect(tristateNand1, &IC_74xx00_t::Y1Updated, tristateNand1, &IC_74xx00_t::UpdateA2);
-    connect(tristateNand1, &IC_74xx00_t::Y2Updated, tristateNand1, &IC_74xx00_t::UpdateB1);
-    connect(tristateNand1, &IC_74xx00_t::Y3Updated, tristateNand1, &IC_74xx00_t::UpdateA4);
-    connect(tristateNand1, &IC_74xx00_t::Y4Updated, tristateNand1, &IC_74xx00_t::UpdateB3);
-    connect(tristateNand2, &IC_74xx00_t::Y1Updated, tristateNand2, &IC_74xx00_t::UpdateA2);
-    connect(tristateNand2, &IC_74xx00_t::Y2Updated, tristateNand2, &IC_74xx00_t::UpdateB1);
+    connect(tristateNand1, &IC_74xx00_t::SignalY1Updated, tristateNand1, &IC_74xx00_t::ProcessUpdateA2);
+    connect(tristateNand1, &IC_74xx00_t::SignalY2Updated, tristateNand1, &IC_74xx00_t::ProcessUpdateB1);
+    connect(tristateNand1, &IC_74xx00_t::SignalY3Updated, tristateNand1, &IC_74xx00_t::ProcessUpdateA4);
+    connect(tristateNand1, &IC_74xx00_t::SignalY4Updated, tristateNand1, &IC_74xx00_t::ProcessUpdateB3);
+    connect(tristateNand2, &IC_74xx00_t::SignalY1Updated, tristateNand2, &IC_74xx00_t::ProcessUpdateA2);
+    connect(tristateNand2, &IC_74xx00_t::SignalY2Updated, tristateNand2, &IC_74xx00_t::ProcessUpdateB1);
 
-    connect(tristateNand1, &IC_74xx00_t::Y1Updated, tristateNor, &IC_74xx02_t::UpdateA2);
-    connect(tristateNand1, &IC_74xx00_t::Y1Updated, tristateNor, &IC_74xx02_t::UpdateA3);
-    connect(tristateNand1, &IC_74xx00_t::Y3Updated, tristateNor, &IC_74xx02_t::UpdateA1);
-    connect(tristateNand1, &IC_74xx00_t::Y3Updated, tristateNor, &IC_74xx02_t::UpdateB3);
-    connect(tristateNand2, &IC_74xx00_t::Y1Updated, tristateNor, &IC_74xx02_t::UpdateB1);
-    connect(tristateNand2, &IC_74xx00_t::Y1Updated, tristateNor, &IC_74xx02_t::UpdateB2);
+    connect(tristateNand1, &IC_74xx00_t::SignalY1Updated, tristateNor, &IC_74xx02_t::ProcessUpdateA2);
+    connect(tristateNand1, &IC_74xx00_t::SignalY1Updated, tristateNor, &IC_74xx02_t::ProcessUpdateA3);
+    connect(tristateNand1, &IC_74xx00_t::SignalY3Updated, tristateNor, &IC_74xx02_t::ProcessUpdateA1);
+    connect(tristateNand1, &IC_74xx00_t::SignalY3Updated, tristateNor, &IC_74xx02_t::ProcessUpdateB3);
+    connect(tristateNand2, &IC_74xx00_t::SignalY1Updated, tristateNor, &IC_74xx02_t::ProcessUpdateB1);
+    connect(tristateNand2, &IC_74xx00_t::SignalY1Updated, tristateNor, &IC_74xx02_t::ProcessUpdateB2);
 
-    connect(tristateNor, &IC_74xx02_t::Y1Updated, tristateNand1, &IC_74xx00_t::UpdateB2);
-    connect(tristateNor, &IC_74xx02_t::Y2Updated, tristateNand1, &IC_74xx00_t::UpdateB4);
-    connect(tristateNor, &IC_74xx02_t::Y3Updated, tristateNand2, &IC_74xx00_t::UpdateB2);
+    connect(tristateNor, &IC_74xx02_t::SignalY1Updated, tristateNand1, &IC_74xx00_t::ProcessUpdateB2);
+    connect(tristateNor, &IC_74xx02_t::SignalY2Updated, tristateNand1, &IC_74xx00_t::ProcessUpdateB4);
+    connect(tristateNor, &IC_74xx02_t::SignalY3Updated, tristateNand2, &IC_74xx00_t::ProcessUpdateB2);
 
-    connect(tristateNand1, &IC_74xx00_t::Y1Updated, this, &HW_TriStateLatch_t::UpdateQ1);
-    connect(tristateNand1, &IC_74xx00_t::Y3Updated, this, &HW_TriStateLatch_t::UpdateQ2);
-    connect(tristateNand2, &IC_74xx00_t::Y1Updated, this, &HW_TriStateLatch_t::UpdateQ3);
+    connect(tristateNand1, &IC_74xx00_t::SignalY1Updated, this, &HW_TriStateLatch_t::ProcessUpdateQ1);
+    connect(tristateNand1, &IC_74xx00_t::SignalY3Updated, this, &HW_TriStateLatch_t::ProcessUpdateQ2);
+    connect(tristateNand2, &IC_74xx00_t::SignalY1Updated, this, &HW_TriStateLatch_t::ProcessUpdateQ3);
 
     // -- set the initial state
-    tristateNand2->A1High();
-    tristateNand1->A3High();
-    tristateNand1->A1Low();
-    tristateNand1->A1High();
+    tristateNand2->ProcessA1High();
+    tristateNand1->ProcessA3High();
+    tristateNand1->ProcessA1Low();
+    tristateNand1->ProcessA1High();
 
     TriggerFirstUpdates();
 }

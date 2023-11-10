@@ -72,13 +72,13 @@ GUI_Clock4PhaseGroup_t::GUI_Clock4PhaseGroup_t(HW_Clock4Phase_t *clock, QWidget 
 
     setLayout(clkLedVLayout);
 
-    connect(clock, &HW_Clock4Phase_t::Cycle1Changed, led1, &GUI_Led_t::ChangeState);
-    connect(clock, &HW_Clock4Phase_t::Cycle2Changed, led2, &GUI_Led_t::ChangeState);
-    connect(clock, &HW_Clock4Phase_t::Cycle3Changed, led3, &GUI_Led_t::ChangeState);
-    connect(clock, &HW_Clock4Phase_t::Cycle4Changed, led4, &GUI_Led_t::ChangeState);
+    connect(clock, &HW_Clock4Phase_t::SignalCycle1Changed, led1, &GUI_Led_t::ProcessStateChange);
+    connect(clock, &HW_Clock4Phase_t::SignalCycle2Changed, led2, &GUI_Led_t::ProcessStateChange);
+    connect(clock, &HW_Clock4Phase_t::SignalCycle3Changed, led3, &GUI_Led_t::ProcessStateChange);
+    connect(clock, &HW_Clock4Phase_t::SignalCycle4Changed, led4, &GUI_Led_t::ProcessStateChange);
 
-    connect(clock, &HW_Clock4Phase_t::Phase1Changed, phaseLed1, &GUI_Led_t::ChangeState);
-    connect(clock, &HW_Clock4Phase_t::Phase2Changed, phaseLed2, &GUI_Led_t::ChangeState);
+    connect(clock, &HW_Clock4Phase_t::SignalPhase1Changed, phaseLed1, &GUI_Led_t::ProcessStateChange);
+    connect(clock, &HW_Clock4Phase_t::SignalPhase2Changed, phaseLed2, &GUI_Led_t::ProcessStateChange);
 }
 
 

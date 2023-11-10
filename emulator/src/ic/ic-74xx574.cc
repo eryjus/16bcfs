@@ -1,5 +1,5 @@
 //===================================================================================================================
-// ic-74xx193.hh -- This class implements an Octal 74xx574 D-Type Latch
+// ic-74xx574.cc -- This class implements a 74xx574 Octal D-Type Latch
 //
 //      Copyright (c) 2023 - Adam Clark
 //      License: Beerware
@@ -55,39 +55,39 @@ void IC_74xx574_t::TriggerFirstUpdates(void)
     pins[Q8] = pins[D8];
 
 
-    emit Q1Updated(pins[Q1]);
-    emit Q2Updated(pins[Q2]);
-    emit Q3Updated(pins[Q3]);
-    emit Q4Updated(pins[Q4]);
-    emit Q5Updated(pins[Q5]);
-    emit Q6Updated(pins[Q6]);
-    emit Q7Updated(pins[Q7]);
-    emit Q8Updated(pins[Q8]);
+    emit SignalQ1Updated(pins[Q1]);
+    emit SignalQ2Updated(pins[Q2]);
+    emit SignalQ3Updated(pins[Q3]);
+    emit SignalQ4Updated(pins[Q4]);
+    emit SignalQ5Updated(pins[Q5]);
+    emit SignalQ6Updated(pins[Q6]);
+    emit SignalQ7Updated(pins[Q7]);
+    emit SignalQ8Updated(pins[Q8]);
 }
 
 
 //
 // -- change the state of the output enable pin, which requires immediate action
 //    --------------------------------------------------------------------------
-void IC_74xx574_t::UpdateOE(TriState_t state)
+void IC_74xx574_t::ProcessUpdateOE(TriState_t state)
 {
     pins[OEb] = state;
 
-    emit Q1Updated(pins[OEb]==HIGH?Z:pins[Q1]);
-    emit Q2Updated(pins[OEb]==HIGH?Z:pins[Q2]);
-    emit Q3Updated(pins[OEb]==HIGH?Z:pins[Q3]);
-    emit Q4Updated(pins[OEb]==HIGH?Z:pins[Q4]);
-    emit Q5Updated(pins[OEb]==HIGH?Z:pins[Q5]);
-    emit Q6Updated(pins[OEb]==HIGH?Z:pins[Q6]);
-    emit Q7Updated(pins[OEb]==HIGH?Z:pins[Q7]);
-    emit Q8Updated(pins[OEb]==HIGH?Z:pins[Q8]);
+    emit SignalQ1Updated(pins[OEb]==HIGH?Z:pins[Q1]);
+    emit SignalQ2Updated(pins[OEb]==HIGH?Z:pins[Q2]);
+    emit SignalQ3Updated(pins[OEb]==HIGH?Z:pins[Q3]);
+    emit SignalQ4Updated(pins[OEb]==HIGH?Z:pins[Q4]);
+    emit SignalQ5Updated(pins[OEb]==HIGH?Z:pins[Q5]);
+    emit SignalQ6Updated(pins[OEb]==HIGH?Z:pins[Q6]);
+    emit SignalQ7Updated(pins[OEb]==HIGH?Z:pins[Q7]);
+    emit SignalQ8Updated(pins[OEb]==HIGH?Z:pins[Q8]);
 }
 
 
 //
 // -- latch the state of the
 //    --------------------------------------------------------------------------
-void IC_74xx574_t::UpdateClk(TriState_t state)
+void IC_74xx574_t::ProcessUpdateClk(TriState_t state)
 {
     pins[CLK] = state;
 
@@ -101,14 +101,14 @@ void IC_74xx574_t::UpdateClk(TriState_t state)
         pins[Q7] = pins[D7];
         pins[Q8] = pins[D8];
 
-        emit Q1Updated(pins[OEb]==HIGH?Z:pins[Q1]);
-        emit Q2Updated(pins[OEb]==HIGH?Z:pins[Q2]);
-        emit Q3Updated(pins[OEb]==HIGH?Z:pins[Q3]);
-        emit Q4Updated(pins[OEb]==HIGH?Z:pins[Q4]);
-        emit Q5Updated(pins[OEb]==HIGH?Z:pins[Q5]);
-        emit Q6Updated(pins[OEb]==HIGH?Z:pins[Q6]);
-        emit Q7Updated(pins[OEb]==HIGH?Z:pins[Q7]);
-        emit Q8Updated(pins[OEb]==HIGH?Z:pins[Q8]);
+        emit SignalQ1Updated(pins[OEb]==HIGH?Z:pins[Q1]);
+        emit SignalQ2Updated(pins[OEb]==HIGH?Z:pins[Q2]);
+        emit SignalQ3Updated(pins[OEb]==HIGH?Z:pins[Q3]);
+        emit SignalQ4Updated(pins[OEb]==HIGH?Z:pins[Q4]);
+        emit SignalQ5Updated(pins[OEb]==HIGH?Z:pins[Q5]);
+        emit SignalQ6Updated(pins[OEb]==HIGH?Z:pins[Q6]);
+        emit SignalQ7Updated(pins[OEb]==HIGH?Z:pins[Q7]);
+        emit SignalQ8Updated(pins[OEb]==HIGH?Z:pins[Q8]);
     }
 }
 

@@ -42,15 +42,15 @@ public:
 
 
 public slots:
-    void UpdateQ1(TriState_t state) { emit Q1Changed(state); }
-    void UpdateQ2(TriState_t state) { emit Q2Changed(state); }
-    void UpdateQ3(TriState_t state) { emit Q3Changed(state); }
+    void ProcessUpdateQ1(TriState_t state) { emit SignalQ1Changed(state); }
+    void ProcessUpdateQ2(TriState_t state) { emit SignalQ2Changed(state); }
+    void ProcessUpdateQ3(TriState_t state) { emit SignalQ3Changed(state); }
 
 
 signals:
-    void Q1Changed(TriState_t state);
-    void Q2Changed(TriState_t state);
-    void Q3Changed(TriState_t state);
+    void SignalQ1Changed(TriState_t state);
+    void SignalQ2Changed(TriState_t state);
+    void SignalQ3Changed(TriState_t state);
 };
 
 

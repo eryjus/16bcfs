@@ -39,7 +39,7 @@ IC_74xx138_t::IC_74xx138_t(void)
 //
 // -- Update the XOR Gates, being careful not to push any changes for performance reasons
 //    -----------------------------------------------------------------------------------
-void IC_74xx138_t::UpdatesComplete(void)
+void IC_74xx138_t::ProcessUpdatesComplete(void)
 {
     pins[Y0] = HIGH;
     pins[Y1] = HIGH;
@@ -88,16 +88,16 @@ void IC_74xx138_t::UpdatesComplete(void)
         }
     }
 
-    emit Y0Updated(pins[Y0]);
-    emit Y1Updated(pins[Y1]);
-    emit Y2Updated(pins[Y2]);
-    emit Y3Updated(pins[Y3]);
-    emit Y4Updated(pins[Y4]);
-    emit Y5Updated(pins[Y5]);
-    emit Y6Updated(pins[Y6]);
-    emit Y7Updated(pins[Y7]);
+    emit SignalY0Updated(pins[Y0]);
+    emit SignalY1Updated(pins[Y1]);
+    emit SignalY2Updated(pins[Y2]);
+    emit SignalY3Updated(pins[Y3]);
+    emit SignalY4Updated(pins[Y4]);
+    emit SignalY5Updated(pins[Y5]);
+    emit SignalY6Updated(pins[Y6]);
+    emit SignalY7Updated(pins[Y7]);
 
-    emit AllUpdated();
+    emit SignalAllUpdated();
 }
 
 

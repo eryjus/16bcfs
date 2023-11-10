@@ -20,8 +20,8 @@
 HW_Oscillator_t::HW_Oscillator_t(int interval)
 {
     state = LOW;
-    setInterval(500);
-    connect(this, &QTimer::timeout, this, &HW_Oscillator_t::ChangeTimerState);
+    ProcessSetInterval(500);
+    connect(this, &QTimer::timeout, this, &HW_Oscillator_t::ProcessTimerStateChange);
 }
 
 

@@ -41,13 +41,13 @@ GUI_StepGroup_t::GUI_StepGroup_t(HW_Clock4Phase_t *clock, QWidget *parent) : QGr
 
     setLayout(layout);
 
-    connect(step, &QPushButton::pressed, this, &GUI_StepGroup_t::PressedStep);
-    connect(step, &QPushButton::released, this, &GUI_StepGroup_t::ReleasedStep);
+    connect(step, &QPushButton::pressed, this, &GUI_StepGroup_t::ProcessStepPressed);
+    connect(step, &QPushButton::released, this, &GUI_StepGroup_t::ProcessStepReleased);
 
-    connect(this, &GUI_StepGroup_t::StepButtonChanged, clock->GetClkControlOr(), &IC_74xx32_t::UpdateB1);
-    connect(this, &GUI_StepGroup_t::StepButtonChanged, clock->GetClkControlAnd(), &IC_74xx08_t::UpdateB4);
+    connect(this, &GUI_StepGroup_t::SignalStepButtonChanged, clock->GetClkControlOr(), &IC_74xx32_t::ProcessUpdateB1);
+    connect(this, &GUI_StepGroup_t::SignalStepButtonChanged, clock->GetClkControlAnd(), &IC_74xx08_t::ProcessUpdateB4);
 
-    emit StepButtonChanged(LOW);
+    emit SignalStepButtonChanged(LOW);
 }
 
 

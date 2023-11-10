@@ -44,7 +44,7 @@ IC_74xx193_t::IC_74xx193_t()
 //
 // -- Update the outputs
 //    ------------------
-void IC_74xx193_t::UpdatesComplete(void)
+void IC_74xx193_t::ProcessUpdatesComplete(void)
 {
     if (pins[UP] == LOW && pins[DOWN] == LOW) {
         qDebug("Invalid state on 74xx193: Both UP and DOWN are LOW at the same time");
@@ -68,25 +68,25 @@ void IC_74xx193_t::UpdatesComplete(void)
     if (lastUp == HIGH && pins[UP] == LOW && cnt == 15) {
         // -- Count Up High-to-Low transition: Set COb low
         pins[COb] = LOW;
-        emit CoUpdated(LOW);
+        emit SignalCoUpdated(LOW);
     }
 
     if (lastDown == HIGH && pins[DOWN] == LOW && cnt == 0) {
         // -- Count Up High-to-Low transition: Set BOb low
         pins[BOb] = LOW;
-        emit BoUpdated(LOW);
+        emit SignalBoUpdated(LOW);
     }
 
     if (lastUp == LOW && pins[UP] == HIGH) {
         cnt ++;
         pins[COb] = HIGH;
-        emit CoUpdated(HIGH);
+        emit SignalCoUpdated(HIGH);
     }
 
     if (lastDown == LOW && pins[DOWN] == HIGH) {
         cnt --;
         pins[BOb] = HIGH;
-        emit BoUpdated(HIGH);
+        emit SignalBoUpdated(HIGH);
     }
 
 updateOut:
@@ -99,27 +99,29 @@ updateOut:
     pins[QC] = (cnt&0b0100?HIGH:LOW);
     pins[QD] = (cnt&0b1000?HIGH:LOW);
 
-    emit QaUpdated(pins[QA]);
-    emit QbUpdated(pins[QB]);
-    emit QcUpdated(pins[QC]);
-    emit QdUpdated(pins[QD]);
+    emit SignalQaUpdated(pins[QA]);
+    emit SignalQbUpdated(pins[QB]);
+    emit SignalQcUpdated(pins[QC]);
+    emit SignalQdUpdated(pins[QD]);
 
-    emit AllUpdated();
+    emit SignalAllUpdated();
 }
 
 
+//
 // -- perform the initial calculation of state and push the results out to all subscribers
+//    ------------------------------------------------------------------------------------
 void IC_74xx193_t::TriggerFirstUpdates(void)
 {
-    UpdatesComplete();
+    ProcessUpdatesComplete();
 
-    emit QaUpdated(pins[QA]);
-    emit QbUpdated(pins[QB]);
-    emit QcUpdated(pins[QC]);
-    emit QdUpdated(pins[QD]);
-    emit BoUpdated(pins[BOb]);
-    emit CoUpdated(pins[COb]);
-    emit AllUpdated();
+    emit SignalQaUpdated(pins[QA]);
+    emit SignalQbUpdated(pins[QB]);
+    emit SignalQcUpdated(pins[QC]);
+    emit SignalQdUpdated(pins[QD]);
+    emit SignalBoUpdated(pins[BOb]);
+    emit SignalCoUpdated(pins[COb]);
+    emit SignalAllUpdated();
 
 }
 

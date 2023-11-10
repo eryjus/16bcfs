@@ -47,29 +47,29 @@ public:
 
 
 public:
-    void TriggerFirstUpdates(void) { AllUpdated(); emit UpdatesComplete(); }
+    void TriggerFirstUpdates(void) { emit SignalAllUpdated(); ProcessUpdatesComplete(); }
 
 
 public slots:
-    void UpdateA(TriState_t state) { pins[A] = state; }
-    void UpdateB(TriState_t state) { pins[B] = state; }
-    void UpdateC(TriState_t state) { pins[C] = state; }
-    void UpdateG1(TriState_t state) { pins[G1] = state; }
-    void UpdateG2A(TriState_t state) { pins[G2Ab] = state; }
-    void UpdateG2B(TriState_t state) { pins[G2Bb] = state; }
-    void UpdatesComplete(void);
+    void ProcessUpdateA(TriState_t state) { pins[A] = state; }
+    void ProcessUpdateB(TriState_t state) { pins[B] = state; }
+    void ProcessUpdateC(TriState_t state) { pins[C] = state; }
+    void ProcessUpdateG1(TriState_t state) { pins[G1] = state; }
+    void ProcessUpdateG2A(TriState_t state) { pins[G2Ab] = state; }
+    void ProcessUpdateG2B(TriState_t state) { pins[G2Bb] = state; }
+    void ProcessUpdatesComplete(void);
 
 
 signals:
-    void Y0Updated(TriState_t state);
-    void Y1Updated(TriState_t state);
-    void Y2Updated(TriState_t state);
-    void Y3Updated(TriState_t state);
-    void Y4Updated(TriState_t state);
-    void Y5Updated(TriState_t state);
-    void Y6Updated(TriState_t state);
-    void Y7Updated(TriState_t state);
-    void AllUpdated(void);
+    void SignalY0Updated(TriState_t state);
+    void SignalY1Updated(TriState_t state);
+    void SignalY2Updated(TriState_t state);
+    void SignalY3Updated(TriState_t state);
+    void SignalY4Updated(TriState_t state);
+    void SignalY5Updated(TriState_t state);
+    void SignalY6Updated(TriState_t state);
+    void SignalY7Updated(TriState_t state);
+    void SignalAllUpdated(void);
 };
 
 

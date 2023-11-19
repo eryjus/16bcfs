@@ -17,6 +17,13 @@
 
 
 //
+// -- some hinting for the compiler
+//    -----------------------------
+#define likely(x)       __builtin_expect((x),1)
+#define unlikely(x)     __builtin_expect((x),0)
+
+
+//
 // -- c/c++ standard include files here
 //    ---------------------------------
 typedef enum {
@@ -78,7 +85,6 @@ class GUI_ClockLedGroup_t;
 class GUI_ClockModeGroup_t;
 class GUI_ClockSpeed_t;
 class GUI_DipSwitch_t;
-class GUI_EmulationWindow_t;
 class GUI_Led_t;
 class GUI_OscillatorGroup_t;
 class GUI_StepGroup_t;
@@ -113,7 +119,6 @@ class GUI_StepGroup_t;
 #include "gui/gui-clock-led-group.hh"
 #include "gui/gui-clock-mode-group.hh"
 #include "gui/gui-dip-switch.hh"
-#include "gui/gui-emu-window.hh"
 #include "gui/gui-led.hh"
 #include "gui/gui-oscillator-group.hh"
 #include "gui/gui-step-group.hh"

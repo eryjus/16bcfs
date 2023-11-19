@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 {
     GUI_Application_t *app = new GUI_Application_t(argc, argv);
 
-    GUI_EmulationWindow_t::Get()->GetComputer()->GetOscillator()->StartTimer();
+    HW_Computer_t::Get();
 
     return app->exec();
 }

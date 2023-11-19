@@ -11,7 +11,7 @@
 
 
 #include "16bcfs.hh"
-#include "ic-74xx193.moc.cc"
+#include "../moc/ic-74xx193.moc.cc"
 
 
 //

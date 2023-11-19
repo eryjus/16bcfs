@@ -24,7 +24,7 @@ private:
     QPushButton *step;
 
 public:
-    GUI_StepGroup_t(HW_Clock4Phase_t *clock, QWidget *parent = nullptr);
+    GUI_StepGroup_t(HW_Clock_t *clock, QWidget *parent = nullptr);
     virtual ~GUI_StepGroup_t() {}
 
 

@@ -43,7 +43,7 @@ private:
 
 
 public:
-    GUI_BusTester_t(HW_BusDriver_t *driver, QGroupBox *parent = nullptr);
+    GUI_BusTester_t(QString name, HW_BusDriver_t *driver, QGroupBox *parent = nullptr);
     virtual ~GUI_BusTester_t() {}
 
 

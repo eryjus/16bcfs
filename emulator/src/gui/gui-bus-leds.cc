@@ -19,7 +19,7 @@
 //
 // -- construct the bus LED display, hooking the LEDs to the proper bus output signals
 //    --------------------------------------------------------------------------------
-GUI_BusLeds_t::GUI_BusLeds_t(HW_Bus_t *bus, QWidget *parent) : QGroupBox("Fictitious Bus", parent)
+GUI_BusLeds_t::GUI_BusLeds_t(QString name, HW_Bus_t *bus, QWidget *parent) : QGroupBox(name, parent)
 {
     led0 = new GUI_Led_t;
     led1 = new GUI_Led_t;
@@ -37,7 +37,7 @@ GUI_BusLeds_t::GUI_BusLeds_t(HW_Bus_t *bus, QWidget *parent) : QGroupBox("Fictit
     ledD = new GUI_Led_t;
     ledE = new GUI_Led_t;
     ledF = new GUI_Led_t;
-    setObjectName(tr("Fictitious Bus"));
+    setObjectName(name);
 
     setAlignment(Qt::AlignHCenter);
     setFixedWidth(190);

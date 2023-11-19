@@ -20,20 +20,27 @@ class GUI_EmulationWindow_t : public QWidget {
     Q_OBJECT
 
 private:
-    QGridLayout *grid;
-    HW_Computer_t *computer;
+    static GUI_EmulationWindow_t *singleton;
+    static HW_Computer_t *computer;
 
 
-public:
-    explicit GUI_EmulationWindow_t(QWidget *parent = nullptr) : QWidget(parent) {};
+private:
+    explicit GUI_EmulationWindow_t(void);
     virtual ~GUI_EmulationWindow_t() {}
 
+    GUI_EmulationWindow_t(const GUI_EmulationWindow_t &) = delete;
+    GUI_EmulationWindow_t &operator=(const GUI_EmulationWindow_t &) = delete;
+
 
 public:
-    HW_Computer_t *GetComputer(void) const { return computer; }
+    static GUI_EmulationWindow_t *Get(void) { if (!singleton) new GUI_EmulationWindow_t; return singleton; }
 
 
 public:
-    void Initialize(void);
+    static HW_Computer_t *GetComputer(void) { return computer; }
+
+
+public:
+    static void Initialize(void);
 };
 

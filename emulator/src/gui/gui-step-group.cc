@@ -17,7 +17,7 @@
 //
 // -- Construct a new Step Button Group
 //    ---------------------------------
-GUI_StepGroup_t::GUI_StepGroup_t(HW_Clock4Phase_t *clock, QWidget *parent) : QGroupBox("Step", parent)
+GUI_StepGroup_t::GUI_StepGroup_t(HW_Clock_t *clock, QWidget *parent) : QGroupBox("Step", parent)
 {
     step = new QPushButton(tr("Step"));
 
@@ -44,8 +44,7 @@ GUI_StepGroup_t::GUI_StepGroup_t(HW_Clock4Phase_t *clock, QWidget *parent) : QGr
     connect(step, &QPushButton::pressed, this, &GUI_StepGroup_t::ProcessStepPressed);
     connect(step, &QPushButton::released, this, &GUI_StepGroup_t::ProcessStepReleased);
 
-    connect(this, &GUI_StepGroup_t::SignalStepButtonChanged, clock->GetClkControlOr(), &IC_74xx32_t::ProcessUpdateB1);
-    connect(this, &GUI_StepGroup_t::SignalStepButtonChanged, clock->GetClkControlAnd(), &IC_74xx08_t::ProcessUpdateB4);
+    connect(this, &GUI_StepGroup_t::SignalStepButtonChanged, clock->GetClockAnd(), &IC_74xx08_t::ProcessUpdateB2);
 
     emit SignalStepButtonChanged(LOW);
 }

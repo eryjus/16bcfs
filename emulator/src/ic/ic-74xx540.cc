@@ -1,23 +1,23 @@
 //===================================================================================================================
-// ic-74xx541.cc -- This class implements a 74xx541 Line Driver
+// ic-74xx540.cc -- This class implements a 74xx540 Inverting Line Driver
 //
 //      Copyright (c) 2023 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2023-Oct-30  Initial  v0.0.1   Initial Version
+//  2023-Nov-10  Initial  v0.0.1   Initial Version
 //===================================================================================================================
 
 
 #include "16bcfs.hh"
-#include "../moc/ic-74xx541.moc.cc"
+#include "../moc/ic-74xx540.moc.cc"
 
 
 //
-// -- This is the contructor for the Line Driver
-//    ------------------------------------------
-IC_74xx541_t::IC_74xx541_t()
+// -- This is the contructor for the Inverting Line Driver
+//    ----------------------------------------------------
+IC_74xx540_t::IC_74xx540_t()
 {
     pins[OE1b] = HIGH;
     pins[D0] = LOW;
@@ -43,7 +43,7 @@ IC_74xx541_t::IC_74xx541_t()
 //
 // -- Update the outputs based on the OE pins
 //    ---------------------------------------
-void IC_74xx541_t::UpdateOutputs(void)
+void IC_74xx540_t::UpdateOutputs(void)
 {
     TriState_t oe = (pins[OE1b] == HIGH || pins[OE2b] == HIGH) ? HIGH : LOW;
 
@@ -57,14 +57,14 @@ void IC_74xx541_t::UpdateOutputs(void)
         pins[Y6] = Z;
         pins[Y7] = Z;
     } else {
-        pins[Y0] = pins[D0];
-        pins[Y1] = pins[D1];
-        pins[Y2] = pins[D2];
-        pins[Y3] = pins[D3];
-        pins[Y4] = pins[D4];
-        pins[Y5] = pins[D5];
-        pins[Y6] = pins[D6];
-        pins[Y7] = pins[D7];
+        pins[Y0] = (pins[D0]==Z?Z:(pins[D0]==HIGH?LOW:HIGH));
+        pins[Y1] = (pins[D1]==Z?Z:(pins[D1]==HIGH?LOW:HIGH));
+        pins[Y2] = (pins[D2]==Z?Z:(pins[D2]==HIGH?LOW:HIGH));
+        pins[Y3] = (pins[D3]==Z?Z:(pins[D3]==HIGH?LOW:HIGH));
+        pins[Y4] = (pins[D4]==Z?Z:(pins[D4]==HIGH?LOW:HIGH));
+        pins[Y5] = (pins[D5]==Z?Z:(pins[D5]==HIGH?LOW:HIGH));
+        pins[Y6] = (pins[D6]==Z?Z:(pins[D6]==HIGH?LOW:HIGH));
+        pins[Y7] = (pins[D7]==Z?Z:(pins[D7]==HIGH?LOW:HIGH));
     }
 
     emit SignalY0Updated(oe==HIGH?Z:pins[Y0]);

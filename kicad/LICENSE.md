@@ -1,4 +1,4 @@
-# 16-Bit Computer From Scratch -- Assembler
+# 16-Bit Computer From Scratch -- KiCad Projects
 
 *Copyright (c)  2022-2023 -- Adam Clark*
 

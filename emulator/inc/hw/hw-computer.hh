@@ -20,31 +20,52 @@ class HW_Computer_t : public QObject {
     Q_OBJECT
 
 private:
+    // -- singleton instance
+    static HW_Computer_t *singleton;
+
     // -- Start with an oscillator
-    HW_Oscillator_t *oscillator;
+    static HW_Oscillator_t *oscillator;
+    static HW_Clock_t *clock;
 
-    // -- Create the elements of the 4-cycle clock
-    HW_Clock4Phase_t *clk4Phase;
+    // -- ALU-A and ALU-B Input buses
+    static HW_Bus_t *aluA;
+    static HW_Bus_t *aluB;
 
-    // -- Tristate Latch
-    HW_TriStateLatch_t *triStateLatch;
+    // -- The ALU
+    static HW_Alu_t *alu;
 
-    // -- Fictitious Bus for Testing
-    HW_Bus_t *bus;
-    HW_BusDriver_t *driver;
+    // -- The Main Bus
+    static HW_Bus_t *mainBus;
 
-public:
+
+    // -- Temporary elements for testing the ALU
+    static HW_BusDriver_t *aluADriver;
+    static HW_BusDriver_t *aluBDriver;
+
+
+private:
     explicit HW_Computer_t(void) {};
     virtual ~HW_Computer_t() {};
 
-public:
-    void Initialize(void);
+    HW_Computer_t(const HW_Computer_t &) = delete;
+    HW_Computer_t &operator=(const HW_Computer_t &) = delete;
 
-    HW_Oscillator_t *GetOscillator(void) const { return oscillator; }
-    HW_Clock4Phase_t *Get4PhaseClock(void) const { return clk4Phase; }
-    HW_TriStateLatch_t *GetTriStateLatch(void) const { return triStateLatch; }
-    HW_Bus_t *GetFictitousBus(void) const { return bus; }
-    HW_BusDriver_t *GetBusDriver(void) const { return driver; }
+
+public:
+    static HW_Computer_t *Get(void) { if (singleton == nullptr) singleton = new HW_Computer_t; return singleton; }
+
+
+public:
+    static void Initialize(void);
+
+    static HW_Oscillator_t *GetOscillator(void) { return oscillator; }
+    static HW_Clock_t *GetClock(void) { return clock; }
+    static HW_Bus_t *GetAluA(void) { return aluA; }
+    static HW_Bus_t *GetAluB(void) { return aluB; }
+    static HW_BusDriver_t *GetAluADriver(void) { return aluADriver; }
+    static HW_BusDriver_t *GetAluBDriver(void) { return aluBDriver; }
+    static HW_Alu_t *GetAlu(void) { return alu; }
+    static HW_Bus_t *GetMainBus(void) { return mainBus; }
 
 
 signals:

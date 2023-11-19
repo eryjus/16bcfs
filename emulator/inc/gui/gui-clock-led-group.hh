@@ -1,28 +1,30 @@
 //===================================================================================================================
-//  main.cc -- this is the main entry point for the emulator
+//  gui-clock-led-group.hh -- This is a group box for visualizing the clock cycle
 //
 //      Copyright (c) 2023 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2023-Oct-24  Initial  v0.0.1   Reinvisioned initial version
+//  2023-Nov-17  Initial  v0.0.1   Reinvisioned initial version
 //===================================================================================================================
 
 
-#include "16bcfs.hh"
+#pragma once
 
 
 //
-// -- The main entry point for the application
-//    ----------------------------------------
-int main(int argc, char *argv[])
-{
-    GUI_Application_t *app = new GUI_Application_t(argc, argv);
-
-    GUI_EmulationWindow_t::Get()->GetComputer()->GetOscillator()->StartTimer();
-
-    return app->exec();
-}
+// -- This is a group box where the clock mode is selected
+//    ----------------------------------------------------
+class GUI_ClockLedGroup_t : public QGroupBox {
+    Q_OBJECT
 
 
+private:
+    GUI_Led_t *clockLed;
+
+
+public:
+    explicit GUI_ClockLedGroup_t(HW_Clock_t *clk);
+    virtual ~GUI_ClockLedGroup_t() {}
+};

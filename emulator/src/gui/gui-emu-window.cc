@@ -15,32 +15,52 @@
 
 
 //
+// -- static class members
+//    --------------------
+GUI_EmulationWindow_t *GUI_EmulationWindow_t::singleton = nullptr;
+HW_Computer_t *GUI_EmulationWindow_t::computer = nullptr;
+
+
+//
+// -- construct a singleton instance of a GUI_EmulationWindow_t
+//    ---------------------------------------------------------
+GUI_EmulationWindow_t::GUI_EmulationWindow_t(void) : QWidget(nullptr)
+{
+    singleton = this;
+    Initialize();
+}
+
+
+//
 // -- Initialize the main application window for all the widgets
 //    ----------------------------------------------------------
 void GUI_EmulationWindow_t::Initialize(void)
 {
-    computer = new HW_Computer_t();
-    computer->Initialize();
+    QGridLayout *grid;
 
+    computer = HW_Computer_t::Get();
+    computer->Initialize();
 
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    GUI_ClockFunctionGroup_t *g;
-    GUI_OscillatorGroup_t *o;
-
-    grid->addWidget((o = new GUI_OscillatorGroup_t(computer->GetOscillator())), 17, 38);
-    grid->addWidget(new GUI_Clock4PhaseGroup_t(computer->Get4PhaseClock()), 17, 37);
-    grid->addWidget((g = new GUI_ClockFunctionGroup_t(computer->GetTriStateLatch(), computer->Get4PhaseClock())), 18, 37, 1, 2);
-    grid->addWidget(new GUI_StepGroup_t(computer->Get4PhaseClock()), 18, 39);
+    grid->addWidget(new GUI_OscillatorGroup_t(computer->GetOscillator()), 17, 38);
+    grid->addWidget(new GUI_ClockLedGroup_t(computer->GetClock()), 17, 37);
+    grid->addWidget(new GUI_ClockModeGroup_t(computer->GetClock()), 18, 37, 1, 2);
+    grid->addWidget(new GUI_StepGroup_t(computer->GetClock()), 18, 39);
     grid->addWidget(new GUI_ClockSpeed_t(computer->GetOscillator()), 17, 39);
-    grid->addWidget(new GUI_BusLeds_t(computer->GetFictitousBus()), 17, 34, 1, 3);
-    grid->addWidget(new GUI_BusTester_t(computer->GetBusDriver()), 18, 33, 1, 4);
+    grid->addWidget(new GUI_BusLeds_t("ALU A", computer->GetAluA()), 17, 29, 1, 3);
+    grid->addWidget(new GUI_BusLeds_t("ALU B", computer->GetAluB()), 17, 33, 1, 3);
+    grid->addWidget(new GUI_BusTester_t("ALU A Input", computer->GetAluADriver()), 18, 29, 1, 4);
+    grid->addWidget(new GUI_BusTester_t("ALU B Input", computer->GetAluBDriver()), 18, 33, 1, 4);
 
-    setLayout(grid);
+    grid->addWidget(new GUI_BusLeds_t("Main Bus", computer->GetMainBus()), 16, 31, 1, 3);
 
-    setWindowTitle(tr("16bcfs Emulator"));
-    showMaximized();
+
+    singleton->setLayout(grid);
+
+    singleton->setWindowTitle(tr("16bcfs Emulator"));
+    singleton->showMaximized();
 }
 
 

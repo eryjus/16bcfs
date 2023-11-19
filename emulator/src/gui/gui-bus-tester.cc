@@ -15,7 +15,10 @@
 
 
 
-GUI_BusTester_t::GUI_BusTester_t(HW_BusDriver_t *driver, QGroupBox *parent) : QGroupBox("Bus Tester", parent)
+//
+// -- Construct the bus tester, which will manually push values onto a bus
+//    --------------------------------------------------------------------
+GUI_BusTester_t::GUI_BusTester_t(QString name, HW_BusDriver_t *driver, QGroupBox *parent) : QGroupBox(name, parent)
 {
     dip0 = new GUI_DipSwitch_t;
     dip1 = new GUI_DipSwitch_t;
@@ -36,7 +39,7 @@ GUI_BusTester_t::GUI_BusTester_t(HW_BusDriver_t *driver, QGroupBox *parent) : QG
 
     oe = new QCheckBox;
 
-    setObjectName(tr("Bus Tester"));
+    setObjectName(name);
 
     setAlignment(Qt::AlignHCenter);
     setFixedWidth(260);

@@ -16,7 +16,7 @@
 //
 // -- This is the foundation of the computer, as in the backplane or breadboard that everything plugs into
 //    ----------------------------------------------------------------------------------------------------
-class HW_Computer_t : public QObject {
+class HW_Computer_t : public QWidget {
     Q_OBJECT
 
 private:
@@ -52,20 +52,12 @@ private:
 
 
 public:
-    static HW_Computer_t *Get(void) { if (singleton == nullptr) singleton = new HW_Computer_t; return singleton; }
+    static HW_Computer_t *Get(void);
 
 
 public:
+    static void InitGui(void);
     static void Initialize(void);
-
-    static HW_Oscillator_t *GetOscillator(void) { return oscillator; }
-    static HW_Clock_t *GetClock(void) { return clock; }
-    static HW_Bus_t *GetAluA(void) { return aluA; }
-    static HW_Bus_t *GetAluB(void) { return aluB; }
-    static HW_BusDriver_t *GetAluADriver(void) { return aluADriver; }
-    static HW_BusDriver_t *GetAluBDriver(void) { return aluBDriver; }
-    static HW_Alu_t *GetAlu(void) { return alu; }
-    static HW_Bus_t *GetMainBus(void) { return mainBus; }
 
 
 signals:

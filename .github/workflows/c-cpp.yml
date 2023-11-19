@@ -19,5 +19,7 @@ jobs:
         version: '6.6.0'
     - name: Install tup
       run: sudo apt install tup
-    - name: Make
+    - name: Initialize tup
+      run: tup init
+    - name: Build everything
       run: make

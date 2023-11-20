@@ -17,6 +17,10 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.6.0'
+    - name: Make a local bin folder
+      run: mkdir -p ~/bin
+    - name: Link to the 16bcfs.arch file
+      run: ln -s asm/arch ~/bin/arch
     - name: where is home?
       run: echo ~
     - name: exports

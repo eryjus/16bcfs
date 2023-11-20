@@ -1,3 +1,5 @@
 include_rules
 
+export Qt6_DIR
+
 : ../obj/*.o |> gcc -L $Qt6_DIR/../../$(QT_VERSION)/gcc_64/lib/ -o %o %f -lQt6Widgets -lQt6Core -lQt6Gui -lstdc++ |> emu

@@ -1,0 +1,33 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.6.0'
+    - name: Make a local bin folder
+      run: mkdir -p ~/bin
+    - name: Link to the 16bcfs.arch file
+      run: ln -s ~/work/16bcfs/16bcfs/asm/arch ~/bin/arch
+    - name: what is in arch?
+      run: ls -alR ~/bin/ ~/bin/arch/
+    - name: pwd
+      run: pwd
+    - name: Install tup
+      run: sudo apt install tup
+    - name: Initialize tup
+      run: tup init
+    - name: Build everything
+      run: make

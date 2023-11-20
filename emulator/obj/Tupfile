@@ -1,6 +1,8 @@
 include_rules
 
-: foreach ../src/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $HOME/Qt/$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
-: foreach ../src/gui/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $HOME/Qt/$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
-: foreach ../src/hw/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $HOME/Qt/$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
-: foreach ../src/ic/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $HOME/Qt/$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
+export Qt6_DIR
+
+: foreach ../src/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
+: foreach ../src/gui/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
+: foreach ../src/hw/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
+: foreach ../src/ic/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o

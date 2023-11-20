@@ -22,7 +22,7 @@ jobs:
     - name: Link to the 16bcfs.arch file
       run: ln -s asm/arch ~/bin/arch
     - name: what is in arch?
-      run: ls -alR ~/bin
+      run: ls -alR ~/bin ~/bin/arch
     - name: pwd
       run: pwd
     - name: Install tup

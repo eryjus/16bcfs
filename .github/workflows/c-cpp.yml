@@ -16,7 +16,9 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.6.0'    
+        version: '6.6.0'
+    - name: pwd
+      run: pwd
     - name: ls Qt
       run: ls -alR
     - name: Install tup

@@ -20,7 +20,7 @@ jobs:
     - name: pwd
       run: pwd
     - name: ls Qt
-      run: ls -alR
+      run: ls -alR ..
     - name: Install tup
       run: sudo apt install tup
     - name: Initialize tup

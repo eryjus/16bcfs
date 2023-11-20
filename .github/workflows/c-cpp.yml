@@ -17,6 +17,8 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.6.0'
+    - name: where is home?
+      run: echo ~
     - name: pwd
       run: pwd
     - name: ls Qt

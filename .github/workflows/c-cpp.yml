@@ -20,7 +20,7 @@ jobs:
     - name: pwd
       run: pwd
     - name: ls Qt
-      run: ls -alR ..
+      run: ls -alR ../Qt/6.6.0/gcc_64/libexec
     - name: Install tup
       run: sudo apt install tup
     - name: Initialize tup

@@ -19,6 +19,8 @@ jobs:
         version: '6.6.0'
     - name: where is home?
       run: echo ~
+    - name: exports
+      run: export
     - name: pwd
       run: pwd
     - name: ls Qt

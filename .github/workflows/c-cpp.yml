@@ -16,8 +16,9 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.6.0'
-        tools: 'moc'
+        version: '6.6.0'    
+    - name: ls Qt
+      run: ls -al Qt/6.6.0/gcc_64/libexec/
     - name: Install tup
       run: sudo apt install tup
     - name: Initialize tup

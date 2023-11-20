@@ -18,7 +18,7 @@ jobs:
       with:
         version: '6.6.0'    
     - name: ls Qt
-      run: ls -al Qt/6.6.0/gcc_64/libexec/
+      run: ls -al Qt/6.6.0/gcc_64/
     - name: Install tup
       run: sudo apt install tup
     - name: Initialize tup

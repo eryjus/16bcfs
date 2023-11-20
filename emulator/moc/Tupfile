@@ -6,6 +6,6 @@ export Qt6_DIR
 #: foreach ../inc/hw/* |> ~/Qt/$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
 #: foreach ../inc/ic/* |> ~/Qt/$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
 
-: foreach ../inc/gui/* |> $Qt6_DIR/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
-: foreach ../inc/hw/* |> $Qt6_DIR/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
-: foreach ../inc/ic/* |> $Qt6_DIR/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
+: foreach ../inc/gui/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
+: foreach ../inc/hw/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
+: foreach ../inc/ic/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc

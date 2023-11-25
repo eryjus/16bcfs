@@ -24,6 +24,10 @@ See [LICENSE.md](LICENSE.md).
 I use `tup` as my primary build system.  I usually will wrap `tup` in `make` commands.  You can find `tup` [here](https://gittup.org/tup/).  I simply find `tup` to more reliable detect changed sources with less work.
 
 
+### Qt6_DIR Environment Variable
+
+The `Qt6_DIR` Environment Variable needs to point to the installation location of Qt6, for example `~/Qt/6.6.0/gcc_64/`.  Your installation location may be different, so copy-and-paste is not advised.
+
 ---
 
 ## EEPROM Programmer

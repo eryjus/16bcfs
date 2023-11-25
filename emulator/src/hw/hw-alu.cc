@@ -80,18 +80,18 @@ HW_Alu_t::HW_Alu_t(HW_Bus_t *a, HW_Bus_t *b,
 
 
     // -- Perform the initial updates
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
 //
 // -- Ensure the ALU is in the proper state to perform calculations
 //    -------------------------------------------------------------
-void HW_Alu_t::TriggerFirstUpdates(void)
+void HW_Alu_t::TriggerFirstUpdate(void)
 {
-    adder->TriggerFirstUpdates();
-    lsbA->TriggerFirstUpdates();
-    msbA->TriggerFirstUpdates();
-    lsbB->TriggerFirstUpdates();
-    msbB->TriggerFirstUpdates();
+    adder->TriggerFirstUpdate();
+    lsbA->TriggerFirstUpdate();
+    msbA->TriggerFirstUpdate();
+    lsbB->TriggerFirstUpdate();
+    msbB->TriggerFirstUpdate();
 }

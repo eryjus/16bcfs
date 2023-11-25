@@ -6,3 +6,4 @@ export Qt6_DIR
 : foreach ../src/gui/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
 : foreach ../src/hw/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
 : foreach ../src/ic/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o
+: foreach ../src/mod/*.cc | ../moc/*.moc.cc |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include %f -o %o |> %B.o

@@ -41,17 +41,17 @@ HW_BusDriver_t::HW_BusDriver_t(HW_Bus_t *bus, QObject *parent) : QObject(parent)
     connect(lsb, &IC_74xx541_t::SignalY1Updated, bus, &HW_Bus_t::ProcessUpdateBit1);
     connect(lsb, &IC_74xx541_t::SignalY0Updated, bus, &HW_Bus_t::ProcessUpdateBit0);
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
 //
 // -- Trigger all the initial updated to put the 'hardware' into the correct state
 //    ----------------------------------------------------------------------------
-void HW_BusDriver_t::TriggerFirstUpdates(void)
+void HW_BusDriver_t::TriggerFirstUpdate(void)
 {
-    msb->TriggerFirstUpdates();
-    lsb->TriggerFirstUpdates();
+    msb->TriggerFirstUpdate();
+    lsb->TriggerFirstUpdate();
 }
 
 

@@ -64,6 +64,7 @@ class IC_74xx00_t;
 class IC_74xx02_t;
 class IC_74xx08_t;
 class IC_74xx32_t;
+class IC_74xx74_t;
 class IC_74xx138_t;
 class IC_74xx193_t;
 class IC_74xx283_t;
@@ -74,20 +75,17 @@ class HW_Alu_t;
 class HW_AluAdder_t;
 class HW_Bus_t;
 class HW_BusDriver_t;
-class HW_Clock_t;
 class HW_Computer_t;
+class HW_MomentarySwitch_t;
 class HW_Oscillator_t;
-class HW_SrLatch_t;
+class HW_Pot_t;
+class HW_SpdtSwitch_t;
 class GUI_Application_t;
 class GUI_BusLeds_t;
 class GUI_BusTester_t;
-class GUI_ClockLedGroup_t;
-class GUI_ClockModeGroup_t;
-class GUI_ClockSpeed_t;
 class GUI_DipSwitch_t;
 class GUI_Led_t;
-class GUI_OscillatorGroup_t;
-class GUI_StepGroup_t;
+class ClockModule_t;
 
 
 
@@ -98,6 +96,7 @@ class GUI_StepGroup_t;
 #include "ic/ic-74xx02.hh"
 #include "ic/ic-74xx08.hh"
 #include "ic/ic-74xx32.hh"
+#include "ic/ic-74xx74.hh"
 #include "ic/ic-74xx138.hh"
 #include "ic/ic-74xx193.hh"
 #include "ic/ic-74xx283.hh"
@@ -108,19 +107,16 @@ class GUI_StepGroup_t;
 #include "hw/hw-alu-adder.hh"
 #include "hw/hw-bus.hh"
 #include "hw/hw-bus-driver.hh"
-#include "hw/hw-clock.hh"
 #include "hw/hw-computer.hh"
+#include "hw/hw-momentary-switch.hh"
 #include "hw/hw-oscillator.hh"
-#include "hw/hw-sr-latch.hh"
+#include "hw/hw-pot.hh"
+#include "hw/hw-spdt-switch.hh"
 #include "gui/gui-application.hh"
 #include "gui/gui-bus-leds.hh"
 #include "gui/gui-bus-tester.hh"
-#include "gui/gui-clock-speed.hh"
-#include "gui/gui-clock-led-group.hh"
-#include "gui/gui-clock-mode-group.hh"
 #include "gui/gui-dip-switch.hh"
 #include "gui/gui-led.hh"
-#include "gui/gui-oscillator-group.hh"
-#include "gui/gui-step-group.hh"
+#include "mod/mod-clock.hh"
 
 

@@ -43,7 +43,7 @@ IC_74xx574_t::IC_74xx574_t()
 //
 // -- perform the initial calculation of state and push the results out to all subscribers
 //    ------------------------------------------------------------------------------------
-void IC_74xx574_t::TriggerFirstUpdates(void)
+void IC_74xx574_t::TriggerFirstUpdate(void)
 {
     pins[Q1] = pins[D1];
     pins[Q2] = pins[D2];

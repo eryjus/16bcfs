@@ -136,7 +136,7 @@ HW_AluAdder_t::HW_AluAdder_t(IC_74xx541_t *aluALsb, IC_74xx541_t *aluAMsb,
     driver->ProcessUpdateOE2(LOW);
 
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
@@ -144,13 +144,13 @@ HW_AluAdder_t::HW_AluAdder_t(IC_74xx541_t *aluALsb, IC_74xx541_t *aluAMsb,
 //
 // -- Handle the initial updates to put everything in order
 //    -----------------------------------------------------
-void HW_AluAdder_t::TriggerFirstUpdates(void)
+void HW_AluAdder_t::TriggerFirstUpdate(void)
 {
-    bits0->TriggerFirstUpdates();
-    bits3->TriggerFirstUpdates();
-    bits7->TriggerFirstUpdates();
-    bitsb->TriggerFirstUpdates();
-    bitsf->TriggerFirstUpdates();
+    bits0->TriggerFirstUpdate();
+    bits3->TriggerFirstUpdate();
+    bits7->TriggerFirstUpdate();
+    bitsb->TriggerFirstUpdate();
+    bitsf->TriggerFirstUpdate();
 }
 
 

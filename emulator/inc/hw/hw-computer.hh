@@ -20,12 +20,11 @@ class HW_Computer_t : public QWidget {
     Q_OBJECT
 
 private:
+    // -- The computer modules
+    static ClockModule_t *clock;
+
     // -- singleton instance
     static HW_Computer_t *singleton;
-
-    // -- Start with an oscillator
-    static HW_Oscillator_t *oscillator;
-    static HW_Clock_t *clock;
 
     // -- ALU-A and ALU-B Input buses
     static HW_Bus_t *aluA;

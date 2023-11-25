@@ -37,7 +37,7 @@ IC_74xx32_t::IC_74xx32_t(void)
 //
 // -- use when built to make sure all the connections are updated
 //    -----------------------------------------------------------
-void IC_74xx32_t::TriggerFirstUpdates(void)
+void IC_74xx32_t::TriggerFirstUpdate(void)
 {
     UpdatesComplete();
     emit SignalY1Updated(pins[Y1]);

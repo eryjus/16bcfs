@@ -47,7 +47,7 @@ public:
 
 
 public:
-    void TriggerFirstUpdates(void) { emit SignalAllUpdated(); ProcessUpdatesComplete(); }
+    void TriggerFirstUpdate(void) { emit SignalAllUpdated(); ProcessUpdatesComplete(); }
 
 
 public slots:

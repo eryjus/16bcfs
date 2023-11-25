@@ -111,7 +111,7 @@ updateOut:
 //
 // -- perform the initial calculation of state and push the results out to all subscribers
 //    ------------------------------------------------------------------------------------
-void IC_74xx193_t::TriggerFirstUpdates(void)
+void IC_74xx193_t::TriggerFirstUpdate(void)
 {
     ProcessUpdatesComplete();
 

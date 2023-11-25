@@ -50,7 +50,7 @@ public:
 
 
 public:
-    void TriggerFirstUpdates(void) { UpdateOutputs(); }
+    void TriggerFirstUpdate(void) { UpdateOutputs(); }
     void UpdateOutputs(void);
 
 

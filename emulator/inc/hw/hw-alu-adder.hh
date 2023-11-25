@@ -38,7 +38,7 @@ public:
 
 
 public:
-    void TriggerFirstUpdates(void);
+    void TriggerFirstUpdate(void);
 
 
 public slots:

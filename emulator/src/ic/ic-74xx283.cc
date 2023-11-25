@@ -39,14 +39,14 @@ IC_74xx283_t::IC_74xx283_t()
     b = 0;
     sum = 0;
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
 //
 // -- perform the initial calculation of state and push the results out to all subscribers
 //    ------------------------------------------------------------------------------------
-void IC_74xx283_t::TriggerFirstUpdates(void)
+void IC_74xx283_t::TriggerFirstUpdate(void)
 {
     emit SignalS0Updated(pins[S0]);
     emit SignalS0Updated(pins[S1]);

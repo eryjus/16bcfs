@@ -32,7 +32,7 @@ public:
 
 
 private:
-    void TriggerFirstUpdates(void);
+    void TriggerFirstUpdate(void);
 
 
 public slots:

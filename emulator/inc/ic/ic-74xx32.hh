@@ -43,7 +43,7 @@ public:
     virtual ~IC_74xx32_t() {};
 
 public:
-    void TriggerFirstUpdates(void);
+    void TriggerFirstUpdate(void);
 
 
 public slots:

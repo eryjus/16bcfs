@@ -21,10 +21,6 @@ jobs:
       run: mkdir -p ~/bin
     - name: Link to the 16bcfs.arch file
       run: ln -s ~/work/16bcfs/16bcfs/asm/arch ~/bin/arch
-    - name: what is in arch?
-      run: ls -alR ~/bin/ ~/bin/arch/
-    - name: pwd
-      run: pwd
     - name: Install tup
       run: sudo apt install tup
     - name: Initialize tup

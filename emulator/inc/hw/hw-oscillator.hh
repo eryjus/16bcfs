@@ -38,6 +38,7 @@ public slots:
         emit SignalSanityCheck();
     }
     void ProcessSetInterval(int interval) { QTimer::setInterval(interval); }
+    void ProcessRawInterval(int interval) { QTimer::setInterval((10-interval)*100); }
 
 signals:
     void SignalStateChanged(TriState_t state);

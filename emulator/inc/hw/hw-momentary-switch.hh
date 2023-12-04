@@ -36,6 +36,10 @@ public:
     virtual ~HW_MomentarySwitch_t() {}
 
 
+public:
+    void TriggerFirstUpdates(void);
+
+
 signals:
     void SignalState(TriState_t state);
 

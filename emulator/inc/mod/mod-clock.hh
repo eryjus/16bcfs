@@ -39,7 +39,7 @@ private:
     GUI_Led_t *actualClock;
     IC_74xx00_t *nand1;
     IC_74xx08_t *and1;
-    IC_74xx32_t *or1;
+    IC_74xx02_t *nor1;
     IC_74xx74_t *latch;
 
 
@@ -57,6 +57,7 @@ public slots:
 signals:
     // -- these functions become the outputs from this module to other parts of the build
     void SignalClockState(TriState_t state);
+    void SignalSanityCheck(void);               // not a part of the physical build
 
 
 public:
@@ -75,6 +76,6 @@ private:
 
 private slots:
     // -- used for internal signaling
-    void ProcessUpdateImage(TriState_t state)  { oscillatorVisual->setPixmap(state?hi:lo); }
+    void ProcessUpdateImage(TriState_t state)  { oscillatorVisual->setPixmap(state?lo:hi); }
 };
 

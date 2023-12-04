@@ -48,7 +48,7 @@ private:
 
 
 public:
-    HW_Bus_t(HW_Oscillator_t *osc, QObject *parent = nullptr);
+    HW_Bus_t(ClockModule_t *clk, QObject *parent = nullptr);
     virtual ~HW_Bus_t() {}
 
 

@@ -52,44 +52,44 @@ void IC_74xx193_t::ProcessUpdatesComplete(void)
 
 
     if (pins[CLR] == HIGH) {
+        pins[A] = LOW;
+        pins[B] = LOW;
+        pins[C] = LOW;
+        pins[D] = LOW;
         cnt = 0;
-        goto updateOut;
+    } else {
+        if (pins[LOADb] == LOW) {
+            cnt =     ((pins[D]==HIGH?1:0) << 3)
+                    | ((pins[C]==HIGH?1:0) << 2)
+                    | ((pins[B]==HIGH?1:0) << 1)
+                    | ((pins[A]==HIGH?1:0) << 0);
+        }
+
+        if (pins[UP] == LOW && cnt == 15) {
+            // -- Count Up High-to-Low transition: Set COb low
+            pins[COb] = LOW;
+            emit SignalCoUpdated(LOW);
+        }
+
+        if (pins[DOWN] == LOW && cnt == 0) {
+            // -- Count Up High-to-Low transition: Set BOb low
+            pins[BOb] = LOW;
+            emit SignalBoUpdated(LOW);
+        }
+
+        if (lastUp == LOW && pins[UP] == HIGH) {
+            cnt ++;
+            pins[COb] = HIGH;
+            emit SignalCoUpdated(HIGH);
+        }
+
+        if (lastDown == LOW && pins[DOWN] == HIGH) {
+            cnt --;
+            pins[BOb] = HIGH;
+            emit SignalBoUpdated(HIGH);
+        }
     }
 
-    if (pins[LOADb] == LOW) {
-        cnt = ((pins[D]==HIGH?1:0) << 3)
-                | ((pins[C]==HIGH?1:0) << 2)
-                | ((pins[B]==HIGH?1:0) << 1)
-                | ((pins[A]==HIGH?1:0) << 0);
-
-        goto updateOut;
-    }
-
-    if (lastUp == HIGH && pins[UP] == LOW && cnt == 15) {
-        // -- Count Up High-to-Low transition: Set COb low
-        pins[COb] = LOW;
-        emit SignalCoUpdated(LOW);
-    }
-
-    if (lastDown == HIGH && pins[DOWN] == LOW && cnt == 0) {
-        // -- Count Up High-to-Low transition: Set BOb low
-        pins[BOb] = LOW;
-        emit SignalBoUpdated(LOW);
-    }
-
-    if (lastUp == LOW && pins[UP] == HIGH) {
-        cnt ++;
-        pins[COb] = HIGH;
-        emit SignalCoUpdated(HIGH);
-    }
-
-    if (lastDown == LOW && pins[DOWN] == HIGH) {
-        cnt --;
-        pins[BOb] = HIGH;
-        emit SignalBoUpdated(HIGH);
-    }
-
-updateOut:
     cnt &= 0xf;
     lastUp = pins[UP];
     lastDown = pins[DOWN];
@@ -103,8 +103,6 @@ updateOut:
     emit SignalQbUpdated(pins[QB]);
     emit SignalQcUpdated(pins[QC]);
     emit SignalQdUpdated(pins[QD]);
-
-    emit SignalAllUpdated();
 }
 
 
@@ -121,8 +119,6 @@ void IC_74xx193_t::TriggerFirstUpdate(void)
     emit SignalQdUpdated(pins[QD]);
     emit SignalBoUpdated(pins[BOb]);
     emit SignalCoUpdated(pins[COb]);
-    emit SignalAllUpdated();
-
 }
 
 

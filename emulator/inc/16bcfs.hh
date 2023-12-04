@@ -47,12 +47,14 @@ typedef enum {
 #include <QtGui/QPicture>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDial>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSizePolicy>
 #include <QtWidgets/QSlider>
 
@@ -62,6 +64,7 @@ typedef enum {
 //     ----------------------------------
 class IC_74xx00_t;
 class IC_74xx02_t;
+class IC_74xx04_t;
 class IC_74xx08_t;
 class IC_74xx32_t;
 class IC_74xx74_t;
@@ -86,6 +89,7 @@ class GUI_BusTester_t;
 class GUI_DipSwitch_t;
 class GUI_Led_t;
 class ClockModule_t;
+class GpRegisterModule_t;
 
 
 
@@ -94,6 +98,7 @@ class ClockModule_t;
 //    ----------------------------------
 #include "ic/ic-74xx00.hh"
 #include "ic/ic-74xx02.hh"
+#include "ic/ic-74xx04.hh"
 #include "ic/ic-74xx08.hh"
 #include "ic/ic-74xx32.hh"
 #include "ic/ic-74xx74.hh"
@@ -118,5 +123,6 @@ class ClockModule_t;
 #include "gui/gui-dip-switch.hh"
 #include "gui/gui-led.hh"
 #include "mod/mod-clock.hh"
+#include "mod/mod-gp-register.hh"
 
 

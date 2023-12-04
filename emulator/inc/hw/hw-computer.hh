@@ -23,12 +23,19 @@ private:
     // -- The computer modules
     static ClockModule_t *clock;
 
+    // -- The General Purpose Register Modules
+    static GpRegisterModule_t *pc;
+
     // -- singleton instance
     static HW_Computer_t *singleton;
 
     // -- ALU-A and ALU-B Input buses
     static HW_Bus_t *aluA;
     static HW_Bus_t *aluB;
+
+    // -- Address Bus 1 and 2
+    static HW_Bus_t *addr1;
+    static HW_Bus_t *addr2;
 
     // -- The ALU
     static HW_Alu_t *alu;
@@ -42,6 +49,10 @@ private:
     static HW_BusDriver_t *aluBDriver;
 
 
+    static HW_MomentarySwitch_t *brk;
+    static HW_MomentarySwitch_t *rst;
+
+
 private:
     explicit HW_Computer_t(void) {};
     virtual ~HW_Computer_t() {};
@@ -53,6 +64,16 @@ private:
 public:
     static HW_Computer_t *Get(void);
 
+    static HW_Bus_t *GetMainBus(void) { return mainBus; }
+    static HW_Bus_t *GetAluABus(void) { return aluA; }
+    static HW_Bus_t *GetAluBBus(void) { return aluB; }
+    static HW_Bus_t *GetAddr1Bus(void) { return addr1; }
+    static HW_Bus_t *GetAddr2Bus(void) { return addr2; }
+
+    static ClockModule_t *GetClock(void) { return clock; }
+
+    static QWidget *BuildTestHarness(void);
+
 
 public:
     static void InitGui(void);
@@ -61,6 +82,10 @@ public:
 
 signals:
     void SignalOscillatorStateChanged(TriState_t state);
+
+
+private slots:
+    void ProcessToggleButton(int id, bool checked);
 };
 
 

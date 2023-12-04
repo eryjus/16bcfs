@@ -15,11 +15,11 @@
 
 
 
-HW_Bus_t::HW_Bus_t(HW_Oscillator_t *osc, QObject *parent) : QObject(parent), assertedBits(new Map_t)
+HW_Bus_t::HW_Bus_t(ClockModule_t *clk, QObject *parent) : QObject(parent), assertedBits(new Map_t)
 {
     for (int i = BIT_0; i <= BIT_F; i ++) (*assertedBits)[i] = new Asserts_t;
 
-    connect(osc, &HW_Oscillator_t::SignalSanityCheck, this, &HW_Bus_t::ProcessSanityCheck);
+    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_t::ProcessSanityCheck);
 }
 
 

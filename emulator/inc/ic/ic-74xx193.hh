@@ -52,14 +52,14 @@ public:
 
 
 public slots:
-    void ProcessUpdateB(TriState_t state) { pins[B] = state; }
+    void ProcessUpdateB(TriState_t state) { pins[B] = state; ProcessUpdatesComplete(); }
     void ProcessUpdateDown(TriState_t state) { lastDown = pins[DOWN]; pins[DOWN] = state; ProcessUpdatesComplete(); }
     void ProcessUpdateUp(TriState_t state) { lastUp = pins[UP]; pins[UP] = state; ProcessUpdatesComplete(); }
-    void ProcessUpdateD(TriState_t state) { pins[D] = state; }
-    void ProcessUpdateC(TriState_t state) { pins[C] = state; }
-    void ProcessUpdateLoad(TriState_t state) { pins[LOADb] = state; }
-    void ProcessUpdateClr(TriState_t state) { pins[CLR] = state; }
-    void ProcessUpdateA(TriState_t state) { pins[A] = state; }
+    void ProcessUpdateD(TriState_t state) { pins[D] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateC(TriState_t state) { pins[C] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateLoad(TriState_t state) { pins[LOADb] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateClr(TriState_t state) { pins[CLR] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateA(TriState_t state) { pins[A] = state; ProcessUpdatesComplete(); }
     void ProcessUpdatesComplete(void);
 
 signals:
@@ -69,7 +69,6 @@ signals:
     void SignalQdUpdated(TriState_t state);
     void SignalBoUpdated(TriState_t state);
     void SignalCoUpdated(TriState_t state);
-    void SignalAllUpdated(void);
 };
 
 

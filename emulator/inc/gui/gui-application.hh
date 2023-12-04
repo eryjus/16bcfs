@@ -18,7 +18,7 @@ class GUI_Application_t : public QApplication {
 
 
 public:
-    explicit GUI_Application_t(int &argc, char **argv) : QApplication(argc, argv) {}
+    explicit GUI_Application_t(int &argc, char **argv) : QApplication(argc, argv) { HW_Computer_t::Get(); }
     virtual ~GUI_Application_t() {}
 };
 

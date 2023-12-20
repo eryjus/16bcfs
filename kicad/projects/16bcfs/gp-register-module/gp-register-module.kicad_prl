@@ -64,11 +64,11 @@
       35,
       36
     ],
-    "visible_layers": "ffc3f30_fffffff9",
+    "visible_layers": "fffffff_ffffffff",
     "zone_display_mode": 0
   },
   "meta": {
-    "filename": "gp-register.kicad_prl",
+    "filename": "Register.kicad_prl",
     "version": 3
   },
   "project": {

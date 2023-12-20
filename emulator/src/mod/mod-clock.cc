@@ -228,11 +228,11 @@ void ClockModule_t::WireUp(void)
     connect(singleStepDebounced, &HW_SpdtSwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB2);
     // ProcessUpdateA3 connected to Reset Slot
     connect(runModeMomentary, &HW_MomentarySwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB3);
-    // ProcessUpdateA4 connected to Break Slot
+    connect(nor1, &IC_74xx02_t::SignalY4Updated, and1, &IC_74xx08_t::ProcessUpdateA4);
     connect(stepModeMomentary, &HW_MomentarySwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB4);
 
 
-    // -- connect up the inputs to the OR gates
+    // -- connect up the inputs to the NOR gates
     connect(and1, &IC_74xx08_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateA1);
     connect(and1, &IC_74xx08_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateB1);
 
@@ -240,8 +240,6 @@ void ClockModule_t::WireUp(void)
     nor1->ProcessB2Low();
     nor1->ProcessA3Low();
     nor1->ProcessB3Low();
-    nor1->ProcessA4Low();
-    nor1->ProcessB4Low();
 
 
     // -- connect up the oscillator output (LED?)
@@ -270,6 +268,9 @@ void ClockModule_t::WireUp(void)
 // -- These represent inputs from off the module and where those signals are wired
 //    ----------------------------------------------------------------------------
 void ClockModule_t::ProcessReset(TriState_t state) { and1->ProcessUpdateA3(state); }
-void ClockModule_t::ProcessBreak(TriState_t state) { and1->ProcessUpdateA4(state); }
+void ClockModule_t::ProcessBreak(TriState_t state) {
+    nor1->ProcessUpdateA4(state);
+    nor1->ProcessUpdateB4(state);
+}
 
 

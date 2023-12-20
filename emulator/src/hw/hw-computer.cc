@@ -90,11 +90,6 @@ QWidget *HW_Computer_t::BuildTestHarness(void)
     mainGroup->addButton(mainPc, TEST_MAIN_PC);
     mainGroup->addButton(swapAlu, TEST_SWAP_ALU);
     mainGroup->addButton(swapPc, TEST_SWAP_PC);
-//    grid->addWidget(mainNone, 0, 0);
-//    grid->addWidget(mainAlu, 0, 1);
-//    grid->addWidget(mainPc, 0, 2);
-//    grid->addWidget(swapAlu, 1, 1);
-//    grid->addWidget(swapPc, 1, 2);
 
     QButtonGroup *aluAGroup = new QButtonGroup;
     QRadioButton *aluANone = new QRadioButton("ALUA None");
@@ -225,7 +220,7 @@ void HW_Computer_t::InitGui(void)
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 16, 39);
+    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 16, 39);
     grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 16, 38);
     grid->addWidget(new GUI_BusLeds_t("Main Bus", mainBus), 13, 33, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("ALU A", aluA), 14, 33, 1, 3);
@@ -261,7 +256,6 @@ void HW_Computer_t::Initialize(void)
     //
     // -- Place the oscillator
     //    --------------------
-//    HW_Oscillator_t *oscillator = new HW_Oscillator_t;
     clock = new ClockModule_t;
 
 

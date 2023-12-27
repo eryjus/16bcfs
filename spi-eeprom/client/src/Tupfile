@@ -1,0 +1,5 @@
+include_rules
+
+export Qt6_DIR
+
+: foreach *.cc |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc

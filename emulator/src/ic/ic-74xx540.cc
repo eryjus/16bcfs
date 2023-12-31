@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx540.cc -- This class implements a 74xx540 Inverting Line Driver
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

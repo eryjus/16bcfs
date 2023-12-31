@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx74.cc -- This class implements a 74xx74 Dual D-Type Latch
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -162,12 +162,13 @@ void IC_74xx74_t::ProcessUpdatePre2(TriState_t state)
 //    -------------------
 void IC_74xx74_t::ProcessUpdateClk1(TriState_t state)
 {
+    TriState_t last = pins[CLK1];
     pins[CLK1] = state;
 
     if (pins[CLR1b] == LOW || pins[PRE1b] == LOW) return;
 
     // -- rising edge
-    if (state == HIGH) {
+    if (state == HIGH && last == LOW) {
         pins[Q1] = pins[D1];
         pins[Q1b] = pins[Q1]==HIGH?LOW:HIGH;
 
@@ -182,12 +183,13 @@ void IC_74xx74_t::ProcessUpdateClk1(TriState_t state)
 //    -------------------
 void IC_74xx74_t::ProcessUpdateClk2(TriState_t state)
 {
+    TriState_t last = pins[CLK2];
     pins[CLK2] = state;
 
     if (pins[CLR2b] == LOW || pins[PRE2b] == LOW) return;
 
     // -- rising edge
-    if (state == HIGH) {
+    if (state == HIGH && last == LOW) {
         pins[Q2] = pins[D2];
         pins[Q2b] = pins[Q2]==HIGH?LOW:HIGH;
 

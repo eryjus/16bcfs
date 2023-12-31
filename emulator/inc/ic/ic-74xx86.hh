@@ -1,12 +1,12 @@
 //===================================================================================================================
-// ic-74xx08.hh -- This header file defines a 74xx08 Quad Two-Input AND Gate IC
+// ic-74xx86.hh -- This header file defines a 74xx86 Quad Two-Input XOR Gate IC
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2023-Oct-23  Initial  v0.0.1   Initial Version
+//  2023-Dec-30  Initial  v0.0.1   Initial Version
 //===================================================================================================================
 
 
@@ -14,9 +14,9 @@
 
 
 //
-// -- This class implements a 74xx08 AND Gate IC
+// -- This class implements a 74xx86 AND Gate IC
 //    ------------------------------------------
-class IC_74xx08_t : public QObject {
+class IC_74xx86_t : public QObject {
     Q_OBJECT
 
 public:
@@ -39,8 +39,8 @@ private:
 
 
 public:
-    IC_74xx08_t(void);
-    virtual ~IC_74xx08_t() {};
+    IC_74xx86_t(void);
+    virtual ~IC_74xx86_t() {};
 
 public:
     void TriggerFirstUpdate(void);

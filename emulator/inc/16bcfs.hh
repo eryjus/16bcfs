@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  16bcfs.hh -- This is the singular header file to include for the entire project
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -66,9 +66,12 @@ class IC_74xx00_t;
 class IC_74xx02_t;
 class IC_74xx04_t;
 class IC_74xx08_t;
+class IC_74xx30_t;
 class IC_74xx32_t;
 class IC_74xx74_t;
+class IC_74xx86_t;
 class IC_74xx138_t;
+class IC_74xx151_t;
 class IC_74xx193_t;
 class IC_74xx283_t;
 class IC_74xx540_t;
@@ -90,6 +93,7 @@ class GUI_DipSwitch_t;
 class GUI_Led_t;
 class ClockModule_t;
 class GpRegisterModule_t;
+class AluFlagsModule_t;
 
 
 
@@ -100,9 +104,12 @@ class GpRegisterModule_t;
 #include "ic/ic-74xx02.hh"
 #include "ic/ic-74xx04.hh"
 #include "ic/ic-74xx08.hh"
+#include "ic/ic-74xx30.hh"
 #include "ic/ic-74xx32.hh"
 #include "ic/ic-74xx74.hh"
+#include "ic/ic-74xx86.hh"
 #include "ic/ic-74xx138.hh"
+#include "ic/ic-74xx151.hh"
 #include "ic/ic-74xx193.hh"
 #include "ic/ic-74xx283.hh"
 #include "ic/ic-74xx540.hh"
@@ -124,5 +131,7 @@ class GpRegisterModule_t;
 #include "gui/gui-led.hh"
 #include "mod/mod-clock.hh"
 #include "mod/mod-gp-register.hh"
+#include "mod/mod-alu-flags.hh"
+
 
 

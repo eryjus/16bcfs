@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-gp-register.cc -- This class represents the entirety of a general purpose register
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -203,6 +203,7 @@ void GpRegisterModule_t::TriggerFirstUpdate(void)
     nand1->TriggerFirstUpdate();
     inv1->TriggerFirstUpdate();
 }
+
 
 
 //

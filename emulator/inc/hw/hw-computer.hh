@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-computer.hh -- This is the foundation of the computer build -- like a backplane
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -43,6 +43,10 @@ private:
     // -- The Main Bus
     static HW_Bus_t *mainBus;
 
+    // -- Flags for Pgm and Int contexts
+    static AluFlagsModule_t *pgmFlags;
+    static AluFlagsModule_t *intFlags;
+
 
     // -- Temporary elements for testing the ALU
     static HW_BusDriver_t *aluADriver;
@@ -51,6 +55,10 @@ private:
 
     static HW_MomentarySwitch_t *brk;
     static HW_MomentarySwitch_t *rst;
+    static HW_MomentarySwitch_t *clc;
+    static HW_MomentarySwitch_t *stc;
+    static HW_MomentarySwitch_t *clv;
+    static HW_MomentarySwitch_t *stv;
 
 
 private:
@@ -71,6 +79,9 @@ public:
     static HW_Bus_t *GetAddr2Bus(void) { return addr2; }
 
     static ClockModule_t *GetClock(void) { return clock; }
+    static HW_Alu_t *GetAlu(void) { return alu; }
+    static AluFlagsModule_t *GetPgmFlags(void) { return pgmFlags; }
+    static AluFlagsModule_t *GetIntFlags(void) { return intFlags; }
 
     static QWidget *BuildTestHarness(void);
 
@@ -86,6 +97,9 @@ signals:
 
 private slots:
     void ProcessToggleButton(int id, bool checked);
+    void ProcessUpdateZLatch(int state);
+    void ProcessUpdateCLatch(int state);
+    void ProcessUpdateNVLLatch(int state);
 };
 
 

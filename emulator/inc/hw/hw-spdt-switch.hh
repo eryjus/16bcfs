@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-spdt-switch.hh -- This class implements a single pole double throw switch
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

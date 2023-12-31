@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-pot.hh -- This class implements a variable resistor or potentiometer
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx00.cc -- This file implementes the 74xx00 Quad Two-Input NAND Gate IC
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  gui-bus-leds.hh -- This is a group box visualizing a bus contents
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

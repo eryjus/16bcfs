@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx283.hh -- This class emulates a 74xx283 Full Adder
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

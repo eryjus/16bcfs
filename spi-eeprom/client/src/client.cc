@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  client.cc -- this is the source file for the eeprom programmer client
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-oscillator.hh -- This is a generic oscillator
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

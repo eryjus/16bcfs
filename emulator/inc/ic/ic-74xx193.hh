@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx193.hh -- This header file defines a 74xx193 Up/Down Counter
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

@@ -1,6 +1,6 @@
 # 16-Bit Computer From Scratch -- KiCad Projects
 
-*Copyright (c)  2022-2023 -- Adam Clark*
+*Copyright (c)  2022-2024 -- Adam Clark*
 
 **"THE BEER-WARE LICENSE" (by Poul-Henning Kamp; Revision 42):**
 

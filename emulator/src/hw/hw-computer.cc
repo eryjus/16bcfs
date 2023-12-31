@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-computer.cc -- This is the foundation of the computer build -- like a backplane or breadboard
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -15,21 +15,36 @@
 
 
 //
-// -- Static class members
-//    --------------------
+// -- Static class members -- modules
+//    -------------------------------
 HW_Computer_t *HW_Computer_t::singleton = nullptr;
 ClockModule_t *HW_Computer_t::clock = nullptr;
+AluFlagsModule_t *HW_Computer_t::pgmFlags = nullptr;
+AluFlagsModule_t *HW_Computer_t::intFlags = nullptr;
+
+
+// -- Buses
 HW_Bus_t *HW_Computer_t::mainBus = nullptr;
 HW_Bus_t *HW_Computer_t::aluA = nullptr;
 HW_Bus_t *HW_Computer_t::aluB = nullptr;
 HW_Bus_t *HW_Computer_t::addr1 = nullptr;
 HW_Bus_t *HW_Computer_t::addr2 = nullptr;
 HW_Alu_t *HW_Computer_t::alu = nullptr;
+
+
+// -- Registers
+GpRegisterModule_t *HW_Computer_t::pc = nullptr;
+
+
+// -- Testing
 HW_BusDriver_t *HW_Computer_t::aluADriver = nullptr;
 HW_BusDriver_t *HW_Computer_t::aluBDriver = nullptr;
-GpRegisterModule_t *HW_Computer_t::pc = nullptr;
 HW_MomentarySwitch_t *HW_Computer_t::brk = nullptr;
 HW_MomentarySwitch_t *HW_Computer_t::rst = nullptr;
+HW_MomentarySwitch_t *HW_Computer_t::clc = nullptr;
+HW_MomentarySwitch_t *HW_Computer_t::stc = nullptr;
+HW_MomentarySwitch_t *HW_Computer_t::clv = nullptr;
+HW_MomentarySwitch_t *HW_Computer_t::stv = nullptr;
 
 
 enum {
@@ -137,6 +152,12 @@ QWidget *HW_Computer_t::BuildTestHarness(void)
     grid->addWidget(pcModeInc, 6, 2);
     grid->addWidget(pcModeDec, 6, 3);
 
+    QCheckBox *z = new QCheckBox("Latch Z");
+    grid->addWidget(z, 7, 0);
+    QCheckBox *c = new QCheckBox("Latch C");
+    grid->addWidget(c, 7, 1);
+    QCheckBox *nvl = new QCheckBox("Latch NVL");
+    grid->addWidget(nvl, 7, 2);
 
     connect(mainGroup, &QButtonGroup::idToggled, HW_Computer_t::Get(), &HW_Computer_t::ProcessToggleButton);
     connect(aluAGroup, &QButtonGroup::idToggled, HW_Computer_t::Get(), &HW_Computer_t::ProcessToggleButton);
@@ -144,6 +165,10 @@ QWidget *HW_Computer_t::BuildTestHarness(void)
     connect(addr1Group, &QButtonGroup::idToggled, HW_Computer_t::Get(), &HW_Computer_t::ProcessToggleButton);
     connect(addr2Group, &QButtonGroup::idToggled, HW_Computer_t::Get(), &HW_Computer_t::ProcessToggleButton);
     connect(pcModeGroup, &QButtonGroup::idToggled, HW_Computer_t::Get(), &HW_Computer_t::ProcessToggleButton);
+
+    connect(z, &QCheckBox::stateChanged, HW_Computer_t::Get(), &HW_Computer_t::ProcessUpdateZLatch);
+    connect(c, &QCheckBox::stateChanged, HW_Computer_t::Get(), &HW_Computer_t::ProcessUpdateCLatch);
+    connect(nvl, &QCheckBox::stateChanged, HW_Computer_t::Get(), &HW_Computer_t::ProcessUpdateNVLLatch);
 
 
     mainNone->setChecked(false);
@@ -164,6 +189,11 @@ QWidget *HW_Computer_t::BuildTestHarness(void)
 
     return test;
 }
+
+
+void HW_Computer_t::ProcessUpdateZLatch(int state) { pgmFlags->ProcessZLatch(state==Qt::Unchecked?LOW:HIGH); }
+void HW_Computer_t::ProcessUpdateCLatch(int state) { pgmFlags->ProcessCLatch(state==Qt::Unchecked?LOW:HIGH); }
+void HW_Computer_t::ProcessUpdateNVLLatch(int state) { pgmFlags->ProcessNVLLatch(state==Qt::Unchecked?LOW:HIGH); }
 
 
 //
@@ -222,6 +252,10 @@ void HW_Computer_t::InitGui(void)
 
     grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 16, 39);
     grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 16, 38);
+    grid->addWidget((clc = new HW_MomentarySwitch_t("CLC", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 15, 38);
+    grid->addWidget((stc = new HW_MomentarySwitch_t("STC", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 15, 39);
+    grid->addWidget((clv = new HW_MomentarySwitch_t("CLV", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 14, 38);
+    grid->addWidget((stv = new HW_MomentarySwitch_t("STV", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 14, 39);
     grid->addWidget(new GUI_BusLeds_t("Main Bus", mainBus), 13, 33, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("ALU A", aluA), 14, 33, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("ALU B", aluB), 15, 33, 1, 3);
@@ -233,6 +267,8 @@ void HW_Computer_t::InitGui(void)
 
     grid->addWidget(clock, 17, 37, 2, 3);
     grid->addWidget(pc, 0, 4, 2, 4);
+    grid->addWidget(pgmFlags, 0, 29, 1, 2);
+    grid->addWidget(intFlags, 0, 31, 1, 2);
 
 
     singleton->setLayout(grid);
@@ -245,6 +281,12 @@ void HW_Computer_t::InitGui(void)
     connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
     connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, pc, &GpRegisterModule_t::ProcessReset);
+
+    connect(clc, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessClearCarry);
+    connect(stc, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessSetCarry);
+
+    connect(clv, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessClearOverflow);
+    connect(stv, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessSetOverflow);
 }
 
 
@@ -283,10 +325,16 @@ void HW_Computer_t::Initialize(void)
 
 
     //
+    // -- Create the 2 flags results
+    //    --------------------------
+    pgmFlags = new AluFlagsModule_t("Pgm Flags");
+    intFlags = new AluFlagsModule_t("Int Flags", HIGH);
+
+
+    //
     // -- Create the Registers
     //    --------------------
     pc = new GpRegisterModule_t("PC");
-
 
 
     //
@@ -297,10 +345,15 @@ void HW_Computer_t::Initialize(void)
 
     // -- connect up the clock
     connect(clock, &ClockModule_t::SignalClockState, pc, &GpRegisterModule_t::ProcessClk);
+    connect(clock, &ClockModule_t::SignalClockState, pgmFlags, &AluFlagsModule_t::ProcessClk);
 
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
 
+    stv->TriggerFirstUpdates();
+    clv->TriggerFirstUpdates();
+    stc->TriggerFirstUpdates();
+    clc->TriggerFirstUpdates();
     brk->TriggerFirstUpdates();
     rst->TriggerFirstUpdates();         // must be last to reset everything
 }

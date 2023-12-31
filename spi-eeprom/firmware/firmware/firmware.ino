@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  firmware.ino -- Arduino sketch to program an SPI Serial EEPROM
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //  This sketch will be used to ferret out the details for programming a 256 Kbit EEPROM using the SPI protocol.
@@ -77,7 +77,7 @@ void Welcome() {
   Serial.begin(115200);
   Serial.println();
   Serial.println("Welcome to the SPI 256 Kbit EEPROM Programmer");
-  Serial.println("  Copyright (c) 2023 -- Adam Clark under the Beerware License");
+  Serial.println("  Copyright (c) 2023-2024 -- Adam Clark under the Beerware License");
   Serial.println("  See https://github.com/eryjus/16bcfs/blob/master/LICENSE.md for complete details");
   Serial.println("==================================================================================");
 }
@@ -142,7 +142,7 @@ void LockEeprom() {
   byte stat = GetStatus();
   stat |= 0x80;         // -- set the WPEN bit
   stat &= ~0x03;        // -- clear the read only bits
-  
+
   // -- Now we nee to set the WEL
   WriteStatus(stat);
 
@@ -157,7 +157,7 @@ void UnlockEeprom() {
   byte stat = GetStatus();
   stat &= ~0x80;        // -- clear the WPEN bit
   stat &= ~0x03;        // -- clear the read only bits
-  
+
   // -- Now we nee to set the WEL
   WriteStatus(stat);
 
@@ -377,7 +377,7 @@ void Finish() {
 //
 // -- send a bit to the SPI interface and read a bit at the same time
 //
-//    NOTE: I am not likely to do both actions at the same time in this code, 
+//    NOTE: I am not likely to do both actions at the same time in this code,
 //          but the hardware does support full duplex communications, so
 //          this code needs to be able to support it.
 //    ------------------------------------------------------------------------
@@ -387,7 +387,7 @@ bool XchgBit(bool bit) {
   if (bit) digitalWrite(MOSI, HIGH);
   else digitalWrite(MOSI, LOW);
 
-  digitalWrite(SCLK, HIGH); 
+  digitalWrite(SCLK, HIGH);
   digitalWrite(SCLK, LOW);
 
   return (rv == HIGH);
@@ -580,25 +580,25 @@ void loop() {
 
   if (cmd == "B00") {
     BlockProtect(0b00);
-    
+
     return;
   }
 
   if (cmd == "B01") {
     BlockProtect(0b01);
-    
+
     return;
   }
 
   if (cmd == "B10") {
     BlockProtect(0b10);
-    
+
     return;
   }
 
   if (cmd == "B11") {
     BlockProtect(0b11);
-    
+
     return;
   }
 

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-alu.cc -- This class represents the ALU, with all its components
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

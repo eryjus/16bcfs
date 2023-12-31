@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-alu-adder.hh -- This class represents the adder module in the ALU
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -22,10 +22,9 @@ class HW_AluAdder_t : public QObject {
 
 private:
     IC_74xx283_t *bits0;
-    IC_74xx283_t *bits3;
-    IC_74xx283_t *bits7;
-    IC_74xx283_t *bitsb;
-    IC_74xx283_t *bitsf;
+    IC_74xx283_t *bits4;
+    IC_74xx283_t *bits8;
+    IC_74xx283_t *bitsc;
 
     HW_BusDriver_t *driver;
 

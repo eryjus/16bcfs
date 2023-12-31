@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx541.hh -- This class implements a 74xx541 Line Driver
 //
-//      Copyright (c) 2023 - Adam Clark
+//      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

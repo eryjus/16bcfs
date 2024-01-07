@@ -76,10 +76,10 @@ int dp = 0;
 void Welcome() {
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Welcome to the SPI 256 Kbit EEPROM Programmer");
-  Serial.println("  Copyright (c) 2023-2024 -- Adam Clark under the Beerware License");
-  Serial.println("  See https://github.com/eryjus/16bcfs/blob/master/LICENSE.md for complete details");
-  Serial.println("==================================================================================");
+  Serial.println(F("Welcome to the SPI 256 Kbit EEPROM Programmer"));
+  Serial.println(F("  Copyright (c) 2023-2024 -- Adam Clark under the Beerware License"));
+  Serial.println(F("  See https://github.com/eryjus/16bcfs/blob/master/LICENSE.md for complete details"));
+  Serial.println(F("=================================================================================="));
 }
 
 
@@ -89,15 +89,18 @@ void Welcome() {
 //    ------------------------------------
 void PrintHelp() {
   Serial.println();
-  Serial.println("Available Commands:");
-  Serial.println("\tS\t\tDecode the EEPROM STATUS register and print the contents");
-  Serial.println("\tL\t\tLock the EEPROM by setting the WPEN bit");
-  Serial.println("\tU\t\tUnlock the EEPROM by clearing the WPEN bit");
-  Serial.println("\tZ<xxxx>\t\tWrite a test pattern to a page, and verify it");
-  Serial.println("\tD<xxxx>\t\tDump a page to the serial port");
-  Serial.println("\tBbb\t\tSet the Block Protect Option: (00=None; 01=Upper Quarter; 10=Upper Half; 11=All");
-  Serial.println("\tFxx\t\tFill the EEPROM with the specified value");
-  Serial.println("\tPxx xxxx\tPoke a value into the EEPROM memory");
+  Serial.println(F("Available Commands:"));
+  Serial.println(F("\tS\t\tDecode the EEPROM STATUS register and print the contents"));
+  Serial.println(F("\tL\t\tLock the EEPROM by setting the WPEN bit"));
+  Serial.println(F("\tU\t\tUnlock the EEPROM by clearing the WPEN bit"));
+  Serial.println(F("\tZ<xxxx>\t\tWrite a test pattern to a page, and verify it"));
+  Serial.println(F("\tD<xxxx>\t\tDump a page to the serial port"));
+  Serial.println(F("\tBbb\t\tSet the Block Protect Option: (00=None; 01=Upper Quarter; 10=Upper Half; 11=All"));
+  Serial.println(F("\tFxx\t\tFill the EEPROM with the specified value"));
+  Serial.println(F("\tPxx xxxx\tPoke a value into the EEPROM memory"));
+  Serial.println(F("\tW\t\tWrite (Program) an entire EEPROM"));
+  Serial.println(F("\tR\t\tRead an entire EEPROM"));
+  Serial.println(F("\tV\t\tVerify the Contents of an EEPROM against the selected binary"));
   Serial.println();
   Serial.print("> ");
 }
@@ -119,18 +122,18 @@ String ReadCommand() {
 //    ------------------------------------------------------
 void PrintStatus() {
   byte stat = GetStatus();
-  Serial.println("EEPROM Status:");
-  Serial.print("   WPEN\t");  Serial.println((stat & 0x80) != 0 ? "Enabled" : "Disabled");
-  Serial.print("   BP  \t");  if (((stat >> 2) & 0x3) < 1) { Serial.print('0'); } Serial.println((stat >> 2) & 0x3, BIN);
-  Serial.print("   WEL \t");  Serial.println((stat & 0x02) != 0 ? "Latched" : "Unlatched");
-  Serial.print("   WIP \t");  Serial.println((stat & 0x01) != 0 ? "True" : "False");
+  Serial.println(F("EEPROM Status:"));
+  Serial.print(F("   WPEN\t"));  Serial.println((stat & 0x80) != 0 ? F("Enabled") : F("Disabled"));
+  Serial.print(F("   BP  \t"));  if (((stat >> 2) & 0x3) < 1) { Serial.print('0'); } Serial.println((stat >> 2) & 0x3, BIN);
+  Serial.print(F("   WEL \t"));  Serial.println((stat & 0x02) != 0 ? F("Latched") : F("Unlatched"));
+  Serial.print(F("   WIP \t"));  Serial.println((stat & 0x01) != 0 ? F("True") : F("False"));
   Serial.println();
-  Serial.print("The current Page Location is 0x"); Serial.println(dp, HEX);
+  Serial.print(F("The current Page Location is 0x")); Serial.println(dp, HEX);
   Serial.println();
-  Serial.println("WPEN = Write Protect ENable");
-  Serial.println("BP   = Block Protect (00=None; 01=Upper Quarter; 10=Upper Half; 11=All");
-  Serial.println("WEL  = Write Enable Latch");
-  Serial.println("WIP  = Write In Progress");
+  Serial.println(F("WPEN = Write Protect ENable"));
+  Serial.println(F("BP   = Block Protect (00=None; 01=Upper Quarter; 10=Upper Half; 11=All"));
+  Serial.println(F("WEL  = Write Enable Latch"));
+  Serial.println(F("WIP  = Write In Progress"));
 }
 
 
@@ -146,7 +149,7 @@ void LockEeprom() {
   // -- Now we nee to set the WEL
   WriteStatus(stat);
 
-  Serial.println("Locked");
+  Serial.println(F("Locked"));
 }
 
 
@@ -161,7 +164,7 @@ void UnlockEeprom() {
   // -- Now we nee to set the WEL
   WriteStatus(stat);
 
-  Serial.println("Unlocked");
+  Serial.println(F("Unlocked"));
 }
 
 
@@ -177,7 +180,7 @@ void BlockProtect(int p) {
 
   WriteStatus(stat);
 
-  Serial.print("Block Protect set to ");
+  Serial.print(F("Block Protect set to "));
   if (p < 1) Serial.print('0');
   Serial.println(p, BIN);
 }
@@ -240,13 +243,32 @@ bool VerifyPage(int loc, byte *buffer, int size) {
 
   for (int i = 0; i < size; i ++) {
     if (ReadByte() != buffer[i]) {
-      Serial.print("FAIL: bytes do not match at location0x");  Serial.println(loc + i, HEX);
+      Serial.print(F("FAIL: bytes do not match at location0x"));  Serial.println(loc + i, HEX);
       rv = false;
     }
   }
 
   Finish();
   return rv;
+}
+
+
+
+//
+// -- Read a page's contents
+//    ----------------------
+void ReadPage(long loc, byte *array)
+{
+  Start();
+  ShiftByte(READ);
+  ShiftByte((loc >> 8) & 0xff);
+  ShiftByte(loc & 0xff);
+
+  for (int i = 0; i < PAGE_SIZE; i ++) {
+    array[i] = ReadByte();
+  }
+
+  Finish();
 }
 
 
@@ -260,7 +282,7 @@ void DumpPage(int loc) {
   ShiftByte((loc >> 8) & 0xff);
   ShiftByte(loc & 0xff);
 
-  Serial.print("Dumping the contents of the EEPROM at 0x"); Serial.println(loc, HEX);
+  Serial.print(F("Dumping the contents of the EEPROM at 0x")); Serial.println(loc, HEX);
   Serial.println();
   Serial.println("Loc   00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
   Serial.print  ("----- -----------------------------------------------");
@@ -305,18 +327,18 @@ void TestPattern(int loc) {
     return;
   }
 
-  byte pattern[PAGE_SIZE] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\0";
+  byte pattern[PAGE_SIZE] = { F("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\0") };
 
   SetWEL();
   WritePage(loc, pattern, PAGE_SIZE);
   bool result = VerifyPage(loc, pattern, PAGE_SIZE);
 
   if (result) {
-    Serial.print("SUCCESS: Test pattern successfully written to and verified at location 0x");
+    Serial.print(F("SUCCESS: Test pattern successfully written to and verified at location 0x"));
     Serial.println(loc, HEX);
   } else {
-    Serial.print("FAIL: Unable to verify the test pattern.");
-    Serial.print("  (see previous messages for more details)");
+    Serial.print(F("FAIL: Unable to verify the test pattern."));
+    Serial.print(F("  (see previous messages for more details)"));
   }
 }
 
@@ -329,27 +351,167 @@ void Fill(byte val) {
   byte buffer[PAGE_SIZE];
   memset(buffer, val, PAGE_SIZE);
 
-  Serial.print("Filling EEPROM with the byte value 0x");
+  Serial.print(F("Filling EEPROM with the byte value 0x"));
   if (val < 16) Serial.print('0');
   Serial.println(val, HEX);
 
-  Serial.print("0000: ");
+  Serial.print(F("0000: "));
 
   for (long i = 0; i < EEPROM_BYTES; i += PAGE_SIZE) {
     if ((i & 0x7ff) == 0 && i != 0) {
       Serial.println();
       if (i < 0x1000) Serial.print('0');
       Serial.print(i, HEX);
-      Serial.print(": ");
+      Serial.print(F(": "));
     }
     Serial.print('.');
     WritePage(i, buffer, PAGE_SIZE);
   }
 
   Serial.println();
-  Serial.print("Filled the EEPROM with the value 0x");
+  Serial.print(F("Filled the EEPROM with the value 0x"));
   if (val < 16) Serial.print('0');
   Serial.println(val, HEX);
+}
+
+
+
+//
+// -- Enter Write Mode, program an entire EEPROM
+//    ------------------------------------------
+void Write(void) {
+  // -- send 3 breaks (well, really ETX) characters to get the client's attention
+  Serial.println("Please select the file to program to the EEPROM");
+  Serial.print(F("\x03\x03\x03"));
+  Serial.flush();
+
+  // -- make sure we get an ACK back in a reasonable amount of time (0.5 sec should do)
+  Serial.setTimeout(500);
+  byte inp[2];
+  if (Serial.readBytes(inp, 1) == 0) return;
+  if (inp[0] != '\x06') return;
+
+  // -- now we need to inform the client that we are executing a WRITE
+  Serial.print(F("W"));
+  Serial.flush();
+
+  while (Serial.readBytes(inp, 1) == 0) {}    // wait forever for a response
+  if (inp[0] != '\x06') return;               // check for an ACK
+
+  byte buf[PAGE_SIZE];
+  byte wrk[1];
+
+  for (long i = 0; i < EEPROM_BYTES; i += PAGE_SIZE) {
+    digitalWrite(LED_BUILTIN, HIGH);
+
+    for (int j = 0; j < PAGE_SIZE; j ++) {
+      while (Serial.available() < 1) {}          // wait for a page to be available
+
+      Serial.readBytes(wrk, 1);
+      buf[j] = wrk[0];
+    }
+
+    digitalWrite(LED_BUILTIN, LOW);
+
+    WritePage(i, buf, PAGE_SIZE);
+
+    Serial.print(F("\x06"));
+    Serial.flush();
+  }
+}
+
+
+
+//
+// -- Enter Read Mode, read an entire EEPROM
+//    --------------------------------------
+void Read(void) {
+  // -- send 3 breaks (well, really ETX) characters to get the client's attention
+  Serial.println("Please select the file to save the EEPROM program");
+  Serial.print(F("\x03\x03\x03"));
+  Serial.flush();
+
+  // -- make sure we get an ACK back in a reasonable amount of time (0.5 sec should do)
+  Serial.setTimeout(500);
+  byte inp[2];
+  if (Serial.readBytes(inp, 1) == 0) return;
+  if (inp[0] != '\x06') return;
+
+  // -- now we need to inform the client that we are executing a WRITE
+  Serial.print(F("R"));
+  Serial.flush();
+
+  while (Serial.readBytes(inp, 1) == 0) {}    // wait forever for a response
+  if (inp[0] != '\x06') return;               // check for an ACK
+
+  byte buf[PAGE_SIZE];
+  byte wrk[1];
+
+  for (long i = 0; i < EEPROM_BYTES; i += PAGE_SIZE) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    ReadPage(i, buf);
+    digitalWrite(LED_BUILTIN, LOW);
+
+    for (int j = 0; j < PAGE_SIZE; j ++) {
+      // -- need to be real clear about which version of `Serial.print()` is called!
+      Serial.print((char)buf[j]);
+    }
+
+    while (Serial.readBytes(inp, 1) == 0) {}    // wait forever for a response
+    if (inp[0] != '\x06') return;               // check for an ACK
+  }
+}
+
+
+
+//
+// -- Enter Verify Mode, read an entire EEPROM
+//    ----------------------------------------
+void Verify(void) {
+  // -- send 3 breaks (well, really ETX) characters to get the client's attention
+  Serial.println("Please select the file to save the EEPROM program");
+  Serial.print(F("\x03\x03\x03"));
+  Serial.flush();
+
+  // -- make sure we get an ACK back in a reasonable amount of time (0.5 sec should do)
+  Serial.setTimeout(500);
+  byte inp[2];
+  if (Serial.readBytes(inp, 1) == 0) return;
+  if (inp[0] != '\x06') return;
+
+  // -- now we need to inform the client that we are executing a WRITE
+  Serial.print(F("V"));
+  Serial.flush();
+
+  while (Serial.readBytes(inp, 1) == 0) {}    // wait forever for a response
+  if (inp[0] != '\x06') return;               // check for an ACK
+
+  byte inBuf[PAGE_SIZE];
+  byte romBuf[PAGE_SIZE];
+  byte wrk[1];
+
+  for (long i = 0; i < EEPROM_BYTES; i += PAGE_SIZE) {
+    digitalWrite(LED_BUILTIN, HIGH);
+
+    for (int j = 0; j < PAGE_SIZE; j ++) {
+      while (Serial.available() < 1) {}          // wait for a page to be available
+
+      Serial.readBytes(wrk, 1);
+      inBuf[j] = wrk[0];
+    }
+
+    digitalWrite(LED_BUILTIN, LOW);
+
+    bool good = true;
+    ReadPage(i, romBuf);
+
+    for (int j = 0; j < PAGE_SIZE; j ++) {
+      if (inBuf[j] != romBuf[j]) good = false;
+    }
+
+    Serial.print(good?F("\x06"):F("\x15"));
+    Serial.flush();
+  }
 }
 
 
@@ -491,6 +653,10 @@ void setup() {
   digitalWrite(SCLK, LOW);
   digitalWrite(MOSI, LOW);
 
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+
   // -- initialize global variables
   dp = 0;
 
@@ -530,26 +696,26 @@ void loop() {
   cmd.trim();
   Serial.println(cmd);
 
-  if (cmd == "S") {
+  if (cmd == F("S")) {
     PrintStatus();
 
     return;
   }
 
-  if (cmd == "L") {
+  if (cmd == F("L")) {
     LockEeprom();
 
     return;
   }
 
-  if (cmd == "U") {
+  if (cmd == F("U")) {
     UnlockEeprom();
 
     return;
   }
 
   if (cmd[0] == 'Z') {
-    if (cmd == "Z") TestPattern(0);   // this is the whole command, take the defaults
+    if (cmd == F("Z")) TestPattern(0);   // this is the whole command, take the defaults
     else {
       cmd[0] = ' ';
       cmd.trim();
@@ -564,7 +730,7 @@ void loop() {
   }
 
   if (cmd[0] == 'D') {
-    if (cmd == "D") DumpPage(dp);      // this is the whole command, take the defaults
+    if (cmd == F("D")) DumpPage(dp);      // this is the whole command, take the defaults
     else {
       cmd[0] = ' ';
       cmd.trim();
@@ -578,25 +744,25 @@ void loop() {
     return;
   }
 
-  if (cmd == "B00") {
+  if (cmd == F("B00")) {
     BlockProtect(0b00);
 
     return;
   }
 
-  if (cmd == "B01") {
+  if (cmd == F("B01")) {
     BlockProtect(0b01);
 
     return;
   }
 
-  if (cmd == "B10") {
+  if (cmd == F("B10")) {
     BlockProtect(0b10);
 
     return;
   }
 
-  if (cmd == "B11") {
+  if (cmd == F("B11")) {
     BlockProtect(0b11);
 
     return;
@@ -625,6 +791,26 @@ void loop() {
 
     dp = loc & ~(PAGE_SIZE-1);
 
+    return;
+  }
+
+  if (cmd == F("W")) {
+    Write();
+    Serial.setTimeout(2147483647);    // -- restore timeout unconditionally
+    return;
+  }
+
+
+  if (cmd == F("R")) {
+    Read();
+    Serial.setTimeout(2147483647);    // -- restore timeout unconditionally
+    return;
+  }
+
+
+  if (cmd == F("V")) {
+    Verify();
+    Serial.setTimeout(2147483647);    // -- restore timeout unconditionally
     return;
   }
 }

@@ -36,6 +36,7 @@
 #include "QtWidgets/QWidget"
 #include "QtWidgets/QLineEdit"
 #include "QtWidgets/QLabel"
+#include "QtWidgets/QMessageBox"
 #include "QtWidgets/QStatusBar"
 #include "QtWidgets/QMenuBar"
 #include "QtWidgets/QFileDialog"
@@ -91,6 +92,8 @@ public:
 private:
     void CreateActions(void);
     void CreateMenus(void);
+    void SendBinary(void);
+    void ReadBinary(void);
 
 
 public slots:
@@ -334,11 +337,168 @@ inline void MainWindow::SetTitle(void)
 }
 
 
+
+//
+// -- Send a binary file to the Arduino
+//
+//    NOTE: This function is actually, "Bad form, Jack!"  Nothing should tie up the GUI thread for a long
+//    period of time, but this function does just that.  It forces updates as required, but we really do
+//    not want much else going on.
+//    ----------------------------------------------------------------------------------------------------
+void MainWindow::SendBinary(void)
+{
+    const char *ack = "\x06";
+    const char *nak = "x\15";
+    QString filename = QFileDialog::getOpenFileName(this, "Send Binary", ".", "Binary Files (*.bin)");
+
+    if (filename.isEmpty()) {
+        log->insertPlainText("Aborted\n");
+        log->moveCursor(QTextCursor::End);
+        write(fdDev, nak, 1);
+        return;
+    }
+
+    log->insertPlainText("Opening ");
+    log->insertPlainText(filename);
+    log->insertPlainText("\n");
+    log->moveCursor(QTextCursor::End);
+
+    int fd = open(filename.toStdString().c_str(), O_RDONLY);
+
+    write(fdDev, ack, 1);
+
+    if (fd < 0) {
+        log->insertPlainText("Unable to open Binary file to send: ");
+        log->insertPlainText(filename);
+        log->insertPlainText("\n");
+        log->moveCursor(QTextCursor::End);
+
+        write(fdDev, nak, 1);
+        return;
+    }
+
+    log->insertPlainText(filename);
+    log->insertPlainText(" opened\n");
+
+    for (int i = 0; i < 32768/64; i ++) {
+        uint8_t buf [64];
+        read(fd, buf, 64);
+        write(fdDev, buf, 64);
+
+        if (i % 32 == 0) {
+            char loc[9];
+
+            sprintf(loc, "%4.4x:\t", i * 64);
+            log->insertPlainText("\n");
+            log->insertPlainText(loc);
+            log->moveCursor(QTextCursor::End);
+        }
+
+        // -- check for the Arduino to ACK the page
+        while (read(fdDev, buf, 1) == 0) {}
+
+        log->insertPlainText(buf[0]=='\x06'?".":"X");
+        log->repaint();
+    }
+
+    ::close(fd);
+    log->insertPlainText("\n\nBinary sent seccessfully\n");
+    log->moveCursor(QTextCursor::End);
+}
+
+
+
+//
+// -- Read a binary file from the Arduino
+//
+//    NOTE: This function is actually, "Bad form, Jack!"  Nothing should tie up the GUI thread for a long
+//    period of time, but this function does just that.  It forces updates as required, but we really do
+//    not want much else going on.
+//    ----------------------------------------------------------------------------------------------------
+void MainWindow::ReadBinary(void)
+{
+    const char *ack = "\x06";
+    const char *nak = "x\15";
+    QString filename = QFileDialog::getSaveFileName(this, "Save Binary", ".", "Binary Files (*.bin)");
+    int flags = O_WRONLY;
+    mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+
+    if (filename.right(4) != ".bin") filename += ".bin";
+
+    // -- did we get a filename?
+    if (filename.isEmpty()) {
+        log->insertPlainText("Aborted\n");
+        log->moveCursor(QTextCursor::End);
+        write(fdDev, nak, 1);
+        return;
+    }
+
+    // -- if it exists, can we overwrite it?
+    if (QFileInfo::exists(filename)) flags |= O_TRUNC;
+    else flags |= O_CREAT;
+
+    log->insertPlainText("Opening ");
+    log->insertPlainText(filename);
+    log->insertPlainText("\n");
+    log->moveCursor(QTextCursor::End);
+
+    int fd = open(filename.toStdString().c_str(), flags, mode);
+
+    write(fdDev, ack, 1);
+
+    if (fd < 0) {
+        log->insertPlainText("Unable to open Binary file to save: ");
+        log->insertPlainText(filename);
+        log->insertPlainText("\n");
+        log->moveCursor(QTextCursor::End);
+
+        write(fdDev, nak, 1);
+        return;
+    }
+
+    log->insertPlainText(filename);
+    log->insertPlainText(" opened\n");
+
+    for (int i = 0; i < 32768/64; i ++) {
+        uint8_t buf [64];
+        uint8_t tmp;
+
+        for (int j = 0; j < 64; j ++) {
+            while (read(fdDev, &tmp, 1) <= 0) {}
+            buf[j] = tmp;
+        }
+        write(fd, buf, 64);
+
+        if (i % 32 == 0) {
+            char loc[9];
+
+            sprintf(loc, "%4.4x:\t", i * 64);
+            log->insertPlainText("\n");
+            log->insertPlainText(loc);
+            log->moveCursor(QTextCursor::End);
+        }
+
+        log->insertPlainText(".");
+        log->repaint();
+
+        // -- check for the Arduino to ACK the page
+        write(fdDev, ack, 1);
+    }
+
+    ::close(fd);
+    log->insertPlainText("\n\nBinary read seccessfully\n");
+    log->moveCursor(QTextCursor::End);
+}
+
+
+
 //
 // -- When we are idle, poll the tty for new input
 //    --------------------------------------------
 void MainWindow::OnIdle(void)
 {
+    static int bcnt = 0;
+
     if (xmit) return;
 
     struct pollfd fds = {
@@ -358,7 +518,48 @@ void MainWindow::OnIdle(void)
 
         if (len < 0) return;
         buf[len] = 0;
-        log->insertPlainText(buf);
+
+        for (int i = 0; i < len; i ++) {
+            char t[2] = {0};
+
+            if (buf[i] == '\x03') {
+                bcnt ++;
+
+                if (bcnt == 3) {
+                    char typ[2] = {0};
+                    // -- send an ACK and block waiting for the type of xmit to complete
+                    write(fdDev, "\x06", 1);
+                    while (read(fdDev, typ, 1) == 0) {}
+
+                    switch(typ[0]) {
+                    case 'W':
+                        SendBinary();
+                        break;
+                    case 'R':
+                        ReadBinary();
+                        break;
+                    case 'V':
+                        SendBinary();
+                        break;
+                    default:
+                        log->insertPlainText("\nUnknown Transaction Type: ");
+                        log->insertPlainText(typ);
+                        log->insertPlainText("\n");
+                        break;
+                    }
+
+                    bcnt = 0;
+                }
+
+                continue;
+            } else bcnt = 0;
+
+            if (buf[i] != '\r') {
+                t[0] = buf[i];
+                log->insertPlainText(t);
+            }
+        }
+
         log->moveCursor(QTextCursor::End);
     }
 }
@@ -371,7 +572,6 @@ void MainWindow::OnIdle(void)
 void MainWindow::ProcessInput(void)
 {
     QString entry = line->text();
-    if (entry.length() == 0) return;
 
     const char newline[] = { '\n', 0};
 

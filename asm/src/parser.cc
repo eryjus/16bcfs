@@ -450,16 +450,22 @@ void Parser_t::ParseFile(void)
             break;
 
         case TOK_ARCH_REGISTER:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseRegisterDef();
             break;
 
         case TOK_ARCH_MEMORY:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseMemoryDef();
             break;
 
         case TOK_ARCH_OPCODE:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseOpcodeDef();
             break;
@@ -477,27 +483,21 @@ void Parser_t::ParseFile(void)
             break;
 
         case TOK_LABEL:
-            if (!Binary_t::IsInitialized()) {
-                Binary_t::BinaryInit();
-            }
+            if (!Binary_t::IsInitialized()) Binary_t::BinaryInit();
 
             NoteLabelLocation();
             ADVANCE_TOKEN;
             break;
 
         case TOK_DB:
-            if (!Binary_t::IsInitialized()) {
-                Binary_t::BinaryInit();
-            }
+            if (!Binary_t::IsInitialized()) Binary_t::BinaryInit();
 
             ADVANCE_TOKEN;
             ParseData();
             break;
 
         case TOK_INSTRUCTION:
-            if (!Binary_t::IsInitialized()) {
-                Binary_t::BinaryInit();
-            }
+            if (!Binary_t::IsInitialized()) Binary_t::BinaryInit();
 
             OpCodes::ParseInstruction(OpCodes::NormalizeInstruction(yylval.name));
             ADVANCE_TOKEN;
@@ -507,9 +507,7 @@ void Parser_t::ParseFile(void)
             if (Binary_t::IsAlloc()) {
                 Messaging::Warning("Organization is initialized already; extra specification ignored\n"
                         "This could have been an implicit initialization as `.organization` needs to be first\n",
-                        __FILE__, __LINE__, "", 0);
-
-                break;
+                        GetSourceFile(), yylineno, "", 0);
             }
 
             ADVANCE_TOKEN;
@@ -519,9 +517,11 @@ void Parser_t::ParseFile(void)
             break;
 
         case TOK_ARCH_BIG_ENDIAN:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             if (Binary_t::EndianInitialized()) {
                 Messaging::Warning("Endianness has already been initialized; extra specification ignored\n",
-                        __FILE__, __LINE__, "", 0);
+                        GetSourceFile(), yylineno, "", 0);
             } else {
                 Binary_t::SetEndian(Binary_t::BIG);
             }
@@ -530,6 +530,8 @@ void Parser_t::ParseFile(void)
             break;
 
         case TOK_ARCH_LITTLE_ENDIAN:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             if (Binary_t::EndianInitialized()) {
                 Messaging::Warning("Endianness has already been initialized; extra specification ignored\n",
                         __FILE__, __LINE__, "", 0);
@@ -541,24 +543,32 @@ void Parser_t::ParseFile(void)
             break;
 
         case TOK_ARCH_COND_BITS:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseCondBits();
             ADVANCE_TOKEN;
             break;
 
         case TOK_ARCH_COND_DEFAULT:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseCondDefault();
             ADVANCE_TOKEN;
             break;
 
         case TOK_ARCH_COND_PREFIX:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseCondPrefix();
             ADVANCE_TOKEN;
             break;
 
         case TOK_ARCH_COND_SUFFIX:
+            if (!Binary_t::IsAlloc()) Binary_8bit_t::Organization();
+
             ADVANCE_TOKEN;
             ParseCondSuffix();
             ADVANCE_TOKEN;

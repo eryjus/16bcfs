@@ -27,3 +27,9 @@ jobs:
       run: tup init
     - name: Build everything
       run: make
+    - name: Check Test `asm-00001`
+      run: diff 16bcfs-tests/asm-00001/expected.txt 16bcfs-tests/asm-00001/output.txt
+    - name: Check Test `asm-00002`
+      run: diff 16bcfs-tests/asm-00002/expected.txt 16bcfs-tests/asm-00002/output.txt
+    - name: Check Test `asm-00003`
+      run: diff 16bcfs-tests/asm-00003/expected.txt 16bcfs-tests/asm-00003/output.txt

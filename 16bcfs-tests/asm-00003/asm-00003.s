@@ -1,5 +1,5 @@
 ;;===================================================================================================================
-;; asm-00001.s: ensure that `.organization` comes first
+;; asm-00003.s: ensure that `.organization` comes first
 ;;
 ;;  Test case for
 ;;

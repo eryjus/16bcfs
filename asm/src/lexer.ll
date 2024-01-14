@@ -108,7 +108,7 @@ BIN             [01]
 
                                         currentSourceFile = strdup(yytext);
                                         yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
-                                        yylineno = 1;
+                                        yylineno = 0;
 
                                         BEGIN(architecture);
                                     }
@@ -147,7 +147,7 @@ BIN             [01]
 
                                         currentSourceFile = strdup(yytext);
                                         yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
-                                        yylineno = 1;
+                                        yylineno = 0;
                                     }
 
 
@@ -367,7 +367,7 @@ void OpenFile (const char *file)
     }
 
     yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
-    yylineno = 1;
+    yylineno = 0;
 }
 
 

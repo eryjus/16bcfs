@@ -1,0 +1,22 @@
+;;===================================================================================================================
+;; asm-00001.s: ensure that `.organization` comes first
+;;
+;;  Test case for
+;;
+;;  This source is expected to fail.  It does not have the organization clause first in the architecture.
+;;
+;;  -----------------------------------------------------------------------------------------------------------------
+;;
+;;     Date      Tracker  Version  Pgmr  Description
+;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+;;  2024-Jan-13  Initial    #62    ADCL  Initial version
+;;
+;;===================================================================================================================
+
+    .memory         0x0000 0xffff
+    .organization   16bits          ;; this will fail
+    .org            0x0000
+
+entry:
+    nop
+

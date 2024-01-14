@@ -1,1 +1,0 @@
-: test-nop.s | ../../asm/asm |> ../../asm/asm %f |> output.bin eeprom-lsb.bin eeprom-msb.bin opcodes.h

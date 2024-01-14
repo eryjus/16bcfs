@@ -1,1 +1,0 @@
-: test-carry.s | ../../asm/asm |> ../../asm/asm %f  -l=output.txt |> output.bin eeprom-lsb.bin eeprom-msb.bin opcodes.h output.txt

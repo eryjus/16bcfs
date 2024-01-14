@@ -1,1 +1,0 @@
-: test-mov.s | ../../asm/asm |> ../../asm/asm -l=output.txt %f |> output.bin eeprom-lsb.bin eeprom-msb.bin opcodes.h output.txt

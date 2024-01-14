@@ -1,3 +1,0 @@
-: lexer.ll |> flex -iso %o %f |> lexer.c
-: *.c* |> clang -o %o *.c* -lstdc++|> asm
-

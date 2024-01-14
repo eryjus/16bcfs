@@ -1,1 +1,1 @@
-: test-nop.s | ../../asm/asm |> ../../asm/asm %f && rm -f *.bin |> opcodes.h
+: test-nop.s | ../../asm/bin/asm |> ../../asm/bin/asm %f && rm -f *.bin |> opcodes.h

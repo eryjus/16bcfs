@@ -1,0 +1,2 @@
+: lexer.ll |> flex -iso %o %f |> lexer.cc
+

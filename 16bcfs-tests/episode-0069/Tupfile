@@ -1,0 +1,1 @@
+: test-r2.s | ../../asm/bin/asm |> ../../asm/bin/asm %f -l=output.txt |> output.bin eeprom-lsb.bin eeprom-msb.bin opcodes.h output.txt

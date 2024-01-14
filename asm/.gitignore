@@ -2,5 +2,5 @@
 asm
 test.s
 bbv2.inc
-lexer.c
+lexer.c*
 output.bin

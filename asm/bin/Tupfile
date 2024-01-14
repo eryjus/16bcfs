@@ -1,0 +1,2 @@
+: ../src/*.c* |> clang -I ../inc -o %o %f -lstdc++|> asm
+

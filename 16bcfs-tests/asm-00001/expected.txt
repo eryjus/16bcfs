@@ -1,0 +1,7 @@
+WARNING (asm-00001.s:17):
+Organization is initialized already; extra specification ignored
+This could have been an implicit initialization as `.organization` needs to be first
+
+FATAL (asm-00001.s:17):
+Unable to reinitialize binary .organization
+

@@ -15,6 +15,12 @@
 
 
 //
+// -- The settings for the application
+//    --------------------------------
+QSettings *HW_Computer_t::settings;
+
+
+//
 // -- Static class members -- modules
 //    -------------------------------
 HW_Computer_t *HW_Computer_t::singleton = nullptr;
@@ -34,6 +40,41 @@ HW_Alu_t *HW_Computer_t::alu = nullptr;
 
 // -- Registers
 GpRegisterModule_t *HW_Computer_t::pc = nullptr;
+
+
+// -- Control ROMs
+IC_25lc256_t *HW_Computer_t::ctrl0 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl1 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl2 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl3 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl4 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl5 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl6 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl7 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl8 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrl9 = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrla = nullptr;
+IC_25lc256_t *HW_Computer_t::ctrlb = nullptr;
+
+
+// -- Control RAM
+IC_AS6C62256_t *HW_Computer_t::ctrl0Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl1Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl2Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl3Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl4Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl5Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl6Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl7Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl8Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrl9Ram = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrlaRam = nullptr;
+IC_AS6C62256_t *HW_Computer_t::ctrlbRam = nullptr;
+
+
+// -- Widgets
+QWidget *HW_Computer_t::central = nullptr;
+
 
 
 // -- Testing
@@ -270,8 +311,24 @@ void HW_Computer_t::InitGui(void)
     grid->addWidget(pgmFlags, 0, 29, 1, 2);
     grid->addWidget(intFlags, 0, 31, 1, 2);
 
+    central = new QWidget;
+    central->setLayout(grid);
+    singleton->setCentralWidget(central);
 
-    singleton->setLayout(grid);
+    singleton->statusBar()->showMessage("Hi!", 3000);
+
+    QMenu *fileMenu = singleton->menuBar()->addMenu("File");
+    QAction *quitAction = new QAction("Quit");
+    quitAction->setShortcuts(QKeySequence::Quit);
+    quitAction->setStatusTip("Quit the emulator");
+    connect(quitAction, &QAction::triggered, app, &QApplication::quit);
+    fileMenu->addAction(quitAction);
+
+    QMenu *editMenu = singleton->menuBar()->addMenu("Edit");
+    QAction *settings = new QAction("Settings");
+    settings->setStatusTip("Edit the emulator settings");
+    connect(settings, &QAction::triggered, singleton, &HW_Computer_t::ProcessSettingsWindow);
+    editMenu->addAction(settings);
 
     singleton->setWindowTitle(tr("16bcfs Emulator"));
     singleton->showMaximized();
@@ -338,6 +395,40 @@ void HW_Computer_t::Initialize(void)
 
 
     //
+    // -- Create the Control ROMs
+    //    -----------------------
+    ctrl0 = new IC_25lc256_t("ctrl0.bin");
+    ctrl1 = new IC_25lc256_t("ctrl1.bin");
+    ctrl2 = new IC_25lc256_t("ctrl2.bin");
+    ctrl3 = new IC_25lc256_t("ctrl3.bin");
+    ctrl4 = new IC_25lc256_t("ctrl4.bin");
+    ctrl5 = new IC_25lc256_t("ctrl5.bin");
+    ctrl6 = new IC_25lc256_t("ctrl6.bin");
+    ctrl7 = new IC_25lc256_t("ctrl7.bin");
+    ctrl8 = new IC_25lc256_t("ctrl8.bin");
+    ctrl9 = new IC_25lc256_t("ctrl9.bin");
+    ctrla = new IC_25lc256_t("ctrla.bin");
+    ctrlb = new IC_25lc256_t("ctrlb.bin");
+
+
+    //
+    // -- Create the Control RAMs
+    //    -----------------------
+    ctrl0Ram = new IC_AS6C62256_t(ctrl0);
+    ctrl1Ram = new IC_AS6C62256_t(ctrl1);
+    ctrl2Ram = new IC_AS6C62256_t(ctrl2);
+    ctrl3Ram = new IC_AS6C62256_t(ctrl3);
+    ctrl4Ram = new IC_AS6C62256_t(ctrl4);
+    ctrl5Ram = new IC_AS6C62256_t(ctrl5);
+    ctrl6Ram = new IC_AS6C62256_t(ctrl6);
+    ctrl7Ram = new IC_AS6C62256_t(ctrl7);
+    ctrl8Ram = new IC_AS6C62256_t(ctrl8);
+    ctrl9Ram = new IC_AS6C62256_t(ctrl9);
+    ctrlaRam = new IC_AS6C62256_t(ctrla);
+    ctrlbRam = new IC_AS6C62256_t(ctrlb);
+
+
+    //
     // -- Finally, build the GUI screen
     //    -----------------------------
     InitGui();
@@ -350,6 +441,19 @@ void HW_Computer_t::Initialize(void)
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
 
+    ctrl0->TriggerFirstUpdate();
+    ctrl1->TriggerFirstUpdate();
+    ctrl2->TriggerFirstUpdate();
+    ctrl3->TriggerFirstUpdate();
+    ctrl4->TriggerFirstUpdate();
+    ctrl5->TriggerFirstUpdate();
+    ctrl6->TriggerFirstUpdate();
+    ctrl7->TriggerFirstUpdate();
+    ctrl8->TriggerFirstUpdate();
+    ctrl9->TriggerFirstUpdate();
+    ctrla->TriggerFirstUpdate();
+    ctrlb->TriggerFirstUpdate();
+
     stv->TriggerFirstUpdates();
     clv->TriggerFirstUpdates();
     stc->TriggerFirstUpdates();
@@ -359,3 +463,13 @@ void HW_Computer_t::Initialize(void)
 }
 
 
+
+//
+// -- execute the settings dialog
+//    ---------------------------
+void HW_Computer_t::ProcessSettingsWindow(void)
+{
+    GUI_SettingsDialog_t *settings = new GUI_SettingsDialog_t(this);
+    settings->exec();
+    delete settings;
+}

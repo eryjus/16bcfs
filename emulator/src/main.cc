@@ -13,12 +13,24 @@
 #include "16bcfs.hh"
 
 
+
+//
+// -- I cannot see a way around this, app needs to be a global variable
+//    -----------------------------------------------------------------
+GUI_Application_t *app = nullptr;
+
+
+
 //
 // -- The main entry point for the application
 //    ----------------------------------------
 int main(int argc, char *argv[])
 {
-    GUI_Application_t *app = new GUI_Application_t(argc, argv);
+    new GUI_Application_t(argc, argv);
+
+    // -- settings will use these if not provided explicitly; they will be relied upon
+    app->setOrganizationName("eryjus");
+    app->setApplicationName("16bcfs-emulator");
 
     return app->exec();
 }

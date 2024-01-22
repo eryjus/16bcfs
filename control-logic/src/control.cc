@@ -715,6 +715,7 @@ int main(void)
         promBuffer[i] = GenerateControlSignals(i);
     }
 
+    FILE *of0;
     FILE *of1;
     FILE *of2;
     FILE *of3;
@@ -726,9 +727,11 @@ int main(void)
     FILE *of9;
     FILE *ofa;
     FILE *ofb;
-    FILE *ofc;
 
     // -- Open each output file in turn
+    of0 = fopen("ctrl0.bin", "w");
+    if (!of0) perror("Unable to open ctrl0.bin");
+
     of1 = fopen("ctrl1.bin", "w");
     if (!of1) perror("Unable to open ctrl1.bin");
 
@@ -762,25 +765,23 @@ int main(void)
     ofb = fopen("ctrlb.bin", "w");
     if (!ofb) perror("Unable to open ctrlb.bin");
 
-    ofc = fopen("ctrlc.bin", "w");
-    if (!ofc) perror("Unable to open ctrlc.bin");
-
 
     // -- write each EEPROM
     for (int i = 0; i < PROM_SIZE; i ++) {
-        uint8_t byte1 = (promBuffer[i] >>  0) & 0xff;
-        uint8_t byte2 = (promBuffer[i] >>  8) & 0xff;
-        uint8_t byte3 = (promBuffer[i] >> 16) & 0xff;
-        uint8_t byte4 = (promBuffer[i] >> 24) & 0xff;
-        uint8_t byte5 = (promBuffer[i] >> 32) & 0xff;
-        uint8_t byte6 = (promBuffer[i] >> 40) & 0xff;
-        uint8_t byte7 = (promBuffer[i] >> 48) & 0xff;
-        uint8_t byte8 = (promBuffer[i] >> 56) & 0xff;
-        uint8_t byte9 = (promBuffer[i] >> 64) & 0xff;
-        uint8_t bytea = (promBuffer[i] >> 72) & 0xff;
-        uint8_t byteb = (promBuffer[i] >> 80) & 0xff;
-        uint8_t bytec = (promBuffer[i] >> 88) & 0xff;
+        uint8_t byte0 = (promBuffer[i] >>  0) & 0xff;
+        uint8_t byte1 = (promBuffer[i] >>  8) & 0xff;
+        uint8_t byte2 = (promBuffer[i] >> 16) & 0xff;
+        uint8_t byte3 = (promBuffer[i] >> 24) & 0xff;
+        uint8_t byte4 = (promBuffer[i] >> 32) & 0xff;
+        uint8_t byte5 = (promBuffer[i] >> 40) & 0xff;
+        uint8_t byte6 = (promBuffer[i] >> 48) & 0xff;
+        uint8_t byte7 = (promBuffer[i] >> 56) & 0xff;
+        uint8_t byte8 = (promBuffer[i] >> 64) & 0xff;
+        uint8_t byte9 = (promBuffer[i] >> 72) & 0xff;
+        uint8_t bytea = (promBuffer[i] >> 80) & 0xff;
+        uint8_t byteb = (promBuffer[i] >> 88) & 0xff;
 
+        fwrite(&byte0, 1, sizeof(uint8_t), of0);
         fwrite(&byte1, 1, sizeof(uint8_t), of1);
         fwrite(&byte2, 1, sizeof(uint8_t), of2);
         fwrite(&byte3, 1, sizeof(uint8_t), of3);
@@ -792,10 +793,10 @@ int main(void)
         fwrite(&byte9, 1, sizeof(uint8_t), of9);
         fwrite(&bytea, 1, sizeof(uint8_t), ofa);
         fwrite(&byteb, 1, sizeof(uint8_t), ofb);
-        fwrite(&bytec, 1, sizeof(uint8_t), ofc);
     }
 
     // -- Flush the buffers -- just to be sure
+    fflush(of0);
     fflush(of1);
     fflush(of2);
     fflush(of3);
@@ -807,10 +808,10 @@ int main(void)
     fflush(of9);
     fflush(ofa);
     fflush(ofb);
-    fflush(ofc);
 
 
     // -- close the files
+    fclose(of0);
     fclose(of1);
     fclose(of2);
     fclose(of3);
@@ -822,7 +823,6 @@ int main(void)
     fclose(of9);
     fclose(ofa);
     fclose(ofb);
-    fclose(ofc);
 }
 
 

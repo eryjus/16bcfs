@@ -16,10 +16,16 @@
 //
 // -- This is the foundation of the computer, as in the backplane or breadboard that everything plugs into
 //    ----------------------------------------------------------------------------------------------------
-class HW_Computer_t : public QWidget {
+class HW_Computer_t : public QMainWindow {
     Q_OBJECT
 
 private:
+    // -- here are the settings for the application
+    static QSettings *settings;
+
+    // -- The central widget
+    static QWidget *central;
+
     // -- The computer modules
     static ClockModule_t *clock;
 
@@ -47,6 +53,34 @@ private:
     static AluFlagsModule_t *pgmFlags;
     static AluFlagsModule_t *intFlags;
 
+    // -- the Control ROMS
+    static IC_25lc256_t *ctrl0;
+    static IC_25lc256_t *ctrl1;
+    static IC_25lc256_t *ctrl2;
+    static IC_25lc256_t *ctrl3;
+    static IC_25lc256_t *ctrl4;
+    static IC_25lc256_t *ctrl5;
+    static IC_25lc256_t *ctrl6;
+    static IC_25lc256_t *ctrl7;
+    static IC_25lc256_t *ctrl8;
+    static IC_25lc256_t *ctrl9;
+    static IC_25lc256_t *ctrla;
+    static IC_25lc256_t *ctrlb;
+
+    // -- the Parallel Control RAMS
+    static IC_AS6C62256_t *ctrl0Ram;
+    static IC_AS6C62256_t *ctrl1Ram;
+    static IC_AS6C62256_t *ctrl2Ram;
+    static IC_AS6C62256_t *ctrl3Ram;
+    static IC_AS6C62256_t *ctrl4Ram;
+    static IC_AS6C62256_t *ctrl5Ram;
+    static IC_AS6C62256_t *ctrl6Ram;
+    static IC_AS6C62256_t *ctrl7Ram;
+    static IC_AS6C62256_t *ctrl8Ram;
+    static IC_AS6C62256_t *ctrl9Ram;
+    static IC_AS6C62256_t *ctrlaRam;
+    static IC_AS6C62256_t *ctrlbRam;
+
 
     // -- Temporary elements for testing the ALU
     static HW_BusDriver_t *aluADriver;
@@ -62,7 +96,7 @@ private:
 
 
 private:
-    explicit HW_Computer_t(void) {};
+    explicit HW_Computer_t(void) { settings = new QSettings("eryjus", "16bcfs-emulator"); };
     virtual ~HW_Computer_t() {};
 
     HW_Computer_t(const HW_Computer_t &) = delete;
@@ -82,6 +116,7 @@ public:
     static HW_Alu_t *GetAlu(void) { return alu; }
     static AluFlagsModule_t *GetPgmFlags(void) { return pgmFlags; }
     static AluFlagsModule_t *GetIntFlags(void) { return intFlags; }
+    static QSettings *GetSettings(void) { return settings; }
 
     static QWidget *BuildTestHarness(void);
 
@@ -100,6 +135,7 @@ private slots:
     void ProcessUpdateZLatch(int state);
     void ProcessUpdateCLatch(int state);
     void ProcessUpdateNVLLatch(int state);
+    void ProcessSettingsWindow(void);
 };
 
 

@@ -38,11 +38,13 @@ typedef enum {
 //
 // -- Qt6 include files here
 //    ----------------------
+#include <QtCore/QFile>
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtCore/QTimer>
 #include <QtCore/QTime>
+#include <QtCore/QSettings>
 #include <QtGui/QPalette>
 #include <QtGui/QPicture>
 #include <QtGui/QPixmap>
@@ -50,18 +52,25 @@ typedef enum {
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDial>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSizePolicy>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QStatusBar>
 
 
 //
 // --  forward declaration of all classes
 //     ----------------------------------
+class IC_25lc256_t;
 class IC_74xx00_t;
 class IC_74xx02_t;
 class IC_74xx04_t;
@@ -77,6 +86,7 @@ class IC_74xx283_t;
 class IC_74xx540_t;
 class IC_74xx541_t;
 class IC_74xx574_t;
+class IC_AS6C63256_t;
 class HW_Alu_t;
 class HW_AluAdder_t;
 class HW_Bus_t;
@@ -91,9 +101,18 @@ class GUI_BusLeds_t;
 class GUI_BusTester_t;
 class GUI_DipSwitch_t;
 class GUI_Led_t;
+class GUI_SettingsDialog_t;
 class ClockModule_t;
 class GpRegisterModule_t;
 class AluFlagsModule_t;
+
+
+
+//
+// -- I cannot see a way around this, app needs to be a global variable
+//    -----------------------------------------------------------------
+extern GUI_Application_t *app;
+const QString key = "control-rom/folder";   // -- I expect the linker to handle the duplicate constants here
 
 
 
@@ -115,6 +134,7 @@ class AluFlagsModule_t;
 #include "ic/ic-74xx540.hh"
 #include "ic/ic-74xx541.hh"
 #include "ic/ic-74xx574.hh"
+#include "ic/ic-as6c62256.hh"
 #include "hw/hw-alu.hh"
 #include "hw/hw-alu-adder.hh"
 #include "hw/hw-bus.hh"
@@ -129,9 +149,13 @@ class AluFlagsModule_t;
 #include "gui/gui-bus-tester.hh"
 #include "gui/gui-dip-switch.hh"
 #include "gui/gui-led.hh"
+#include "gui/gui-settings-dialog.hh"
 #include "mod/mod-clock.hh"
 #include "mod/mod-gp-register.hh"
 #include "mod/mod-alu-flags.hh"
+
+// -- needs to be last
+#include "ic/ic-25lc256.hh"
 
 
 

@@ -27,6 +27,7 @@ HW_Computer_t *HW_Computer_t::singleton = nullptr;
 ClockModule_t *HW_Computer_t::clock = nullptr;
 AluFlagsModule_t *HW_Computer_t::pgmFlags = nullptr;
 AluFlagsModule_t *HW_Computer_t::intFlags = nullptr;
+CtrlRomCtrlModule_t *HW_Computer_t::ctrlCtrl = nullptr;
 
 
 // -- Buses
@@ -35,6 +36,11 @@ HW_Bus_t *HW_Computer_t::aluA = nullptr;
 HW_Bus_t *HW_Computer_t::aluB = nullptr;
 HW_Bus_t *HW_Computer_t::addr1 = nullptr;
 HW_Bus_t *HW_Computer_t::addr2 = nullptr;
+HW_Bus_t *HW_Computer_t::instrBus = nullptr;
+HW_Bus_t *HW_Computer_t::ctrlBus = nullptr;
+
+
+// -- The ALU
 HW_Alu_t *HW_Computer_t::alu = nullptr;
 
 
@@ -306,6 +312,7 @@ void HW_Computer_t::InitGui(void)
     grid->addWidget(new GUI_BusTester_t("ALU B Input", aluBDriver), 18, 33, 1, 4);
 
 
+    grid->addWidget(ctrlCtrl, 17, 0, 2, 4);
     grid->addWidget(clock, 17, 37, 2, 3);
     grid->addWidget(pc, 0, 4, 2, 4);
     grid->addWidget(pgmFlags, 0, 29, 1, 2);
@@ -338,6 +345,7 @@ void HW_Computer_t::InitGui(void)
     connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
     connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, pc, &GpRegisterModule_t::ProcessReset);
+    connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlCtrl, &CtrlRomCtrlModule_t::ProcessReset);
 
     connect(clc, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessClearCarry);
     connect(stc, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessSetCarry);
@@ -366,6 +374,8 @@ void HW_Computer_t::Initialize(void)
     aluB = new HW_Bus_t(clock);
     addr1 = new HW_Bus_t(clock);
     addr2 = new HW_Bus_t(clock);
+    instrBus = new HW_Bus_t(clock);
+    ctrlBus = new HW_Bus_t(clock);
 
 
     //
@@ -392,6 +402,12 @@ void HW_Computer_t::Initialize(void)
     // -- Create the Registers
     //    --------------------
     pc = new GpRegisterModule_t("PC");
+
+
+    //
+    // -- Create the Control ROM Control Module
+    //    -------------------------------------
+    ctrlCtrl = new CtrlRomCtrlModule_t;
 
 
     //

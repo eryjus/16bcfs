@@ -34,8 +34,8 @@ IC_74xx193_t::IC_74xx193_t()
     pins[CLR] = LOW;
     pins[A] = LOW;
 
-    lastUp = LOW;
-    lastDown = LOW;
+    lastUp = pins[UP];
+    lastDown = pins[DOWN];
 
     cnt = 0;
 }
@@ -46,63 +46,118 @@ IC_74xx193_t::IC_74xx193_t()
 //    ------------------
 void IC_74xx193_t::ProcessUpdatesComplete(void)
 {
+    TriState_t newQa;
+    TriState_t newQb;
+    TriState_t newQc;
+    TriState_t newQd;
+    TriState_t newCOb;
+    TriState_t newBOb;
+
+
     if (pins[UP] == LOW && pins[DOWN] == LOW) {
         qDebug("Invalid state on 74xx193: Both UP and DOWN are LOW at the same time");
     }
 
 
     if (pins[CLR] == HIGH) {
-        pins[A] = LOW;
-        pins[B] = LOW;
-        pins[C] = LOW;
-        pins[D] = LOW;
+        TriState_t lastQa = pins[QA];
+        TriState_t lastQb = pins[QB];
+        TriState_t lastQc = pins[QC];
+        TriState_t lastQd = pins[QD];
+        TriState_t lastCOb = pins[COb];
+        TriState_t lastBOb = pins[BOb];
+
+        lastUp = pins[UP];
+        lastDown = pins[DOWN];
+
         cnt = 0;
+        pins[QA] = LOW;
+        pins[QB] = LOW;
+        pins[QC] = LOW;
+        pins[QD] = LOW;
+        pins[COb] = HIGH;
+
+        if (pins[DOWN] == LOW) pins[BOb] = LOW;
+        else pins[BOb] = HIGH;
+
+        if (pins[QA] != lastQa) emit SignalQaUpdated(pins[QA]);
+        if (pins[QB] != lastQb) emit SignalQbUpdated(pins[QB]);
+        if (pins[QC] != lastQc) emit SignalQcUpdated(pins[QC]);
+        if (pins[QD] != lastQd) emit SignalQdUpdated(pins[QD]);
+        if (pins[BOb] != lastBOb) emit SignalBoUpdated(pins[BOb]);
+        if (pins[COb] != lastCOb) emit SignalCoUpdated(pins[COb]);
+
+        return;
+    }
+
+
+    if (pins[LOADb] == LOW) {
+        cnt =     ((pins[D]==HIGH?1:0) << 3)
+                | ((pins[C]==HIGH?1:0) << 2)
+                | ((pins[B]==HIGH?1:0) << 1)
+                | ((pins[A]==HIGH?1:0) << 0);
     } else {
-        if (pins[LOADb] == LOW) {
-            cnt =     ((pins[D]==HIGH?1:0) << 3)
-                    | ((pins[C]==HIGH?1:0) << 2)
-                    | ((pins[B]==HIGH?1:0) << 1)
-                    | ((pins[A]==HIGH?1:0) << 0);
-        }
-
-        if (pins[UP] == LOW && cnt == 15) {
-            // -- Count Up High-to-Low transition: Set COb low
-            pins[COb] = LOW;
-            emit SignalCoUpdated(LOW);
-        }
-
-        if (pins[DOWN] == LOW && cnt == 0) {
-            // -- Count Up High-to-Low transition: Set BOb low
-            pins[BOb] = LOW;
-            emit SignalBoUpdated(LOW);
-        }
-
         if (lastUp == LOW && pins[UP] == HIGH) {
             cnt ++;
-            pins[COb] = HIGH;
-            emit SignalCoUpdated(HIGH);
         }
+
 
         if (lastDown == LOW && pins[DOWN] == HIGH) {
             cnt --;
-            pins[BOb] = HIGH;
-            emit SignalBoUpdated(HIGH);
         }
     }
 
+
     cnt &= 0xf;
+
+
+    if (cnt == 15) {
+        newCOb = (pins[UP] == LOW ? LOW : HIGH);
+    } else newCOb = HIGH;
+
+    if (cnt == 0) {
+        newBOb = (pins[DOWN] == LOW ? LOW : HIGH);
+    } else newBOb = HIGH;
+
+    newQa = (cnt&0b0001?HIGH:LOW);
+    newQb = (cnt&0b0010?HIGH:LOW);
+    newQc = (cnt&0b0100?HIGH:LOW);
+    newQd = (cnt&0b1000?HIGH:LOW);
+
+
+    if (newQa != pins[QA]) {
+        pins[QA] = newQa;
+        emit SignalQaUpdated(newQa);
+    }
+
+    if (newQb != pins[QB]) {
+        pins[QB] = newQb;
+        emit SignalQbUpdated(newQb);
+    }
+
+    if (newQc != pins[QC]) {
+        pins[QC] = newQc;
+        emit SignalQcUpdated(newQc);
+    }
+
+    if (newQd != pins[QD]) {
+        pins[QD] = newQd;
+        emit SignalQdUpdated(newQd);
+    }
+
+    if (newBOb != pins[BOb]) {
+        pins[BOb] = newBOb;
+        emit SignalBoUpdated(newBOb);
+    }
+
+    if (newCOb != pins[COb]) {
+        pins[COb] = newCOb;
+        emit SignalCoUpdated(newCOb);
+    }
+
+
     lastUp = pins[UP];
     lastDown = pins[DOWN];
-
-    pins[QA] = (cnt&0b0001?HIGH:LOW);
-    pins[QB] = (cnt&0b0010?HIGH:LOW);
-    pins[QC] = (cnt&0b0100?HIGH:LOW);
-    pins[QD] = (cnt&0b1000?HIGH:LOW);
-
-    emit SignalQaUpdated(pins[QA]);
-    emit SignalQbUpdated(pins[QB]);
-    emit SignalQcUpdated(pins[QC]);
-    emit SignalQdUpdated(pins[QD]);
 }
 
 

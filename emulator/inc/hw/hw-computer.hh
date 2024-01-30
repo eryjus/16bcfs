@@ -32,6 +32,9 @@ private:
     // -- The General Purpose Register Modules
     static GpRegisterModule_t *pc;
 
+    // -- The Control ROM Control Module
+    static CtrlRomCtrlModule_t *ctrlCtrl;
+
     // -- singleton instance
     static HW_Computer_t *singleton;
 
@@ -48,6 +51,12 @@ private:
 
     // -- The Main Bus
     static HW_Bus_t *mainBus;
+
+    // -- The Insturuction Bus
+    static HW_Bus_t *instrBus;
+
+    // -- The control logic lookup bus
+    static HW_Bus_t *ctrlBus;
 
     // -- Flags for Pgm and Int contexts
     static AluFlagsModule_t *pgmFlags;
@@ -111,13 +120,16 @@ public:
     static HW_Bus_t *GetAluBBus(void) { return aluB; }
     static HW_Bus_t *GetAddr1Bus(void) { return addr1; }
     static HW_Bus_t *GetAddr2Bus(void) { return addr2; }
+    static HW_Bus_t *GetInstrBus(void) { return instrBus; }
+    static HW_Bus_t *GetCtrlBus(void) { return ctrlBus; }
 
     static ClockModule_t *GetClock(void) { return clock; }
     static HW_Alu_t *GetAlu(void) { return alu; }
     static AluFlagsModule_t *GetPgmFlags(void) { return pgmFlags; }
     static AluFlagsModule_t *GetIntFlags(void) { return intFlags; }
-    static QSettings *GetSettings(void) { return settings; }
 
+
+    static QSettings *GetSettings(void) { return settings; }
     static QWidget *BuildTestHarness(void);
 
 

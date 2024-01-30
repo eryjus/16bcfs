@@ -169,11 +169,13 @@ void IC_74xx74_t::ProcessUpdateClk1(TriState_t state)
 
     // -- rising edge
     if (state == HIGH && last == LOW) {
-        pins[Q1] = pins[D1];
-        pins[Q1b] = pins[Q1]==HIGH?LOW:HIGH;
+        if (pins[Q1] != pins[D1]) {
+            pins[Q1] = pins[D1];
+            pins[Q1b] = pins[Q1]==HIGH?LOW:HIGH;
 
-        emit SignalQ1Updated(pins[Q1]);
-        emit SignalQ1bUpdated(pins[Q1b]);
+            emit SignalQ1Updated(pins[Q1]);
+            emit SignalQ1bUpdated(pins[Q1b]);
+        }
     }
 }
 
@@ -190,11 +192,13 @@ void IC_74xx74_t::ProcessUpdateClk2(TriState_t state)
 
     // -- rising edge
     if (state == HIGH && last == LOW) {
-        pins[Q2] = pins[D2];
-        pins[Q2b] = pins[Q2]==HIGH?LOW:HIGH;
+        if (pins[Q2] != pins[D2]) {
+            pins[Q2] = pins[D2];
+            pins[Q2b] = pins[Q2]==HIGH?LOW:HIGH;
 
-        emit SignalQ2Updated(pins[Q2]);
-        emit SignalQ2bUpdated(pins[Q2b]);
+            emit SignalQ2Updated(pins[Q2]);
+            emit SignalQ2bUpdated(pins[Q2b]);
+        }
     }
 }
 

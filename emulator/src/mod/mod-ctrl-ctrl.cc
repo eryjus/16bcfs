@@ -84,9 +84,9 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
 
 
 //    addr0->setObjectName("DEBUG");
-    bits->setObjectName("DEBUG");
-    resetting->setObjectName("DEBUG");
-    and1->setObjectName("DEBUG");
+//    bits->setObjectName("DEBUG");
+//    resetting->setObjectName("DEBUG");
+//    and1->setObjectName("DEBUG");
 }
 
 
@@ -208,9 +208,9 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- start with the 74xx74 resetting latch
     //    -------------------------------------
     resetting->ProcessUpdateClr1(HIGH);
-    connect(this, &CtrlRomCtrlModule_t::PrivateSignalInternalResetInv, resetting, &IC_74xx74_t::ProcessUpdateD1);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, resetting, &IC_74xx74_t::ProcessUpdateD1);
     connect(clock, &HW_Oscillator_t::SignalStateChanged, resetting, &IC_74xx74_t::ProcessUpdateClk1);
-    connect(this, &CtrlRomCtrlModule_t::PrivateSignalInternalReset, resetting, &IC_74xx74_t::ProcessUpdatePre1);
+    // pin 4 is handled in ProcessReset
     // pin 5 is Qr
     // pin 6 is Qrb
     // pin 8 is unused
@@ -224,13 +224,15 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- wire up the NAND gate as an SR Latch
     //    ------------------------------------
-    connect(this, &CtrlRomCtrlModule_t::PrivateSignalInternalReset, nand1, &IC_74xx00_t::ProcessUpdateA1);
+    // pin 1 is handled in ProcessReset
     connect(nand1, &IC_74xx00_t::SignalY2Updated, nand1, &IC_74xx00_t::ProcessUpdateB1);
+    // -- pin 3 output is in the next line
     connect(nand1, &IC_74xx00_t::SignalY1Updated, nand1, &IC_74xx00_t::ProcessUpdateA2);
     connect(addrC, &IC_74xx193_t::SignalCoUpdated, nand1, &IC_74xx00_t::ProcessUpdateB2);
-    // pin 8 unused
-    nand1->ProcessB3Low();
-    nand1->ProcessA3Low();
+    // pin 6 handled below
+    // pin 8 already handled above in 74xx74
+    // pin 9 handled in ProcessReset
+    // pin 9 handled in ProcessReset
     // pin 11 unused
     nand1->ProcessB4Low();
     nand1->ProcessA4Low();
@@ -343,20 +345,20 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Counter for the bits
     //    --------------------
-    bits->ProcessUpdateB(HIGH);
+    bits->ProcessUpdateB(LOW);
     // bit 2 unused
     // bit 3 unused
     connect(and1, &IC_74xx08_t::SignalY1Updated, bits, &IC_74xx193_t::ProcessUpdateDown);
     bits->ProcessUpdateUp(HIGH);
     // bit 6 unused
     // bit 7 unused
-    bits->ProcessUpdateD(LOW);
-    bits->ProcessUpdateC(HIGH);
+    bits->ProcessUpdateD(HIGH);
+    bits->ProcessUpdateC(LOW);
     connect(and1, &IC_74xx08_t::SignalY2Updated, bits, &IC_74xx193_t::ProcessUpdateLoad);
     // bit 12 unused
     // bit 13 handled in `and1` above
     bits->ProcessUpdateClr(LOW);
-    bits->ProcessUpdateA(HIGH);
+    bits->ProcessUpdateA(LOW);
 
 
 
@@ -483,9 +485,14 @@ void CtrlRomCtrlModule_t::WireUp(void)
 //    -------------------------------
 inline void CtrlRomCtrlModule_t::ProcessReset(TriState_t state)
 {
-    emit PrivateSignalInternalReset(state);
-    emit PrivateSignalInternalResetInv(state==HIGH?LOW:HIGH);
-    if (state == HIGH) clock->StartTimer();
+    nand1->ProcessUpdateA1(state);
+    nand1->ProcessUpdateB3(state);
+    nand1->ProcessUpdateA3(state);
+    resetting->ProcessUpdatePre1(state);
+
+    if (state == HIGH) {
+        clock->StartTimer();
+    }
 }
 
 

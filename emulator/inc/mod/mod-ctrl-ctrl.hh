@@ -127,12 +127,6 @@ signals:
 
 
 
-signals:
-    void PrivateSignalInternalReset(TriState_t state);
-    void PrivateSignalInternalResetInv(TriState_t state);
-
-
-
 public:
     // -- constructor/destructor
     explicit CtrlRomCtrlModule_t(void);

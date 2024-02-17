@@ -27,17 +27,18 @@ HW_Computer_t *HW_Computer_t::singleton = nullptr;
 ClockModule_t *HW_Computer_t::clock = nullptr;
 AluFlagsModule_t *HW_Computer_t::pgmFlags = nullptr;
 AluFlagsModule_t *HW_Computer_t::intFlags = nullptr;
-CtrlRomCtrlModule_t *HW_Computer_t::ctrlCtrl = nullptr;
 
 
 // -- Buses
-HW_Bus_t *HW_Computer_t::mainBus = nullptr;
-HW_Bus_t *HW_Computer_t::aluA = nullptr;
-HW_Bus_t *HW_Computer_t::aluB = nullptr;
-HW_Bus_t *HW_Computer_t::addr1 = nullptr;
-HW_Bus_t *HW_Computer_t::addr2 = nullptr;
-HW_Bus_t *HW_Computer_t::instrBus = nullptr;
-HW_Bus_t *HW_Computer_t::ctrlBus = nullptr;
+HW_Bus_1_t *HW_Computer_t::rHld = nullptr;
+HW_Bus_16_t *HW_Computer_t::mainBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::aluA = nullptr;
+HW_Bus_16_t *HW_Computer_t::aluB = nullptr;
+HW_Bus_16_t *HW_Computer_t::addr1 = nullptr;
+HW_Bus_16_t *HW_Computer_t::addr2 = nullptr;
+HW_Bus_16_t *HW_Computer_t::instrBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::ctrlBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::AddrCopyBus = nullptr;
 
 
 // -- The ALU
@@ -49,7 +50,10 @@ GpRegisterModule_t *HW_Computer_t::pc = nullptr;
 
 
 // -- Control ROMs
-IC_25lc256_t *HW_Computer_t::ctrl0 = nullptr;
+CtrlRomCtrlModule_t *HW_Computer_t::ctrlCtrl = nullptr;
+CtrlRomModule_t *HW_Computer_t::ctrl0 = nullptr;
+
+
 IC_25lc256_t *HW_Computer_t::ctrl1 = nullptr;
 IC_25lc256_t *HW_Computer_t::ctrl2 = nullptr;
 IC_25lc256_t *HW_Computer_t::ctrl3 = nullptr;
@@ -64,7 +68,6 @@ IC_25lc256_t *HW_Computer_t::ctrlb = nullptr;
 
 
 // -- Control RAM
-IC_AS6C62256_t *HW_Computer_t::ctrl0Ram = nullptr;
 IC_AS6C62256_t *HW_Computer_t::ctrl1Ram = nullptr;
 IC_AS6C62256_t *HW_Computer_t::ctrl2Ram = nullptr;
 IC_AS6C62256_t *HW_Computer_t::ctrl3Ram = nullptr;
@@ -310,6 +313,7 @@ void HW_Computer_t::InitGui(void)
     grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 17, 33, 1, 3);
     grid->addWidget(new GUI_BusTester_t("ALU A Input", aluADriver), 18, 29, 1, 4);
     grid->addWidget(new GUI_BusTester_t("ALU B Input", aluBDriver), 18, 33, 1, 4);
+    grid->addWidget((ctrl0 = new CtrlRomModule_t("Ctrl0", "ctrl0.bin")), 0, 0, 1, 1);
 
 
     grid->addWidget(ctrlCtrl, 17, 0, 2, 4);
@@ -345,7 +349,7 @@ void HW_Computer_t::InitGui(void)
     connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
     connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, pc, &GpRegisterModule_t::ProcessReset);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlCtrl, &CtrlRomCtrlModule_t::ProcessReset);
+    connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlCtrl, &CtrlRomCtrlModule_t::ProcessResetUpdate);
 
     connect(clc, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessClearCarry);
     connect(stc, &HW_MomentarySwitch_t::SignalState, pgmFlags, &AluFlagsModule_t::ProcessSetCarry);
@@ -369,13 +373,15 @@ void HW_Computer_t::Initialize(void)
     //
     // -- Create the various buses
     //    ------------------------
-    mainBus = new HW_Bus_t(clock);
-    aluA = new HW_Bus_t(clock);
-    aluB = new HW_Bus_t(clock);
-    addr1 = new HW_Bus_t(clock);
-    addr2 = new HW_Bus_t(clock);
-    instrBus = new HW_Bus_t(clock);
-    ctrlBus = new HW_Bus_t(clock);
+    rHld = new HW_Bus_1_t(clock);
+    mainBus = new HW_Bus_16_t(clock);
+    aluA = new HW_Bus_16_t(clock);
+    aluB = new HW_Bus_16_t(clock);
+    addr1 = new HW_Bus_16_t(clock);
+    addr2 = new HW_Bus_16_t(clock);
+    instrBus = new HW_Bus_16_t(clock);
+    ctrlBus = new HW_Bus_16_t(clock);
+    AddrCopyBus = new HW_Bus_16_t(clock);
 
 
     //
@@ -413,7 +419,6 @@ void HW_Computer_t::Initialize(void)
     //
     // -- Create the Control ROMs
     //    -----------------------
-    ctrl0 = new IC_25lc256_t("ctrl0.bin");
     ctrl1 = new IC_25lc256_t("ctrl1.bin");
     ctrl2 = new IC_25lc256_t("ctrl2.bin");
     ctrl3 = new IC_25lc256_t("ctrl3.bin");
@@ -430,7 +435,6 @@ void HW_Computer_t::Initialize(void)
     //
     // -- Create the Control RAMs
     //    -----------------------
-    ctrl0Ram = new IC_AS6C62256_t(ctrl0);
     ctrl1Ram = new IC_AS6C62256_t(ctrl1);
     ctrl2Ram = new IC_AS6C62256_t(ctrl2);
     ctrl3Ram = new IC_AS6C62256_t(ctrl3);
@@ -456,8 +460,9 @@ void HW_Computer_t::Initialize(void)
 
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
+    connect(ctrlCtrl, &CtrlRomCtrlModule_t::SignalQcUpdated, ctrl0, &CtrlRomModule_t::ProcessSanityCheck);
 
-    ctrl0->TriggerFirstUpdate();
+
     ctrl1->TriggerFirstUpdate();
     ctrl2->TriggerFirstUpdate();
     ctrl3->TriggerFirstUpdate();
@@ -489,3 +494,24 @@ void HW_Computer_t::ProcessSettingsWindow(void)
     settings->exec();
     delete settings;
 }
+
+
+
+//
+// -- Perform the steps needed to execute a proper reset
+//    --------------------------------------------------
+void HW_Computer_t::PerformReset(void)
+{
+    rst->Press();
+
+    pgmFlags->TriggerFirstUpdate();
+    intFlags->TriggerFirstUpdate();
+    alu->TriggerFirstUpdate();
+    pc->TriggerFirstUpdate();
+    ctrlCtrl->TriggerFirstUpdate();
+    ctrl0->TriggerFirstUpdate();
+
+    rst->Release();
+}
+
+

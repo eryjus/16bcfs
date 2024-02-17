@@ -31,7 +31,7 @@ private:
 
 
 public:
-    HW_Alu_t(HW_Bus_t *a, HW_Bus_t *b, HW_Bus_t *mainBus, QObject *parent = nullptr);
+    HW_Alu_t(HW_Bus_16_t *a, HW_Bus_16_t *b, HW_Bus_16_t *mainBus, QObject *parent = nullptr);
     virtual ~HW_Alu_t() {}
 
 

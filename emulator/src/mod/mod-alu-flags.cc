@@ -139,26 +139,26 @@ void AluFlagsModule_t::WireUp(void)
     //
     // -- wire up the Z flag -- start with the MSB Inv from the bus
     //    ---------------------------------------------------------
-    HW_Bus_t *mainBus = HW_Computer_t::GetMainBus();
-    connect(mainBus, &HW_Bus_t::SignalBitFUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD7);
-    connect(mainBus, &HW_Bus_t::SignalBitEUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD6);
-    connect(mainBus, &HW_Bus_t::SignalBitDUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD5);
-    connect(mainBus, &HW_Bus_t::SignalBitCUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD4);
-    connect(mainBus, &HW_Bus_t::SignalBitBUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD3);
-    connect(mainBus, &HW_Bus_t::SignalBitAUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD2);
-    connect(mainBus, &HW_Bus_t::SignalBit9Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD1);
-    connect(mainBus, &HW_Bus_t::SignalBit8Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD0);
+    HW_Bus_16_t *mainBus = HW_Computer_t::GetMainBus();
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD7);
+    connect(mainBus, &HW_Bus_16_t::SignalBitEUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD6);
+    connect(mainBus, &HW_Bus_16_t::SignalBitDUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD5);
+    connect(mainBus, &HW_Bus_16_t::SignalBitCUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD4);
+    connect(mainBus, &HW_Bus_16_t::SignalBitBUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD3);
+    connect(mainBus, &HW_Bus_16_t::SignalBitAUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD2);
+    connect(mainBus, &HW_Bus_16_t::SignalBit9Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD1);
+    connect(mainBus, &HW_Bus_16_t::SignalBit8Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD0);
 
 
     // -- LSB Inv from the bus
-    connect(mainBus, &HW_Bus_t::SignalBit7Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD7);
-    connect(mainBus, &HW_Bus_t::SignalBit6Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD6);
-    connect(mainBus, &HW_Bus_t::SignalBit5Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD5);
-    connect(mainBus, &HW_Bus_t::SignalBit4Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD4);
-    connect(mainBus, &HW_Bus_t::SignalBit3Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD3);
-    connect(mainBus, &HW_Bus_t::SignalBit2Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD2);
-    connect(mainBus, &HW_Bus_t::SignalBit1Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD1);
-    connect(mainBus, &HW_Bus_t::SignalBit0Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD0);
+    connect(mainBus, &HW_Bus_16_t::SignalBit7Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD7);
+    connect(mainBus, &HW_Bus_16_t::SignalBit6Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD6);
+    connect(mainBus, &HW_Bus_16_t::SignalBit5Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD5);
+    connect(mainBus, &HW_Bus_16_t::SignalBit4Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD4);
+    connect(mainBus, &HW_Bus_16_t::SignalBit3Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD3);
+    connect(mainBus, &HW_Bus_16_t::SignalBit2Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD2);
+    connect(mainBus, &HW_Bus_16_t::SignalBit1Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD1);
+    connect(mainBus, &HW_Bus_16_t::SignalBit0Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD0);
 
 
     // -- connect the inverting driver to the NAND Gates -- MSB
@@ -288,7 +288,7 @@ void AluFlagsModule_t::WireUp(void)
     // -- Wire up the N Flag signals; N-side of the latch
     //    -----------------------------------------------
     nvLatch->ProcessUpdateClr1(HIGH);
-    connect(mainBus, &HW_Bus_t::SignalBitFUpdated, nvLatch, &IC_74xx74_t::ProcessUpdateD1);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, nvLatch, &IC_74xx74_t::ProcessUpdateD1);
     connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClk1);
     nvLatch->ProcessUpdatePre1(HIGH);
 
@@ -304,13 +304,13 @@ void AluFlagsModule_t::WireUp(void)
     //
     // -- Wire up the V Flag signals; starting with the ALU input MSbits
     //    --------------------------------------------------------------
-    HW_Bus_t *aluA = HW_Computer_t::GetAluABus();
-    HW_Bus_t *aluB = HW_Computer_t::GetAluBBus();
+    HW_Bus_16_t *aluA = HW_Computer_t::GetAluABus();
+    HW_Bus_16_t *aluB = HW_Computer_t::GetAluBBus();
 
-    connect(aluA, &HW_Bus_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA1);
-    connect(mainBus, &HW_Bus_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB1);
-    connect(aluB, &HW_Bus_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA2);
-    connect(mainBus, &HW_Bus_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB2);
+    connect(aluA, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA1);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB1);
+    connect(aluB, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA2);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB2);
     // A3 is handled in the L flag calculation
     // B3 is handled in the L flag calculation
     xor1->ProcessA4Low();
@@ -333,7 +333,7 @@ void AluFlagsModule_t::WireUp(void)
     //
     // -- Wire up the L Flag signals; starting with an XOR
     //    ------------------------------------------------
-    connect(mainBus, &HW_Bus_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA3);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA3);
     connect(and1, &IC_74xx08_t::SignalY4Updated, xor1, &IC_74xx86_t::ProcessUpdateB3);
 
 

@@ -1,5 +1,5 @@
 //===================================================================================================================
-//  hw-bus.cc -- This is a generic bus
+//  hw-bus-8.cc -- This is a generic bus
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
@@ -11,21 +11,28 @@
 
 
 #include "16bcfs.hh"
-#include "../moc/hw-bus.moc.cc"
+#include "../moc/hw-bus-8.moc.cc"
 
 
 
-HW_Bus_t::HW_Bus_t(ClockModule_t *clk, QObject *parent) : QObject(parent), assertedBits(new Map_t)
+//
+// -- Construct a new 8-bit bus
+//    -------------------------
+HW_Bus_8_t::HW_Bus_8_t(ClockModule_t *clk, QObject *parent) : QObject(parent), assertedBits(new Map_t)
 {
-    for (int i = BIT_0; i <= BIT_F; i ++) (*assertedBits)[i] = new Asserts_t;
+    for (int i = BIT_0; i <= BIT_7; i ++) (*assertedBits)[i] = new Asserts_t;
 
-    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_t::ProcessSanityCheck);
+    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_8_t::ProcessSanityCheck);
 }
 
 
 
-void HW_Bus_t::MaintainBit(int bit, TriState_t state)
+//
+// -- Maintain the bits on the 8-bit bus
+//    ----------------------------------
+void HW_Bus_8_t::MaintainBit(int bit, TriState_t state)
 {
+    TriState_t old;
     QObject *obj = sender();        // do NOT de-reference this pointer!  It may not be valid
 
     // -- Now, check the reference count and update as appropriate
@@ -65,14 +72,6 @@ void HW_Bus_t::MaintainBit(int bit, TriState_t state)
     case BIT_5: emit SignalBit5Updated(state); break;
     case BIT_6: emit SignalBit6Updated(state); break;
     case BIT_7: emit SignalBit7Updated(state); break;
-    case BIT_8: emit SignalBit8Updated(state); break;
-    case BIT_9: emit SignalBit9Updated(state); break;
-    case BIT_A: emit SignalBitAUpdated(state); break;
-    case BIT_B: emit SignalBitBUpdated(state); break;
-    case BIT_C: emit SignalBitCUpdated(state); break;
-    case BIT_D: emit SignalBitDUpdated(state); break;
-    case BIT_E: emit SignalBitEUpdated(state); break;
-    case BIT_F: emit SignalBitFUpdated(state); break;
     }
 }
 
@@ -81,9 +80,9 @@ void HW_Bus_t::MaintainBit(int bit, TriState_t state)
 //
 // -- Handle the sanity check at the clock high and low levels where the status should be stable
 //    ------------------------------------------------------------------------------------------
-void HW_Bus_t::ProcessSanityCheck(void)
+void HW_Bus_8_t::ProcessSanityCheck(void)
 {
-    for (int i = BIT_0; i <= BIT_F; i ++) {
+    for (int i = BIT_0; i <= BIT_7; i ++) {
         if ((*assertedBits)[i]->count() > 1) {
             qDebug() << "Bus" << objectName() << "bit" << i << "has" << (*assertedBits)[i]->count() << "signals asserted";
         }

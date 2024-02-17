@@ -56,6 +56,8 @@ public:
 
 private:
     IC_25lc256_t *reference;
+    bool outputting;
+    uint8_t outputValue;
 
 
 private:
@@ -76,6 +78,8 @@ public:
 
 
 private:
+    void ProcessInput(void);
+    void ProcessOutput(void);
     void UpdateAll(void);
     void OutputZ(void);
 
@@ -97,9 +101,10 @@ public slots:
     void ProcessUpdateA12(TriState_t state) { pins[A12] = state; UpdateAll(); }
     void ProcessUpdateA13(TriState_t state) { pins[A13] = state; UpdateAll(); }
     void ProcessUpdateA14(TriState_t state) { pins[A14] = state; UpdateAll(); }
-    void ProcessUpdateCE(TriState_t state)  { pins[CEb] = state; UpdateAll(); }
-    void ProcessUpdateOE(TriState_t state)  { pins[OEb] = state; UpdateAll(); }
-    void ProcessUpdateWE(TriState_t state)  { pins[WEb] = state; UpdateAll(); }
+
+    void ProcessUpdateCE(TriState_t state);
+    void ProcessUpdateOE(TriState_t state);
+    void ProcessUpdateWE(TriState_t state);
 
     void ProcessUpdateDq0(TriState_t state)  { pins[DQ0] = state; UpdateAll(); }
     void ProcessUpdateDq1(TriState_t state)  { pins[DQ1] = state; UpdateAll(); }

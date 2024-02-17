@@ -8,6 +8,68 @@
 //  12 (up to 16) ROMs will be loaded at the same time, it is adventageous to pull all the repetitive components
 //  into a single control module.
 //
+//  OK, so this get real confusing real quick.  I will document how the gates are used here in order to maintain
+//  some order.
+//
+//  `resetting` -- 74xx74
+//  Latch 1: This is the resetting latch where Qr is set when the circuit is in reset; #Qr is available
+//  Latch 2: Unused
+//
+//  `nand1` -- 74xx00
+//  Gates 1 & 2: Copying SR latch where Qc is on Y1 and #Qc is on Y2
+//  Gates 3 & 4: Shifting SR latch where Qs is on Y4 and #Qs is on Y3
+//
+//  `nand2` -- 74xx00
+//  Gates 1 & 2: Copying SR latch where Ql is on Y1 and #Ql is on Y2
+//  Gates 3 & 4: unused
+//
+//  `and1` -- 74xx08
+//  Gate 1: (Qc * CLK)
+//  Gate 2: ((Qc * CLK) * Qs)
+//  Gate 3: ((#Bc * #Bb) * Ba)
+//  Gate 4: (#Bc * #Bb)
+//
+//  `and2` -- 74xx08
+//  Gate 1: (#CLK * #Bd)
+//  Gate 2: ((#CLK * #Bd) * ((#Bc * #Bb) * Ba))
+//  Gate 3: (Bd * ((#Bc * #Bb) * Ba))
+//  Gate 4: (#Qr * /BO)
+//
+//  `and3` -- 74xx08
+//  Gate 1: (((Qc * CLK) * Qs) * #Qr)
+//  Gate 2: unused
+//  Gate 3: unused
+//  Gate 4: unused
+//
+//  `or1` -- 74xx32
+//  Gate 1: (#Qs + #Qc)
+//  Gate 2: (Qr + #Qc)
+//  Gate 3: unused
+//  Gate 4: unused
+//
+//  `or2` -- 74xx32
+//  Gate 1: (Ba + Bb)
+//  Gate 2: (Bc + Bd)
+//  Gate 3: ((Ba + Bb) + (Bc + Bd))
+//  Gate 4: unused
+//
+//  `inv1` -- 74xx04
+//  Gate 1: #CLK
+//  Gate 2: #Bb
+//  Gate 3: #Bc
+//  Gate 4: #Bd
+//  Gate 5: #(Bd * #Bc * #Bb * Ba)
+//  Gate 6: #(#CLK * #Bd * #Bc * #Bb * Ba)
+//
+//  `inv2` -- 74xx04
+//  Gate 1: #(/RESET)
+//  Gate 2: #(#Qs + #Qc)
+//  Gate 3: unused
+//  Gate 4: unused
+//  Gate 5: unused
+//  Gate 6: unused
+//
+//
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
 //  2024-Jan-25  Initial  v0.0.1   Initial version
@@ -45,8 +107,15 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
 {
     resetting = new IC_74xx74_t;
     nand1 = new IC_74xx00_t;
+    nand2 = new IC_74xx00_t;
     and1 = new IC_74xx08_t;
+    and2 = new IC_74xx08_t;
+    and3 = new IC_74xx08_t;
+    or1 = new IC_74xx32_t;
+    or2 = new IC_74xx32_t;
     oAnd1 = new IC_74xx03_t;
+    inv1 = new IC_74xx04_t;
+    inv2 = new IC_74xx04_t;
     mux0 = new IC_74xx157_t;
     mux4 = new IC_74xx157_t;
     mux8 = new IC_74xx157_t;
@@ -59,8 +128,12 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     shift = new IC_74xx165_t;
     clock = new HW_Oscillator_t;
     clk = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
+
     qr = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
     qc = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
+    qs = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
+    ql = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
+
     led0 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
     led1 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
     led2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
@@ -81,12 +154,6 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     bit1 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
     bit2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
     bit3 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
-
-
-//    addr0->setObjectName("DEBUG");
-//    bits->setObjectName("DEBUG");
-//    resetting->setObjectName("DEBUG");
-//    and1->setObjectName("DEBUG");
 }
 
 
@@ -122,18 +189,24 @@ void CtrlRomCtrlModule_t::BuildGui(void)
 
     controlLayout->addWidget(clk, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("clk"), 1, 0, Qt::AlignHCenter);
-    controlLayout->addWidget(qr, 0, 1, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("rst"), 1, 1, Qt::AlignHCenter);
-    controlLayout->addWidget(qc, 0, 2, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("cpy"), 1, 2, Qt::AlignHCenter);
-    controlLayout->addWidget(bit3, 0, 5, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel(" 8 "), 1, 5, Qt::AlignHCenter);
-    controlLayout->addWidget(bit2, 0, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel(" 4 "), 1, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(bit1, 0, 7, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel(" 2 "), 1, 7, Qt::AlignHCenter);
-    controlLayout->addWidget(bit0, 0, 8, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel(" 1 "), 1, 8, Qt::AlignHCenter);
+    controlLayout->addWidget(qr, 0, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("Qr"), 1, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(qc, 0, 3, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("Qc"), 1, 3, Qt::AlignHCenter);
+    controlLayout->addWidget(qs, 0, 4, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("Qs"), 1, 4, Qt::AlignHCenter);
+    controlLayout->addWidget(ql, 0, 5, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("Ql"), 1, 5, Qt::AlignHCenter);
+    controlLayout->addWidget(bit3, 0, 7, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel(" 8 "), 1, 7, Qt::AlignHCenter);
+    controlLayout->addWidget(bit2, 0, 8, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel(" 4 "), 1, 8, Qt::AlignHCenter);
+    controlLayout->addWidget(bit1, 0, 9, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel(" 2 "), 1, 9, Qt::AlignHCenter);
+    controlLayout->addWidget(bit0, 0, 10, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel(" 1 "), 1, 10, Qt::AlignHCenter);
+    controlLayout->setColumnMinimumWidth(1, 10);
+    controlLayout->setColumnMinimumWidth(6, 10);
 
 
     controls->setLayout(controlLayout);
@@ -183,7 +256,14 @@ void CtrlRomCtrlModule_t::TriggerFirstUpdate(void)
 {
     resetting->TriggerFirstUpdate();
     nand1->TriggerFirstUpdate();
+    nand2->TriggerFirstUpdate();
     and1->TriggerFirstUpdate();
+    and2->TriggerFirstUpdate();
+    and3->TriggerFirstUpdate();
+    inv1->TriggerFirstUpdate();
+    inv2->TriggerFirstUpdate();
+    or1->TriggerFirstUpdate();
+    or2->TriggerFirstUpdate();
     oAnd1->TriggerFirstUpdate();
     mux0->TriggerFirstUpdate();
     mux4->TriggerFirstUpdate();
@@ -205,255 +285,611 @@ void CtrlRomCtrlModule_t::TriggerFirstUpdate(void)
 void CtrlRomCtrlModule_t::WireUp(void)
 {
     //
-    // -- start with the 74xx74 resetting latch
-    //    -------------------------------------
-    resetting->ProcessUpdateClr1(HIGH);
-    connect(nand1, &IC_74xx00_t::SignalY3Updated, resetting, &IC_74xx74_t::ProcessUpdateD1);
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, resetting, &IC_74xx74_t::ProcessUpdateClk1);
-    // pin 4 is handled in ProcessReset
-    // pin 5 is Qr
-    // pin 6 is Qrb
-    // pin 8 is unused
-    // pin 9 is unused
-    resetting->ProcessUpdatePre2(HIGH);
-    resetting->ProcessUpdateClk2(LOW);
-    resetting->ProcessUpdateD2(LOW);
-    resetting->ProcessUpdateClr2(HIGH);
+    // -- First connect up the inputs on the 74xx74 IC
+    //    --------------------------------------------
+
+    //
+    // -- Gate 1 is used for the In Reset condition
+    //    -----------------------------------------
+    resetting->ProcessUpdateClr1(HIGH);                                                             // pin 1: #CLR1
+    connect(inv2, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateD1);         // pin 2: D1
+    connect(clock, &HW_Oscillator_t::SignalStateChanged, resetting, &IC_74xx74_t::ProcessUpdateClk1); // pin 3: CLK1 from local clock
+    // pin 4 is handled in ProcessResetUpdate() -- below
+    // pin 5 is the Q output pin
+    // pin 6 is the #Q output pin
 
 
     //
-    // -- wire up the NAND gate as an SR Latch
-    //    ------------------------------------
-    // pin 1 is handled in ProcessReset
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, nand1, &IC_74xx00_t::ProcessUpdateB1);
-    // -- pin 3 output is in the next line
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, nand1, &IC_74xx00_t::ProcessUpdateA2);
-    connect(addrC, &IC_74xx193_t::SignalCoUpdated, nand1, &IC_74xx00_t::ProcessUpdateB2);
-    // pin 6 handled below
-    // pin 8 already handled above in 74xx74
-    // pin 9 handled in ProcessReset
-    // pin 9 handled in ProcessReset
-    // pin 11 unused
-    nand1->ProcessB4Low();
-    nand1->ProcessA4Low();
+    // -- Gate 2 is unused
+    //    ----------------
+    // pin 8 is the #Q output pin (unused)
+    // pin 9 is the Q output pin (unused)
+    resetting->ProcessUpdatePre2(HIGH);                                                             // pin 10: #PRE2
+    resetting->ProcessUpdateClk2(LOW);                                                              // pin 11: CLK2
+    resetting->ProcessUpdateD2(LOW);                                                                // pin 12: D2
+    resetting->ProcessUpdateClr2(HIGH);                                                             // pin 13: #CLR2
+
 
 
     //
-    // -- wire up the AND gate to handle the Qc*CLK signal
+    // -- connect up nand1 for 2 SR latches.  These are handled in pairs for this section
+    //    -------------------------------------------------------------------------------
+
+    //
+    // -- Gates 1&2 are used for the Copying (Qc) SR Latch
     //    ------------------------------------------------
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateA1);
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, and1, &IC_74xx08_t::ProcessUpdateB1);
-    connect(and1, &IC_74xx08_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalClkAndQcUpdated);
-    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, and1, &IC_74xx08_t::ProcessUpdateA2);
-    connect(bits, &IC_74xx193_t::SignalBoUpdated, and1, &IC_74xx08_t::ProcessUpdateB2);
-    // pin 6 handled with `bits` below
-    // pin 8 unused
-    and1->ProcessB3Low();
-    and1->ProcessA3Low();
-    // pin 11 unused
-    and1->ProcessB4Low();
-    and1->ProcessA4Low();
+    // pin 1 is the set pin, and handled in ProcessResetUpdate() -- below
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, nand1, &IC_74xx00_t::ProcessUpdateB1);            // pin 2: 1B Input
+    // pin 3 is the output of the set-side gate -- Qc
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, nand1, &IC_74xx00_t::ProcessUpdateA2);            // pin 4: 2A input
+    connect(addrC, &IC_74xx193_t::SignalCoUpdated, nand1, &IC_74xx00_t::ProcessUpdateB2);           // pin 5: 2B input
+    // pin 6 is the output of the reset-side gate -- #Qc
 
 
     //
-    // -- connect the and gate used for #RHLD
+    // -- Gates 3&4 are for the Shifting (Qs) SR latch
+    //    --------------------------------------------
+    // pin 8 is the output of the reset-side gate -- #Qs
+    connect(inv1, &IC_74xx04_t::SignalY6Updated, nand1, &IC_74xx00_t::ProcessUpdateA3);             // pin 9: 3A Input
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, nand1, &IC_74xx00_t::ProcessUpdateB3);            // pin 10: 3B Input
+    // pin 11 is the output of the set-side gate -- Qs
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, nand1, &IC_74xx00_t::ProcessUpdateA4);            // pin 12: 4A Input
+    connect(inv1, &IC_74xx04_t::SignalY5Updated, nand1, &IC_74xx00_t::ProcessUpdateB4);             // pin 13: 4B Input
+
+
+
+    //
+    // -- connect up nand2 for 1 additional SR latche.  These are handled in pairs for this section
+    //    -----------------------------------------------------------------------------------------
+
+    //
+    // -- Gates 1&2 are used for the Copying (Ql) SR Latch
+    //    ------------------------------------------------
+    connect(or2, &IC_74xx32_t::SignalY3Updated, nand2, &IC_74xx00_t::ProcessUpdateA1);              // pin 1: 2B input (Set)
+    connect(nand2, &IC_74xx00_t::SignalY2Updated, nand2, &IC_74xx00_t::ProcessUpdateB1);            // pin 2: 1B Input
+    // pin 3 is the output of the set-side gate -- Ql
+    connect(nand2, &IC_74xx00_t::SignalY1Updated, nand2, &IC_74xx00_t::ProcessUpdateA2);            // pin 4: 2A input
+    connect(inv1, &IC_74xx04_t::SignalY6Updated, nand2, &IC_74xx00_t::ProcessUpdateB2);             // pin 5: 1A Input (Reset)
+    // pin 6 is the output of the reset-side gate -- #Ql
+
+
+    //
+    // -- Gates 3&4 are not used
+    //    ----------------------
+    // pin 8 is unused
+    nand2->ProcessA3Low();                                                                          // pin 9 unused
+    nand2->ProcessB3Low();                                                                          // pin 10 unused
+    // pin 11 is unused
+    nand2->ProcessA4Low();                                                                          // pin 12 unused
+    nand2->ProcessB4Low();                                                                          // pin 13 unused
+
+
+
+    //
+    // -- connect up the first AND gate
+    //    -----------------------------
+
+    //
+    // -- Gate 1 is used for (Qc * CLK)
+    //    -----------------------------
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateA1);             // pin 1: Qc input
+    connect(clock, &HW_Oscillator_t::SignalStateChanged, and1, &IC_74xx08_t::ProcessUpdateB1);      // pin 2: CLK input
+    // pin 3 is the output (Qc * CLK)
+
+
+    //
+    // -- Gate 2 is ued for ((Qc * CLK) * Qs)
     //    -----------------------------------
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, oAnd1, &IC_74xx03_t::ProcessUpdateA1);
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, oAnd1, &IC_74xx03_t::ProcessUpdateB1);
-    connect(oAnd1, &IC_74xx03_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalRHldUpdated);
-    oAnd1->ProcessA2High();
-    oAnd1->ProcessB2High();
-    // pin 6 unused
-    // pin 8 unused
-    oAnd1->ProcessB3High();
-    oAnd1->ProcessA3High();
-    // pin 11 unused
-    oAnd1->ProcessB4High();
-    oAnd1->ProcessA4High();
+    connect(and1, &IC_74xx08_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateA2);              // pin 4: (Qc * CLK) input
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, and1, &IC_74xx08_t::ProcessUpdateB2);             // pin 5: Qs
+    // pin 6 is the output ((Qc * CLK) * Qs)
 
 
     //
-    // -- connect up the muxes; for that we need the instruction bus
-    //    ----------------------------------------------------------
-    HW_Bus_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
-    HW_Bus_t *ctrlBus = HW_Computer_t::Get()->GetCtrlBus();
-
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux0, &IC_74xx157_t::ProcessUpdateAB);
-    connect(instrBus, &HW_Bus_t::SignalBit0Updated, mux0, &IC_74xx157_t::ProcessUpdateA1);
-    connect(addr0, &IC_74xx193_t::SignalQaUpdated, mux0, &IC_74xx157_t::ProcessUpdateB1);
-    connect(mux0, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit0);
-    connect(instrBus, &HW_Bus_t::SignalBit1Updated, mux0, &IC_74xx157_t::ProcessUpdateA2);
-    connect(addr0, &IC_74xx193_t::SignalQbUpdated, mux0, &IC_74xx157_t::ProcessUpdateB2);
-    connect(mux0, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit1);
-    connect(mux0, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit2);
-    connect(addr0, &IC_74xx193_t::SignalQcUpdated, mux0, &IC_74xx157_t::ProcessUpdateB3);
-    connect(instrBus, &HW_Bus_t::SignalBit2Updated, mux0, &IC_74xx157_t::ProcessUpdateA3);
-    connect(mux0, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit3);
-    connect(addr0, &IC_74xx193_t::SignalQdUpdated, mux0, &IC_74xx157_t::ProcessUpdateB4);
-    connect(instrBus, &HW_Bus_t::SignalBit3Updated, mux0, &IC_74xx157_t::ProcessUpdateA4);
-    mux0->ProcessUpdateGb(LOW);
-
-
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux4, &IC_74xx157_t::ProcessUpdateAB);
-    connect(instrBus, &HW_Bus_t::SignalBit0Updated, mux4, &IC_74xx157_t::ProcessUpdateA1);
-    connect(addr4, &IC_74xx193_t::SignalQaUpdated, mux4, &IC_74xx157_t::ProcessUpdateB1);
-    connect(mux4, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit4);
-    connect(instrBus, &HW_Bus_t::SignalBit1Updated, mux4, &IC_74xx157_t::ProcessUpdateA2);
-    connect(addr4, &IC_74xx193_t::SignalQbUpdated, mux4, &IC_74xx157_t::ProcessUpdateB2);
-    connect(mux4, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit5);
-    connect(mux4, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit6);
-    connect(addr4, &IC_74xx193_t::SignalQcUpdated, mux4, &IC_74xx157_t::ProcessUpdateB3);
-    connect(instrBus, &HW_Bus_t::SignalBit2Updated, mux4, &IC_74xx157_t::ProcessUpdateA3);
-    connect(mux4, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit7);
-    connect(addr4, &IC_74xx193_t::SignalQdUpdated, mux4, &IC_74xx157_t::ProcessUpdateB4);
-    connect(instrBus, &HW_Bus_t::SignalBit3Updated, mux4, &IC_74xx157_t::ProcessUpdateA4);
-    mux4->ProcessUpdateGb(LOW);
-
-
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux8, &IC_74xx157_t::ProcessUpdateAB);
-    connect(instrBus, &HW_Bus_t::SignalBit0Updated, mux8, &IC_74xx157_t::ProcessUpdateA1);
-    connect(addr8, &IC_74xx193_t::SignalQaUpdated, mux8, &IC_74xx157_t::ProcessUpdateB1);
-    connect(mux8, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit8);
-    connect(instrBus, &HW_Bus_t::SignalBit1Updated, mux8, &IC_74xx157_t::ProcessUpdateA2);
-    connect(addr8, &IC_74xx193_t::SignalQbUpdated, mux8, &IC_74xx157_t::ProcessUpdateB2);
-    connect(mux8, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBit9);
-    connect(mux8, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBitA);
-    connect(addr8, &IC_74xx193_t::SignalQcUpdated, mux8, &IC_74xx157_t::ProcessUpdateB3);
-    connect(instrBus, &HW_Bus_t::SignalBit2Updated, mux8, &IC_74xx157_t::ProcessUpdateA3);
-    connect(mux8, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBitB);
-    connect(addr8, &IC_74xx193_t::SignalQdUpdated, mux8, &IC_74xx157_t::ProcessUpdateB4);
-    connect(instrBus, &HW_Bus_t::SignalBit3Updated, mux8, &IC_74xx157_t::ProcessUpdateA4);
-    mux8->ProcessUpdateGb(LOW);
-
-
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, muxC, &IC_74xx157_t::ProcessUpdateAB);
-    connect(instrBus, &HW_Bus_t::SignalBit0Updated, muxC, &IC_74xx157_t::ProcessUpdateA1);
-    connect(addrC, &IC_74xx193_t::SignalQaUpdated, muxC, &IC_74xx157_t::ProcessUpdateB1);
-    connect(muxC, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBitC);
-    connect(instrBus, &HW_Bus_t::SignalBit1Updated, muxC, &IC_74xx157_t::ProcessUpdateA2);
-    connect(addrC, &IC_74xx193_t::SignalQbUpdated, muxC, &IC_74xx157_t::ProcessUpdateB2);
-    connect(muxC, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBitD);
-    connect(muxC, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBitE);
-    connect(addrC, &IC_74xx193_t::SignalQcUpdated, muxC, &IC_74xx157_t::ProcessUpdateB3);
-    connect(instrBus, &HW_Bus_t::SignalBit2Updated, muxC, &IC_74xx157_t::ProcessUpdateA3);
-    connect(muxC, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_t::ProcessUpdateBitF);
-    connect(addrC, &IC_74xx193_t::SignalQdUpdated, muxC, &IC_74xx157_t::ProcessUpdateB4);
-    connect(instrBus, &HW_Bus_t::SignalBit3Updated, muxC, &IC_74xx157_t::ProcessUpdateA4);
-    muxC->ProcessUpdateGb(LOW);
+    // -- Gate 3 is used for ((#Bc * #Bb) * Ba)
+    //    -------------------------------------
+    // pin 8 is the output ((#Bc * #Bb) * Ba)
+    connect(bits, &IC_74xx193_t::SignalQaUpdated, and1, &IC_74xx08_t::ProcessUpdateA3);             // pin 9: Ba input
+    connect(and1, &IC_74xx08_t::SignalY4Updated, and1, &IC_74xx08_t::ProcessUpdateB3);              // pin 10: (#Bc * #Bb) input
 
 
     //
-    // -- Counter for the bits
+    // -- Gate 4 is used for (#Bc * #Bb)
+    //    ------------------------------
+    // pin 11 is the output (#Bc * #Bb)
+    connect(inv1, &IC_74xx04_t::SignalY3Updated, and1, &IC_74xx08_t::ProcessUpdateA4);              // pin 12: #Bc Input
+    connect(inv1, &IC_74xx04_t::SignalY2Updated, and1, &IC_74xx08_t::ProcessUpdateB4);              // pin 13: #Bb Input
+
+
+
+    //
+    // -- connect up the second AND gate
+    //    ------------------------------
+
+    //
+    // -- Gate 1 is used for (#CLK * #Bd)
+    //    -------------------------------
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, and2, &IC_74xx08_t::ProcessUpdateA1);              // pin 1: #CLK Input
+    connect(inv1, &IC_74xx04_t::SignalY4Updated, and2, &IC_74xx08_t::ProcessUpdateB1);              // pin 2: #Bd Input
+    // pin 3 is the output (#CLK * #Bd)
+
+
+    //
+    // -- Gate 2 is used for ((#CLK * #Bd) * ((#Bc * #Bb) * Ba))
+    //    ------------------------------------------------------
+    connect(and2, &IC_74xx08_t::SignalY1Updated, and2, &IC_74xx08_t::ProcessUpdateA2);              // pin 4: (#CLK * #Bd) Input
+    connect(and1, &IC_74xx08_t::SignalY3Updated, and2, &IC_74xx08_t::ProcessUpdateB2);              // pin 5: ((#Bc * #Bb) * Ba) Input
+    // pin 6 is the complete ((#CLK * #Bd) * ((#Bc * #Bb) * Ba)) Output
+
+
+    //
+    // -- Gate 3 is used for (Bd * ((#Bc * #Bb) * Ba))
+    //    --------------------------------------------
+    // pin 8 is the output (Bd * ((#Bc * #Bb) * Ba))
+    connect(bits, &IC_74xx193_t::SignalQdUpdated, and2, &IC_74xx08_t::ProcessUpdateA3);             // pin 9: Bd Input
+    connect(and1, &IC_74xx08_t::SignalY3Updated, and2, &IC_74xx08_t::ProcessUpdateB3);              // pin 10: ((#Bc * #Bb) * Ba) Input
+
+
+    //
+    // -- Gate 4 is used for (#Qr * /BO)
+    //    ------------------------------
+    // pin 11 is the output (#Qr * /BO)
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, and2, &IC_74xx08_t::ProcessUpdateA4);        // pin 12: #Qr Input
+    connect(bits, &IC_74xx193_t::SignalBoUpdated, and2, &IC_74xx08_t::ProcessUpdateB4);             // pin 13: /BO Input
+
+
+
+    //
+    // -- connect up the third AND gate
+    //    -----------------------------
+
+    //
+    // -- Gate 1 is used for (((Qc * CLK) * Qs) * #Qr)
+    //    --------------------------------------------
+    connect(and1, &IC_74xx08_t::SignalY2Updated, and3, &IC_74xx08_t::ProcessUpdateA1);              // pin 1:
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, and3, &IC_74xx08_t::ProcessUpdateB1);        // pin 2:
+    // pin 3 is the output (((Qc * CLK) * Qs) * #Qr)
+
+
+    //
+    // -- Gate 2 is unused
+    //    ----------------
+    and3->ProcessA2Low();                                                                           // pin 4
+    and3->ProcessB2Low();                                                                           // pin 5
+    // pin 6 is unused
+
+
+    //
+    // -- Gate 3 is unused
+    //    ----------------
+    // pin 8 is unused
+    and3->ProcessA3Low();                                                                           // pin 9
+    and3->ProcessB3Low();                                                                           // pin 10
+
+
+    //
+    // -- Gate 4 is unused
+    //    ----------------
+    // pin 11 is unused
+    and3->ProcessA4Low();                                                                           // pin 12
+    and3->ProcessB4Low();                                                                           // pin 13
+
+
+
+    //
+    // -- connect up the OR gate IC
+    //    -------------------------
+
+    //
+    // -- Gate 1 is (#Qs + #Qc)
     //    --------------------
-    bits->ProcessUpdateB(LOW);
-    // bit 2 unused
-    // bit 3 unused
-    connect(and1, &IC_74xx08_t::SignalY1Updated, bits, &IC_74xx193_t::ProcessUpdateDown);
-    bits->ProcessUpdateUp(HIGH);
-    // bit 6 unused
-    // bit 7 unused
-    bits->ProcessUpdateD(HIGH);
-    bits->ProcessUpdateC(LOW);
-    connect(and1, &IC_74xx08_t::SignalY2Updated, bits, &IC_74xx193_t::ProcessUpdateLoad);
-    // bit 12 unused
-    // bit 13 handled in `and1` above
-    bits->ProcessUpdateClr(LOW);
-    bits->ProcessUpdateA(LOW);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateA1);              // pin 1: Qs Input
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateB1);              // pin 2: #Qc Input
+    // pin 3 is the output (#Qs + #Qc)
+
+
+    //
+    // -- Gate 2 is (Qr + #Qc)
+    //    --------------------
+    connect(resetting, &IC_74xx74_t::SignalQ1Updated, or1, &IC_74xx32_t::ProcessUpdateA2);          // pin 4: Qr Input
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateB2);              // pin 5: #Qc Input
+    // pin 6 is (Qr + #Qc)
+
+
+    //
+    // -- Gate 3 is unused
+    //    ----------------
+    // pin 8 is unused
+    or1->ProcessA3Low();                                                                            // pin 9 is unused
+    or1->ProcessB3Low();                                                                            // pin 10 is unused
+
+
+    //
+    // -- Gate 4 is unused
+    //    ----------------
+    // pin 11 is unused
+    or1->ProcessA4Low();                                                                            // pin 12 is unused
+    or1->ProcessB4Low();                                                                            // pin 13 is unused
 
 
 
     //
-    // -- Counters for the address
-    //    ------------------------
-    addr0->ProcessUpdateB(LOW);
-    // pin 2 handled in the muxes above
-    // pin 3 handled in the muxes above
-    addr0->ProcessUpdateDown(HIGH);
-    connect(bits, &IC_74xx193_t::SignalBoUpdated, addr0, &IC_74xx193_t::ProcessUpdateUp);
-    // pin 6 is handled in the muxes above
-    // pin 7 is handled in the muxes above
-    addr0->ProcessUpdateD(HIGH);
-    addr0->ProcessUpdateC(HIGH);
-    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addr0, &IC_74xx193_t::ProcessUpdateLoad);
-    // pin 12 is connected to the next IC
-    // pin 13 is connected to the next IC, though it is not used
-    addr0->ProcessUpdateClr(LOW);
-    addr0->ProcessUpdateA(HIGH);
+    // -- connect up the second OR gate IC
+    //    --------------------------------
+
+    //
+    // -- Gate 1 is (Ba + Bb)
+    //    -------------------
+    connect(bits, &IC_74xx193_t::SignalQaUpdated, or2, &IC_74xx32_t::ProcessUpdateA1);              // pin 1: Ba
+    connect(bits, &IC_74xx193_t::SignalQbUpdated, or2, &IC_74xx32_t::ProcessUpdateB1);              // pin 2: Bb
+    // pin 3 is the (Ba + Bb) output
 
 
-    addr4->ProcessUpdateB(HIGH);
-    // pin 2 handled in the muxes above
-    // pin 3 handled in the muxes above
-    connect(addr0, &IC_74xx193_t::SignalBoUpdated, addr4, &IC_74xx193_t::ProcessUpdateDown);
-    connect(addr0, &IC_74xx193_t::SignalCoUpdated, addr4, &IC_74xx193_t::ProcessUpdateUp);
-    // pin 6 is handled in the muxes above
-    // pin 7 is handled in the muxes above
-    addr4->ProcessUpdateD(HIGH);
-    addr4->ProcessUpdateC(HIGH);
-    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addr4, &IC_74xx193_t::ProcessUpdateLoad);
-    // pin 12 is connected to the next IC
-    // pin 13 is connected to the next IC, though it is not used
-    addr4->ProcessUpdateClr(LOW);
-    addr4->ProcessUpdateA(HIGH);
+    //
+    // -- Gate 2 is (Bc + Bd)
+    //    -------------------
+    connect(bits, &IC_74xx193_t::SignalQcUpdated, or2, &IC_74xx32_t::ProcessUpdateA2);              // pin 4: Bc
+    connect(bits, &IC_74xx193_t::SignalQdUpdated, or2, &IC_74xx32_t::ProcessUpdateB2);              // pin 5: Bd
+    // pin 6 is the (Bc + Bd) output
 
 
-    addr8->ProcessUpdateB(HIGH);
-    // pin 2 handled in the muxes above
-    // pin 3 handled in the muxes above
-    connect(addr4, &IC_74xx193_t::SignalBoUpdated, addr8, &IC_74xx193_t::ProcessUpdateDown);
-    connect(addr4, &IC_74xx193_t::SignalCoUpdated, addr8, &IC_74xx193_t::ProcessUpdateUp);
-    // pin 6 is handled in the muxes above
-    // pin 7 is handled in the muxes above
-    addr8->ProcessUpdateD(HIGH);
-    addr8->ProcessUpdateC(HIGH);
-    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addr8, &IC_74xx193_t::ProcessUpdateLoad);
-    // pin 12 is connected to the next IC
-    // pin 13 is connected to the next IC, though it is not used
-    addr8->ProcessUpdateClr(LOW);
-    addr8->ProcessUpdateA(HIGH);
+    //
+    // -- Gate 3 is ((Ba + Bb) + (Bc + Bd))
+    //    ---------------------------------
+    // pin 8 is the ((Ba + Bb) + (Bc + Bd)) output
+    connect(or2, &IC_74xx32_t::SignalY1Updated, or2, &IC_74xx32_t::ProcessUpdateA3);                // pin 9: (Ba + Bb)
+    connect(or2, &IC_74xx32_t::SignalY2Updated, or2, &IC_74xx32_t::ProcessUpdateB3);                // pin 10: (Bc + Bd)
 
 
-    addrC->ProcessUpdateB(HIGH);
-    // pin 2 handled in the muxes above
-    // pin 3 handled in the muxes above
-    connect(addr8, &IC_74xx193_t::SignalBoUpdated, addrC, &IC_74xx193_t::ProcessUpdateDown);
-    connect(addr8, &IC_74xx193_t::SignalCoUpdated, addrC, &IC_74xx193_t::ProcessUpdateUp);
-    // pin 6 is handled in the muxes above
-    // pin 7 is handled in the muxes above
-    addrC->ProcessUpdateD(LOW);
-    addrC->ProcessUpdateC(HIGH);
-    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addrC, &IC_74xx193_t::ProcessUpdateLoad);
+    //
+    // -- Gate 4 is unused
+    //    ----------------
+    // pin 8 is unused
+    or2->ProcessA4Low();                                                                            // pin 12: unused
+    or2->ProcessB4Low();                                                                            // pin 13: unused
+
+
+
+    //
+    // -- connect up the Open Drain/Open Collector AND gate
+    //    -------------------------------------------------
+
+    //
+    // -- Gate 1 is (#Qc * #Qc)
+    //    ---------------------
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, oAnd1, &IC_74xx03_t::ProcessUpdateA1);            // pin 1: #Qc Input
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, oAnd1, &IC_74xx03_t::ProcessUpdateB2);            // pin 2: #Qc Input
+    // pin 3 is the output (#Qc + #Qc)
+
+
+    //
+    // -- Gate 2 is Unused
+    //    --------------------
+    oAnd1->ProcessA2Low();                                                                          // pin 9 is unused
+    oAnd1->ProcessB2Low();                                                                          // pin 10 is unused
+    // pin 6 is unused
+
+
+    //
+    // -- Gate 3 is unused
+    //    ----------------
+    // pin 8 is unused
+    oAnd1->ProcessA3Low();                                                                          // pin 9 is unused
+    oAnd1->ProcessB3Low();                                                                          // pin 10 is unused
+
+
+    //
+    // -- Gate 4 is unused
+    //    ----------------
+    // pin 11 is unused
+    oAnd1->ProcessA4Low();                                                                          // pin 12 is unused
+    oAnd1->ProcessB4Low();                                                                          // pin 13 is unused
+
+
+
+    //
+    // -- connect up inverter 1
+    //    ---------------------
+
+    //
+    // -- Gate 1 is #CLK
+    //    --------------
+    connect(clock, &HW_Oscillator_t::SignalStateChanged, inv1, &IC_74xx04_t::ProcessUpdateA1);      // pin 1: CLK
+    // pin 2 is #CLK
+
+
+    //
+    // -- Gate 2 is #Bb
+    //    -------------
+    connect(bits, &IC_74xx193_t::SignalQbUpdated, inv1, &IC_74xx04_t::ProcessUpdateA2);             // pin 3: Bb
+    // pin 4 is #Bb output
+
+
+    //
+    // -- Gate 3 is #Bc
+    //    -------------
+    connect(bits, &IC_74xx193_t::SignalQcUpdated, inv1, &IC_74xx04_t::ProcessUpdateA3);             // pin 5: Bb
+    // pin 6 is #Bb output
+
+
+    //
+    // -- Gate 4 is #Bd
+    //    -------------
+    // pin 8 is #Bd
+    connect(bits, &IC_74xx193_t::SignalQdUpdated, inv1, &IC_74xx04_t::ProcessUpdateA4);             // pin 9: Bb
+
+
+    //
+    // -- Gate 5 is #(Bd * #Bc * #Bb * Ba)
+    //    --------------------------------
+    // pin 10 is #(Bd * #Bc * #Bb * Ba)
+    connect(and2, &IC_74xx08_t::SignalY3Updated, inv1, &IC_74xx04_t::ProcessUpdateA5);              // pin 11: (Bd * #Bc * #Bb * Ba)
+
+
+    //
+    // -- Gate 6 is #(#CLK * #Bd * #Bc * #Bb * Ba)
+    //    ----------------------------------------
+    // pin 12 is #(#CLK * #Bd * #Bc * #Bb * Ba)
+    connect(and2, &IC_74xx08_t::SignalY2Updated, inv1, &IC_74xx04_t::ProcessUpdateA6);              // pin 13: (#CLK * #Bd * #Bc * #Bb * Ba)
+
+
+
+    //
+    // -- connect up inverter 2
+    //    ---------------------
+
+    //
+    // -- Gate 1 is #(/RESET)
+    //    -------------------
+    // pin 1 is handled in ProcessClockReset() -- below
+    // pin 2 is #(#RESET)
+
+
+    //
+    // -- Gate 2 is #(#Qs + #Qc)
+    //    ---------------------
+    connect(or1, &IC_74xx32_t::SignalY1Updated, inv2, &IC_74xx04_t::ProcessUpdateA2);               // pin 3: (#Qs + #Qc)
+    // pin 4 is #(#Qs + #Qc)
+
+
+    //
+    // -- Gate 3 is unused
+    //    -----------------------------
+    inv2->ProcessA3Low();                                                                           // pin 5 : unused
+    // pin 6 is unused
+
+
+    //
+    // -- Gate 4 is unused
+    //    ----------------
+    // pin 8 is unused
+    inv2->ProcessA4Low();                                                                           // pin 9: unused
+
+
+    //
+    // -- Gate 5 is unused
+    //    ----------------
+    // pin 10 is unused
+    inv2->ProcessA5Low();                                                                           // pin 11: unused
+
+
+    //
+    // -- Gate 6 is unused
+    //    ----------------
     // pin 12 is unused
-    // pin 13 is unused
-    addrC->ProcessUpdateClr(LOW);
-    addrC->ProcessUpdateA(HIGH);
+    inv2->ProcessA6Low();                                                                           // pin 13: unused
+
+
+
+    //
+    // -- Connect up MUX0 -- the least significant nibble
+    //    -----------------------------------------------
+    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
+
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux0, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
+    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux0, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 0
+    connect(addr0, &IC_74xx193_t::SignalQaUpdated, mux0, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 0
+    // pin 4: Output Y1
+    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, mux0, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 1
+    connect(addr0, &IC_74xx193_t::SignalQbUpdated, mux0, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 1
+    // pin 6: Output Y2
+    // pin 9: Output Y3
+    connect(addr0, &IC_74xx193_t::SignalQcUpdated, mux0, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 2
+    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, mux0, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 2
+    // pin 12: Output Y4
+    connect(addr0, &IC_74xx193_t::SignalQdUpdated, mux0, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 3
+    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, mux0, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 3
+    mux0->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
+
+
+    //
+    // -- Connect up MUX4 -- the next least significant nibble
+    //    ----------------------------------------------------
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux4, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
+    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux4, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 4
+    connect(addr4, &IC_74xx193_t::SignalQaUpdated, mux4, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 4
+    // pin 4: Output Y1
+    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, mux4, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 5
+    connect(addr4, &IC_74xx193_t::SignalQbUpdated, mux4, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 5
+    // pin 6: Output Y2
+    // pin 9: Output Y3
+    connect(addr4, &IC_74xx193_t::SignalQcUpdated, mux4, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 6
+    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, mux4, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 6
+    // pin 12: Output Y4
+    connect(addr4, &IC_74xx193_t::SignalQdUpdated, mux4, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 7
+    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, mux4, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 7
+    mux4->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
+
+
+
+    //
+    // -- Connect up MUX8 -- the next most significant nibble
+    //    ---------------------------------------------------
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux8, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
+    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux8, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 8
+    connect(addr8, &IC_74xx193_t::SignalQaUpdated, mux8, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 8
+    // pin 4: Output Y1
+    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, mux8, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 9
+    connect(addr8, &IC_74xx193_t::SignalQbUpdated, mux8, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 9
+    // pin 6: Output Y2
+    // pin 9: Output Y3
+    connect(addr8, &IC_74xx193_t::SignalQcUpdated, mux8, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 10
+    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, mux8, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 10
+    // pin 12: Output Y4
+    connect(addr8, &IC_74xx193_t::SignalQdUpdated, mux8, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 11
+    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, mux8, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 11
+    mux8->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
+
+
+
+    //
+    // -- Connect up MUXc -- the most significant nibble
+    //    ----------------------------------------------
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, muxC, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
+    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, muxC, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 12
+    connect(addrC, &IC_74xx193_t::SignalQaUpdated, muxC, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 12
+    // pin 4: Output Y1
+    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, muxC, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 13
+    connect(addrC, &IC_74xx193_t::SignalQbUpdated, muxC, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 13
+    // pin 6: Output Y2
+    // pin 9: Output Y3
+    connect(addrC, &IC_74xx193_t::SignalQcUpdated, muxC, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 14
+    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, muxC, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 14
+    // pin 12: Output Y4
+    connect(addrC, &IC_74xx193_t::SignalQdUpdated, muxC, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 15
+    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, muxC, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 15
+    muxC->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
+
+
+
+    //
+    // -- Counter for the bits 74HC193
+    //    ----------------------------
+    bits->ProcessUpdateB(LOW);                                                                      // pin 1: Input B
+    // bit 2: output Bb
+    // bit 3: output Ba
+    connect(clock, &HW_Oscillator_t::SignalStateChanged, bits, &IC_74xx193_t::ProcessUpdateDown);   // pin 4: Down count clock
+    bits->ProcessUpdateUp(HIGH);                                                                    // pin 5: Up Count clock (tied high)
+    // bit 6: output Bc
+    // bit 7: output Bd
+    bits->ProcessUpdateD(HIGH);                                                                     // pin 9: Input D
+    bits->ProcessUpdateC(LOW);                                                                      // pin 10: Input C
+    connect(and2, &IC_74xx08_t::SignalY4Updated, bits, &IC_74xx193_t::ProcessUpdateLoad);           // pin 11: Load (#Qr * /BO)
+    // bit 12: /CO Output
+    // bit 13: /BO Output
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, bits, &IC_74xx193_t::ProcessUpdateClr);           // pin 14: CLR
+    bits->ProcessUpdateA(HIGH);                                                                     // pin 15: Input A
+
+
+
+    //
+    // -- Counters for the address the least significant 74HC193
+    //    ------------------------------------------------------
+    addr0->ProcessUpdateB(LOW);                                                                     // pin 1: Input B
+    // bit 2: output Addr0 Qb
+    // bit 3: output Addr0 Qa
+    addr0->ProcessUpdateDown(HIGH);                                                                 // pin 4: Down count clock (tied high)
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, addr0, &IC_74xx193_t::ProcessUpdateUp);           // pin 5: Up Count clock
+    // bit 6: output Addr0 Qc
+    // bit 7: output Addr0 Qd
+    addr0->ProcessUpdateD(HIGH);                                                                    // pin 9: Input D
+    addr0->ProcessUpdateC(HIGH);                                                                    // pin 10: Input C
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addr0, &IC_74xx193_t::ProcessUpdateLoad);    // pin 11: Load (#Qr * /BO)
+    // bit 12: /CO Output
+    // bit 13: /BO Output
+    addr0->ProcessUpdateClr(LOW);                                                                   // pin 14: CLR (never clear, only load)
+    addr0->ProcessUpdateA(HIGH);                                                                    // pin 15: Input A
+
+
+
+    //
+    // -- Counters for the address the next least significant 74HC193
+    //    -----------------------------------------------------------
+    addr4->ProcessUpdateB(HIGH);                                                                    // pin 1: Input B
+    // bit 2: output Addr4 Qb
+    // bit 3: output Addr4 Qa
+    connect(addr0, &IC_74xx193_t::SignalBoUpdated, addr4, &IC_74xx193_t::ProcessUpdateUp);          // pin 5: Down Count clock
+    connect(addr0, &IC_74xx193_t::SignalCoUpdated, addr4, &IC_74xx193_t::ProcessUpdateUp);          // pin 5: Up Count clock
+    // bit 6: output Addr4 Qc
+    // bit 7: output Addr4 Qd
+    addr4->ProcessUpdateD(HIGH);                                                                    // pin 9: Input D
+    addr4->ProcessUpdateC(HIGH);                                                                    // pin 10: Input C
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addr4, &IC_74xx193_t::ProcessUpdateLoad);    // pin 11: Load (#Qr * /BO)
+    // bit 12: /CO Output
+    // bit 13: /BO Output
+    addr4->ProcessUpdateClr(LOW);                                                                   // pin 14: CLR (never clear, only load)
+    addr4->ProcessUpdateA(HIGH);                                                                    // pin 15: Input A
+
+
+
+    //
+    // -- Counters for the address the next most significant 74HC193
+    //    ----------------------------------------------------------
+    addr8->ProcessUpdateB(HIGH);                                                                    // pin 1: Input B
+    // bit 2: output Addr8 Qb
+    // bit 3: output Addr8 Qa
+    connect(addr4, &IC_74xx193_t::SignalBoUpdated, addr8, &IC_74xx193_t::ProcessUpdateUp);          // pin 5: Down Count clock
+    connect(addr4, &IC_74xx193_t::SignalCoUpdated, addr8, &IC_74xx193_t::ProcessUpdateUp);          // pin 5: Up Count clock
+    // bit 6: output Addr8 Qc
+    // bit 7: output Addr8 Qd
+    addr8->ProcessUpdateD(HIGH);                                                                    // pin 9: Input D
+    addr8->ProcessUpdateC(HIGH);                                                                    // pin 10: Input C
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addr8, &IC_74xx193_t::ProcessUpdateLoad);    // pin 11: Load (#Qr * /BO)
+    // bit 12: /CO Output
+    // bit 13: /BO Output
+    addr8->ProcessUpdateClr(LOW);                                                                   // pin 14: CLR (never clear, only load)
+    addr8->ProcessUpdateA(HIGH);                                                                    // pin 15: Input A
+
+
+
+    //
+    // -- Counters for the address the most significant 74HC193
+    //    -----------------------------------------------------
+    addrC->ProcessUpdateB(HIGH);                                                                    // pin 1: Input B
+    // bit 2: output AddrC Qb
+    // bit 3: output AddrC Qa
+    connect(addr8, &IC_74xx193_t::SignalBoUpdated, addrC, &IC_74xx193_t::ProcessUpdateUp);          // pin 5: Down Count clock
+    connect(addr8, &IC_74xx193_t::SignalCoUpdated, addrC, &IC_74xx193_t::ProcessUpdateUp);          // pin 5: Up Count clock
+    // bit 6: output AddrC Qc
+    // bit 7: output AddrC Qd
+    addrC->ProcessUpdateD(LOW);                                                                     // pin 9: Input D
+    addrC->ProcessUpdateC(HIGH);                                                                    // pin 10: Input C
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, addrC, &IC_74xx193_t::ProcessUpdateLoad);    // pin 11: Load (#Qr * /BO)
+    // bit 12: /CO Output
+    // bit 13: /BO Output
+    addrC->ProcessUpdateClr(LOW);                                                                   // pin 14: CLR (never clear, only load)
+    addrC->ProcessUpdateA(HIGH);                                                                    // pin 15: Input A
+
 
 
     //
     // -- Wire up the command/address shifter
     //    -----------------------------------
-    connect(resetting, &IC_74xx74_t::SignalQ1Updated, shift, &IC_74xx165_t::ProcessUpdateShLd);
-    connect(and1, &IC_74xx08_t::SignalY1Updated, shift, &IC_74xx165_t::ProcessUpdateClk);
-    shift->ProcessUpdateE(LOW);
-    shift->ProcessUpdateF(LOW);
-    shift->ProcessUpdateG(LOW);
-    shift->ProcessUpdateH(LOW);
-    // pin 7 unused
-    connect(shift, &IC_74xx165_t::SignalQHUpdated, this, &CtrlRomCtrlModule_t::SignalCommandAddresssLine);
-    shift->ProcessUpdateSer(LOW);
-    shift->ProcessUpdateA(HIGH);
-    shift->ProcessUpdateB(HIGH);
-    shift->ProcessUpdateC(LOW);
-    shift->ProcessUpdateD(LOW);
-    shift->ProcessUpdateClkInh(LOW);
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, shift, &IC_74xx165_t::ProcessUpdateShLd);    // pin 1: SH or /LD selection
+    connect(and1, &IC_74xx08_t::SignalY2Updated, shift, &IC_74xx165_t::ProcessUpdateClk);           // pin 2: Clock (Qc * CLK * #Qs)
+    shift->ProcessUpdateE(LOW);                                                                     // pin 3: bit E
+    shift->ProcessUpdateF(LOW);                                                                     // pin 4: bit F
+    shift->ProcessUpdateG(LOW);                                                                     // pin 5: bit G
+    shift->ProcessUpdateH(LOW);                                                                     // pin 6: bit H
+    // pin 7: output #Qh for chaining ICs
+    // pin 9: output Qh for chaining ICs
+    shift->ProcessUpdateSer(LOW);                                                                   // pin 10: serial input (always 0)
+    shift->ProcessUpdateA(HIGH);                                                                    // pin 11: bit A
+    shift->ProcessUpdateB(HIGH);                                                                    // pin 12: bit B
+    shift->ProcessUpdateC(LOW);                                                                     // pin 13: bit C
+    shift->ProcessUpdateD(LOW);                                                                     // pin 14: bit D
+    shift->ProcessUpdateClkInh(LOW);                                                                // pin 15: Clock Inhibit
 
 
     //
     // -- Wire up the LEDs
     //    ----------------
     connect(clock, &HW_Oscillator_t::SignalStateChanged, clk, &GUI_Led_t::ProcessStateChange);
+
     connect(resetting, &IC_74xx74_t::SignalQ1Updated, qr, &GUI_Led_t::ProcessStateChange);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, qc, &GUI_Led_t::ProcessStateChange);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, qs, &GUI_Led_t::ProcessStateChange);
+    connect(nand2, &IC_74xx00_t::SignalY1Updated, ql, &GUI_Led_t::ProcessStateChange);
 
     connect(mux0, &IC_74xx157_t::SignalY1Updated, led0, &GUI_Led_t::ProcessStateChange);
     connect(mux0, &IC_74xx157_t::SignalY2Updated, led1, &GUI_Led_t::ProcessStateChange);
@@ -476,6 +912,73 @@ void CtrlRomCtrlModule_t::WireUp(void)
     connect(bits, &IC_74xx193_t::SignalQbUpdated, bit1, &GUI_Led_t::ProcessStateChange);
     connect(bits, &IC_74xx193_t::SignalQcUpdated, bit2, &GUI_Led_t::ProcessStateChange);
     connect(bits, &IC_74xx193_t::SignalQdUpdated, bit3, &GUI_Led_t::ProcessStateChange);
+
+
+
+    //
+    // -- Connect up the outputs: individual signals first
+    //    ------------------------------------------------
+    HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
+    connect(oAnd1, &IC_74xx03_t::SignalY1Updated, rHld, &HW_Bus_1_t::SignalBit0Updated);
+    connect(resetting, &IC_74xx74_t::SignalQ1Updated, this, &CtrlRomCtrlModule_t::SignalQrUpdated);
+    connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, this, &CtrlRomCtrlModule_t::SignalQrbUpdated);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalQcUpdated);
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalQcbUpdated);
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::ProcessQcb);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::SignalQsUpdated);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, this, &CtrlRomCtrlModule_t::SignalQsbUpdated);
+    connect(and3, &IC_74xx08_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalShiftClockUpdated);
+    connect(or1, &IC_74xx32_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalEepromCsUpdated);
+    connect(shift, &IC_74xx165_t::SignalQHUpdated, this, &CtrlRomCtrlModule_t::SignalEepromCmdAddrUpdated);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalSramOeUpdated);
+    connect(nand2, &IC_74xx00_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalSramWeUpdated);
+    connect(inv2, &IC_74xx04_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalSramCeUpdated);
+
+
+
+    //
+    // -- Connect up the outputs: Ctrl Logic Bus
+    //    --------------------------------------
+    HW_Bus_16_t *ctrlBus = HW_Computer_t::Get()->GetCtrlBus();
+    connect(mux0, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit0);
+    connect(mux0, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit1);
+    connect(mux0, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit2);
+    connect(mux0, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit3);
+    connect(mux4, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit4);
+    connect(mux4, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit5);
+    connect(mux4, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit6);
+    connect(mux4, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit7);
+    connect(mux8, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit8);
+    connect(mux8, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit9);
+    connect(mux8, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBitA);
+    connect(mux8, &IC_74xx157_t::SignalY4Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBitB);
+    connect(muxC, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBitC);
+    connect(muxC, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBitD);
+    connect(muxC, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBitE);
+    ctrlBus->SignalBitFUpdated(LOW);
+
+
+
+    //
+    // -- Connect up the outputs: Address Copy Bus
+    //    ----------------------------------------
+    HW_Bus_16_t *addrCopyBus = HW_Computer_t::GetAddrCopyBus();
+    connect(addr0, &IC_74xx193_t::SignalQaUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit0);
+    connect(addr0, &IC_74xx193_t::SignalQbUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit1);
+    connect(addr0, &IC_74xx193_t::SignalQcUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit2);
+    connect(addr0, &IC_74xx193_t::SignalQdUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit3);
+    connect(addr4, &IC_74xx193_t::SignalQaUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit4);
+    connect(addr4, &IC_74xx193_t::SignalQbUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit5);
+    connect(addr4, &IC_74xx193_t::SignalQcUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit6);
+    connect(addr4, &IC_74xx193_t::SignalQdUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit7);
+    connect(addr8, &IC_74xx193_t::SignalQaUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit8);
+    connect(addr8, &IC_74xx193_t::SignalQbUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBit9);
+    connect(addr8, &IC_74xx193_t::SignalQcUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBitA);
+    connect(addr8, &IC_74xx193_t::SignalQdUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBitB);
+    connect(addrC, &IC_74xx193_t::SignalQaUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBitC);
+    connect(addrC, &IC_74xx193_t::SignalQbUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBitD);
+    connect(addrC, &IC_74xx193_t::SignalQdUpdated, addrCopyBus, &HW_Bus_16_t::ProcessUpdateBitE);
+    addrCopyBus->ProcessUpdateBitF(LOW);
 }
 
 
@@ -483,20 +986,19 @@ void CtrlRomCtrlModule_t::WireUp(void)
 //
 // -- Start the clock when reset hits
 //    -------------------------------
-inline void CtrlRomCtrlModule_t::ProcessReset(TriState_t state)
+inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 {
-    nand1->ProcessUpdateA1(state);
-    nand1->ProcessUpdateB3(state);
-    nand1->ProcessUpdateA3(state);
-    resetting->ProcessUpdatePre1(state);
+    // -- This is still an active low signal!!!
+
+    nand1->ProcessUpdateA1(state);          // SR Set
+    inv2->ProcessUpdateA1(state);           // #Reset
+    resetting->ProcessUpdatePre1(state);    // set the D-Latch
 
     if (state == HIGH) {
+        qDebug() << "Reset Complete!";
         clock->StartTimer();
     }
 }
-
-
-
 
 
 

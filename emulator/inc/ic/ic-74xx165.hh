@@ -84,7 +84,7 @@ public slots:
     void ProcessUpdateSer(TriState_t state) { pins[SER] = state; }
     void ProcessUpdateClk(TriState_t state) { pins[CLK] = state; ProcessClock(); }
     void ProcessUpdateClkInh(TriState_t state) { pins[CLK_INH] = state; ProcessClock(); }
-    void ProcessUpdateShLd(TriState_t state) {pins[SH_LD] = state; if (pins[SH_LD] == LOW) ProcessNewPin(); };
+    void ProcessUpdateShLd(TriState_t state) { pins[SH_LD] = state; ProcessNewPin(); };
 
 
 

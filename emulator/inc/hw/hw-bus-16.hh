@@ -1,5 +1,5 @@
 //===================================================================================================================
-//  hw-bus.hh -- This is a generic bus
+//  hw-bus-16.hh -- This is a generic 16-bit bus
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
@@ -17,7 +17,7 @@
 //
 // -- Handle multiple connections into a bus
 //    --------------------------------------
-class HW_Bus_t : public QObject {
+class HW_Bus_16_t : public QObject {
     Q_OBJECT
 
 
@@ -48,8 +48,8 @@ private:
 
 
 public:
-    HW_Bus_t(ClockModule_t *clk, QObject *parent = nullptr);
-    virtual ~HW_Bus_t() {}
+    HW_Bus_16_t(ClockModule_t *clk, QObject *parent = nullptr);
+    virtual ~HW_Bus_16_t() {}
 
 
 private:

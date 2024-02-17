@@ -18,28 +18,28 @@
 //
 // -- This is a group of line drivers which will drive a 16-bit bus
 //    -------------------------------------------------------------
-HW_BusDriver_t::HW_BusDriver_t(HW_Bus_t *bus, QObject *parent) : QObject(parent)
+HW_BusDriver_t::HW_BusDriver_t(HW_Bus_16_t *bus, QObject *parent) : QObject(parent)
 {
     msb = new IC_74xx541_t;
     lsb = new IC_74xx541_t;
 
     // -- connect the output signals to their sources on the IC
-    connect(msb, &IC_74xx541_t::SignalY7Updated, bus, &HW_Bus_t::ProcessUpdateBitF);
-    connect(msb, &IC_74xx541_t::SignalY6Updated, bus, &HW_Bus_t::ProcessUpdateBitE);
-    connect(msb, &IC_74xx541_t::SignalY5Updated, bus, &HW_Bus_t::ProcessUpdateBitD);
-    connect(msb, &IC_74xx541_t::SignalY4Updated, bus, &HW_Bus_t::ProcessUpdateBitC);
-    connect(msb, &IC_74xx541_t::SignalY3Updated, bus, &HW_Bus_t::ProcessUpdateBitB);
-    connect(msb, &IC_74xx541_t::SignalY2Updated, bus, &HW_Bus_t::ProcessUpdateBitA);
-    connect(msb, &IC_74xx541_t::SignalY1Updated, bus, &HW_Bus_t::ProcessUpdateBit9);
-    connect(msb, &IC_74xx541_t::SignalY0Updated, bus, &HW_Bus_t::ProcessUpdateBit8);
-    connect(lsb, &IC_74xx541_t::SignalY7Updated, bus, &HW_Bus_t::ProcessUpdateBit7);
-    connect(lsb, &IC_74xx541_t::SignalY6Updated, bus, &HW_Bus_t::ProcessUpdateBit6);
-    connect(lsb, &IC_74xx541_t::SignalY5Updated, bus, &HW_Bus_t::ProcessUpdateBit5);
-    connect(lsb, &IC_74xx541_t::SignalY4Updated, bus, &HW_Bus_t::ProcessUpdateBit4);
-    connect(lsb, &IC_74xx541_t::SignalY3Updated, bus, &HW_Bus_t::ProcessUpdateBit3);
-    connect(lsb, &IC_74xx541_t::SignalY2Updated, bus, &HW_Bus_t::ProcessUpdateBit2);
-    connect(lsb, &IC_74xx541_t::SignalY1Updated, bus, &HW_Bus_t::ProcessUpdateBit1);
-    connect(lsb, &IC_74xx541_t::SignalY0Updated, bus, &HW_Bus_t::ProcessUpdateBit0);
+    connect(msb, &IC_74xx541_t::SignalY7Updated, bus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(msb, &IC_74xx541_t::SignalY6Updated, bus, &HW_Bus_16_t::ProcessUpdateBitE);
+    connect(msb, &IC_74xx541_t::SignalY5Updated, bus, &HW_Bus_16_t::ProcessUpdateBitD);
+    connect(msb, &IC_74xx541_t::SignalY4Updated, bus, &HW_Bus_16_t::ProcessUpdateBitC);
+    connect(msb, &IC_74xx541_t::SignalY3Updated, bus, &HW_Bus_16_t::ProcessUpdateBitB);
+    connect(msb, &IC_74xx541_t::SignalY2Updated, bus, &HW_Bus_16_t::ProcessUpdateBitA);
+    connect(msb, &IC_74xx541_t::SignalY1Updated, bus, &HW_Bus_16_t::ProcessUpdateBit9);
+    connect(msb, &IC_74xx541_t::SignalY0Updated, bus, &HW_Bus_16_t::ProcessUpdateBit8);
+    connect(lsb, &IC_74xx541_t::SignalY7Updated, bus, &HW_Bus_16_t::ProcessUpdateBit7);
+    connect(lsb, &IC_74xx541_t::SignalY6Updated, bus, &HW_Bus_16_t::ProcessUpdateBit6);
+    connect(lsb, &IC_74xx541_t::SignalY5Updated, bus, &HW_Bus_16_t::ProcessUpdateBit5);
+    connect(lsb, &IC_74xx541_t::SignalY4Updated, bus, &HW_Bus_16_t::ProcessUpdateBit4);
+    connect(lsb, &IC_74xx541_t::SignalY3Updated, bus, &HW_Bus_16_t::ProcessUpdateBit3);
+    connect(lsb, &IC_74xx541_t::SignalY2Updated, bus, &HW_Bus_16_t::ProcessUpdateBit2);
+    connect(lsb, &IC_74xx541_t::SignalY1Updated, bus, &HW_Bus_16_t::ProcessUpdateBit1);
+    connect(lsb, &IC_74xx541_t::SignalY0Updated, bus, &HW_Bus_16_t::ProcessUpdateBit0);
 
     TriggerFirstUpdate();
 }

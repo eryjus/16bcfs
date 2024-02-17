@@ -27,7 +27,7 @@ private:
 
 
 public:
-    HW_BusDriver_t(HW_Bus_t *bus, QObject *parent = nullptr);
+    HW_BusDriver_t(HW_Bus_16_t *bus, QObject *parent = nullptr);
     virtual ~HW_BusDriver_t() {}
 
 

@@ -40,7 +40,7 @@ private:
 
 
 public:
-    GUI_BusLeds_t(QString name, HW_Bus_t *bus, QWidget *parent = nullptr);
+    GUI_BusLeds_t(QString name, HW_Bus_16_t *bus, QWidget *parent = nullptr);
     ~GUI_BusLeds_t() {}
 };
 

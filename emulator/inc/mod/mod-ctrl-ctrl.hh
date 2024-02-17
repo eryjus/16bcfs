@@ -31,18 +31,33 @@ private:
 
 
 
-    // -- a NAND gate to handle the SR Latch and other logic
+    // -- a NAND gate to handle the SR Latch
     IC_74xx00_t *nand1;
+    IC_74xx00_t *nand2;
 
 
 
     // -- several pins require CLK ANDed with Qc
     IC_74xx08_t *and1;
+    IC_74xx08_t *and2;
+    IC_74xx08_t *and3;
+
+
+
+    // -- OR gate to combine several signal options
+    IC_74xx32_t *or1;
+    IC_74xx32_t *or2;
 
 
 
     // -- we need an open drain AND gate for #RHLD
     IC_74xx03_t *oAnd1;
+
+
+
+    // -- a coupld of inverters for shaping signals properly
+    IC_74xx04_t *inv1;
+    IC_74xx04_t *inv2;
 
 
 
@@ -81,6 +96,8 @@ private:
     GUI_Led_t *clk;
     GUI_Led_t *qr;
     GUI_Led_t *qc;
+    GUI_Led_t *qs;
+    GUI_Led_t *ql;
 
     GUI_Led_t *led0;
     GUI_Led_t *led1;
@@ -107,7 +124,13 @@ private:
 
 public slots:
     // -- here are the external inputs into this module: note the instruction will have a bus
-    void ProcessReset(TriState_t state);
+    void ProcessResetUpdate(TriState_t state);
+
+
+    //
+    // -- additional inputs not here:
+    //    * Instruction -- from the Instruction Register (15-bit bus)
+    //    -----------------------------------------------------------
 
 
 private slots:
@@ -116,14 +139,29 @@ private slots:
 
 
 signals:
-    // -- here are the outputs from this module into
+    // -- here are the outputs from this module into other components
     void SignalQrUpdated(TriState_t state);
     void SignalQrbUpdated(TriState_t state);
     void SignalQcUpdated(TriState_t state);
     void SignalQcbUpdated(TriState_t state);
-    void SignalClkAndQcUpdated(TriState_t state);
-    void SignalRHldUpdated(TriState_t state);
-    void SignalCommandAddresssLine(TriState_t state);
+    void SignalQsUpdated(TriState_t state);
+    void SignalQsbUpdated(TriState_t state);
+
+    void SignalShiftClockUpdated(TriState_t state);         // Qc * CLK * Qs
+    void SignalEepromCsUpdated(TriState_t state);           // Qr + #Qc
+    void SignalEepromCmdAddrUpdated(TriState_t state);      // 74HC165 output
+
+    void SignalSramOeUpdated(TriState_t state);             // Qc
+    void SignalSramWeUpdated(TriState_t state);             // Qs
+    void SignalSramCeUpdated(TriState_t state);             // Qs + #Qc
+
+
+    //
+    // -- some additional outputs not here:
+    //    * #RHLD -- a 1-bit bus
+    //    * CTRL -- control address for eeprom lookup
+    //    * Address Counter -- for the Program ROM to copy of desired (15-bit bus)
+    //    ------------------------------------------------------------------------
 
 
 
@@ -134,12 +172,16 @@ public:
 
 
 
+public:
+    void TriggerFirstUpdate(void);          // trigger all the proper initial updates
+
+
+
 private:
     // -- intenral functions
     void AllocateComponents(void);          // Get the component memory from heap
     void BuildGui(void);                    // place the components on the GUI
     void WireUp(void);                      // make all the necessary connections
-    void TriggerFirstUpdate(void);          // trigger all the proper initial updates
 };
 
 

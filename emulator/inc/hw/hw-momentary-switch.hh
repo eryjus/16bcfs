@@ -38,6 +38,8 @@ public:
 
 public:
     void TriggerFirstUpdates(void);
+    inline void Press(void) { ProcessPressed(); }
+    inline void Release(void) { ProcessReleased(); }
 
 
 signals:

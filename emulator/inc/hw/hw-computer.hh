@@ -20,6 +20,9 @@ class HW_Computer_t : public QMainWindow {
     Q_OBJECT
 
 private:
+    // -- singleton instance
+    static HW_Computer_t *singleton;
+
     // -- here are the settings for the application
     static QSettings *settings;
 
@@ -32,38 +35,41 @@ private:
     // -- The General Purpose Register Modules
     static GpRegisterModule_t *pc;
 
-    // -- The Control ROM Control Module
-    static CtrlRomCtrlModule_t *ctrlCtrl;
-
-    // -- singleton instance
-    static HW_Computer_t *singleton;
+    // -- Reset Hold control Bus (1-bit with pull-up)
+    static HW_Bus_1_t *rHld;
 
     // -- ALU-A and ALU-B Input buses
-    static HW_Bus_t *aluA;
-    static HW_Bus_t *aluB;
+    static HW_Bus_16_t *aluA;
+    static HW_Bus_16_t *aluB;
 
     // -- Address Bus 1 and 2
-    static HW_Bus_t *addr1;
-    static HW_Bus_t *addr2;
+    static HW_Bus_16_t *addr1;
+    static HW_Bus_16_t *addr2;
 
     // -- The ALU
     static HW_Alu_t *alu;
 
     // -- The Main Bus
-    static HW_Bus_t *mainBus;
+    static HW_Bus_16_t *mainBus;
 
     // -- The Insturuction Bus
-    static HW_Bus_t *instrBus;
+    static HW_Bus_16_t *instrBus;
 
     // -- The control logic lookup bus
-    static HW_Bus_t *ctrlBus;
+    static HW_Bus_16_t *ctrlBus;
+
+    // -- The Address Copy Bus
+    static HW_Bus_16_t *AddrCopyBus;
 
     // -- Flags for Pgm and Int contexts
     static AluFlagsModule_t *pgmFlags;
     static AluFlagsModule_t *intFlags;
 
     // -- the Control ROMS
-    static IC_25lc256_t *ctrl0;
+    static CtrlRomCtrlModule_t *ctrlCtrl;
+    static CtrlRomModule_t *ctrl0;
+
+
     static IC_25lc256_t *ctrl1;
     static IC_25lc256_t *ctrl2;
     static IC_25lc256_t *ctrl3;
@@ -77,7 +83,6 @@ private:
     static IC_25lc256_t *ctrlb;
 
     // -- the Parallel Control RAMS
-    static IC_AS6C62256_t *ctrl0Ram;
     static IC_AS6C62256_t *ctrl1Ram;
     static IC_AS6C62256_t *ctrl2Ram;
     static IC_AS6C62256_t *ctrl3Ram;
@@ -115,18 +120,23 @@ private:
 public:
     static HW_Computer_t *Get(void);
 
-    static HW_Bus_t *GetMainBus(void) { return mainBus; }
-    static HW_Bus_t *GetAluABus(void) { return aluA; }
-    static HW_Bus_t *GetAluBBus(void) { return aluB; }
-    static HW_Bus_t *GetAddr1Bus(void) { return addr1; }
-    static HW_Bus_t *GetAddr2Bus(void) { return addr2; }
-    static HW_Bus_t *GetInstrBus(void) { return instrBus; }
-    static HW_Bus_t *GetCtrlBus(void) { return ctrlBus; }
+    static HW_Bus_1_t *GetRhldBus(void) { return rHld; }
+    static HW_Bus_16_t *GetMainBus(void) { return mainBus; }
+    static HW_Bus_16_t *GetAluABus(void) { return aluA; }
+    static HW_Bus_16_t *GetAluBBus(void) { return aluB; }
+    static HW_Bus_16_t *GetAddr1Bus(void) { return addr1; }
+    static HW_Bus_16_t *GetAddr2Bus(void) { return addr2; }
+    static HW_Bus_16_t *GetInstrBus(void) { return instrBus; }
+    static HW_Bus_16_t *GetCtrlBus(void) { return ctrlBus; }
+    static HW_Bus_16_t *GetAddrCopyBus(void) { return AddrCopyBus; }
 
     static ClockModule_t *GetClock(void) { return clock; }
     static HW_Alu_t *GetAlu(void) { return alu; }
     static AluFlagsModule_t *GetPgmFlags(void) { return pgmFlags; }
     static AluFlagsModule_t *GetIntFlags(void) { return intFlags; }
+
+    static CtrlRomCtrlModule_t *GetCtrlCtrl(void) { return ctrlCtrl; }
+    static CtrlRomModule_t *GetCtrl0(void) { return ctrl0; }
 
 
     static QSettings *GetSettings(void) { return settings; }
@@ -136,6 +146,7 @@ public:
 public:
     static void InitGui(void);
     static void Initialize(void);
+    static void PerformReset(void);
 
 
 signals:

@@ -19,7 +19,7 @@
 //
 // -- construct the bus LED display, hooking the LEDs to the proper bus output signals
 //    --------------------------------------------------------------------------------
-GUI_BusLeds_t::GUI_BusLeds_t(QString name, HW_Bus_t *bus, QWidget *parent) : QGroupBox(name, parent)
+GUI_BusLeds_t::GUI_BusLeds_t(QString name, HW_Bus_16_t *bus, QWidget *parent) : QGroupBox(name, parent)
 {
     led0 = new GUI_Led_t;
     led1 = new GUI_Led_t;
@@ -88,22 +88,22 @@ GUI_BusLeds_t::GUI_BusLeds_t(QString name, HW_Bus_t *bus, QWidget *parent) : QGr
 
 
     // -- make the connections
-    connect(bus, &HW_Bus_t::SignalBit0Updated, led0, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit1Updated, led1, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit2Updated, led2, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit3Updated, led3, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit4Updated, led4, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit5Updated, led5, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit6Updated, led6, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit7Updated, led7, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit8Updated, led8, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBit9Updated, led9, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBitAUpdated, ledA, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBitBUpdated, ledB, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBitCUpdated, ledC, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBitDUpdated, ledD, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBitEUpdated, ledE, &GUI_Led_t::ProcessStateChange);
-    connect(bus, &HW_Bus_t::SignalBitFUpdated, ledF, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit0Updated, led0, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit1Updated, led1, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit2Updated, led2, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit3Updated, led3, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit4Updated, led4, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit5Updated, led5, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit6Updated, led6, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit7Updated, led7, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit8Updated, led8, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBit9Updated, led9, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBitAUpdated, ledA, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBitBUpdated, ledB, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBitCUpdated, ledC, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBitDUpdated, ledD, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBitEUpdated, ledE, &GUI_Led_t::ProcessStateChange);
+    connect(bus, &HW_Bus_16_t::SignalBitFUpdated, ledF, &GUI_Led_t::ProcessStateChange);
 }
 
 

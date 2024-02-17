@@ -83,6 +83,7 @@ class IC_74xx86_t;
 class IC_74xx138_t;
 class IC_74xx151_t;
 class IC_74xx157_t;
+class IC_74xx164_t;
 class IC_74xx165_t;
 class IC_74xx193_t;
 class IC_74xx283_t;
@@ -93,7 +94,9 @@ class IC_AS6C63256_t;
 
 class HW_Alu_t;
 class HW_AluAdder_t;
-class HW_Bus_t;
+class HW_Bus_1_t;
+class HW_Bus_8_t;
+class HW_Bus_16_t;
 class HW_BusDriver_t;
 class HW_Computer_t;
 class HW_MomentarySwitch_t;
@@ -111,6 +114,7 @@ class GUI_SettingsDialog_t;
 class AluFlagsModule_t;
 class ClockModule_t;
 class CtrlRomCtrlModule_t;
+class CtrlRomModule_t;
 class GpRegisterModule_t;
 
 
@@ -137,6 +141,7 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "ic/ic-74xx138.hh"
 #include "ic/ic-74xx151.hh"
 #include "ic/ic-74xx157.hh"
+#include "ic/ic-74xx164.hh"
 #include "ic/ic-74xx165.hh"
 #include "ic/ic-74xx193.hh"
 #include "ic/ic-74xx283.hh"
@@ -147,7 +152,9 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 
 #include "hw/hw-alu.hh"
 #include "hw/hw-alu-adder.hh"
-#include "hw/hw-bus.hh"
+#include "hw/hw-bus-1.hh"
+#include "hw/hw-bus-8.hh"
+#include "hw/hw-bus-16.hh"
 #include "hw/hw-bus-driver.hh"
 #include "hw/hw-computer.hh"
 #include "hw/hw-momentary-switch.hh"
@@ -169,6 +176,7 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 
 // -- needs to be last
 #include "ic/ic-25lc256.hh"
+#include "mod/mod-ctrl-rom.hh"
 
 
 

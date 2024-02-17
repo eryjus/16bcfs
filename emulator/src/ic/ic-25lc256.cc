@@ -73,9 +73,11 @@ void IC_25lc256_t::ProcessUpdateCs(TriState_t state)
 //    ------------------------------------------------------------------
 void IC_25lc256_t::ProcessUpdateSck(TriState_t state)
 {
+    pins[SCK] = state;
+
     if (pins[CSb] != LOW) return;               // if not active, do nothing
 
-    int currentState = (pins[CSb] == HIGH ? CLK_HI : CLK_LO) | mode | bits;
+    int currentState = (pins[SCK] == HIGH ? CLK_HI : CLK_LO) | mode | bits;
 
     switch (currentState) {
     case INSTRUCTION | BIT0 | CLK_HI:
@@ -131,10 +133,10 @@ void IC_25lc256_t::ProcessUpdateSck(TriState_t state)
         break;
 
     case INSTRUCTION | BIT6 | CLK_LO:
+        bits = BIT7;
         break;
 
     case INSTRUCTION | BIT7 | CLK_HI:
-        bits = BIT7;
         byte = (byte << 1) | (pins[SI] == LOW ? 0 : 1);
         break;
 

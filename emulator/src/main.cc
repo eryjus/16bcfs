@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     // -- settings will use these if not provided explicitly; they will be relied upon
     app->setOrganizationName("eryjus");
     app->setApplicationName("16bcfs-emulator");
+    HW_Computer_t::Get()->PerformReset();
 
     return app->exec();
 }

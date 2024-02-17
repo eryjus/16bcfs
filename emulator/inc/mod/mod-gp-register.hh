@@ -123,12 +123,17 @@ public:
     virtual ~GpRegisterModule_t() {}
 
 
+
+public:
+    void TriggerFirstUpdate(void);         // trigger all the proper initial updates
+
+
+
 private:
     // -- intenral functions
     void AllocateComponents(void);          // Get the component memory from heap
     void BuildGui(void);                    // place the components on the GUI
     void WireUp(void);                      // make all the necessary connections
-    void TriggerFirstUpdate(void);         // trigger all the proper initial updates
 };
 
 

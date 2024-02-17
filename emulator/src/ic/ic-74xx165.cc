@@ -57,6 +57,8 @@ void IC_74xx165_t::ProcessClock(void)
         return;
     }
 
+    clockState = newState;
+
     // -- are we in loading mode?  if so, no shifting
     if (pins[SH_LD] == LOW) return;
 

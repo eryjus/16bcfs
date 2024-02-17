@@ -19,7 +19,7 @@
 // -- construct an adder for the ALU
 //    ------------------------------
 HW_AluAdder_t::HW_AluAdder_t(IC_74xx541_t *aluALsb, IC_74xx541_t *aluAMsb,
-                IC_74xx541_t *aluBLsb, IC_74xx541_t *aluBMsb, HW_Bus_t *mainBus,
+                IC_74xx541_t *aluBLsb, IC_74xx541_t *aluBMsb, HW_Bus_16_t *mainBus,
                 QObject *parent) : QObject(parent)
 {
     // -- allocate the components

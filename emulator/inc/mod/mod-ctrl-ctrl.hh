@@ -46,18 +46,16 @@ private:
 
     // -- OR gate to combine several signal options
     IC_74xx32_t *or1;
-    IC_74xx32_t *or2;
 
 
 
     // -- we need an open drain AND gate for #RHLD
-    IC_74xx03_t *oAnd1;
+    IC_74xx03_t *oNand1;
 
 
 
-    // -- a coupld of inverters for shaping signals properly
+    // -- ac inverter for shaping signals properly
     IC_74xx04_t *inv1;
-    IC_74xx04_t *inv2;
 
 
 

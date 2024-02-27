@@ -21,7 +21,8 @@
 //
 //  `nand2` -- 74xx00
 //  Gates 1 & 2: Copying SR latch where Ql is on Y1 and #Ql is on Y2
-//  Gates 3 & 4: unused
+//  Gate 3: unused
+//  Gate 4: #RESET NAND #RESET
 //
 //  `and1` -- 74xx08
 //  Gate 1: (Qc * CLK)
@@ -37,21 +38,15 @@
 //
 //  `and3` -- 74xx08
 //  Gate 1: (((Qc * CLK) * Qs) * #Qr)
-//  Gate 2: unused
+//  Gate 2: Qc * Qs
 //  Gate 3: unused
 //  Gate 4: unused
 //
 //  `or1` -- 74xx32
-//  Gate 1: (#Qs + #Qc)
-//  Gate 2: (Qr + #Qc)
-//  Gate 3: unused
-//  Gate 4: unused
-//
-//  `or2` -- 74xx32
 //  Gate 1: (Ba + Bb)
 //  Gate 2: (Bc + Bd)
 //  Gate 3: ((Ba + Bb) + (Bc + Bd))
-//  Gate 4: unused
+//  Gate 4: (Qr + #Qc)
 //
 //  `inv1` -- 74xx04
 //  Gate 1: #CLK
@@ -60,14 +55,6 @@
 //  Gate 4: #Bd
 //  Gate 5: #(Bd * #Bc * #Bb * Ba)
 //  Gate 6: #(#CLK * #Bd * #Bc * #Bb * Ba)
-//
-//  `inv2` -- 74xx04
-//  Gate 1: #(/RESET)
-//  Gate 2: #(#Qs + #Qc)
-//  Gate 3: unused
-//  Gate 4: unused
-//  Gate 5: unused
-//  Gate 6: unused
 //
 //
 //      Date     Tracker  Version  Description
@@ -112,10 +99,8 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     and2 = new IC_74xx08_t;
     and3 = new IC_74xx08_t;
     or1 = new IC_74xx32_t;
-    or2 = new IC_74xx32_t;
-    oAnd1 = new IC_74xx03_t;
+    oNand1 = new IC_74xx03_t;
     inv1 = new IC_74xx04_t;
-    inv2 = new IC_74xx04_t;
     mux0 = new IC_74xx157_t;
     mux4 = new IC_74xx157_t;
     mux8 = new IC_74xx157_t;
@@ -261,10 +246,8 @@ void CtrlRomCtrlModule_t::TriggerFirstUpdate(void)
     and2->TriggerFirstUpdate();
     and3->TriggerFirstUpdate();
     inv1->TriggerFirstUpdate();
-    inv2->TriggerFirstUpdate();
     or1->TriggerFirstUpdate();
-    or2->TriggerFirstUpdate();
-    oAnd1->TriggerFirstUpdate();
+    oNand1->TriggerFirstUpdate();
     mux0->TriggerFirstUpdate();
     mux4->TriggerFirstUpdate();
     mux8->TriggerFirstUpdate();
@@ -292,7 +275,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Gate 1 is used for the In Reset condition
     //    -----------------------------------------
     resetting->ProcessUpdateClr1(HIGH);                                                             // pin 1: #CLR1
-    connect(inv2, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateD1);         // pin 2: D1
+    connect(nand2, &IC_74xx00_t::SignalY4Updated, resetting, &IC_74xx74_t::ProcessUpdateD1);        // pin 2: D1
     connect(clock, &HW_Oscillator_t::SignalStateChanged, resetting, &IC_74xx74_t::ProcessUpdateClk1); // pin 3: CLK1 from local clock
     // pin 4 is handled in ProcessResetUpdate() -- below
     // pin 5 is the Q output pin
@@ -345,7 +328,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Gates 1&2 are used for the Copying (Ql) SR Latch
     //    ------------------------------------------------
-    connect(or2, &IC_74xx32_t::SignalY3Updated, nand2, &IC_74xx00_t::ProcessUpdateA1);              // pin 1: 2B input (Set)
+    connect(or1, &IC_74xx32_t::SignalY3Updated, nand2, &IC_74xx00_t::ProcessUpdateA1);              // pin 1: 2B input (Set)
     connect(nand2, &IC_74xx00_t::SignalY2Updated, nand2, &IC_74xx00_t::ProcessUpdateB1);            // pin 2: 1B Input
     // pin 3 is the output of the set-side gate -- Ql
     connect(nand2, &IC_74xx00_t::SignalY1Updated, nand2, &IC_74xx00_t::ProcessUpdateA2);            // pin 4: 2A input
@@ -354,14 +337,20 @@ void CtrlRomCtrlModule_t::WireUp(void)
 
 
     //
-    // -- Gates 3&4 are not used
-    //    ----------------------
+    // -- Gates 3 is unused
+    //    -----------------
     // pin 8 is unused
-    nand2->ProcessA3Low();                                                                          // pin 9 unused
-    nand2->ProcessB3Low();                                                                          // pin 10 unused
+    nand2->ProcessA3Low();                                                                          // pin 9: Qs
+    nand2->ProcessB3Low();                                                                          // pin 10: Qc
+
+
+
+    //
+    // -- Gates 4 is used as an inverter
+    //    ------------------------------
     // pin 11 is unused
-    nand2->ProcessA4Low();                                                                          // pin 12 unused
-    nand2->ProcessB4Low();                                                                          // pin 13 unused
+    // pin 12 is #RESET, handled in ProcessReset below
+    // pin 13 is #RESET, handled in ProcessReset below
 
 
 
@@ -452,11 +441,11 @@ void CtrlRomCtrlModule_t::WireUp(void)
 
 
     //
-    // -- Gate 2 is unused
-    //    ----------------
-    and3->ProcessA2Low();                                                                           // pin 4
-    and3->ProcessB2Low();                                                                           // pin 5
-    // pin 6 is unused
+    // -- Gate 2 is (Qs * Qc)
+    //    -------------------
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, and3, &IC_74xx08_t::ProcessUpdateA2);             // pin 4
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, and3, &IC_74xx08_t::ProcessUpdateB2);             // pin 5
+    // pin 6 is (Qs * Qc)
 
 
     //
@@ -481,55 +470,18 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //    -------------------------
 
     //
-    // -- Gate 1 is (#Qs + #Qc)
-    //    --------------------
-    connect(nand1, &IC_74xx00_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateA1);              // pin 1: Qs Input
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateB1);              // pin 2: #Qc Input
-    // pin 3 is the output (#Qs + #Qc)
-
-
-    //
-    // -- Gate 2 is (Qr + #Qc)
-    //    --------------------
-    connect(resetting, &IC_74xx74_t::SignalQ1Updated, or1, &IC_74xx32_t::ProcessUpdateA2);          // pin 4: Qr Input
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateB2);              // pin 5: #Qc Input
-    // pin 6 is (Qr + #Qc)
-
-
-    //
-    // -- Gate 3 is unused
-    //    ----------------
-    // pin 8 is unused
-    or1->ProcessA3Low();                                                                            // pin 9 is unused
-    or1->ProcessB3Low();                                                                            // pin 10 is unused
-
-
-    //
-    // -- Gate 4 is unused
-    //    ----------------
-    // pin 11 is unused
-    or1->ProcessA4Low();                                                                            // pin 12 is unused
-    or1->ProcessB4Low();                                                                            // pin 13 is unused
-
-
-
-    //
-    // -- connect up the second OR gate IC
-    //    --------------------------------
-
-    //
     // -- Gate 1 is (Ba + Bb)
     //    -------------------
-    connect(bits, &IC_74xx193_t::SignalQaUpdated, or2, &IC_74xx32_t::ProcessUpdateA1);              // pin 1: Ba
-    connect(bits, &IC_74xx193_t::SignalQbUpdated, or2, &IC_74xx32_t::ProcessUpdateB1);              // pin 2: Bb
+    connect(bits, &IC_74xx193_t::SignalQaUpdated, or1, &IC_74xx32_t::ProcessUpdateA1);              // pin 1: Ba
+    connect(bits, &IC_74xx193_t::SignalQbUpdated, or1, &IC_74xx32_t::ProcessUpdateB1);              // pin 2: Bb
     // pin 3 is the (Ba + Bb) output
 
 
     //
     // -- Gate 2 is (Bc + Bd)
     //    -------------------
-    connect(bits, &IC_74xx193_t::SignalQcUpdated, or2, &IC_74xx32_t::ProcessUpdateA2);              // pin 4: Bc
-    connect(bits, &IC_74xx193_t::SignalQdUpdated, or2, &IC_74xx32_t::ProcessUpdateB2);              // pin 5: Bd
+    connect(bits, &IC_74xx193_t::SignalQcUpdated, or1, &IC_74xx32_t::ProcessUpdateA2);              // pin 4: Bc
+    connect(bits, &IC_74xx193_t::SignalQdUpdated, or1, &IC_74xx32_t::ProcessUpdateB2);              // pin 5: Bd
     // pin 6 is the (Bc + Bd) output
 
 
@@ -537,16 +489,16 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Gate 3 is ((Ba + Bb) + (Bc + Bd))
     //    ---------------------------------
     // pin 8 is the ((Ba + Bb) + (Bc + Bd)) output
-    connect(or2, &IC_74xx32_t::SignalY1Updated, or2, &IC_74xx32_t::ProcessUpdateA3);                // pin 9: (Ba + Bb)
-    connect(or2, &IC_74xx32_t::SignalY2Updated, or2, &IC_74xx32_t::ProcessUpdateB3);                // pin 10: (Bc + Bd)
+    connect(or1, &IC_74xx32_t::SignalY1Updated, or1, &IC_74xx32_t::ProcessUpdateA3);                // pin 9: (Ba + Bb)
+    connect(or1, &IC_74xx32_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateB3);                // pin 10: (Bc + Bd)
 
 
     //
-    // -- Gate 4 is unused
-    //    ----------------
-    // pin 8 is unused
-    or2->ProcessA4Low();                                                                            // pin 12: unused
-    or2->ProcessB4Low();                                                                            // pin 13: unused
+    // -- Gate 4 is (Qr + #Qc)
+    //    --------------------
+    // pin 11 is (Qr + #Qc)
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateA4);              // pin 12: #Qc Input
+    connect(resetting, &IC_74xx74_t::SignalQ1Updated, or1, &IC_74xx32_t::ProcessUpdateB4);          // pin 13: Qr Input
 
 
 
@@ -557,16 +509,16 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Gate 1 is (#Qc * #Qc)
     //    ---------------------
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, oAnd1, &IC_74xx03_t::ProcessUpdateA1);            // pin 1: #Qc Input
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, oAnd1, &IC_74xx03_t::ProcessUpdateB2);            // pin 2: #Qc Input
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, oNand1, &IC_74xx03_t::ProcessUpdateA1);            // pin 1: #Qc Input
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, oNand1, &IC_74xx03_t::ProcessUpdateB2);            // pin 2: #Qc Input
     // pin 3 is the output (#Qc + #Qc)
 
 
     //
     // -- Gate 2 is Unused
     //    --------------------
-    oAnd1->ProcessA2Low();                                                                          // pin 9 is unused
-    oAnd1->ProcessB2Low();                                                                          // pin 10 is unused
+    oNand1->ProcessA2Low();                                                                          // pin 9 is unused
+    oNand1->ProcessB2Low();                                                                          // pin 10 is unused
     // pin 6 is unused
 
 
@@ -574,16 +526,16 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Gate 3 is unused
     //    ----------------
     // pin 8 is unused
-    oAnd1->ProcessA3Low();                                                                          // pin 9 is unused
-    oAnd1->ProcessB3Low();                                                                          // pin 10 is unused
+    oNand1->ProcessA3Low();                                                                          // pin 9 is unused
+    oNand1->ProcessB3Low();                                                                          // pin 10 is unused
 
 
     //
     // -- Gate 4 is unused
     //    ----------------
     // pin 11 is unused
-    oAnd1->ProcessA4Low();                                                                          // pin 12 is unused
-    oAnd1->ProcessB4Low();                                                                          // pin 13 is unused
+    oNand1->ProcessA4Low();                                                                          // pin 12 is unused
+    oNand1->ProcessB4Low();                                                                          // pin 13 is unused
 
 
 
@@ -631,53 +583,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //    ----------------------------------------
     // pin 12 is #(#CLK * #Bd * #Bc * #Bb * Ba)
     connect(and2, &IC_74xx08_t::SignalY2Updated, inv1, &IC_74xx04_t::ProcessUpdateA6);              // pin 13: (#CLK * #Bd * #Bc * #Bb * Ba)
-
-
-
-    //
-    // -- connect up inverter 2
-    //    ---------------------
-
-    //
-    // -- Gate 1 is #(/RESET)
-    //    -------------------
-    // pin 1 is handled in ProcessClockReset() -- below
-    // pin 2 is #(#RESET)
-
-
-    //
-    // -- Gate 2 is #(#Qs + #Qc)
-    //    ---------------------
-    connect(or1, &IC_74xx32_t::SignalY1Updated, inv2, &IC_74xx04_t::ProcessUpdateA2);               // pin 3: (#Qs + #Qc)
-    // pin 4 is #(#Qs + #Qc)
-
-
-    //
-    // -- Gate 3 is unused
-    //    -----------------------------
-    inv2->ProcessA3Low();                                                                           // pin 5 : unused
-    // pin 6 is unused
-
-
-    //
-    // -- Gate 4 is unused
-    //    ----------------
-    // pin 8 is unused
-    inv2->ProcessA4Low();                                                                           // pin 9: unused
-
-
-    //
-    // -- Gate 5 is unused
-    //    ----------------
-    // pin 10 is unused
-    inv2->ProcessA5Low();                                                                           // pin 11: unused
-
-
-    //
-    // -- Gate 6 is unused
-    //    ----------------
-    // pin 12 is unused
-    inv2->ProcessA6Low();                                                                           // pin 13: unused
 
 
 
@@ -919,7 +824,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up the outputs: individual signals first
     //    ------------------------------------------------
     HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
-    connect(oAnd1, &IC_74xx03_t::SignalY1Updated, rHld, &HW_Bus_1_t::SignalBit0Updated);
+    connect(oNand1, &IC_74xx03_t::SignalY1Updated, rHld, &HW_Bus_1_t::SignalBit0Updated);
     connect(resetting, &IC_74xx74_t::SignalQ1Updated, this, &CtrlRomCtrlModule_t::SignalQrUpdated);
     connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, this, &CtrlRomCtrlModule_t::SignalQrbUpdated);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalQcUpdated);
@@ -928,11 +833,11 @@ void CtrlRomCtrlModule_t::WireUp(void)
     connect(nand1, &IC_74xx00_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::SignalQsUpdated);
     connect(nand1, &IC_74xx00_t::SignalY3Updated, this, &CtrlRomCtrlModule_t::SignalQsbUpdated);
     connect(and3, &IC_74xx08_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalShiftClockUpdated);
-    connect(or1, &IC_74xx32_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalEepromCsUpdated);
+    connect(or1, &IC_74xx32_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::SignalEepromCsUpdated);
     connect(shift, &IC_74xx165_t::SignalQHUpdated, this, &CtrlRomCtrlModule_t::SignalEepromCmdAddrUpdated);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalSramOeUpdated);
     connect(nand2, &IC_74xx00_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalSramWeUpdated);
-    connect(inv2, &IC_74xx04_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalSramCeUpdated);
+    connect(and3, &IC_74xx08_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalSramCeUpdated);
 
 
 
@@ -991,7 +896,8 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
     // -- This is still an active low signal!!!
 
     nand1->ProcessUpdateA1(state);          // SR Set
-    inv2->ProcessUpdateA1(state);           // #Reset
+    nand2->ProcessUpdateA4(state);          // #Reset
+    nand2->ProcessUpdateB4(state);          // #Reset
     resetting->ProcessUpdatePre1(state);    // set the D-Latch
 
     if (state == HIGH) {

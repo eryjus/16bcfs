@@ -112,6 +112,7 @@ private:
     GUI_Led_t *ledC;
     GUI_Led_t *ledD;
     GUI_Led_t *ledE;
+    GUI_Led_t *ledF;
 
     GUI_Led_t *bit0;
     GUI_Led_t *bit1;

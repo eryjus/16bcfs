@@ -338,8 +338,14 @@ void IC_AS6C62256_t::ProcessSanityCheck(void)
 
     qDebug() << "... started!";
 
+    qDebug() << "First 8 bytes:";
+    for (int i = 0; i < 8; i ++) {
+        qDebug() << i << Qt::hex << this->contents[i] << Qt::hex << reference->contents[i];
+    }
+
     // -- note that this is a friend function to the ROM class definition, so the private members are accessible here
-    if (memcmp(reference->contents, this->contents, 32 * 1024) != 0) {
+    int loc = memcmp(reference->contents, this->contents, 32 * 1024);
+    if (loc != 0) {
         qDebug() << "ERROR!!!  RAM is no longer congruent with the reference ROM!!!";
     } else {
         qDebug() << "... data is sane.";

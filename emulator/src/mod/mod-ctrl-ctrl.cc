@@ -134,6 +134,7 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     ledC = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
     ledD = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
     ledE = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
+    ledF = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
 
     bit0 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
     bit1 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
@@ -209,6 +210,7 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     contentsLayout->setContentsMargins(0, 0, 0, 0);
     contentsLayout->setSpacing(1);
 
+    contentsLayout->addWidget(ledF, Qt::AlignHCenter);
     contentsLayout->addWidget(ledE, Qt::AlignHCenter);
     contentsLayout->addWidget(ledD, Qt::AlignHCenter);
     contentsLayout->addWidget(ledC, Qt::AlignHCenter);
@@ -276,7 +278,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //    -----------------------------------------
     resetting->ProcessUpdateClr1(HIGH);                                                             // pin 1: #CLR1
     connect(nand2, &IC_74xx00_t::SignalY4Updated, resetting, &IC_74xx74_t::ProcessUpdateD1);        // pin 2: D1
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, resetting, &IC_74xx74_t::ProcessUpdateClk1); // pin 3: CLK1 from local clock
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClk1);       // pin 3: CLK1 from local clock
     // pin 4 is handled in ProcessResetUpdate() -- below
     // pin 5 is the Q output pin
     // pin 6 is the #Q output pin
@@ -662,7 +664,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, muxC, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 14
     // pin 12: Output Y4
     connect(addrC, &IC_74xx193_t::SignalQdUpdated, muxC, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 15
-    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, muxC, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 15
+    muxC->ProcessUpdateA4(LOW);                                                                     // pin 14: Input A4: bit 15
     muxC->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
 
 
@@ -811,6 +813,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     connect(muxC, &IC_74xx157_t::SignalY1Updated, ledC, &GUI_Led_t::ProcessStateChange);
     connect(muxC, &IC_74xx157_t::SignalY2Updated, ledD, &GUI_Led_t::ProcessStateChange);
     connect(muxC, &IC_74xx157_t::SignalY3Updated, ledE, &GUI_Led_t::ProcessStateChange);
+    connect(muxC, &IC_74xx157_t::SignalY4Updated, ledF, &GUI_Led_t::ProcessStateChange);
 
 
     connect(bits, &IC_74xx193_t::SignalQaUpdated, bit0, &GUI_Led_t::ProcessStateChange);

@@ -277,82 +277,95 @@ void IC_25lc256_t::ProcessUpdateSck(TriState_t state)
     case ADDRESS_LSB | BIT7 | CLK_LO:
         mode = READING;
         byte = contents[addr];
+
+        pins[SO] = (byte & (1<<7) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT0;
         break;
 
 
     case READING | BIT0 | CLK_HI:
-        pins[SO] = (byte & (1<<7) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT0 | CLK_LO:
+        pins[SO] = (byte & (1<<6) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT1;
         break;
 
     case READING | BIT1 | CLK_HI:
-        pins[SO] = (byte & (1<<6) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT1 | CLK_LO:
+        pins[SO] = (byte & (1<<5) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT2;
         break;
 
     case READING | BIT2 | CLK_HI:
-        pins[SO] = (byte & (1<<5) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT2 | CLK_LO:
+        pins[SO] = (byte & (1<<4) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT3;
         break;
 
     case READING | BIT3 | CLK_HI:
-        pins[SO] = (byte & (1<<4) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT3 | CLK_LO:
+        pins[SO] = (byte & (1<<3) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT4;
         break;
 
     case READING | BIT4 | CLK_HI:
-        pins[SO] = (byte & (1<<3) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT4 | CLK_LO:
+        pins[SO] = (byte & (1<<2) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT5;
         break;
 
     case READING | BIT5 | CLK_HI:
-        pins[SO] = (byte & (1<<2) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT5 | CLK_LO:
+        pins[SO] = (byte & (1<<1) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT6;
         break;
 
     case READING | BIT6 | CLK_HI:
-        pins[SO] = (byte & (1<<1) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT6 | CLK_LO:
+        pins[SO] = (byte & (1<<0) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT7;
         break;
 
     case READING | BIT7 | CLK_HI:
-        pins[SO] = (byte & (1<<0) ? HIGH : LOW);
-        emit SignalSoUpdated(pins[SO]);
         break;
 
     case READING | BIT7 | CLK_LO:
         addr ++;
         addr &= 0x7fff;         // make sure it wraps properly
         byte = contents[addr];
+
+        pins[SO] = (byte & (1<<7) ? HIGH : LOW);
+        emit SignalSoUpdated(pins[SO]);
+
         bits = BIT0;
         break;
 

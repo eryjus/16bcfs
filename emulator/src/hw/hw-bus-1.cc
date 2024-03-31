@@ -32,6 +32,7 @@ HW_Bus_1_t::HW_Bus_1_t(ClockModule_t *clk, QObject *parent) : QObject(parent), a
 //    ----------------------------------
 void HW_Bus_1_t::MaintainBit(TriState_t state)
 {
+    qDebug() << "1-bit bus update" << state;
     TriState_t old;
     QObject *obj = sender();        // do NOT de-reference this pointer!  It may not be valid
 

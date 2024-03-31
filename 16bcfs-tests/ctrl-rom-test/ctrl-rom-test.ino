@@ -36,22 +36,27 @@ extern unsigned char ______control_logic_ctrl0_bin[];
 //
 // -- Which pins are relevant to us?  (by GPIO)
 //    -----------------------------------------
-#define BIT0 36       // input bit 0
-#define BIT1 39       // input bit 1
-#define BIT2 34       // input bit 2
-#define BIT3 35       // input bit 3
-#define BIT4 32       // input bit 4
-#define BIT5 33       // input bit 5
-#define BIT6 25       // input bit 6
-#define BIT7 26       // input bit 7
+#define BIT7 36       // input bit 7
+#define BIT6 39       // input bit 6
+#define BIT5 34       // input bit 5
+#define BIT4 35       // input bit 4
+#define BIT3 32       // input bit 3
+#define BIT2 33       // input bit 2
+#define BIT1 25       // input bit 1
+#define BIT0 26       // input bit 0
 
 #define RHLD 13       // Reset Hold input
 
 
-#define CLK  22       // Latch Clock Output
+//
+// -- Output Pins
+//    -----------
+#define LTCH 22       // Latch Clock Output
 #define SHFT 18       // Shift Clock Output
 #define ADDR 19       // Address Pin Output
 #define CLR  21       // Shifter Clear Signal Output
+#define RST  5        // Reset button
+//#define CLK  17       // The main clock
 
 
 #define LED_BUILTIN 2
@@ -80,8 +85,8 @@ void setup() {
   // -- Initialize the outputs to LOW...  but recall that there is only 1 inverter in the 3v3 to 5v 
   //    level shifter.  So, we need to be careful about inverting the signals in code as well.
   //    -------------------------------------------------------------------------------------------
-  pinMode(CLK, OUTPUT);
-  digitalWrite(CLK, HIGH);
+  pinMode(LTCH, OUTPUT);
+  digitalWrite(LTCH, HIGH);
 
   pinMode(SHFT, OUTPUT);
   digitalWrite(SHFT, HIGH);
@@ -93,6 +98,13 @@ void setup() {
   digitalWrite(CLR, HIGH);
   delay(10);
   digitalWrite(CLR, LOW);
+
+  pinMode(RST, OUTPUT);
+  digitalWrite(RST, LOW);
+
+//  pinMode(CLK, OUTPUT);
+//  digitalWrite(CLK, LOW);
+
 
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -158,20 +170,15 @@ bool checkByte(long i) {
     int bit = addr & (1<<(15-b));
 
     digitalWrite(ADDR, (bit == 0) ? LOW : HIGH);
-    delay(1); 
     digitalWrite(SHFT, LOW);
     delay(1);
     digitalWrite(SHFT, HIGH);
-//    delay(1);
-  
-//    while (Serial.read() != '\n') {}
   }
 
-//  delay(1);
-  digitalWrite(CLK, LOW);
-  delay(1);
-  digitalWrite(CLK, HIGH);
-//  delay(1);
+  digitalWrite(LTCH, LOW);
+  delay(2);
+//  while (Serial.read() != '\n') {}
+  digitalWrite(LTCH, HIGH);
 
   byte s = readSram();
   byte g = getGoldenByte(i);
@@ -188,14 +195,46 @@ bool checkByte(long i) {
 // -- This code is executed once per iteration, prepeatedly
 //    -----------------------------------------------------
 void loop() {
-  Serial.println(F("... waiting for #RHLD"));
+//  unsigned long counter = 0;
+  unsigned long earlyStop = 0;
+  unsigned long lateStop = ((32768 + 3 - 0) * 9) - 1;
+
+  //
+  // -- Execute a Reset Sequence
+  //    ------------------------
+  Serial.println(F("Resetting.  Press Enter to continue."));
+  digitalWrite(RST, HIGH);
+
+  while (Serial.read() != '\n') {}
+
+  digitalWrite(RST, LOW);
+  delay(250);
 
 
   //
   // -- wait for the reset hold to come high -- as it will work on the real hardware
   //    ----------------------------------------------------------------------------
+  Serial.println(F("... waiting for #RHLD"));
+
   while (digitalRead(RHLD) == LOW) {
-    delay(500);
+#if 0
+    if (counter < earlyStop || counter >= lateStop) {
+      Serial.printf("%10.10ld: Enter for LOW CLK\n", counter);
+      while (Serial.read() != '\n') {}
+    }
+
+    digitalWrite(CLK, HIGH);
+    delay(1);
+
+    if (counter < earlyStop || counter >= lateStop) {
+      Serial.printf("%10.10ld: Enter for HIGH CLK\n", counter);
+      while (Serial.read() != '\n') {}
+    }
+
+    digitalWrite(CLK, LOW);
+    delay(1);
+    counter ++;
+#endif
   }
 
 
@@ -204,7 +243,9 @@ void loop() {
   //    -----------------------------------
   digitalWrite(LED_BUILTIN, HIGH);
   Serial.println(F("Testing!"));
-  delay(10);
+  delay(250);
+
+//  while (Serial.read() != '\n') {}
 
 
 
@@ -223,13 +264,14 @@ void loop() {
     // -- output some status indicators
     //    -----------------------------
 //    if (i % 0x100 == 0) {
-      Serial.printf("  address 0x%04.4x ", i); 
+      Serial.printf("  address 0x%04.4x ", i);
 //    }
 
 
     //
     // -- check if failed and if so, flash the LED and do nothing else
     //    ------------------------------------------------------------
+//    checkByte(i);
     if (checkByte(i) == false) {
       Serial.println(F("Test FAILED!!!"));
       Serial.print(F("   location ")); Serial.println(i);

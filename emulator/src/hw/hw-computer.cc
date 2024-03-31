@@ -460,7 +460,8 @@ void HW_Computer_t::Initialize(void)
 
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
-    connect(ctrlCtrl, &CtrlRomCtrlModule_t::SignalQcUpdated, ctrl0, &CtrlRomModule_t::ProcessSanityCheck);
+    HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
+    connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrl0, &CtrlRomModule_t::ProcessSanityCheck);
 
 
     ctrl1->TriggerFirstUpdate();

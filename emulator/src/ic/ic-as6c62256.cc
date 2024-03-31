@@ -227,6 +227,9 @@ void IC_AS6C62256_t::ProcessInput(void)
                     (pins[A1] == HIGH ? (1<<1) : 0) |
                     (pins[A0] == HIGH ? (1<<0) : 0);
 
+
+        if (addr == 0x7fff) qDebug() << "SRAM is processing input:" << Qt::hex << addr << "=" << Qt::hex << byte;
+
         contents[addr] = byte;
 
         return;
@@ -236,8 +239,8 @@ void IC_AS6C62256_t::ProcessInput(void)
 
 
 //
-// -- Process Changes in input values
-//    -------------------------------
+// -- Process Changes in output values
+//    --------------------------------
 void IC_AS6C62256_t::ProcessOutput(void)
 {
     if (pins[CEb] == LOW && pins[WEb] == LOW && pins[OEb] == HIGH) {
@@ -338,15 +341,17 @@ void IC_AS6C62256_t::ProcessSanityCheck(void)
 
     qDebug() << "... started!";
 
-    qDebug() << "First 8 bytes:";
-    for (int i = 0; i < 8; i ++) {
-        qDebug() << i << Qt::hex << this->contents[i] << Qt::hex << reference->contents[i];
+    // -- note that this is a friend function to the ROM class definition, so the private members are accessible here
+    int loc;
+    for (loc = 0; loc < 32 * 1024; loc ++)
+    {
+        if (reference->contents[loc] != this->contents[loc]) break;
     }
 
-    // -- note that this is a friend function to the ROM class definition, so the private members are accessible here
-    int loc = memcmp(reference->contents, this->contents, 32 * 1024);
-    if (loc != 0) {
+    if (loc != 32 * 1024) {
         qDebug() << "ERROR!!!  RAM is no longer congruent with the reference ROM!!!";
+        qDebug() << "The first instance with a problem is at index" << loc;
+        qDebug() << "Expected" << Qt::hex << reference->contents[loc] << "and read" << Qt::hex << this->contents[loc];
     } else {
         qDebug() << "... data is sane.";
     }

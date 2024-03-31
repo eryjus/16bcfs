@@ -699,6 +699,9 @@ uint128_t GenerateControlSignals(int loc)
         if (!CONDITION_MET(flags)) return nop;
 
         return out | STC;
+
+    case 0xfff:
+        return ~((uint128_t)0);
     }
 }
 

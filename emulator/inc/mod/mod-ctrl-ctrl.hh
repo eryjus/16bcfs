@@ -92,10 +92,10 @@ private:
 
     // -- set up for some hardware to check state
     GUI_Led_t *clk;
-    GUI_Led_t *qr;
-    GUI_Led_t *qc;
-    GUI_Led_t *qs;
-    GUI_Led_t *ql;
+    GUI_Led_t *rst;
+    GUI_Led_t *oe;
+    GUI_Led_t *we;
+    GUI_Led_t *ce;
 
     GUI_Led_t *led0;
     GUI_Led_t *led1;
@@ -133,7 +133,7 @@ public slots:
 
 
 private slots:
-    void ProcessQcb(TriState_t state) { if (state == HIGH) clock->stop(); }
+    void ProcessQcb(TriState_t state) { /*if (state == HIGH) clock->stop();*/ }
 
 
 
@@ -153,6 +153,8 @@ signals:
     void SignalSramOeUpdated(TriState_t state);             // Qc
     void SignalSramWeUpdated(TriState_t state);             // Qs
     void SignalSramCeUpdated(TriState_t state);             // Qs + #Qc
+
+    void SignalRHld(TriState_t state);                      // #RHLD
 
 
     //

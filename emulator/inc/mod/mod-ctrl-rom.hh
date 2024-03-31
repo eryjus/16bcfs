@@ -58,7 +58,7 @@ public slots:
     void ProcessUpdateQcClk(TriState_t state) { shift->ProcessUpdateClk(state); eeprom->ProcessUpdateSck(state); }
     void ProcessUpdateQc(TriState_t state) { latch->ProcessUpdateOE(state); }
     void ProcessUpdateQcb(TriState_t state) { driver->ProcessUpdateOE2(state); }
-    void ProcessSanityCheck(TriState_t state) { if (state == LOW) sram->ProcessSanityCheck(); }
+    void ProcessSanityCheck(TriState_t state) { if (state != LOW) sram->ProcessSanityCheck(); }
 
 
 

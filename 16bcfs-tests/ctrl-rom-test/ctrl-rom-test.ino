@@ -48,15 +48,23 @@ extern unsigned char ______control_logic_ctrl0_bin[];
 #define RHLD 13       // Reset Hold input
 
 
+<<<<<<< Updated upstream
 //
 // -- Output Pins
 //    -----------
 #define LTCH 22       // Latch Clock Output
+=======
+//#define CLK  22       // Latch Clock Output
+>>>>>>> Stashed changes
 #define SHFT 18       // Shift Clock Output
 #define ADDR 19       // Address Pin Output
 #define CLR  21       // Shifter Clear Signal Output
 #define RST  5        // Reset button
+<<<<<<< Updated upstream
 //#define CLK  17       // The main clock
+=======
+#define CLK  17       // The main clock
+>>>>>>> Stashed changes
 
 
 #define LED_BUILTIN 2
@@ -102,9 +110,14 @@ void setup() {
   pinMode(RST, OUTPUT);
   digitalWrite(RST, LOW);
 
+<<<<<<< Updated upstream
 //  pinMode(CLK, OUTPUT);
 //  digitalWrite(CLK, LOW);
 
+=======
+  pinMode(CLK, OUTPUT);
+  digitalWrite(CLK, LOW);
+>>>>>>> Stashed changes
 
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -119,6 +132,11 @@ void setup() {
   Serial.println();
   Serial.println(F("Welcome to the EEPROM tester"));
   Serial.println(F("Ready to test"));       
+
+  delay(1);
+  
+  Serial.println(F("Press Enter to begin"));
+  while (Serial.read() != '\n') {}
 }
 
 
@@ -175,10 +193,20 @@ bool checkByte(long i) {
     digitalWrite(SHFT, HIGH);
   }
 
+<<<<<<< Updated upstream
   digitalWrite(LTCH, LOW);
   delay(2);
 //  while (Serial.read() != '\n') {}
   digitalWrite(LTCH, HIGH);
+=======
+  delay(1);
+  digitalWrite(CLK, LOW);
+  delay(1);
+  digitalWrite(CLK, HIGH);
+  delay(1);
+
+//  while (Serial.read() != '\n') {}
+>>>>>>> Stashed changes
 
   byte s = readSram();
   byte g = getGoldenByte(i);
@@ -195,6 +223,7 @@ bool checkByte(long i) {
 // -- This code is executed once per iteration, prepeatedly
 //    -----------------------------------------------------
 void loop() {
+<<<<<<< Updated upstream
 //  unsigned long counter = 0;
   unsigned long earlyStop = 0;
   unsigned long lateStop = ((32768 + 3 - 0) * 9) - 1;
@@ -204,6 +233,18 @@ void loop() {
   //    ------------------------
   Serial.println(F("Resetting.  Press Enter to continue."));
   digitalWrite(RST, HIGH);
+=======
+  unsigned long counter = 0;
+  unsigned long earlyStop = 0 * 9;
+  unsigned long lateStop = ((32768 + 3 - 0) * 9) - 1;
+
+
+  //
+  // -- Execute a Reset Sequence
+  //    ------------------------
+  digitalWrite(RST, HIGH);
+  Serial.println(F("In reset.  Press Enter to continue."));
+>>>>>>> Stashed changes
 
   while (Serial.read() != '\n') {}
 
@@ -214,6 +255,7 @@ void loop() {
   //
   // -- wait for the reset hold to come high -- as it will work on the real hardware
   //    ----------------------------------------------------------------------------
+<<<<<<< Updated upstream
   Serial.println(F("... waiting for #RHLD"));
 
   while (digitalRead(RHLD) == LOW) {
@@ -236,17 +278,53 @@ void loop() {
     counter ++;
 #endif
   }
+=======
+  Serial.println(F("Copying data from EEPROM to SRAM"));
+  Serial.println(F("... waiting for #RHLD"));
+>>>>>>> Stashed changes
 
+  while (digitalRead(RHLD) == LOW) {
+  #if 0
+  
+    if (counter < earlyStop || counter >= lateStop) {
+      Serial.printf("%10.10ld: Enter for LOW CLK\n", counter);
+      while (Serial.read() != '\n') {}
+    }
+
+    digitalWrite(CLK, HIGH);
+    delay(1);
+
+    if (counter < earlyStop || counter >= lateStop) {
+      Serial.printf("%10.10ld: Enter for HIGH CLK\n", counter);
+      while (Serial.read() != '\n') {}
+    }
+
+    digitalWrite(CLK, LOW);
+    delay(1);
+    counter ++;
+
+#else
+
+    delay(500);
+
+#endif
+  }
 
   //
   // -- turn on the LED to indicate testing
   //    -----------------------------------
   digitalWrite(LED_BUILTIN, HIGH);
+<<<<<<< Updated upstream
   Serial.println(F("Testing!"));
   delay(250);
 
 //  while (Serial.read() != '\n') {}
+=======
+  Serial.println(F("Copy complete!  Testing!"));
+  delay(10);
+>>>>>>> Stashed changes
 
+//  while (Serial.read() != '\n') {}
 
 
   //

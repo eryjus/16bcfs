@@ -1,12 +1,12 @@
 //===================================================================================================================
-// ic-74xx138.hh -- This header file defines a 74xx138 3:8 Demultiplexer
+// ic-74xx238.hh -- This header file defines a 74xx238 3:8 Demultiplexer
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2023-Oct-26  Initial  v0.0.1   Initial Version
+//  2024-Apr-28  Initial  v0.0.1   Initial Version
 //===================================================================================================================
 
 
@@ -14,9 +14,9 @@
 
 
 //
-// -- This class implements a 74xx138 Demultiplexer
+// -- This class implements a 74xx238 Demultiplexer
 //    ---------------------------------------------
-class IC_74xx138_t : public QObject {
+class IC_74xx238_t : public QObject {
     Q_OBJECT
 
 public:
@@ -42,8 +42,8 @@ private:
 
 
 public:
-    IC_74xx138_t(void);
-    virtual ~IC_74xx138_t() {};
+    IC_74xx238_t(void);
+    virtual ~IC_74xx238_t() {};
 
 
 public:

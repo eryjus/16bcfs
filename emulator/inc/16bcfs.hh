@@ -11,6 +11,12 @@
 
 
 //
+// -- conditionally compile the emulator for a pedantic copy of the EEPROM into SRAM
+//    ------------------------------------------------------------------------------
+#define PEDANTIC_COPY 0
+
+
+//
 // -- want to use this macro to set the number of pins properly
 //    ---------------------------------------------------------
 #define PIN_CNT(x) ((x)+1)

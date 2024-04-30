@@ -26,6 +26,11 @@
 //    ---------------------------------------------------
 class IC_25lc256_t : public QObject {
     friend void IC_AS6C62256_t::ProcessSanityCheck(void);
+
+#if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
+    friend void IC_AS6C62256_t::CopyEeprom(void);
+#endif
+
     Q_OBJECT
 
 

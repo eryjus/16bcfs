@@ -117,6 +117,7 @@ public slots:
 
 
     void ProcessSanityCheck(void);
+    void CopyEeprom(void);
 
 
 signals:

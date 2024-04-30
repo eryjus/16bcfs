@@ -281,5 +281,10 @@ void CtrlRomModule_t::WireUp(void)
     connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalSramOeUpdated, this, &CtrlRomModule_t::ProcessUpdateOutputEnable);
 
     connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, this, &CtrlRomModule_t::ProcessUpdateClk);
+
+
+#if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::CopyEeprom, sram, &IC_AS6C62256_t::CopyEeprom);
+#endif
 }
 

@@ -193,11 +193,8 @@ void IC_74xx74_t::ProcessUpdateClk2(TriState_t state)
     // -- rising edge
     if (state == HIGH && last == LOW) {
         if (pins[Q2] != pins[D2]) {
-            qDebug() << "#Done transition start";
             pins[Q2] = pins[D2];
             pins[Q2b] = (pins[Q2]==HIGH?LOW:HIGH);
-
-            qDebug() << "#Done =" << (pins[Q2] == HIGH ? "HIGH" : "LOW");
 
             emit SignalQ2Updated(pins[Q2]);
             emit SignalQ2bUpdated(pins[Q2b]);

@@ -164,6 +164,8 @@ signals:
     //    * Address Counter -- for the Program ROM to copy of desired (15-bit bus)
     //    ------------------------------------------------------------------------
 
+    void CopyEeprom(void);
+
 
 
 public:

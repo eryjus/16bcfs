@@ -69,21 +69,21 @@ void CtrlRomModule_t::BuildGui(void)
 
 
     layout->addWidget(led7, 0, 0, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("128"), 1, 0, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("7"), 1, 0, Qt::AlignHCenter);
     layout->addWidget(led6, 0, 1, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("64 "), 1, 1, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("6"), 1, 1, Qt::AlignHCenter);
     layout->addWidget(led5, 0, 2, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("32 "), 1, 2, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("5"), 1, 2, Qt::AlignHCenter);
     layout->addWidget(led4, 0, 5, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("16 "), 1, 5, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("4"), 1, 5, Qt::AlignHCenter);
     layout->addWidget(led3, 0, 6, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 8 "), 1, 6, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("3"), 1, 6, Qt::AlignHCenter);
     layout->addWidget(led2, 0, 7, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 4 "), 1, 7, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("2"), 1, 7, Qt::AlignHCenter);
     layout->addWidget(led1, 0, 8, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 2 "), 1, 8, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("1"), 1, 8, Qt::AlignHCenter);
     layout->addWidget(led0, 0, 9, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 1 "), 1, 9, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("0"), 1, 9, Qt::AlignHCenter);
 }
 
 

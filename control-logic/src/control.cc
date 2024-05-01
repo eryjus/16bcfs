@@ -416,19 +416,19 @@ enum : uint128_t {
     PGM_RA_LOAD                         = U128_ENUM(0b1ul, 4, 7),
 
 
-    // bits 3 -- PGM PC Increment
+    // bits 3 -- INT PC Increment
     INT_PC_INC                          = U128_ENUM(0b1ul, 3, 7),
 
 
-    // bits 2 -- PGM PC Load
+    // bits 2 -- INT PC Load
     INT_PC_LOAD                         = U128_ENUM(0b1ul, 2, 7),
 
 
-    // bits 1 -- PGM RA Increment
+    // bits 1 -- INT RA Increment
     INT_RA_INC                          = U128_ENUM(0b1ul, 1, 7),
 
 
-    // bits 0 -- PGM RA Load
+    // bits 0 -- INT RA Load
     INT_RA_LOAD                         = U128_ENUM(0b1ul, 0, 7),
 
 

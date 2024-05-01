@@ -75,7 +75,7 @@
 CtrlRomCtrlModule_t::CtrlRomCtrlModule_t(void) : QGroupBox("Control ROM Control")
 {
     setFixedWidth(190);
-    setFixedHeight(120);
+    setFixedHeight(100);
 
     AllocateComponents();
     BuildGui();
@@ -163,7 +163,7 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     controls->setAlignment(Qt::AlignHCenter);
     controls->setContentsMargins(0, 0, 0, 0);
     controls->setFixedWidth(180);
-    controls->setFixedHeight(50);
+    controls->setFixedHeight(40);
 
     QGridLayout *controlLayout = new QGridLayout;
     controlLayout->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
@@ -212,17 +212,17 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     contentsLayout->addWidget(ledE, Qt::AlignHCenter);
     contentsLayout->addWidget(ledD, Qt::AlignHCenter);
     contentsLayout->addWidget(ledC, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
+    contentsLayout->addSpacerItem(new QSpacerItem(4, 4));
     contentsLayout->addWidget(ledB, Qt::AlignHCenter);
     contentsLayout->addWidget(ledA, Qt::AlignHCenter);
     contentsLayout->addWidget(led9, Qt::AlignHCenter);
     contentsLayout->addWidget(led8, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
+    contentsLayout->addSpacerItem(new QSpacerItem(4, 4));
     contentsLayout->addWidget(led7, Qt::AlignHCenter);
     contentsLayout->addWidget(led6, Qt::AlignHCenter);
     contentsLayout->addWidget(led5, Qt::AlignHCenter);
     contentsLayout->addWidget(led4, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
+    contentsLayout->addSpacerItem(new QSpacerItem(4, 4));
     contentsLayout->addWidget(led3, Qt::AlignHCenter);
     contentsLayout->addWidget(led2, Qt::AlignHCenter);
     contentsLayout->addWidget(led1, Qt::AlignHCenter);
@@ -905,11 +905,26 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
     resetting->ProcessUpdatePre2(state);    // set the D-Latch
 
     if (state == HIGH) {
-        qDebug() << "Reset Complete!";
         clock->StartTimer();
     }
 #else
-    emit CopyEeprom();
+    if (state != HIGH) emit CopyEeprom();
+    else {
+        // -- reset both D-Latches
+        resetting->ProcessUpdateClr1(LOW);
+        resetting->ProcessUpdateClr2(LOW);
+        resetting->ProcessUpdateClr1(HIGH);
+        resetting->ProcessUpdateClr2(HIGH);
+
+        // -- reset the bits counter
+        bits->ProcessUpdateClr(HIGH);
+        bits->ProcessUpdateClr(LOW);
+
+
+        // -- keep an eye on this: it may change at inopportune times
+        emit nand1->SignalY1Updated(LOW);
+    }
+
 #endif
 }
 

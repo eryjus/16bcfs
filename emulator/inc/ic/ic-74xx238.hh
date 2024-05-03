@@ -43,7 +43,7 @@ private:
 
 public:
     IC_74xx238_t(void);
-    virtual ~IC_74xx238_t() {};
+    virtual ~IC_74xx238_t() {}
 
 
 public:

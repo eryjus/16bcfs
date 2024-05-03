@@ -92,6 +92,7 @@ class IC_74xx157_t;
 class IC_74xx164_t;
 class IC_74xx165_t;
 class IC_74xx193_t;
+class IC_74xx238_t;
 class IC_74xx283_t;
 class IC_74xx540_t;
 class IC_74xx541_t;
@@ -116,6 +117,10 @@ class GUI_BusTester_t;
 class GUI_DipSwitch_t;
 class GUI_Led_t;
 class GUI_SettingsDialog_t;
+
+class SubDemux3_t;
+class SubDemux4_t;
+class SubDemux7_t;
 
 class AluFlagsModule_t;
 class ClockModule_t;
@@ -150,6 +155,7 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "ic/ic-74xx164.hh"
 #include "ic/ic-74xx165.hh"
 #include "ic/ic-74xx193.hh"
+#include "ic/ic-74xx238.hh"
 #include "ic/ic-74xx283.hh"
 #include "ic/ic-74xx540.hh"
 #include "ic/ic-74xx541.hh"
@@ -174,6 +180,10 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "gui/gui-dip-switch.hh"
 #include "gui/gui-led.hh"
 #include "gui/gui-settings-dialog.hh"
+
+#include "sub/sub-demux-3.hh"
+#include "sub/sub-demux-4.hh"
+#include "sub/sub-demux-7.hh"
 
 #include "mod/mod-alu-flags.hh"
 #include "mod/mod-clock.hh"

@@ -111,8 +111,8 @@ enum : uint128_t {
 
 
     // bit 1:0 -- Address Bus 1 Assert
-    ADDR_BUS_1_ASSERT_PC                = U128_ENUM(0b00ul, 0, 0),
-    ADDR_BUS_1_ASSERT_RA                = U128_ENUM(0b01ul, 0, 0),
+    ADDR_BUS_1_ASSERT_PGMPC             = U128_ENUM(0b00ul, 0, 0),
+    ADDR_BUS_1_ASSERT_PGMRA             = U128_ENUM(0b01ul, 0, 0),
     ADDR_BUS_1_ASSERT_INTPC             = U128_ENUM(0b10ul, 0, 0),
     ADDR_BUS_1_ASSERT_INTRA             = U128_ENUM(0b11ul, 0, 0),
 
@@ -227,7 +227,7 @@ enum : uint128_t {
     ALU_LOGIC_RESULT_TRUE               = U128_ENUM(0b1111ul, 4, 3),
 
 
-    // bit 3:0 -- ALU A Assert
+    // bit 3:0 -- ALU B Assert
     ALU_BUS_B_ASSERT_NONE                = U128_ENUM(0b0000ul, 0, 3),
     ALU_BUS_B_ASSERT_R1                  = U128_ENUM(0b0001ul, 0, 3),
     ALU_BUS_B_ASSERT_R2                  = U128_ENUM(0b0010ul, 0, 3),
@@ -815,8 +815,8 @@ uint128_t GenerateControlSignals(int loc)
     int flags = (loc >> 12) & 0x7;           // top 3 bits of the memory address; flags for augmenting the control signals
     int instr = (loc >>  0) & 0xfff;         // bottom 12 bits for the memory address of the instruction
 
-    const uint128_t nop = ADDR_BUS_1_ASSERT_PC |  PGM_PC_INC; // Note that `| INSTRUCTION_ASSERT` == `| 0`, ∴ omitted
-    uint128_t out = ADDR_BUS_1_ASSERT_PC | PGM_PC_INC;
+    const uint128_t nop = ADDR_BUS_1_ASSERT_PGMPC |  PGM_PC_INC; // Note that `| INSTRUCTION_ASSERT` == `| 0`, ∴ omitted
+    uint128_t out = ADDR_BUS_1_ASSERT_PGMPC | PGM_PC_INC;
 
     switch (instr) {
     default:
@@ -1012,7 +1012,7 @@ uint128_t GenerateControlSignals(int loc)
         //    ----------------------------------------------------------------
         if (!CONDITION_MET(flags)) return nop | INSTRUCTION_SUPPRESS;
 
-        return FETCH_ASSERT_MAIN | PGM_PC_LOAD | INSTRUCTION_SUPPRESS | ADDR_BUS_1_ASSERT_PC;
+        return FETCH_ASSERT_MAIN | PGM_PC_LOAD | INSTRUCTION_SUPPRESS | ADDR_BUS_1_ASSERT_PGMPC;
 
     case OPCODE_JMP_R1:
         //
@@ -1020,7 +1020,7 @@ uint128_t GenerateControlSignals(int loc)
         //    ----------------------------------------------
         if (!CONDITION_MET(flags)) return nop;
 
-        return MAIN_BUS_ASSERT_R1 | PGM_PC_LOAD | INSTRUCTION_SUPPRESS | ADDR_BUS_1_ASSERT_PC;
+        return MAIN_BUS_ASSERT_R1 | PGM_PC_LOAD | INSTRUCTION_SUPPRESS | ADDR_BUS_1_ASSERT_PGMPC;
 
     case OPCODE_JMP_R2:
         //
@@ -1028,7 +1028,7 @@ uint128_t GenerateControlSignals(int loc)
         //    ----------------------------------------------
         if (!CONDITION_MET(flags)) return nop;
 
-        return MAIN_BUS_ASSERT_R2 | PGM_PC_LOAD | INSTRUCTION_SUPPRESS | ADDR_BUS_1_ASSERT_PC;
+        return MAIN_BUS_ASSERT_R2 | PGM_PC_LOAD | INSTRUCTION_SUPPRESS | ADDR_BUS_1_ASSERT_PGMPC;
 
     case OPCODE_CLC:
         //

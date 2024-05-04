@@ -155,15 +155,6 @@ signals:
     void SignalSramCeUpdated(TriState_t state);             // Qs + #Qc
 
     void SignalRHld(TriState_t state);                      // #RHLD
-
-
-    //
-    // -- some additional outputs not here:
-    //    * #RHLD -- a 1-bit bus
-    //    * CTRL -- control address for eeprom lookup
-    //    * Address Counter -- for the Program ROM to copy of desired (15-bit bus)
-    //    ------------------------------------------------------------------------
-
     void CopyEeprom(void);
 
 

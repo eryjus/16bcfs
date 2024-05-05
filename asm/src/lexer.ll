@@ -64,7 +64,7 @@
 
 WS              [ \t]
 
-COMMENT         \;.*
+COMMENT         \/\/.*
 NL              (\n|\r|\n\r|\r\n)
 
 LETTER          [a-z_]
@@ -261,7 +261,7 @@ BIN             [01]
 
 
 <db>{COMMENT}                       {}
-<db>[^;\n]*                         {
+<db>[^/\n]*                         {
                                         yylval.name = strdup(yytext);
                                         yy_pop_state();
                                         return TOK_BYTE_STREAM_DEF;
@@ -295,7 +295,7 @@ BIN             [01]
 
 {NL}                                { return TOK_EOL; }
 {WS}                                {}
-{COMMENT}.*                         {}
+{COMMENT}                           {}
 
 ^\%include                          { BEGIN(incl); }
 ^\%path                             { BEGIN(path); }
@@ -305,7 +305,7 @@ BIN             [01]
                                         yylval.name = strdup(yytext);
                                         return TOK_LABEL;
                                     }
-{LETTER}[^;\n]*                     {
+{LETTER}[^/\n]*                     {
                                         yylval.name = strdup(yytext);
                                         return TOK_INSTRUCTION;
                                     }

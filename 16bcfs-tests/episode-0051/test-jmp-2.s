@@ -1,17 +1,17 @@
-;;===================================================================================================================
-;; test-jmp.s: Execute an unconditional jmp to an address
-;;
-;;  This code will execute half of the Larson Scanner (Knight Riger effect) from episode-0042.  This will be done
-;;  by executing an unconditional jump back to the start of the program half-way through the scanner.  This will
-;;  make the scanner look like it's wrapping from one side to the other.
-;;
-;;  -----------------------------------------------------------------------------------------------------------------
-;;
-;;     Date      Tracker  Version  Pgmr  Description
-;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
-;;  2023-Mar-26  Initial  v0.0.1   ADCL  Initial version
-;;
-;;===================================================================================================================
+//===================================================================================================================
+// test-jmp.s: Execute an unconditional jmp to an address
+//
+//  This code will execute half of the Larson Scanner (Knight Riger effect) from episode-0042.  This will be done
+//  by executing an unconditional jump back to the start of the program half-way through the scanner.  This will
+//  make the scanner look like it's wrapping from one side to the other.
+//
+//  -----------------------------------------------------------------------------------------------------------------
+//
+//     Date      Tracker  Version  Pgmr  Description
+//  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+//  2023-Mar-26  Initial  v0.0.1   ADCL  Initial version
+//
+//===================================================================================================================
 
 %arch       16bcfs.arch
 

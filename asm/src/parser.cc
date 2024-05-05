@@ -259,7 +259,7 @@ void Parser_t::ParseOpcodeDef(void)
     }
 
     if (MATCH(TOK_OPCODE_DB)) {
-        Messaging::Warning(".db in .opcode definition is deprecated.  .mc is assumed and .db will be removed in the future.", sourceFile, yylineno, 0, 0);
+        Messaging::Warning(":db in :opcode definition is deprecated.  :mc is assumed and :db will be removed in the future.", sourceFile, yylineno, 0, 0);
     }
 
     ADVANCE_TOKEN;
@@ -282,13 +282,13 @@ void Parser_t::ParseOrganization(void)
 {
     if (!MATCH(TOK_ARCH_NUMBER))
     {
-        Messaging::Error("Expected a number in `.organization` directive", sourceFile, yylineno, 0, 0);
+        Messaging::Error("Expected a number in `:organization` directive", sourceFile, yylineno, 0, 0);
         RECOVERY;
         return;
     }
 
     if (yylval.number != 8 && yylval.number != 16) {
-        Messaging::Error("`.organization` directive must specify either 8 or 16 bits", sourceFile, yylineno, 0, 0);
+        Messaging::Error("`:organization` directive must specify either 8 or 16 bits", sourceFile, yylineno, 0, 0);
         RECOVERY;
         return;
     }
@@ -506,7 +506,7 @@ void Parser_t::ParseFile(void)
         case TOK_ARCH_ORGANIZATION:
             if (Binary_t::IsAlloc()) {
                 Messaging::Warning("Organization is initialized already; extra specification ignored\n"
-                        "This could have been an implicit initialization as `.organization` needs to be first\n",
+                        "This could have been an implicit initialization as `:organization` needs to be first\n",
                         GetSourceFile(), yylineno, "", 0);
             }
 

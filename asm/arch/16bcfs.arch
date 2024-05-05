@@ -1,27 +1,27 @@
 ;;===================================================================================================================
 ;; 16bcfs.arch: Assembler architecture definition for the 16-Bit Computer From Scratch
 ;;
-;;  .organization -- this is the fundamental size of the instruction set and the underlying architecture.  It
+;;  :organization -- this is the fundamental size of the instruction set and the underlying architecture.  It
 ;;  identifies the lowest level of operation which can take place.
 ;;
-;;  .little-endian
-;;  .big-endian -- larger than the `.organization` size, what endianness are the structures organized.
+;;  :little-endian
+;;  :big-endian -- larger than the `:organization` size, what endianness are the structures organized.
 ;;
-;;  .cond-bits -- the number of bits used to specify any conditional execution.  When no `.cond-xxx` option is
+;;  :cond-bits -- the number of bits used to specify any conditional execution.  When no `:cond-xxx` option is
 ;;  specified, conditional execution is not supported.  Every instruction will have these bits prepended to the
 ;;  bit image for the instruction.  Note that this is a limitation of this assembler: the condition bits are
 ;;  in the high-order bits.
 ;;
-;;  .cond-default -- specifies the condition which is used when no condition is offered for the instruction, as in
+;;  :cond-default -- specifies the condition which is used when no condition is offered for the instruction, as in
 ;;  the condition bits for execute always.
 ;;
-;;  .cond-prefix -- the characters which are prefixed onto an instruction in order to optionally condition it,
+;;  :cond-prefix -- the characters which are prefixed onto an instruction in order to optionally condition it,
 ;;  followed by the bits which are used to specify the condition.
 ;;
-;;  .cond-suffix -- the characters which are appended to an instruction in order to optionally condition it,
+;;  :cond-suffix -- the characters which are appended to an instruction in order to optionally condition it,
 ;;  followed by the bits which are used to specify the condition.
 ;;
-;;  .register -- defines a register and its size in bits.
+;;  :register -- defines a register and its size in bits.
 ;;
 ;;  ----------------------------------------------------------------------------------------------------------------
 ;;
@@ -35,46 +35,46 @@
 ;;
 ;; -- Some global definitions about the overall architecture
 ;;    ------------------------------------------------------
-.organization   16bits
-.little-endian  ;; note the 16bit organization is "big endian bit order", just like a single byte would be
+:organization   16bits
+:little-endian  ;; note the 16bit organization is "big endian bit order", just like a single byte would be
 
 
 ;;
 ;; -- These are the conditions that can be added to an instruction for conditional execution
 ;;    --------------------------------------------------------------------------------------
-.cond-bits      4
-.cond-default   0x0
-.cond-suffix    -al     0x0
-.cond-suffix    -nv     0x1
-.cond-suffix    -eq     0x2
-.cond-suffix    -ne     0x3
-.cond-suffix    -cs     0x4
-.cond-suffix    -cc     0x5
-.cond-suffix    -mi     0x6
-.cond-suffix    -pl     0x7
-.cond-suffix    -vs     0x8
-.cond-suffix    -vc     0x9
-.cond-suffix    -hi     0xa
-.cond-suffix    -ls     0xb
-.cond-suffix    -ge     0xc
-.cond-suffix    -lt     0xd
-.cond-suffix    -gt     0xe
-.cond-suffix    -le     0xf
+:cond-bits      4
+:cond-default   0x0
+:cond-suffix    -al     0x0
+:cond-suffix    -nv     0x1
+:cond-suffix    -eq     0x2
+:cond-suffix    -ne     0x3
+:cond-suffix    -cs     0x4
+:cond-suffix    -cc     0x5
+:cond-suffix    -mi     0x6
+:cond-suffix    -pl     0x7
+:cond-suffix    -vs     0x8
+:cond-suffix    -vc     0x9
+:cond-suffix    -hi     0xa
+:cond-suffix    -ls     0xb
+:cond-suffix    -ge     0xc
+:cond-suffix    -lt     0xd
+:cond-suffix    -gt     0xe
+:cond-suffix    -le     0xf
 
 
 ;;
 ;; -- Define the registers for this arch
 ;;    ----------------------------------
-;.register       rz      16          ; The "Zero" register (read-only value of 0)
-.register       r1      16          ; R1 Register
-.register       r2      16          ; R2 Register
+;:register       rz      16          ; The "Zero" register (read-only value of 0)
+:register       r1      16          ; R1 Register
+:register       r2      16          ; R2 Register
 
 
 ;;
 ;; -- Memory organization and output
 ;;    ------------------------------
-.memory         0x0000  0x7fff  ROM
-.memory         0x8000  0xffff  RAM
+:memory         0x0000  0x7fff  ROM
+:memory         0x8000  0xffff  RAM
 
 
 ;;
@@ -89,835 +89,835 @@
 ;; == The opodes recognized by this assembler
 ;;    =======================================
 
-.opcode         nop                     .mc  000                ;; -- this is the only instruction which is hard wired
-.opcode         mov     r1,$(16)        .mc  001 %
-.opcode         mov     r2,$(16)        .mc  002 %
-;.opcode         mov     r3,$(16)        .mc  003 %
-;.opcode         mov     r4,$(16)        .mc  004 %
-;.opcode         mov     r5,$(16)        .mc  005 %
-;.opcode         mov     r6,$(16)        .mc  006 %
-;.opcode         mov     r7,$(16)        .mc  007 %
-;.opcode         mov     r8,$(16)        .mc  008 %
-;.opcode         mov     r9,$(16)        .mc  009 %
-;.opcode         mov     r10,$(16)       .mc  00a %
-;.opcode         mov     r11,$(16)       .mc  00b %
-;.opcode         mov     r12,$(16)       .mc  00c %
-;.opcode         mov     sp,$(16)        .mc  00d %
-.opcode          clc                    .mc  00e
-.opcode          stc                    .mc  00f
+:opcode         nop                     :mc  000                ;; -- this is the only instruction which is hard wired
+:opcode         mov     r1,$(16)        :mc  001 %
+:opcode         mov     r2,$(16)        :mc  002 %
+;.opcode         mov     r3,$(16)        :mc  003 %
+;.opcode         mov     r4,$(16)        :mc  004 %
+;.opcode         mov     r5,$(16)        :mc  005 %
+;.opcode         mov     r6,$(16)        :mc  006 %
+;.opcode         mov     r7,$(16)        :mc  007 %
+;.opcode         mov     r8,$(16)        :mc  008 %
+;.opcode         mov     r9,$(16)        :mc  009 %
+;.opcode         mov     r10,$(16)       :mc  00a %
+;.opcode         mov     r11,$(16)       :mc  00b %
+;.opcode         mov     r12,$(16)       :mc  00c %
+;.opcode         mov     sp,$(16)        :mc  00d %
+:opcode          clc                    :mc  00e
+:opcode          stc                    :mc  00f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  010
-.opcode         mov     r1,rz           .mc  011
-.opcode         mov     r2,rz           .mc  012
-;.opcode         mov     r3,rz           .mc  013
-;.opcode         mov     r4,rz           .mc  014
-;.opcode         mov     r5,rz           .mc  015
-;.opcode         mov     r6,rz           .mc  016
-;.opcode         mov     r7,rz           .mc  017
-;.opcode         mov     r8,rz           .mc  018
-;.opcode         mov     r9,rz           .mc  019
-;.opcode         mov     r10,rz          .mc  01a
-;.opcode         mov     r11,rz          .mc  01b
-;.opcode         mov     r12,rz          .mc  01c
-;.opcode         mov     sp,rz           .mc  01d
-;.opcode                                 .mc  01e
-;.opcode                                 .mc  01f
+;.opcode                                 :mc  010
+:opcode         mov     r1,rz           :mc  011
+:opcode         mov     r2,rz           :mc  012
+;.opcode         mov     r3,rz           :mc  013
+;.opcode         mov     r4,rz           :mc  014
+;.opcode         mov     r5,rz           :mc  015
+;.opcode         mov     r6,rz           :mc  016
+;.opcode         mov     r7,rz           :mc  017
+;.opcode         mov     r8,rz           :mc  018
+;.opcode         mov     r9,rz           :mc  019
+;.opcode         mov     r10,rz          :mc  01a
+;.opcode         mov     r11,rz          :mc  01b
+;.opcode         mov     r12,rz          :mc  01c
+;.opcode         mov     sp,rz           :mc  01d
+;.opcode                                 :mc  01e
+;.opcode                                 :mc  01f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  020
-;.opcode                                 .mc  021
-.opcode         mov     r2,r1           .mc  022
-;.opcode         mov     r3,r1           .mc  023
-;.opcode         mov     r4,r1           .mc  024
-;.opcode         mov     r5,r1           .mc  025
-;.opcode         mov     r6,r1           .mc  026
-;.opcode         mov     r7,r1           .mc  027
-;.opcode         mov     r8,r1           .mc  028
-;.opcode         mov     r9,r1           .mc  029
-;.opcode         mov     r10,r1          .mc  02a
-;.opcode         mov     r11,r1          .mc  02b
-;.opcode         mov     r12,r1          .mc  02c
-;.opcode                                 .mc  02d
-;.opcode                                 .mc  02e
-;.opcode                                 .mc  02f
+;.opcode                                 :mc  020
+;.opcode                                 :mc  021
+:opcode         mov     r2,r1           :mc  022
+;.opcode         mov     r3,r1           :mc  023
+;.opcode         mov     r4,r1           :mc  024
+;.opcode         mov     r5,r1           :mc  025
+;.opcode         mov     r6,r1           :mc  026
+;.opcode         mov     r7,r1           :mc  027
+;.opcode         mov     r8,r1           :mc  028
+;.opcode         mov     r9,r1           :mc  029
+;.opcode         mov     r10,r1          :mc  02a
+;.opcode         mov     r11,r1          :mc  02b
+;.opcode         mov     r12,r1          :mc  02c
+;.opcode                                 :mc  02d
+;.opcode                                 :mc  02e
+;.opcode                                 :mc  02f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  030
-.opcode         mov     r1,r2           .mc  031
-;.opcode                                 .mc  032
-;.opcode         mov     r3,r2           .mc  033
-;.opcode         mov     r4,r2           .mc  034
-;.opcode         mov     r5,r2           .mc  035
-;.opcode         mov     r6,r2           .mc  036
-;.opcode         mov     r7,r2           .mc  037
-;.opcode         mov     r8,r2           .mc  038
-;.opcode         mov     r9,r2           .mc  039
-;.opcode         mov     r10,r2          .mc  03a
-;.opcode         mov     r11,r2          .mc  03b
-;.opcode         mov     r12,r2          .mc  03c
-;.opcode                                 .mc  03d
-;.opcode                                 .mc  03e
-;.opcode                                 .mc  03f
+;.opcode                                 :mc  030
+:opcode         mov     r1,r2           :mc  031
+;.opcode                                 :mc  032
+;.opcode         mov     r3,r2           :mc  033
+;.opcode         mov     r4,r2           :mc  034
+;.opcode         mov     r5,r2           :mc  035
+;.opcode         mov     r6,r2           :mc  036
+;.opcode         mov     r7,r2           :mc  037
+;.opcode         mov     r8,r2           :mc  038
+;.opcode         mov     r9,r2           :mc  039
+;.opcode         mov     r10,r2          :mc  03a
+;.opcode         mov     r11,r2          :mc  03b
+;.opcode         mov     r12,r2          :mc  03c
+;.opcode                                 :mc  03d
+;.opcode                                 :mc  03e
+;.opcode                                 :mc  03f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  040
-;.opcode         mov     r1,r3           .mc  041
-;.opcode         mov     r2,r3           .mc  042
-;.opcode                                 .mc  043
-;.opcode         mov     r4,r3           .mc  044
-;.opcode         mov     r5,r3           .mc  045
-;.opcode         mov     r6,r3           .mc  046
-;.opcode         mov     r7,r3           .mc  047
-;.opcode         mov     r8,r3           .mc  048
-;.opcode         mov     r9,r3           .mc  049
-;.opcode         mov     r10,r3          .mc  04a
-;.opcode         mov     r11,r3          .mc  04b
-;.opcode         mov     r12,r3          .mc  04c
-;.opcode                                 .mc  04d
-;.opcode                                 .mc  04e
-;.opcode                                 .mc  04f
+;.opcode                                 :mc  040
+;.opcode         mov     r1,r3           :mc  041
+;.opcode         mov     r2,r3           :mc  042
+;.opcode                                 :mc  043
+;.opcode         mov     r4,r3           :mc  044
+;.opcode         mov     r5,r3           :mc  045
+;.opcode         mov     r6,r3           :mc  046
+;.opcode         mov     r7,r3           :mc  047
+;.opcode         mov     r8,r3           :mc  048
+;.opcode         mov     r9,r3           :mc  049
+;.opcode         mov     r10,r3          :mc  04a
+;.opcode         mov     r11,r3          :mc  04b
+;.opcode         mov     r12,r3          :mc  04c
+;.opcode                                 :mc  04d
+;.opcode                                 :mc  04e
+;.opcode                                 :mc  04f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  050
-;.opcode         mov     r1,r4           .mc  051
-;.opcode         mov     r2,r4           .mc  052
-;.opcode         mov     r3,r4           .mc  053
-;.opcode                                 .mc  054
-;.opcode         mov     r5,r4           .mc  055
-;.opcode         mov     r6,r4           .mc  056
-;.opcode         mov     r7,r4           .mc  057
-;.opcode         mov     r8,r4           .mc  058
-;.opcode         mov     r9,r4           .mc  059
-;.opcode         mov     r10,r4          .mc  05a
-;.opcode         mov     r11,r4          .mc  05b
-;.opcode         mov     r12,r4          .mc  05c
-;.opcode                                 .mc  05d
-;.opcode                                 .mc  05e
-;.opcode                                 .mc  05f
+;.opcode                                 :mc  050
+;.opcode         mov     r1,r4           :mc  051
+;.opcode         mov     r2,r4           :mc  052
+;.opcode         mov     r3,r4           :mc  053
+;.opcode                                 :mc  054
+;.opcode         mov     r5,r4           :mc  055
+;.opcode         mov     r6,r4           :mc  056
+;.opcode         mov     r7,r4           :mc  057
+;.opcode         mov     r8,r4           :mc  058
+;.opcode         mov     r9,r4           :mc  059
+;.opcode         mov     r10,r4          :mc  05a
+;.opcode         mov     r11,r4          :mc  05b
+;.opcode         mov     r12,r4          :mc  05c
+;.opcode                                 :mc  05d
+;.opcode                                 :mc  05e
+;.opcode                                 :mc  05f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  060
-;.opcode         mov     r1,r5           .mc  061
-;.opcode         mov     r2,r5           .mc  062
-;.opcode         mov     r3,r5           .mc  063
-;.opcode         mov     r4,r5           .mc  064
-;.opcode                                 .mc  065
-;.opcode         mov     r6,r5           .mc  066
-;.opcode         mov     r7,r5           .mc  067
-;.opcode         mov     r8,r5           .mc  068
-;.opcode         mov     r9,r5           .mc  069
-;.opcode         mov     r10,r5          .mc  06a
-;.opcode         mov     r11,r5          .mc  06b
-;.opcode         mov     r12,r5          .mc  06c
-;.opcode                                 .mc  06d
-;.opcode                                 .mc  06e
-;.opcode                                 .mc  06f
+;.opcode                                 :mc  060
+;.opcode         mov     r1,r5           :mc  061
+;.opcode         mov     r2,r5           :mc  062
+;.opcode         mov     r3,r5           :mc  063
+;.opcode         mov     r4,r5           :mc  064
+;.opcode                                 :mc  065
+;.opcode         mov     r6,r5           :mc  066
+;.opcode         mov     r7,r5           :mc  067
+;.opcode         mov     r8,r5           :mc  068
+;.opcode         mov     r9,r5           :mc  069
+;.opcode         mov     r10,r5          :mc  06a
+;.opcode         mov     r11,r5          :mc  06b
+;.opcode         mov     r12,r5          :mc  06c
+;.opcode                                 :mc  06d
+;.opcode                                 :mc  06e
+;.opcode                                 :mc  06f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  070
-;.opcode         mov     r1,r6           .mc  071
-;.opcode         mov     r2,r6           .mc  072
-;.opcode         mov     r3,r6           .mc  073
-;.opcode         mov     r4,r6           .mc  074
-;.opcode         mov     r5,r6           .mc  075
-;.opcode                                 .mc  076
-;.opcode         mov     r7,r6           .mc  077
-;.opcode         mov     r8,r6           .mc  078
-;.opcode         mov     r9,r6           .mc  079
-;.opcode         mov     r10,r6          .mc  07a
-;.opcode         mov     r11,r6          .mc  07b
-;.opcode         mov     r12,r6          .mc  07c
-;.opcode                                 .mc  07d
-;.opcode                                 .mc  07e
-;.opcode                                 .mc  07f
+;.opcode                                 :mc  070
+;.opcode         mov     r1,r6           :mc  071
+;.opcode         mov     r2,r6           :mc  072
+;.opcode         mov     r3,r6           :mc  073
+;.opcode         mov     r4,r6           :mc  074
+;.opcode         mov     r5,r6           :mc  075
+;.opcode                                 :mc  076
+;.opcode         mov     r7,r6           :mc  077
+;.opcode         mov     r8,r6           :mc  078
+;.opcode         mov     r9,r6           :mc  079
+;.opcode         mov     r10,r6          :mc  07a
+;.opcode         mov     r11,r6          :mc  07b
+;.opcode         mov     r12,r6          :mc  07c
+;.opcode                                 :mc  07d
+;.opcode                                 :mc  07e
+;.opcode                                 :mc  07f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  080
-;.opcode         mov     r1,r7           .mc  081
-;.opcode         mov     r2,r7           .mc  082
-;.opcode         mov     r3,r7           .mc  083
-;.opcode         mov     r4,r7           .mc  084
-;.opcode         mov     r5,r7           .mc  085
-;.opcode         mov     r6,r7           .mc  086
-;.opcode                                 .mc  087
-;.opcode         mov     r8,r7           .mc  088
-;.opcode         mov     r9,r7           .mc  089
-;.opcode         mov     r10,r7          .mc  08a
-;.opcode         mov     r11,r7          .mc  08b
-;.opcode         mov     r12,r7          .mc  08c
-;.opcode                                 .mc  08d
-;.opcode                                 .mc  08e
-;.opcode                                 .mc  08f
+;.opcode                                 :mc  080
+;.opcode         mov     r1,r7           :mc  081
+;.opcode         mov     r2,r7           :mc  082
+;.opcode         mov     r3,r7           :mc  083
+;.opcode         mov     r4,r7           :mc  084
+;.opcode         mov     r5,r7           :mc  085
+;.opcode         mov     r6,r7           :mc  086
+;.opcode                                 :mc  087
+;.opcode         mov     r8,r7           :mc  088
+;.opcode         mov     r9,r7           :mc  089
+;.opcode         mov     r10,r7          :mc  08a
+;.opcode         mov     r11,r7          :mc  08b
+;.opcode         mov     r12,r7          :mc  08c
+;.opcode                                 :mc  08d
+;.opcode                                 :mc  08e
+;.opcode                                 :mc  08f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  090
-;.opcode         mov     r1,r8           .mc  091
-;.opcode         mov     r2,r8           .mc  092
-;.opcode         mov     r3,r8           .mc  093
-;.opcode         mov     r4,r8           .mc  094
-;.opcode         mov     r5,r8           .mc  095
-;.opcode         mov     r6,r8           .mc  096
-;.opcode         mov     r7,r8           .mc  097
-;.opcode                                 .mc  098
-;.opcode         mov     r9,r8           .mc  099
-;.opcode         mov     r10,r8          .mc  09a
-;.opcode         mov     r11,r8          .mc  09b
-;.opcode         mov     r12,r8          .mc  09c
-;.opcode                                 .mc  09d
-;.opcode                                 .mc  09e
-;.opcode                                 .mc  09f
+;.opcode                                 :mc  090
+;.opcode         mov     r1,r8           :mc  091
+;.opcode         mov     r2,r8           :mc  092
+;.opcode         mov     r3,r8           :mc  093
+;.opcode         mov     r4,r8           :mc  094
+;.opcode         mov     r5,r8           :mc  095
+;.opcode         mov     r6,r8           :mc  096
+;.opcode         mov     r7,r8           :mc  097
+;.opcode                                 :mc  098
+;.opcode         mov     r9,r8           :mc  099
+;.opcode         mov     r10,r8          :mc  09a
+;.opcode         mov     r11,r8          :mc  09b
+;.opcode         mov     r12,r8          :mc  09c
+;.opcode                                 :mc  09d
+;.opcode                                 :mc  09e
+;.opcode                                 :mc  09f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  0a0
-;.opcode         mov     r1,r9           .mc  0a1
-;.opcode         mov     r2,r9           .mc  0a2
-;.opcode         mov     r3,r9           .mc  0a3
-;.opcode         mov     r4,r9           .mc  0a4
-;.opcode         mov     r5,r9           .mc  0a5
-;.opcode         mov     r6,r9           .mc  0a6
-;.opcode         mov     r7,r9           .mc  0a7
-;.opcode         mov     r8,r9           .mc  0a8
-;.opcode                                 .mc  0a9
-;.opcode         mov     r10,r9          .mc  0aa
-;.opcode         mov     r11,r9          .mc  0ab
-;.opcode         mov     r12,r9          .mc  0ac
-;.opcode                                 .mc  0ad
-;.opcode                                 .mc  0ae
-;.opcode                                 .mc  0af
+;.opcode                                 :mc  0a0
+;.opcode         mov     r1,r9           :mc  0a1
+;.opcode         mov     r2,r9           :mc  0a2
+;.opcode         mov     r3,r9           :mc  0a3
+;.opcode         mov     r4,r9           :mc  0a4
+;.opcode         mov     r5,r9           :mc  0a5
+;.opcode         mov     r6,r9           :mc  0a6
+;.opcode         mov     r7,r9           :mc  0a7
+;.opcode         mov     r8,r9           :mc  0a8
+;.opcode                                 :mc  0a9
+;.opcode         mov     r10,r9          :mc  0aa
+;.opcode         mov     r11,r9          :mc  0ab
+;.opcode         mov     r12,r9          :mc  0ac
+;.opcode                                 :mc  0ad
+;.opcode                                 :mc  0ae
+;.opcode                                 :mc  0af
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  0b0
-;.opcode         mov     r1,r10          .mc  0b1
-;.opcode         mov     r2,r10          .mc  0b2
-;.opcode         mov     r3,r10          .mc  0b3
-;.opcode         mov     r4,r10          .mc  0b4
-;.opcode         mov     r5,r10          .mc  0b5
-;.opcode         mov     r6,r10          .mc  0b6
-;.opcode         mov     r7,r10          .mc  0b7
-;.opcode         mov     r8,r10          .mc  0b8
-;.opcode         mov     r9,r10          .mc  0b9
-;.opcode                                 .mc  0ba
-;.opcode         mov     r11,r10         .mc  0bb
-;.opcode         mov     r12,r10         .mc  0bc
-;.opcode                                 .mc  0bd
-;.opcode                                 .mc  0be
-;.opcode                                 .mc  0bf
+;.opcode                                 :mc  0b0
+;.opcode         mov     r1,r10          :mc  0b1
+;.opcode         mov     r2,r10          :mc  0b2
+;.opcode         mov     r3,r10          :mc  0b3
+;.opcode         mov     r4,r10          :mc  0b4
+;.opcode         mov     r5,r10          :mc  0b5
+;.opcode         mov     r6,r10          :mc  0b6
+;.opcode         mov     r7,r10          :mc  0b7
+;.opcode         mov     r8,r10          :mc  0b8
+;.opcode         mov     r9,r10          :mc  0b9
+;.opcode                                 :mc  0ba
+;.opcode         mov     r11,r10         :mc  0bb
+;.opcode         mov     r12,r10         :mc  0bc
+;.opcode                                 :mc  0bd
+;.opcode                                 :mc  0be
+;.opcode                                 :mc  0bf
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  0c0
-;.opcode         mov     r1,r11          .mc  0c1
-;.opcode         mov     r2,r11          .mc  0c2
-;.opcode         mov     r3,r11          .mc  0c3
-;.opcode         mov     r4,r11          .mc  0c4
-;.opcode         mov     r5,r11          .mc  0c5
-;.opcode         mov     r6,r11          .mc  0c6
-;.opcode         mov     r7,r11          .mc  0c7
-;.opcode         mov     r8,r11          .mc  0c8
-;.opcode         mov     r9,r11          .mc  0c9
-;.opcode         mov     r10,r11         .mc  0ca
-;.opcode                                 .mc  0cb
-;.opcode         mov     r12,r11         .mc  0cc
-;.opcode                                 .mc  0cd
-;.opcode                                 .mc  0ce
-;.opcode                                 .mc  0cf
+;.opcode                                 :mc  0c0
+;.opcode         mov     r1,r11          :mc  0c1
+;.opcode         mov     r2,r11          :mc  0c2
+;.opcode         mov     r3,r11          :mc  0c3
+;.opcode         mov     r4,r11          :mc  0c4
+;.opcode         mov     r5,r11          :mc  0c5
+;.opcode         mov     r6,r11          :mc  0c6
+;.opcode         mov     r7,r11          :mc  0c7
+;.opcode         mov     r8,r11          :mc  0c8
+;.opcode         mov     r9,r11          :mc  0c9
+;.opcode         mov     r10,r11         :mc  0ca
+;.opcode                                 :mc  0cb
+;.opcode         mov     r12,r11         :mc  0cc
+;.opcode                                 :mc  0cd
+;.opcode                                 :mc  0ce
+;.opcode                                 :mc  0cf
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  0d0
-;.opcode         mov     r1,r12          .mc  0d1
-;.opcode         mov     r2,r12          .mc  0d2
-;.opcode         mov     r3,r12          .mc  0d3
-;.opcode         mov     r4,r12          .mc  0d4
-;.opcode         mov     r5,r12          .mc  0d5
-;.opcode         mov     r6,r12          .mc  0d6
-;.opcode         mov     r7,r12          .mc  0d7
-;.opcode         mov     r8,r12          .mc  0d8
-;.opcode         mov     r9,r12          .mc  0d9
-;.opcode         mov     r10,r12         .mc  0da
-;.opcode         mov     r11,r12         .mc  0db
-;.opcode                                 .mc  0dc
-;.opcode                                 .mc  0dd
-;.opcode                                 .mc  0de
-;.opcode                                 .mc  0df
+;.opcode                                 :mc  0d0
+;.opcode         mov     r1,r12          :mc  0d1
+;.opcode         mov     r2,r12          :mc  0d2
+;.opcode         mov     r3,r12          :mc  0d3
+;.opcode         mov     r4,r12          :mc  0d4
+;.opcode         mov     r5,r12          :mc  0d5
+;.opcode         mov     r6,r12          :mc  0d6
+;.opcode         mov     r7,r12          :mc  0d7
+;.opcode         mov     r8,r12          :mc  0d8
+;.opcode         mov     r9,r12          :mc  0d9
+;.opcode         mov     r10,r12         :mc  0da
+;.opcode         mov     r11,r12         :mc  0db
+;.opcode                                 :mc  0dc
+;.opcode                                 :mc  0dd
+;.opcode                                 :mc  0de
+;.opcode                                 :mc  0df
 
 ;;
 ;; ==================================================================
 ;;
 
-.opcode         jmp     $(16)           .mc 0f0 %
-.opcode         jmp     r1              .mc 0f1
-.opcode         jmp     r2              .mc 0f2
-;.opcode         jmp     r3              .mc 0f3
-;.opcode         jmp     r4              .mc 0f4
-;.opcode         jmp     r5              .mc 0f5
-;.opcode         jmp     r6              .mc 0f6
-;.opcode         jmp     r7              .mc 0f7
-;.opcode         jmp     r8              .mc 0f8
-;.opcode         jmp     r9              .mc 0f9
-;.opcode         jmp     r10             .mc 0fa
-;.opcode         jmp     r11             .mc 0fb
-;.opcode         jmp     r12             .mc 0fc
-;.opcode         jmp     ra              .mc 0fd
-;.opcode                                 .mc  0fe
-;.opcode                                 .mc  0ff
-
-;;
-;; ==================================================================
-;;
-
-
-;.opcode                                 .mc  100
-.opcode         add     r1,$(16)        .mc  101 %
-.opcode         add     r2,$(16)        .mc  102 %
-;.opcode         add     r3,$(16)        .mc  103 %
-;.opcode         add     r4,$(16)        .mc  104 %
-;.opcode         add     r5,$(16)        .mc  105 %
-;.opcode         add     r6,$(16)        .mc  106 %
-;.opcode         add     r7,$(16)        .mc  107 %
-;.opcode         add     r8,$(16)        .mc  108 %
-;.opcode         add     r9,$(16)        .mc  109 %
-;.opcode         add     r10,$(16)       .mc  10a %
-;.opcode         add     r11,$(16)       .mc  10b %
-;.opcode         add     r12,$(16)       .mc  10c %
-;.opcode         add     sp,$(16)        .mc  10d %
-;.opcode                                 .mc  10e
-;.opcode                                 .mc  10f
+:opcode         jmp     $(16)           :mc 0f0 %
+:opcode         jmp     r1              :mc 0f1
+:opcode         jmp     r2              :mc 0f2
+;.opcode         jmp     r3              :mc 0f3
+;.opcode         jmp     r4              :mc 0f4
+;.opcode         jmp     r5              :mc 0f5
+;.opcode         jmp     r6              :mc 0f6
+;.opcode         jmp     r7              :mc 0f7
+;.opcode         jmp     r8              :mc 0f8
+;.opcode         jmp     r9              :mc 0f9
+;.opcode         jmp     r10             :mc 0fa
+;.opcode         jmp     r11             :mc 0fb
+;.opcode         jmp     r12             :mc 0fc
+;.opcode         jmp     ra              :mc 0fd
+;.opcode                                 :mc  0fe
+;.opcode                                 :mc  0ff
 
 ;;
 ;; ==================================================================
 ;;
 
 
-.opcode         add     r1,r1           .mc  110
-.opcode         add     r1,r2           .mc  111
-;.opcode         add     r1,r3           .mc  112
-;.opcode         add     r1,r4           .mc  113
-;.opcode         add     r1,r5           .mc  114
-;.opcode         add     r1,r6           .mc  115
-;.opcode         add     r1,r7           .mc  116
-;.opcode         add     r1,r8           .mc  117
-;.opcode         add     r1,r9           .mc  118
-;.opcode         add     r1,r10          .mc  119
-;.opcode         add     r1,r11          .mc  11a
-;.opcode         add     r1,r12          .mc  11b
-.opcode         add     r2,r1           .mc  11c
-.opcode         add     r2,r2           .mc  11d
-;.opcode         add     r2,r3           .mc  11e
-;.opcode         add     r2,r4           .mc  11f
+;.opcode                                 :mc  100
+:opcode         add     r1,$(16)        :mc  101 %
+:opcode         add     r2,$(16)        :mc  102 %
+;.opcode         add     r3,$(16)        :mc  103 %
+;.opcode         add     r4,$(16)        :mc  104 %
+;.opcode         add     r5,$(16)        :mc  105 %
+;.opcode         add     r6,$(16)        :mc  106 %
+;.opcode         add     r7,$(16)        :mc  107 %
+;.opcode         add     r8,$(16)        :mc  108 %
+;.opcode         add     r9,$(16)        :mc  109 %
+;.opcode         add     r10,$(16)       :mc  10a %
+;.opcode         add     r11,$(16)       :mc  10b %
+;.opcode         add     r12,$(16)       :mc  10c %
+;.opcode         add     sp,$(16)        :mc  10d %
+;.opcode                                 :mc  10e
+;.opcode                                 :mc  10f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r2,r5           .mc  120
-;.opcode         add     r2,r6           .mc  121
-;.opcode         add     r2,r7           .mc  122
-;.opcode         add     r2,r8           .mc  123
-;.opcode         add     r2,r9           .mc  124
-;.opcode         add     r2,r10          .mc  125
-;.opcode         add     r2,r11          .mc  126
-;.opcode         add     r2,r12          .mc  127
-;.opcode         add     r3,r1           .mc  128
-;.opcode         add     r3,r2           .mc  129
-;.opcode         add     r3,r3           .mc  12a
-;.opcode         add     r3,r4           .mc  12b
-;.opcode         add     r3,r5           .mc  12c
-;.opcode         add     r3,r6           .mc  12d
-;.opcode         add     r3,r7           .mc  12e
-;.opcode         add     r3,r8           .mc  12f
+:opcode         add     r1,r1           :mc  110
+:opcode         add     r1,r2           :mc  111
+;.opcode         add     r1,r3           :mc  112
+;.opcode         add     r1,r4           :mc  113
+;.opcode         add     r1,r5           :mc  114
+;.opcode         add     r1,r6           :mc  115
+;.opcode         add     r1,r7           :mc  116
+;.opcode         add     r1,r8           :mc  117
+;.opcode         add     r1,r9           :mc  118
+;.opcode         add     r1,r10          :mc  119
+;.opcode         add     r1,r11          :mc  11a
+;.opcode         add     r1,r12          :mc  11b
+:opcode         add     r2,r1           :mc  11c
+:opcode         add     r2,r2           :mc  11d
+;.opcode         add     r2,r3           :mc  11e
+;.opcode         add     r2,r4           :mc  11f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r3,r9           .mc  130
-;.opcode         add     r3,r10          .mc  131
-;.opcode         add     r3,r11          .mc  132
-;.opcode         add     r3,r12          .mc  133
-;.opcode         add     r4,r1           .mc  134
-;.opcode         add     r4,r2           .mc  135
-;.opcode         add     r4,r3           .mc  136
-;.opcode         add     r4,r4           .mc  137
-;.opcode         add     r4,r5           .mc  138
-;.opcode         add     r4,r6           .mc  139
-;.opcode         add     r4,r7           .mc  13a
-;.opcode         add     r4,r8           .mc  13b
-;.opcode         add     r4,r9           .mc  13c
-;.opcode         add     r4,r10          .mc  13d
-;.opcode         add     r4,r11          .mc  13e
-;.opcode         add     r4,r12          .mc  13f
+;.opcode         add     r2,r5           :mc  120
+;.opcode         add     r2,r6           :mc  121
+;.opcode         add     r2,r7           :mc  122
+;.opcode         add     r2,r8           :mc  123
+;.opcode         add     r2,r9           :mc  124
+;.opcode         add     r2,r10          :mc  125
+;.opcode         add     r2,r11          :mc  126
+;.opcode         add     r2,r12          :mc  127
+;.opcode         add     r3,r1           :mc  128
+;.opcode         add     r3,r2           :mc  129
+;.opcode         add     r3,r3           :mc  12a
+;.opcode         add     r3,r4           :mc  12b
+;.opcode         add     r3,r5           :mc  12c
+;.opcode         add     r3,r6           :mc  12d
+;.opcode         add     r3,r7           :mc  12e
+;.opcode         add     r3,r8           :mc  12f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r5,r1           .mc  140
-;.opcode         add     r5,r2           .mc  141
-;.opcode         add     r5,r3           .mc  142
-;.opcode         add     r5,r4           .mc  143
-;.opcode         add     r5,r5           .mc  144
-;.opcode         add     r5,r6           .mc  145
-;.opcode         add     r5,r7           .mc  146
-;.opcode         add     r5,r8           .mc  147
-;.opcode         add     r5,r9           .mc  148
-;.opcode         add     r5,r10          .mc  149
-;.opcode         add     r5,r11          .mc  14a
-;.opcode         add     r5,r12          .mc  14b
-;.opcode         add     r6,r1           .mc  14c
-;.opcode         add     r6,r2           .mc  14d
-;.opcode         add     r6,r3           .mc  14e
-;.opcode         add     r6,r4           .mc  14f
+;.opcode         add     r3,r9           :mc  130
+;.opcode         add     r3,r10          :mc  131
+;.opcode         add     r3,r11          :mc  132
+;.opcode         add     r3,r12          :mc  133
+;.opcode         add     r4,r1           :mc  134
+;.opcode         add     r4,r2           :mc  135
+;.opcode         add     r4,r3           :mc  136
+;.opcode         add     r4,r4           :mc  137
+;.opcode         add     r4,r5           :mc  138
+;.opcode         add     r4,r6           :mc  139
+;.opcode         add     r4,r7           :mc  13a
+;.opcode         add     r4,r8           :mc  13b
+;.opcode         add     r4,r9           :mc  13c
+;.opcode         add     r4,r10          :mc  13d
+;.opcode         add     r4,r11          :mc  13e
+;.opcode         add     r4,r12          :mc  13f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r6,r5           .mc  150
-;.opcode         add     r6,r6           .mc  151
-;.opcode         add     r6,r7           .mc  152
-;.opcode         add     r6,r8           .mc  153
-;.opcode         add     r6,r9           .mc  154
-;.opcode         add     r6,r10          .mc  155
-;.opcode         add     r6,r11          .mc  156
-;.opcode         add     r6,r12          .mc  157
-;.opcode         add     r7,r1           .mc  158
-;.opcode         add     r7,r2           .mc  159
-;.opcode         add     r7,r3           .mc  15a
-;.opcode         add     r7,r4           .mc  15b
-;.opcode         add     r7,r5           .mc  15c
-;.opcode         add     r7,r6           .mc  15d
-;.opcode         add     r7,r7           .mc  15e
-;.opcode         add     r7,r8           .mc  15f
+;.opcode         add     r5,r1           :mc  140
+;.opcode         add     r5,r2           :mc  141
+;.opcode         add     r5,r3           :mc  142
+;.opcode         add     r5,r4           :mc  143
+;.opcode         add     r5,r5           :mc  144
+;.opcode         add     r5,r6           :mc  145
+;.opcode         add     r5,r7           :mc  146
+;.opcode         add     r5,r8           :mc  147
+;.opcode         add     r5,r9           :mc  148
+;.opcode         add     r5,r10          :mc  149
+;.opcode         add     r5,r11          :mc  14a
+;.opcode         add     r5,r12          :mc  14b
+;.opcode         add     r6,r1           :mc  14c
+;.opcode         add     r6,r2           :mc  14d
+;.opcode         add     r6,r3           :mc  14e
+;.opcode         add     r6,r4           :mc  14f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r7,r9           .mc  160
-;.opcode         add     r7,r10          .mc  161
-;.opcode         add     r7,r11          .mc  162
-;.opcode         add     r7,r12          .mc  163
-;.opcode         add     r8,r1           .mc  164
-;.opcode         add     r8,r2           .mc  165
-;.opcode         add     r8,r3           .mc  166
-;.opcode         add     r8,r4           .mc  167
-;.opcode         add     r8,r5           .mc  168
-;.opcode         add     r8,r6           .mc  169
-;.opcode         add     r8,r7           .mc  16a
-;.opcode         add     r8,r8           .mc  16b
-;.opcode         add     r8,r9           .mc  16c
-;.opcode         add     r8,r10          .mc  16d
-;.opcode         add     r8,r11          .mc  16e
-;.opcode         add     r8,r12          .mc  16f
+;.opcode         add     r6,r5           :mc  150
+;.opcode         add     r6,r6           :mc  151
+;.opcode         add     r6,r7           :mc  152
+;.opcode         add     r6,r8           :mc  153
+;.opcode         add     r6,r9           :mc  154
+;.opcode         add     r6,r10          :mc  155
+;.opcode         add     r6,r11          :mc  156
+;.opcode         add     r6,r12          :mc  157
+;.opcode         add     r7,r1           :mc  158
+;.opcode         add     r7,r2           :mc  159
+;.opcode         add     r7,r3           :mc  15a
+;.opcode         add     r7,r4           :mc  15b
+;.opcode         add     r7,r5           :mc  15c
+;.opcode         add     r7,r6           :mc  15d
+;.opcode         add     r7,r7           :mc  15e
+;.opcode         add     r7,r8           :mc  15f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r9,r1           .mc  170
-;.opcode         add     r9,r2           .mc  171
-;.opcode         add     r9,r3           .mc  172
-;.opcode         add     r9,r4           .mc  173
-;.opcode         add     r9,r5           .mc  174
-;.opcode         add     r9,r6           .mc  175
-;.opcode         add     r9,r7           .mc  176
-;.opcode         add     r9,r8           .mc  177
-;.opcode         add     r9,r9           .mc  178
-;.opcode         add     r9,r10          .mc  179
-;.opcode         add     r9,r11          .mc  17a
-;.opcode         add     r9,r12          .mc  17b
-;.opcode         add     r10,r1          .mc  17c
-;.opcode         add     r10,r2          .mc  17d
-;.opcode         add     r10,r3          .mc  17e
-;.opcode         add     r10,r4          .mc  17f
+;.opcode         add     r7,r9           :mc  160
+;.opcode         add     r7,r10          :mc  161
+;.opcode         add     r7,r11          :mc  162
+;.opcode         add     r7,r12          :mc  163
+;.opcode         add     r8,r1           :mc  164
+;.opcode         add     r8,r2           :mc  165
+;.opcode         add     r8,r3           :mc  166
+;.opcode         add     r8,r4           :mc  167
+;.opcode         add     r8,r5           :mc  168
+;.opcode         add     r8,r6           :mc  169
+;.opcode         add     r8,r7           :mc  16a
+;.opcode         add     r8,r8           :mc  16b
+;.opcode         add     r8,r9           :mc  16c
+;.opcode         add     r8,r10          :mc  16d
+;.opcode         add     r8,r11          :mc  16e
+;.opcode         add     r8,r12          :mc  16f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r10,r5          .mc  180
-;.opcode         add     r10,r6          .mc  181
-;.opcode         add     r10,r7          .mc  182
-;.opcode         add     r10,r8          .mc  183
-;.opcode         add     r10,r9          .mc  184
-;.opcode         add     r10,r10         .mc  185
-;.opcode         add     r10,r11         .mc  186
-;.opcode         add     r10,r12         .mc  187
-;.opcode         add     r11,r1          .mc  188
-;.opcode         add     r11,r2          .mc  189
-;.opcode         add     r11,r3          .mc  18a
-;.opcode         add     r11,r4          .mc  18b
-;.opcode         add     r11,r5          .mc  18c
-;.opcode         add     r11,r6          .mc  18d
-;.opcode         add     r11,r7          .mc  18e
-;.opcode         add     r11,r8          .mc  18f
+;.opcode         add     r9,r1           :mc  170
+;.opcode         add     r9,r2           :mc  171
+;.opcode         add     r9,r3           :mc  172
+;.opcode         add     r9,r4           :mc  173
+;.opcode         add     r9,r5           :mc  174
+;.opcode         add     r9,r6           :mc  175
+;.opcode         add     r9,r7           :mc  176
+;.opcode         add     r9,r8           :mc  177
+;.opcode         add     r9,r9           :mc  178
+;.opcode         add     r9,r10          :mc  179
+;.opcode         add     r9,r11          :mc  17a
+;.opcode         add     r9,r12          :mc  17b
+;.opcode         add     r10,r1          :mc  17c
+;.opcode         add     r10,r2          :mc  17d
+;.opcode         add     r10,r3          :mc  17e
+;.opcode         add     r10,r4          :mc  17f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     r11,r9          .mc  190
-;.opcode         add     r11,r10         .mc  191
-;.opcode         add     r11,r11         .mc  192
-;.opcode         add     r11,r12         .mc  193
-;.opcode         add     r12,r1          .mc  194
-;.opcode         add     r12,r2          .mc  195
-;.opcode         add     r12,r3          .mc  196
-;.opcode         add     r12,r4          .mc  197
-;.opcode         add     r12,r5          .mc  198
-;.opcode         add     r12,r6          .mc  199
-;.opcode         add     r12,r7          .mc  19a
-;.opcode         add     r12,r8          .mc  19b
-;.opcode         add     r12,r9          .mc  19c
-;.opcode         add     r12,r10         .mc  19d
-;.opcode         add     r12,r11         .mc  19e
-;.opcode         add     r12,r12         .mc  19f
+;.opcode         add     r10,r5          :mc  180
+;.opcode         add     r10,r6          :mc  181
+;.opcode         add     r10,r7          :mc  182
+;.opcode         add     r10,r8          :mc  183
+;.opcode         add     r10,r9          :mc  184
+;.opcode         add     r10,r10         :mc  185
+;.opcode         add     r10,r11         :mc  186
+;.opcode         add     r10,r12         :mc  187
+;.opcode         add     r11,r1          :mc  188
+;.opcode         add     r11,r2          :mc  189
+;.opcode         add     r11,r3          :mc  18a
+;.opcode         add     r11,r4          :mc  18b
+;.opcode         add     r11,r5          :mc  18c
+;.opcode         add     r11,r6          :mc  18d
+;.opcode         add     r11,r7          :mc  18e
+;.opcode         add     r11,r8          :mc  18f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         add     sp,$(16)        .mc  1a0 %
-;.opcode         add     sp,r1           .mc  1a1
-;.opcode         add     sp,r2           .mc  1a2
-;.opcode         add     sp,r3           .mc  1a3
-;.opcode         add     sp,r4           .mc  1a4
-;.opcode         add     sp,r5           .mc  1a5
-;.opcode         add     sp,r6           .mc  1a6
-;.opcode         add     sp,r7           .mc  1a7
-;.opcode         add     sp,r8           .mc  1a8
-;.opcode         add     sp,r9           .mc  1a9
-;.opcode         add     sp,r10          .mc  1aa
-;.opcode         add     sp,r11          .mc  1ab
-;.opcode         add     sp,r12          .mc  1ac
-;.opcode                                 .mc  1ad
-;.opcode                                 .mc  1ae
-;.opcode                                 .mc  1af
+;.opcode         add     r11,r9          :mc  190
+;.opcode         add     r11,r10         :mc  191
+;.opcode         add     r11,r11         :mc  192
+;.opcode         add     r11,r12         :mc  193
+;.opcode         add     r12,r1          :mc  194
+;.opcode         add     r12,r2          :mc  195
+;.opcode         add     r12,r3          :mc  196
+;.opcode         add     r12,r4          :mc  197
+;.opcode         add     r12,r5          :mc  198
+;.opcode         add     r12,r6          :mc  199
+;.opcode         add     r12,r7          :mc  19a
+;.opcode         add     r12,r8          :mc  19b
+;.opcode         add     r12,r9          :mc  19c
+;.opcode         add     r12,r10         :mc  19d
+;.opcode         add     r12,r11         :mc  19e
+;.opcode         add     r12,r12         :mc  19f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode                                 .mc  1b0
-.opcode         adc     r1,$(16)        .mc  1b1 %
-.opcode         adc     r2,$(16)        .mc  1b2 %
-;.opcode         adc     r3,$(16)        .mc  1b3 %
-;.opcode         adc     r4,$(16)        .mc  1b4 %
-;.opcode         adc     r5,$(16)        .mc  1b5 %
-;.opcode         adc     r6,$(16)        .mc  1b6 %
-;.opcode         adc     r7,$(16)        .mc  1b7 %
-;.opcode         adc     r8,$(16)        .mc  1b8 %
-;.opcode         adc     r9,$(16)        .mc  1b9 %
-;.opcode         adc     r10,$(16)       .mc  1ba %
-;.opcode         adc     r11,$(16)       .mc  1bb %
-;.opcode         adc     r12,$(16)       .mc  1bc %
-;.opcode         adc     sp,$(16)        .mc  1bd %
-;.opcode                                 .mc  1be
-;.opcode                                 .mc  1bf
+;.opcode         add     sp,$(16)        :mc  1a0 %
+;.opcode         add     sp,r1           :mc  1a1
+;.opcode         add     sp,r2           :mc  1a2
+;.opcode         add     sp,r3           :mc  1a3
+;.opcode         add     sp,r4           :mc  1a4
+;.opcode         add     sp,r5           :mc  1a5
+;.opcode         add     sp,r6           :mc  1a6
+;.opcode         add     sp,r7           :mc  1a7
+;.opcode         add     sp,r8           :mc  1a8
+;.opcode         add     sp,r9           :mc  1a9
+;.opcode         add     sp,r10          :mc  1aa
+;.opcode         add     sp,r11          :mc  1ab
+;.opcode         add     sp,r12          :mc  1ac
+;.opcode                                 :mc  1ad
+;.opcode                                 :mc  1ae
+;.opcode                                 :mc  1af
 
 ;;
 ;; ==================================================================
 ;;
 
 
-.opcode         adc     r1,r1           .mc  1c0
-.opcode         adc     r1,r2           .mc  1c1
-;.opcode         adc     r1,r3           .mc  1c2
-;.opcode         adc     r1,r4           .mc  1c3
-;.opcode         adc     r1,r5           .mc  1c4
-;.opcode         adc     r1,r6           .mc  1c5
-;.opcode         adc     r1,r7           .mc  1c6
-;.opcode         adc     r1,r8           .mc  1c7
-;.opcode         adc     r1,r9           .mc  1c8
-;.opcode         adc     r1,r10          .mc  1c9
-;.opcode         adc     r1,r11          .mc  1ca
-;.opcode         adc     r1,r12          .mc  1cb
-.opcode         adc     r2,r1           .mc  1cc
-.opcode         adc     r2,r2           .mc  1cd
-;.opcode         adc     r2,r3           .mc  1ce
-;.opcode         adc     r2,r4           .mc  1cf
+;.opcode                                 :mc  1b0
+:opcode         adc     r1,$(16)        :mc  1b1 %
+:opcode         adc     r2,$(16)        :mc  1b2 %
+;.opcode         adc     r3,$(16)        :mc  1b3 %
+;.opcode         adc     r4,$(16)        :mc  1b4 %
+;.opcode         adc     r5,$(16)        :mc  1b5 %
+;.opcode         adc     r6,$(16)        :mc  1b6 %
+;.opcode         adc     r7,$(16)        :mc  1b7 %
+;.opcode         adc     r8,$(16)        :mc  1b8 %
+;.opcode         adc     r9,$(16)        :mc  1b9 %
+;.opcode         adc     r10,$(16)       :mc  1ba %
+;.opcode         adc     r11,$(16)       :mc  1bb %
+;.opcode         adc     r12,$(16)       :mc  1bc %
+;.opcode         adc     sp,$(16)        :mc  1bd %
+;.opcode                                 :mc  1be
+;.opcode                                 :mc  1bf
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r2,r5           .mc  1d0
-;.opcode         adc     r2,r6           .mc  1d1
-;.opcode         adc     r2,r7           .mc  1d2
-;.opcode         adc     r2,r8           .mc  1d3
-;.opcode         adc     r2,r9           .mc  1d4
-;.opcode         adc     r2,r10          .mc  1d5
-;.opcode         adc     r2,r11          .mc  1d6
-;.opcode         adc     r2,r12          .mc  1d7
-;.opcode         adc     r3,r1           .mc  1d8
-;.opcode         adc     r3,r2           .mc  1d9
-;.opcode         adc     r3,r3           .mc  1da
-;.opcode         adc     r3,r4           .mc  1db
-;.opcode         adc     r3,r5           .mc  1dc
-;.opcode         adc     r3,r6           .mc  1dd
-;.opcode         adc     r3,r7           .mc  1de
-;.opcode         adc     r3,r8           .mc  1df
+:opcode         adc     r1,r1           :mc  1c0
+:opcode         adc     r1,r2           :mc  1c1
+;.opcode         adc     r1,r3           :mc  1c2
+;.opcode         adc     r1,r4           :mc  1c3
+;.opcode         adc     r1,r5           :mc  1c4
+;.opcode         adc     r1,r6           :mc  1c5
+;.opcode         adc     r1,r7           :mc  1c6
+;.opcode         adc     r1,r8           :mc  1c7
+;.opcode         adc     r1,r9           :mc  1c8
+;.opcode         adc     r1,r10          :mc  1c9
+;.opcode         adc     r1,r11          :mc  1ca
+;.opcode         adc     r1,r12          :mc  1cb
+:opcode         adc     r2,r1           :mc  1cc
+:opcode         adc     r2,r2           :mc  1cd
+;.opcode         adc     r2,r3           :mc  1ce
+;.opcode         adc     r2,r4           :mc  1cf
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r3,r9           .mc  1e0
-;.opcode         adc     r3,r10          .mc  1e1
-;.opcode         adc     r3,r11          .mc  1e2
-;.opcode         adc     r3,r12          .mc  1e3
-;.opcode         adc     r4,r1           .mc  1e4
-;.opcode         adc     r4,r2           .mc  1e5
-;.opcode         adc     r4,r3           .mc  1e6
-;.opcode         adc     r4,r4           .mc  1e7
-;.opcode         adc     r4,r5           .mc  1e8
-;.opcode         adc     r4,r6           .mc  1e9
-;.opcode         adc     r4,r7           .mc  1ea
-;.opcode         adc     r4,r8           .mc  1eb
-;.opcode         adc     r4,r9           .mc  1ec
-;.opcode         adc     r4,r10          .mc  1ed
-;.opcode         adc     r4,r11          .mc  1ee
-;.opcode         adc     r4,r12          .mc  1ef
+;.opcode         adc     r2,r5           :mc  1d0
+;.opcode         adc     r2,r6           :mc  1d1
+;.opcode         adc     r2,r7           :mc  1d2
+;.opcode         adc     r2,r8           :mc  1d3
+;.opcode         adc     r2,r9           :mc  1d4
+;.opcode         adc     r2,r10          :mc  1d5
+;.opcode         adc     r2,r11          :mc  1d6
+;.opcode         adc     r2,r12          :mc  1d7
+;.opcode         adc     r3,r1           :mc  1d8
+;.opcode         adc     r3,r2           :mc  1d9
+;.opcode         adc     r3,r3           :mc  1da
+;.opcode         adc     r3,r4           :mc  1db
+;.opcode         adc     r3,r5           :mc  1dc
+;.opcode         adc     r3,r6           :mc  1dd
+;.opcode         adc     r3,r7           :mc  1de
+;.opcode         adc     r3,r8           :mc  1df
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r5,r1           .mc  1f0
-;.opcode         adc     r5,r2           .mc  1f1
-;.opcode         adc     r5,r3           .mc  1f2
-;.opcode         adc     r5,r4           .mc  1f3
-;.opcode         adc     r5,r5           .mc  1f4
-;.opcode         adc     r5,r6           .mc  1f5
-;.opcode         adc     r5,r7           .mc  1f6
-;.opcode         adc     r5,r8           .mc  1f7
-;.opcode         adc     r5,r9           .mc  1f8
-;.opcode         adc     r5,r10          .mc  1f9
-;.opcode         adc     r5,r11          .mc  1fa
-;.opcode         adc     r5,r12          .mc  1fb
-;.opcode         adc     r6,r1           .mc  1fc
-;.opcode         adc     r6,r2           .mc  1fd
-;.opcode         adc     r6,r3           .mc  1fe
-;.opcode         adc     r6,r4           .mc  1ff
+;.opcode         adc     r3,r9           :mc  1e0
+;.opcode         adc     r3,r10          :mc  1e1
+;.opcode         adc     r3,r11          :mc  1e2
+;.opcode         adc     r3,r12          :mc  1e3
+;.opcode         adc     r4,r1           :mc  1e4
+;.opcode         adc     r4,r2           :mc  1e5
+;.opcode         adc     r4,r3           :mc  1e6
+;.opcode         adc     r4,r4           :mc  1e7
+;.opcode         adc     r4,r5           :mc  1e8
+;.opcode         adc     r4,r6           :mc  1e9
+;.opcode         adc     r4,r7           :mc  1ea
+;.opcode         adc     r4,r8           :mc  1eb
+;.opcode         adc     r4,r9           :mc  1ec
+;.opcode         adc     r4,r10          :mc  1ed
+;.opcode         adc     r4,r11          :mc  1ee
+;.opcode         adc     r4,r12          :mc  1ef
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r6,r5           .mc  200
-;.opcode         adc     r6,r6           .mc  201
-;.opcode         adc     r6,r7           .mc  202
-;.opcode         adc     r6,r8           .mc  203
-;.opcode         adc     r6,r9           .mc  204
-;.opcode         adc     r6,r10          .mc  205
-;.opcode         adc     r6,r11          .mc  206
-;.opcode         adc     r6,r12          .mc  207
-;.opcode         adc     r7,r1           .mc  208
-;.opcode         adc     r7,r2           .mc  209
-;.opcode         adc     r7,r3           .mc  20a
-;.opcode         adc     r7,r4           .mc  20b
-;.opcode         adc     r7,r5           .mc  20c
-;.opcode         adc     r7,r6           .mc  20d
-;.opcode         adc     r7,r7           .mc  20e
-;.opcode         adc     r7,r8           .mc  20f
+;.opcode         adc     r5,r1           :mc  1f0
+;.opcode         adc     r5,r2           :mc  1f1
+;.opcode         adc     r5,r3           :mc  1f2
+;.opcode         adc     r5,r4           :mc  1f3
+;.opcode         adc     r5,r5           :mc  1f4
+;.opcode         adc     r5,r6           :mc  1f5
+;.opcode         adc     r5,r7           :mc  1f6
+;.opcode         adc     r5,r8           :mc  1f7
+;.opcode         adc     r5,r9           :mc  1f8
+;.opcode         adc     r5,r10          :mc  1f9
+;.opcode         adc     r5,r11          :mc  1fa
+;.opcode         adc     r5,r12          :mc  1fb
+;.opcode         adc     r6,r1           :mc  1fc
+;.opcode         adc     r6,r2           :mc  1fd
+;.opcode         adc     r6,r3           :mc  1fe
+;.opcode         adc     r6,r4           :mc  1ff
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r7,r9           .mc  210
-;.opcode         adc     r7,r10          .mc  211
-;.opcode         adc     r7,r11          .mc  212
-;.opcode         adc     r7,r12          .mc  213
-;.opcode         adc     r8,r1           .mc  214
-;.opcode         adc     r8,r2           .mc  215
-;.opcode         adc     r8,r3           .mc  216
-;.opcode         adc     r8,r4           .mc  217
-;.opcode         adc     r8,r5           .mc  218
-;.opcode         adc     r8,r6           .mc  219
-;.opcode         adc     r8,r7           .mc  21a
-;.opcode         adc     r8,r8           .mc  21b
-;.opcode         adc     r8,r9           .mc  21c
-;.opcode         adc     r8,r10          .mc  21d
-;.opcode         adc     r8,r11          .mc  21e
-;.opcode         adc     r8,r12          .mc  21f
+;.opcode         adc     r6,r5           :mc  200
+;.opcode         adc     r6,r6           :mc  201
+;.opcode         adc     r6,r7           :mc  202
+;.opcode         adc     r6,r8           :mc  203
+;.opcode         adc     r6,r9           :mc  204
+;.opcode         adc     r6,r10          :mc  205
+;.opcode         adc     r6,r11          :mc  206
+;.opcode         adc     r6,r12          :mc  207
+;.opcode         adc     r7,r1           :mc  208
+;.opcode         adc     r7,r2           :mc  209
+;.opcode         adc     r7,r3           :mc  20a
+;.opcode         adc     r7,r4           :mc  20b
+;.opcode         adc     r7,r5           :mc  20c
+;.opcode         adc     r7,r6           :mc  20d
+;.opcode         adc     r7,r7           :mc  20e
+;.opcode         adc     r7,r8           :mc  20f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r9,r1           .mc  220
-;.opcode         adc     r9,r2           .mc  221
-;.opcode         adc     r9,r3           .mc  222
-;.opcode         adc     r9,r4           .mc  223
-;.opcode         adc     r9,r5           .mc  224
-;.opcode         adc     r9,r6           .mc  225
-;.opcode         adc     r9,r7           .mc  226
-;.opcode         adc     r9,r8           .mc  227
-;.opcode         adc     r9,r9           .mc  228
-;.opcode         adc     r9,r10          .mc  229
-;.opcode         adc     r9,r11          .mc  22a
-;.opcode         adc     r9,r12          .mc  22b
-;.opcode         adc     r10,r1          .mc  22c
-;.opcode         adc     r10,r2          .mc  22d
-;.opcode         adc     r10,r3          .mc  22e
-;.opcode         adc     r10,r4          .mc  22f
+;.opcode         adc     r7,r9           :mc  210
+;.opcode         adc     r7,r10          :mc  211
+;.opcode         adc     r7,r11          :mc  212
+;.opcode         adc     r7,r12          :mc  213
+;.opcode         adc     r8,r1           :mc  214
+;.opcode         adc     r8,r2           :mc  215
+;.opcode         adc     r8,r3           :mc  216
+;.opcode         adc     r8,r4           :mc  217
+;.opcode         adc     r8,r5           :mc  218
+;.opcode         adc     r8,r6           :mc  219
+;.opcode         adc     r8,r7           :mc  21a
+;.opcode         adc     r8,r8           :mc  21b
+;.opcode         adc     r8,r9           :mc  21c
+;.opcode         adc     r8,r10          :mc  21d
+;.opcode         adc     r8,r11          :mc  21e
+;.opcode         adc     r8,r12          :mc  21f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r10,r5          .mc  230
-;.opcode         adc     r10,r6          .mc  231
-;.opcode         adc     r10,r7          .mc  232
-;.opcode         adc     r10,r8          .mc  233
-;.opcode         adc     r10,r9          .mc  234
-;.opcode         adc     r10,r10         .mc  235
-;.opcode         adc     r10,r11         .mc  236
-;.opcode         adc     r10,r12         .mc  237
-;.opcode         adc     r11,r1          .mc  238
-;.opcode         adc     r11,r2          .mc  239
-;.opcode         adc     r11,r3          .mc  23a
-;.opcode         adc     r11,r4          .mc  23b
-;.opcode         adc     r11,r5          .mc  23c
-;.opcode         adc     r11,r6          .mc  23d
-;.opcode         adc     r11,r7          .mc  23e
-;.opcode         adc     r11,r8          .mc  23f
+;.opcode         adc     r9,r1           :mc  220
+;.opcode         adc     r9,r2           :mc  221
+;.opcode         adc     r9,r3           :mc  222
+;.opcode         adc     r9,r4           :mc  223
+;.opcode         adc     r9,r5           :mc  224
+;.opcode         adc     r9,r6           :mc  225
+;.opcode         adc     r9,r7           :mc  226
+;.opcode         adc     r9,r8           :mc  227
+;.opcode         adc     r9,r9           :mc  228
+;.opcode         adc     r9,r10          :mc  229
+;.opcode         adc     r9,r11          :mc  22a
+;.opcode         adc     r9,r12          :mc  22b
+;.opcode         adc     r10,r1          :mc  22c
+;.opcode         adc     r10,r2          :mc  22d
+;.opcode         adc     r10,r3          :mc  22e
+;.opcode         adc     r10,r4          :mc  22f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     r11,r9          .mc  240
-;.opcode         adc     r11,r10         .mc  241
-;.opcode         adc     r11,r11         .mc  242
-;.opcode         adc     r11,r12         .mc  243
-;.opcode         adc     r12,r1          .mc  244
-;.opcode         adc     r12,r2          .mc  245
-;.opcode         adc     r12,r3          .mc  246
-;.opcode         adc     r12,r4          .mc  247
-;.opcode         adc     r12,r5          .mc  248
-;.opcode         adc     r12,r6          .mc  249
-;.opcode         adc     r12,r7          .mc  24a
-;.opcode         adc     r12,r8          .mc  24b
-;.opcode         adc     r12,r9          .mc  24c
-;.opcode         adc     r12,r10         .mc  24d
-;.opcode         adc     r12,r11         .mc  24e
-;.opcode         adc     r12,r12         .mc  24f
+;.opcode         adc     r10,r5          :mc  230
+;.opcode         adc     r10,r6          :mc  231
+;.opcode         adc     r10,r7          :mc  232
+;.opcode         adc     r10,r8          :mc  233
+;.opcode         adc     r10,r9          :mc  234
+;.opcode         adc     r10,r10         :mc  235
+;.opcode         adc     r10,r11         :mc  236
+;.opcode         adc     r10,r12         :mc  237
+;.opcode         adc     r11,r1          :mc  238
+;.opcode         adc     r11,r2          :mc  239
+;.opcode         adc     r11,r3          :mc  23a
+;.opcode         adc     r11,r4          :mc  23b
+;.opcode         adc     r11,r5          :mc  23c
+;.opcode         adc     r11,r6          :mc  23d
+;.opcode         adc     r11,r7          :mc  23e
+;.opcode         adc     r11,r8          :mc  23f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         adc     sp,$(16)        .mc  250 %
-;.opcode         adc     sp,r1           .mc  251
-;.opcode         adc     sp,r2           .mc  252
-;.opcode         adc     sp,r3           .mc  253
-;.opcode         adc     sp,r4           .mc  254
-;.opcode         adc     sp,r5           .mc  255
-;.opcode         adc     sp,r6           .mc  256
-;.opcode         adc     sp,r7           .mc  257
-;.opcode         adc     sp,r8           .mc  258
-;.opcode         adc     sp,r9           .mc  259
-;.opcode         adc     sp,r10          .mc  25a
-;.opcode         adc     sp,r11          .mc  25b
-;.opcode         adc     sp,r12          .mc  25c
-;.opcode                                 .mc  25d
-;.opcode                                 .mc  25e
-;.opcode                                 .mc  25f
+;.opcode         adc     r11,r9          :mc  240
+;.opcode         adc     r11,r10         :mc  241
+;.opcode         adc     r11,r11         :mc  242
+;.opcode         adc     r11,r12         :mc  243
+;.opcode         adc     r12,r1          :mc  244
+;.opcode         adc     r12,r2          :mc  245
+;.opcode         adc     r12,r3          :mc  246
+;.opcode         adc     r12,r4          :mc  247
+;.opcode         adc     r12,r5          :mc  248
+;.opcode         adc     r12,r6          :mc  249
+;.opcode         adc     r12,r7          :mc  24a
+;.opcode         adc     r12,r8          :mc  24b
+;.opcode         adc     r12,r9          :mc  24c
+;.opcode         adc     r12,r10         :mc  24d
+;.opcode         adc     r12,r11         :mc  24e
+;.opcode         adc     r12,r12         :mc  24f
 
 ;;
 ;; ==================================================================
 ;;
 
 
-;.opcode         inc     sp              .mc  260
-.opcode         inc     r1              .mc  261
-.opcode         inc     r2              .mc  262
-;.opcode         inc     r3              .mc  263
-;.opcode         inc     r4              .mc  264
-;.opcode         inc     r5              .mc  265
-;.opcode         inc     r6              .mc  266
-;.opcode         inc     r7              .mc  267
-;.opcode         inc     r8              .mc  268
-;.opcode         inc     r9              .mc  269
-;.opcode         inc     r10             .mc  26a
-;.opcode         inc     r11             .mc  26b
-;.opcode         inc     r12             .mc  26c
-;.opcode                                 .mc  26d
-;.opcode                                 .mc  26e
-;.opcode                                 .mc  26f
+;.opcode         adc     sp,$(16)        :mc  250 %
+;.opcode         adc     sp,r1           :mc  251
+;.opcode         adc     sp,r2           :mc  252
+;.opcode         adc     sp,r3           :mc  253
+;.opcode         adc     sp,r4           :mc  254
+;.opcode         adc     sp,r5           :mc  255
+;.opcode         adc     sp,r6           :mc  256
+;.opcode         adc     sp,r7           :mc  257
+;.opcode         adc     sp,r8           :mc  258
+;.opcode         adc     sp,r9           :mc  259
+;.opcode         adc     sp,r10          :mc  25a
+;.opcode         adc     sp,r11          :mc  25b
+;.opcode         adc     sp,r12          :mc  25c
+;.opcode                                 :mc  25d
+;.opcode                                 :mc  25e
+;.opcode                                 :mc  25f
+
+;;
+;; ==================================================================
+;;
+
+
+;.opcode         inc     sp              :mc  260
+:opcode         inc     r1              :mc  261
+:opcode         inc     r2              :mc  262
+;.opcode         inc     r3              :mc  263
+;.opcode         inc     r4              :mc  264
+;.opcode         inc     r5              :mc  265
+;.opcode         inc     r6              :mc  266
+;.opcode         inc     r7              :mc  267
+;.opcode         inc     r8              :mc  268
+;.opcode         inc     r9              :mc  269
+;.opcode         inc     r10             :mc  26a
+;.opcode         inc     r11             :mc  26b
+;.opcode         inc     r12             :mc  26c
+;.opcode                                 :mc  26d
+;.opcode                                 :mc  26e
+;.opcode                                 :mc  26f
 
 ;;
 ;; ==================================================================
@@ -929,8 +929,8 @@
 ;;
 ;; -- Some temporary opcodes or opcodes needing a new home
 ;;    ----------------------------------------------------
-.opcode         decr    r1              .mc ff0
-.opcode         decr    r2              .mc ff2
+:opcode         decr    r1              :mc ff0
+:opcode         decr    r2              :mc ff2
 
 
 ;;
@@ -943,5 +943,5 @@
 ;; -- These are renames for backward compatibility.
 ;;    ---------------------------------------------
 ;;
-.opcode         incr    r1              .mc  261
-.opcode         incr    r2              .mc  262
+:opcode         incr    r1              :mc  261
+:opcode         incr    r2              :mc  262

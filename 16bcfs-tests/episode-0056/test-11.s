@@ -1,8 +1,8 @@
 ;;===================================================================================================================
-;; test-11.s: Test the first suspect conditional instruction. 
+;; test-11.s: Test the first suspect conditional instruction.
 ;;
 ;;  This test will execute a single-byte instruction which prepares the condition, a 2-byte conditional instruction
-;;  which will not pass the condition, replacing the instruction with a NOP, and then followed by a 1-byte 
+;;  which will not pass the condition, replacing the instruction with a NOP, and then followed by a 1-byte
 ;;  instruction which is not conditional.
 ;;
 ;;  This test is required to pass, but is expected to fail at this point in the video series.
@@ -15,7 +15,7 @@
 ;;
 ;;===================================================================================================================
 
-.arch       16bcfs.arch
+%arch       16bcfs.arch
 
     .org    0x0000
 

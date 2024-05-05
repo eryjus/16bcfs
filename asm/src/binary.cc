@@ -397,7 +397,7 @@ void Binary_t::SplitOutput(void)
 //    ----------------------------------------------------------------
 Binary_t *Binary_8bit_t::Organization(void)
 {
-    if (singleton) Messaging::Fatal("Unable to reinitialize binary .organization", Parser_t::GetSourceFile(), yylineno, "", 0);
+    if (singleton) Messaging::Fatal("Unable to reinitialize binary :organization", Parser_t::GetSourceFile(), yylineno, "", 0);
     singleton = new Binary_8bit_t;
     return singleton;
 }
@@ -412,7 +412,7 @@ Binary_t *Binary_8bit_t::Organization(void)
 // -- Set the organization for the binary and initialize the singleton
 //    ----------------------------------------------------------------
 Binary_t *Binary_16bit_t::Organization(void) {
-    if (singleton) Messaging::Fatal("Unable to reinitialize binary .organization", Parser_t::GetSourceFile(), yylineno, "", 0);
+    if (singleton) Messaging::Fatal("Unable to reinitialize binary :organization", Parser_t::GetSourceFile(), yylineno, "", 0);
     singleton = new Binary_16bit_t;
     return singleton;
 }

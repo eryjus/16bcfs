@@ -19,6 +19,7 @@
 /*  -----------  -------  -------  ------------------------------------------------------------------------------- */
 /*  2023-Feb-28  Initial  v0.0.1   Initial Version                                                                 */
 /*  2023-Jun-26  Initial  v0.0.7   Add support for implied conditional execution opcodes                           */
+/*  2024-May-04  #65      v0098    Clean up the architecture and assembler directives and make them discernable    */
 /*                                                                                                                 */
 /*=================================================================================================================*/
 
@@ -220,40 +221,39 @@ BIN             [01]
 <architecture>\+                    { return '+'; }
 <architecture>\-                    { return '-'; }
 
-<architecture>^\.register           { return TOK_ARCH_REGISTER; }
-<architecture>^\.memory             { return TOK_ARCH_MEMORY; }
-<architecture>^\.opcode             { yy_push_state(opcode); return TOK_ARCH_OPCODE; }
-<architecture>^\.organization       { return TOK_ARCH_ORGANIZATION; }
-<architecture>^\.big-endian         { return TOK_ARCH_BIG_ENDIAN; }
-<architecture>^\.little-endian      { return TOK_ARCH_LITTLE_ENDIAN; }
-<architecture>^\.cond-bits          { return TOK_ARCH_COND_BITS; }
-<architecture>^\.cond-default       { return TOK_ARCH_COND_DEFAULT; }
-<architecture>^\.cond-prefix        { return TOK_ARCH_COND_PREFIX; }
-<architecture>^\.cond-suffix        { return TOK_ARCH_COND_SUFFIX; }
+<architecture>^\:register           { return TOK_ARCH_REGISTER; }
+<architecture>^\:memory             { return TOK_ARCH_MEMORY; }
+<architecture>^\:opcode             { yy_push_state(opcode); return TOK_ARCH_OPCODE; }
+<architecture>^\:organization       { return TOK_ARCH_ORGANIZATION; }
+<architecture>^\:big-endian         { return TOK_ARCH_BIG_ENDIAN; }
+<architecture>^\:little-endian      { return TOK_ARCH_LITTLE_ENDIAN; }
+<architecture>^\:cond-bits          { return TOK_ARCH_COND_BITS; }
+<architecture>^\:cond-default       { return TOK_ARCH_COND_DEFAULT; }
+<architecture>^\:cond-prefix        { return TOK_ARCH_COND_PREFIX; }
+<architecture>^\:cond-suffix        { return TOK_ARCH_COND_SUFFIX; }
 
 
-<architecture>\.db                  { yy_push_state(db); return TOK_OPCODE_DB; }
-<architecture>\.mc                  { yy_push_state(db); return TOK_OPCODE_MC; }
+<architecture>\:mc                  { yy_push_state(db); return TOK_OPCODE_MC; }
 
 <architecture>.                     {
-                                        yylval.errorMsg = "Unexpected character in .architecture definition file";
+                                        yylval.errorMsg = "Unexpected character in %arch definition file";
                                         return TOK_ERROR;
                                     }
 
 
 <opcode>{WS}                        { }
-<opcode>[^.\n]+                     {
+<opcode>[^:\n]+                     {
                                         yylval.name = strdup(yytext);
                                         yy_pop_state();
                                         return TOK_OPCODE_DEF;
                                     }
 <opcode>{NL}                        {
-                                        yylval.errorMsg = "Unexpected newline in .opcode definition";
+                                        yylval.errorMsg = "Unexpected newline in :opcode definition";
                                         yy_pop_state();
                                         return TOK_ERROR;
                                     }
 <opcode>.                           {
-                                        yylval.errorMsg = "Unexpected character in .opcode definition";
+                                        yylval.errorMsg = "Unexpected character in :opcode definition";
                                         yy_pop_state();
                                         return TOK_ERROR;
                                     }
@@ -297,9 +297,9 @@ BIN             [01]
 {WS}                                {}
 {COMMENT}.*                         {}
 
-^\.include                          { BEGIN(incl); }
-^\.path                             { BEGIN(path); }
-^\.arch                             { BEGIN(arch); }
+^\%include                          { BEGIN(incl); }
+^\%path                             { BEGIN(path); }
+^\%arch                             { BEGIN(arch); }
 
 ^{LETTER}{ALPHA}+\:                 {
                                         yylval.name = strdup(yytext);

@@ -1,7 +1,7 @@
 ;;===================================================================================================================
 ;; test-mov.s: Perform several move instructions to the R1 register, each an immediate load
 ;;
-;;  This code will produce a Larson Scanner (Knight Riger effect) using a brute force load of each light into 
+;;  This code will produce a Larson Scanner (Knight Riger effect) using a brute force load of each light into
 ;;  the R1 register in turn.
 ;;
 ;;  -----------------------------------------------------------------------------------------------------------------
@@ -12,7 +12,7 @@
 ;;
 ;;===================================================================================================================
 
-.arch       16bcfs.arch
+%arch       16bcfs.arch
 
     .org    0x0000
 

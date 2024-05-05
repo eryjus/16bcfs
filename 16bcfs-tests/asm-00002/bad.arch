@@ -1,5 +1,5 @@
 ;;===================================================================================================================
-;; asm-00002.s: ensure that `.organization` comes first
+;; asm-00002.s: ensure that `:organization` comes first
 ;;
 ;;  Test case for
 ;;
@@ -14,6 +14,6 @@
 ;;===================================================================================================================
 
 
-.register           r1              16
-.organization       16bits          ;; this will fail
-.opcode             nop             .mc 00
+:register           r1              16
+:organization       16bits          ;; this will fail
+:opcode             nop             .mc 00

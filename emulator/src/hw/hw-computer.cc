@@ -46,7 +46,24 @@ HW_Alu_t *HW_Computer_t::alu = nullptr;
 
 
 // -- Registers
-GpRegisterModule_t *HW_Computer_t::pc = nullptr;
+GpRegisterModule_t *HW_Computer_t::r1 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r2 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r3 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r4 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r5 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r6 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r7 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r8 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r9 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r10 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r11 = nullptr;
+GpRegisterModule_t *HW_Computer_t::r12 = nullptr;
+GpRegisterModule_t *HW_Computer_t::pgmpc = nullptr;
+GpRegisterModule_t *HW_Computer_t::pgmra = nullptr;
+GpRegisterModule_t *HW_Computer_t::pgmsp = nullptr;
+GpRegisterModule_t *HW_Computer_t::intpc = nullptr;
+GpRegisterModule_t *HW_Computer_t::intra = nullptr;
+GpRegisterModule_t *HW_Computer_t::intsp = nullptr;
 
 
 // -- Control ROMs
@@ -134,35 +151,35 @@ void HW_Computer_t::ProcessToggleButton(int id, bool checked)
     case TEST_MAIN_NONE: break;
     case TEST_ALUA_NONE: break;
     case TEST_ALUA_PC: {
-        pc->ProcessAssertAluA(checked?HIGH:LOW);
+        pgmpc->ProcessAssertAluA(checked?HIGH:LOW);
         break;
     }
     case TEST_ALUB_NONE: break;
     case TEST_ALUB_PC: {
-        pc->ProcessAssertAluB(checked?HIGH:LOW);
+        pgmpc->ProcessAssertAluB(checked?HIGH:LOW);
         break;
     }
     case TEST_ADDR1_NONE: break;
     case TEST_ADDR1_PC: {
-        pc->ProcessAssertAddr1(checked?HIGH:LOW);
+        pgmpc->ProcessAssertAddr1(checked?HIGH:LOW);
         break;
     }
     case TEST_ADDR2_NONE: break;
     case TEST_ADDR2_PC: {
-        pc->ProcessAssertAddr2(checked?HIGH:LOW);
+        pgmpc->ProcessAssertAddr2(checked?HIGH:LOW);
         break;
     }
     case TEST_PC_NONE: break;
     case TEST_PC_LOAD: {
-        pc->ProcessLoad(checked?HIGH:LOW);
+        pgmpc->ProcessLoad(checked?HIGH:LOW);
         break;
     }
     case TEST_PC_INC: {
-        pc->ProcessInc(checked?HIGH:LOW);
+        pgmpc->ProcessInc(checked?HIGH:LOW);
         break;
     }
     case TEST_PC_DEC: {
-        pc->ProcessDec(checked?HIGH:LOW);
+        pgmpc->ProcessDec(checked?HIGH:LOW);
         break;
     }
     }
@@ -179,40 +196,59 @@ void HW_Computer_t::InitGui(void)
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 12, 39);
-    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 12, 38);
-    grid->addWidget(new GUI_BusLeds_t("Main Bus", mainBus), 9, 33, 1, 3);
-    grid->addWidget(new GUI_BusLeds_t("ALU A", aluA), 10, 33, 1, 3);
-    grid->addWidget(new GUI_BusLeds_t("ALU B", aluB), 11, 33, 1, 3);
-    grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 33, 1, 3);
-    grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 13, 33, 1, 3);
-//    grid->addWidget(new GUI_BusTester_t("ALU A Input", aluADriver), 18, 29, 1, 4);
-//    grid->addWidget(new GUI_BusTester_t("ALU B Input", aluBDriver), 18, 33, 1, 4);
+    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 11, 16);
+    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 11, 15);
+
+    grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 0, 1, 3);
+    grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 12, 3, 1, 3);
+    grid->addWidget(new GUI_BusLeds_t("Main", mainBus), 12, 6, 1, 3);
+    grid->addWidget(new GUI_BusLeds_t("ALU A", aluA), 12, 9, 1, 3);
+    grid->addWidget(new GUI_BusLeds_t("ALU B", aluB), 12, 12, 1, 3);
+
+    grid->addWidget(pgmFlags, 0, 11, 1, 1);
+    grid->addWidget(intFlags, 0, 12, 1, 1);
 
 
-    grid->addWidget((ctrl0 = new CtrlRomModule_t("Ctrl0", "ctrl0.bin")), 2, 38, 1, 1);
-    grid->addWidget((ctrl1 = new CtrlRomModule_t("Ctrl1", "ctrl1.bin")), 3, 38, 1, 1);
-    grid->addWidget((ctrl2 = new CtrlRomModule_t("Ctrl2", "ctrl2.bin")), 4, 38, 1, 1);
-    grid->addWidget((ctrl3 = new CtrlRomModule_t("Ctrl3", "ctrl3.bin")), 5, 38, 1, 1);
-    grid->addWidget((ctrl4 = new CtrlRomModule_t("Ctrl4", "ctrl4.bin")), 6, 38, 1, 1);
-    grid->addWidget((ctrl5 = new CtrlRomModule_t("Ctrl5", "ctrl5.bin")), 7, 38, 1, 1);
-    grid->addWidget((ctrl6 = new CtrlRomModule_t("Ctrl6", "ctrl6.bin")), 8, 38, 1, 1);
-    grid->addWidget((ctrl7 = new CtrlRomModule_t("Ctrl7", "ctrl7.bin")), 9, 38, 1, 1);
-    grid->addWidget((ctrl8 = new CtrlRomModule_t("Ctrl8", "ctrl8.bin")), 2, 39, 1, 1);
-    grid->addWidget((ctrl9 = new CtrlRomModule_t("Ctrl9", "ctrl9.bin")), 3, 39, 1, 1);
-    grid->addWidget((ctrla = new CtrlRomModule_t("Ctrla", "ctrla.bin")), 4, 39, 1, 1);
-    grid->addWidget((ctrlb = new CtrlRomModule_t("Ctrlb", "ctrlb.bin")), 5, 39, 1, 1);
-    grid->addWidget((ctrlc = new CtrlRomModule_t("Ctrlc", "ctrlc.bin")), 6, 39, 1, 1);
-    grid->addWidget((ctrld = new CtrlRomModule_t("Ctrld", "ctrld.bin")), 7, 39, 1, 1);
-    grid->addWidget((ctrle = new CtrlRomModule_t("Ctrle", "ctrle.bin")), 8, 39, 1, 1);
-    grid->addWidget((ctrlf = new CtrlRomModule_t("Ctrlf", "ctrlf.bin")), 9, 39, 1, 1);
-    grid->addWidget(ctrlCtrl, 0, 38, 2, 2);
+    grid->addWidget((ctrl0 = new CtrlRomModule_t("Ctrl0", "ctrl0.bin")), 2, 15, 1, 1);
+    grid->addWidget((ctrl1 = new CtrlRomModule_t("Ctrl1", "ctrl1.bin")), 3, 15, 1, 1);
+    grid->addWidget((ctrl2 = new CtrlRomModule_t("Ctrl2", "ctrl2.bin")), 4, 15, 1, 1);
+    grid->addWidget((ctrl3 = new CtrlRomModule_t("Ctrl3", "ctrl3.bin")), 5, 15, 1, 1);
+    grid->addWidget((ctrl4 = new CtrlRomModule_t("Ctrl4", "ctrl4.bin")), 6, 15, 1, 1);
+    grid->addWidget((ctrl5 = new CtrlRomModule_t("Ctrl5", "ctrl5.bin")), 7, 15, 1, 1);
+    grid->addWidget((ctrl6 = new CtrlRomModule_t("Ctrl6", "ctrl6.bin")), 8, 15, 1, 1);
+    grid->addWidget((ctrl7 = new CtrlRomModule_t("Ctrl7", "ctrl7.bin")), 9, 15, 1, 1);
+    grid->addWidget((ctrl8 = new CtrlRomModule_t("Ctrl8", "ctrl8.bin")), 2, 16, 1, 1);
+    grid->addWidget((ctrl9 = new CtrlRomModule_t("Ctrl9", "ctrl9.bin")), 3, 16, 1, 1);
+    grid->addWidget((ctrla = new CtrlRomModule_t("CtrlA", "ctrla.bin")), 4, 16, 1, 1);
+    grid->addWidget((ctrlb = new CtrlRomModule_t("CtrlB", "ctrlb.bin")), 5, 16, 1, 1);
+    grid->addWidget((ctrlc = new CtrlRomModule_t("CtrlC", "ctrlc.bin")), 6, 16, 1, 1);
+    grid->addWidget((ctrld = new CtrlRomModule_t("CtrlD", "ctrld.bin")), 7, 16, 1, 1);
+    grid->addWidget((ctrle = new CtrlRomModule_t("CtrlE", "ctrle.bin")), 8, 16, 1, 1);
+    grid->addWidget((ctrlf = new CtrlRomModule_t("CtrlF", "ctrlf.bin")), 9, 16, 1, 1);
+    grid->addWidget(ctrlCtrl, 0, 15, 2, 2);
 
 
-    grid->addWidget(clock, 13, 38, 2, 2);
-    grid->addWidget(pc, 0, 4, 2, 4);
-    grid->addWidget(pgmFlags, 0, 29, 1, 2);
-    grid->addWidget(intFlags, 0, 31, 1, 2);
+    grid->addWidget(clock, 12, 15, 2, 2);
+
+    grid->addWidget(pgmpc, 0, 0, 2, 3);
+    grid->addWidget(pgmra, 2, 0, 2, 3);
+    grid->addWidget(pgmsp, 4, 0, 2, 3);
+    grid->addWidget(intpc, 6, 0, 2, 3);
+    grid->addWidget(intra, 8, 0, 2, 3);
+    grid->addWidget(intsp, 10, 0, 2, 3);
+    grid->addWidget(r1, 0, 3, 2, 3);
+    grid->addWidget(r2, 2, 3, 2, 3);
+    grid->addWidget(r3, 4, 3, 2, 3);
+    grid->addWidget(r4, 6, 3, 2, 3);
+    grid->addWidget(r5, 8, 3, 2, 3);
+    grid->addWidget(r6, 10, 3, 2, 3);
+    grid->addWidget(r7, 0, 6, 2, 3);
+    grid->addWidget(r8, 2, 6, 2, 3);
+    grid->addWidget(r9, 4, 6, 2, 3);
+    grid->addWidget(r10, 6, 6, 2, 3);
+    grid->addWidget(r11, 8, 6, 2, 3);
+    grid->addWidget(r12, 10, 6, 2, 3);
+
 
     central = new QWidget;
     central->setLayout(grid);
@@ -234,11 +270,11 @@ void HW_Computer_t::InitGui(void)
     editMenu->addAction(settings);
 
     singleton->setWindowTitle(tr("16bcfs Emulator"));
-    singleton->showMaximized();
+    singleton->show();
 
     connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
     connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, pc, &GpRegisterModule_t::ProcessReset);
+    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlCtrl, &CtrlRomCtrlModule_t::ProcessResetUpdate);
 }
 
@@ -291,7 +327,24 @@ void HW_Computer_t::Initialize(void)
     //
     // -- Create the Registers
     //    --------------------
-    pc = new GpRegisterModule_t("PC");
+    r1 = new GpRegisterModule_t("R1");
+    r2 = new GpRegisterModule_t("R2");
+    r3 = new GpRegisterModule_t("R3");
+    r4 = new GpRegisterModule_t("R4");
+    r5 = new GpRegisterModule_t("R5");
+    r6 = new GpRegisterModule_t("R6");
+    r7 = new GpRegisterModule_t("R7");
+    r8 = new GpRegisterModule_t("R8");
+    r9 = new GpRegisterModule_t("R9");
+    r10 = new GpRegisterModule_t("R10");
+    r11 = new GpRegisterModule_t("R11");
+    r12 = new GpRegisterModule_t("R12");
+    pgmpc = new GpRegisterModule_t("PGM PC");
+    pgmra = new GpRegisterModule_t("PGM RA");
+    pgmsp = new GpRegisterModule_t("PGM SP");
+    intpc = new GpRegisterModule_t("INT PC");
+    intra = new GpRegisterModule_t("INT RA");
+    intsp = new GpRegisterModule_t("INT SP");
 
 
     //
@@ -307,7 +360,7 @@ void HW_Computer_t::Initialize(void)
 
 
     // -- connect up the clock
-    connect(clock, &ClockModule_t::SignalClockState, pc, &GpRegisterModule_t::ProcessClk);
+    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
     connect(clock, &ClockModule_t::SignalClockState, pgmFlags, &AluFlagsModule_t::ProcessClk);
 
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
@@ -365,7 +418,7 @@ void HW_Computer_t::PerformReset(void)
     pgmFlags->TriggerFirstUpdate();
     intFlags->TriggerFirstUpdate();
     alu->TriggerFirstUpdate();
-    pc->TriggerFirstUpdate();
+    pgmpc->TriggerFirstUpdate();
     ctrlCtrl->TriggerFirstUpdate();
     ctrl0->TriggerFirstUpdate();
     ctrl1->TriggerFirstUpdate();

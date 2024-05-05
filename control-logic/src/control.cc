@@ -17,7 +17,7 @@
 //  | CTRL3 | - |
 //  | CTRL4 | - |
 //  | CTRL5 | 6 |
-//  | CTRL6 | 5 |
+//  | CTRL6 | 2 |
 //  | CTRL7 | - |
 //  | CTRL8 | - |
 //  | CTRL9 | - |
@@ -28,7 +28,7 @@
 //  | CTRLE | - |
 //  | CTRLF | - |
 //  |=======|===|
-//  | Total | 7 |
+//  | Total | 8 |
 //
 //  -----------------------------------------------------------------------------------------------------------------
 //
@@ -378,7 +378,16 @@ enum : uint128_t {
     //    ======================
 
 
-    // bit 7:3 -- unused
+    // bit 7:6 -- unused
+
+    // bit 5 -- Break
+    BREAK                               = U128_ENUM(0b1ul, 5, 6),
+
+    // bit 4 -- Leave interrupt Context
+    LEAVE_INT_CONTEXT                   = U128_ENUM(0b1ul, 4, 6),
+
+    // bit 3 -- fetch suppress
+    FETCH_SUPPRESS                      = U128_ENUM(0b1ul, 3, 6),
 
     // bit 2:0 -- shift and rotate signals
     ALU_SHIFT_NONE                      = U128_ENUM(0b000ul, 0, 6),

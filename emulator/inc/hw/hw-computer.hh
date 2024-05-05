@@ -33,7 +33,24 @@ private:
     static ClockModule_t *clock;
 
     // -- The General Purpose Register Modules
-    static GpRegisterModule_t *pc;
+    static GpRegisterModule_t *r1;
+    static GpRegisterModule_t *r2;
+    static GpRegisterModule_t *r3;
+    static GpRegisterModule_t *r4;
+    static GpRegisterModule_t *r5;
+    static GpRegisterModule_t *r6;
+    static GpRegisterModule_t *r7;
+    static GpRegisterModule_t *r8;
+    static GpRegisterModule_t *r9;
+    static GpRegisterModule_t *r10;
+    static GpRegisterModule_t *r11;
+    static GpRegisterModule_t *r12;
+    static GpRegisterModule_t *pgmpc;
+    static GpRegisterModule_t *pgmra;
+    static GpRegisterModule_t *pgmsp;
+    static GpRegisterModule_t *intpc;
+    static GpRegisterModule_t *intra;
+    static GpRegisterModule_t *intsp;
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;

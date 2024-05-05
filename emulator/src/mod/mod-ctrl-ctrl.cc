@@ -75,7 +75,7 @@
 CtrlRomCtrlModule_t::CtrlRomCtrlModule_t(void) : QGroupBox("Control ROM Control")
 {
     setFixedWidth(190);
-    setFixedHeight(100);
+    setFixedHeight(120);
 
     AllocateComponents();
     BuildGui();
@@ -163,15 +163,24 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     controls->setAlignment(Qt::AlignHCenter);
     controls->setContentsMargins(0, 0, 0, 0);
     controls->setFixedWidth(180);
-    controls->setFixedHeight(40);
+    controls->setFixedHeight(50);
 
     QGridLayout *controlLayout = new QGridLayout;
     controlLayout->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     controlLayout->setContentsMargins(0, 0, 0, 0);
     controlLayout->setSpacing(0);
-    controlLayout->setColumnMinimumWidth(1, 10);
-    controlLayout->setColumnMinimumWidth(3, 10);
-    controlLayout->setColumnMinimumWidth(7, 10);
+    controlLayout->setColumnMinimumWidth(0, 12);
+    controlLayout->setColumnMinimumWidth(1, 12);
+    controlLayout->setColumnMinimumWidth(2, 12);
+    controlLayout->setColumnMinimumWidth(3, 12);
+    controlLayout->setColumnMinimumWidth(4, 12);
+    controlLayout->setColumnMinimumWidth(5, 12);
+    controlLayout->setColumnMinimumWidth(6, 12);
+    controlLayout->setColumnMinimumWidth(7, 12);
+    controlLayout->setColumnMinimumWidth(8, 12);
+    controlLayout->setColumnMinimumWidth(9, 12);
+    controlLayout->setColumnMinimumWidth(10, 12);
+    controlLayout->setColumnMinimumWidth(11, 12);
 
     controlLayout->addWidget(clk, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("clk"), 1, 0, Qt::AlignHCenter);
@@ -212,17 +221,17 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     contentsLayout->addWidget(ledE, Qt::AlignHCenter);
     contentsLayout->addWidget(ledD, Qt::AlignHCenter);
     contentsLayout->addWidget(ledC, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 4));
+    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
     contentsLayout->addWidget(ledB, Qt::AlignHCenter);
     contentsLayout->addWidget(ledA, Qt::AlignHCenter);
     contentsLayout->addWidget(led9, Qt::AlignHCenter);
     contentsLayout->addWidget(led8, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 4));
+    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
     contentsLayout->addWidget(led7, Qt::AlignHCenter);
     contentsLayout->addWidget(led6, Qt::AlignHCenter);
     contentsLayout->addWidget(led5, Qt::AlignHCenter);
     contentsLayout->addWidget(led4, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 4));
+    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
     contentsLayout->addWidget(led3, Qt::AlignHCenter);
     contentsLayout->addWidget(led2, Qt::AlignHCenter);
     contentsLayout->addWidget(led1, Qt::AlignHCenter);

@@ -269,10 +269,10 @@ void CtrlRomModule_t::WireUp(void)
     // -- Finally, connect up the Control ROM Control Circuit to drive the reset staste signals
     //    -------------------------------------------------------------------------------------
     CtrlRomCtrlModule_t *ctrlctrl = HW_Computer_t::GetCtrlCtrl();
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQrbUpdated, this, &CtrlRomModule_t::ProcessUpdateQrb);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalShiftClockUpdated, this, &CtrlRomModule_t::ProcessUpdateQcClk);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcUpdated, this, &CtrlRomModule_t::ProcessUpdateQc);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcbUpdated, this, &CtrlRomModule_t::ProcessUpdateQcb);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQrbUpdated, this, &CtrlRomModule_t::ProcessUpdateClear);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalShiftClockUpdated, this, &CtrlRomModule_t::ProcessUpdateShiftClk);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcUpdated, this, &CtrlRomModule_t::ProcessUpdateLatchOe);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcbUpdated, this, &CtrlRomModule_t::ProcessUpdateDriverOe);
     connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalEepromCmdAddrUpdated, this, &CtrlRomModule_t::ProcessUpdateCmdAddr);
     connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalEepromCsUpdated, this, &CtrlRomModule_t::ProcessUpdateChipSelect);
 

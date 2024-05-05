@@ -54,11 +54,12 @@ public slots:
     void ProcessUpdateWriteEnable(TriState_t state) { sram->ProcessUpdateWE(state); }
     void ProcessUpdateOutputEnable(TriState_t state) { sram->ProcessUpdateOE(state); }
 
-    void ProcessUpdateQrb(TriState_t state) { shift->ProcessUpdateClr(state); }
-    void ProcessUpdateQcClk(TriState_t state) { shift->ProcessUpdateClk(state); eeprom->ProcessUpdateSck(state); }
-    void ProcessUpdateQc(TriState_t state) { latch->ProcessUpdateOE(state); }
-    void ProcessUpdateQcb(TriState_t state) { driver->ProcessUpdateOE2(state); }
+    void ProcessUpdateClear(TriState_t state) { shift->ProcessUpdateClr(state); }
+    void ProcessUpdateShiftClk(TriState_t state) { shift->ProcessUpdateClk(state); eeprom->ProcessUpdateSck(state); }
+    void ProcessUpdateLatchOe(TriState_t state) { latch->ProcessUpdateOE(state); }
+    void ProcessUpdateDriverOe(TriState_t state) { driver->ProcessUpdateOE2(state); }
     void ProcessSanityCheck(TriState_t state) { if (state != LOW) sram->ProcessSanityCheck(); }
+    void ProcessCopyEeprom(void) { sram->CopyEeprom(); }
 
 
 

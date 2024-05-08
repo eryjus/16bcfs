@@ -90,19 +90,19 @@
 //    =======================================
 
 :opcode         nop                     :mc  000                // -- this is the only instruction which is hard wired
-:opcode         mov     r1,$(16)        :mc  001 %
-:opcode         mov     r2,$(16)        :mc  002 %
-//.opcode         mov     r3,$(16)        :mc  003 %
-//.opcode         mov     r4,$(16)        :mc  004 %
-//.opcode         mov     r5,$(16)        :mc  005 %
-//.opcode         mov     r6,$(16)        :mc  006 %
-//.opcode         mov     r7,$(16)        :mc  007 %
-//.opcode         mov     r8,$(16)        :mc  008 %
-//.opcode         mov     r9,$(16)        :mc  009 %
-//.opcode         mov     r10,$(16)       :mc  00a %
-//.opcode         mov     r11,$(16)       :mc  00b %
-//.opcode         mov     r12,$(16)       :mc  00c %
-//.opcode         mov     sp,$(16)        :mc  00d %
+:opcode         mov     r1,#        :mc  001 %
+:opcode         mov     r2,#        :mc  002 %
+//:opcode         mov     r3,#        :mc  003 %
+//.opcode         mov     r4,#        :mc  004 %
+//.opcode         mov     r5,#        :mc  005 %
+//.opcode         mov     r6,#        :mc  006 %
+//.opcode         mov     r7,#        :mc  007 %
+//.opcode         mov     r8,#        :mc  008 %
+//.opcode         mov     r9,#        :mc  009 %
+//.opcode         mov     r10,#       :mc  00a %
+//.opcode         mov     r11,#       :mc  00b %
+//.opcode         mov     r12,#       :mc  00c %
+//.opcode         mov     sp,#        :mc  00d %
 :opcode          clc                    :mc  00e
 :opcode          stc                    :mc  00f
 
@@ -396,7 +396,7 @@
 // ==================================================================
 //
 
-:opcode         jmp     $(16)           :mc 0f0 %
+:opcode         jmp     #           :mc 0f0 %
 :opcode         jmp     r1              :mc 0f1
 :opcode         jmp     r2              :mc 0f2
 //.opcode         jmp     r3              :mc 0f3
@@ -419,19 +419,19 @@
 
 
 //.opcode                                 :mc  100
-:opcode         add     r1,$(16)        :mc  101 %
-:opcode         add     r2,$(16)        :mc  102 %
-//.opcode         add     r3,$(16)        :mc  103 %
-//.opcode         add     r4,$(16)        :mc  104 %
-//.opcode         add     r5,$(16)        :mc  105 %
-//.opcode         add     r6,$(16)        :mc  106 %
-//.opcode         add     r7,$(16)        :mc  107 %
-//.opcode         add     r8,$(16)        :mc  108 %
-//.opcode         add     r9,$(16)        :mc  109 %
-//.opcode         add     r10,$(16)       :mc  10a %
-//.opcode         add     r11,$(16)       :mc  10b %
-//.opcode         add     r12,$(16)       :mc  10c %
-//.opcode         add     sp,$(16)        :mc  10d %
+:opcode         add     r1,#        :mc  101 %
+:opcode         add     r2,#        :mc  102 %
+//.opcode         add     r3,#        :mc  103 %
+//.opcode         add     r4,#        :mc  104 %
+//.opcode         add     r5,#        :mc  105 %
+//.opcode         add     r6,#        :mc  106 %
+//.opcode         add     r7,#        :mc  107 %
+//.opcode         add     r8,#        :mc  108 %
+//.opcode         add     r9,#        :mc  109 %
+//.opcode         add     r10,#       :mc  10a %
+//.opcode         add     r11,#       :mc  10b %
+//.opcode         add     r12,#       :mc  10c %
+//.opcode         add     sp,#        :mc  10d %
 //.opcode                                 :mc  10e
 //.opcode                                 :mc  10f
 
@@ -638,7 +638,7 @@
 //
 
 
-//.opcode         add     sp,$(16)        :mc  1a0 %
+//.opcode         add     sp,#        :mc  1a0 %
 //.opcode         add     sp,r1           :mc  1a1
 //.opcode         add     sp,r2           :mc  1a2
 //.opcode         add     sp,r3           :mc  1a3
@@ -661,19 +661,19 @@
 
 
 //.opcode                                 :mc  1b0
-:opcode         adc     r1,$(16)        :mc  1b1 %
-:opcode         adc     r2,$(16)        :mc  1b2 %
-//.opcode         adc     r3,$(16)        :mc  1b3 %
-//.opcode         adc     r4,$(16)        :mc  1b4 %
-//.opcode         adc     r5,$(16)        :mc  1b5 %
-//.opcode         adc     r6,$(16)        :mc  1b6 %
-//.opcode         adc     r7,$(16)        :mc  1b7 %
-//.opcode         adc     r8,$(16)        :mc  1b8 %
-//.opcode         adc     r9,$(16)        :mc  1b9 %
-//.opcode         adc     r10,$(16)       :mc  1ba %
-//.opcode         adc     r11,$(16)       :mc  1bb %
-//.opcode         adc     r12,$(16)       :mc  1bc %
-//.opcode         adc     sp,$(16)        :mc  1bd %
+:opcode         adc     r1,#        :mc  1b1 %
+:opcode         adc     r2,#        :mc  1b2 %
+//.opcode         adc     r3,#        :mc  1b3 %
+//.opcode         adc     r4,#        :mc  1b4 %
+//.opcode         adc     r5,#        :mc  1b5 %
+//.opcode         adc     r6,#        :mc  1b6 %
+//.opcode         adc     r7,#        :mc  1b7 %
+//.opcode         adc     r8,#        :mc  1b8 %
+//.opcode         adc     r9,#        :mc  1b9 %
+//.opcode         adc     r10,#       :mc  1ba %
+//.opcode         adc     r11,#       :mc  1bb %
+//.opcode         adc     r12,#       :mc  1bc %
+//.opcode         adc     sp,#        :mc  1bd %
 //.opcode                                 :mc  1be
 //.opcode                                 :mc  1bf
 
@@ -880,7 +880,7 @@
 //
 
 
-//.opcode         adc     sp,$(16)        :mc  250 %
+//.opcode         adc     sp,#        :mc  250 %
 //.opcode         adc     sp,r1           :mc  251
 //.opcode         adc     sp,r2           :mc  252
 //.opcode         adc     sp,r3           :mc  253

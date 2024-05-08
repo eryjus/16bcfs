@@ -19,14 +19,6 @@
 
 
 //
-// -- This table (indexed by the machine code) is used to keep track of the human readable instruction.
-//    This table is used in outputting the program listing.
-//    -------------------------------------------------------------------------------------------------
-char *opTable16[MAX_OPCODES] = { 0 };
-
-
-
-//
 // -- Some static members
 //    -------------------
 Binary_t *Binary_t::singleton = nullptr;
@@ -86,12 +78,12 @@ void Binary_t::SetAddressAt(uint64_t where, uint64_t address)
     // -- TODO: get an address width and check the number of bytes to update
     // -- TODO: determine the endian-ness of the architecture and handle it here
 
-    // -- for now, assume 16-bit addresses and little endian for all
+    // -- for now, assume 16-bit addresses and big endian for all
     uint8_t lo = address & 0xff;
     uint8_t hi = (address >> 8) & 0xff;
 
-    bin[where] = lo;
-    bin[where + 1] = hi;
+    bin[where + 1] = lo;
+    bin[where] = hi;
 }
 
 
@@ -147,46 +139,10 @@ void Binary_t::EmitInstruction(const char *stream, uint64_t optionalArg)
         BinaryInit();
     }
 
+    optionalArg /= (Binary_t::GetOrganization() / 8);
+
     for (int i = 0; i < strlen(stream); i ++) {
         if (stream[i] == ' ') continue;
-
-        if (stream[i] == '$' || stream[i + 1] == '(') {
-            // -- handle the optional argument here
-            i += 2;
-
-            if (stream[i] == '8' && stream[i + 1] == ')') {
-                if (GetOrganization() == 16) {
-                    EmitByte(0);
-                    EmitByte((uint8_t)(optionalArg & 0xff));
-                } else {
-                    EmitByte((uint8_t)(optionalArg & 0xff));
-                }
-
-                i += 2;
-                continue;
-            }
-
-            if (stream[i] == '1' && stream[i + 1] == '6' && stream[i + 2] == ')') {
-                if (GetOrganization() == 16) {
-                    EmitByte((uint8_t)((optionalArg >> 8) & 0xff));
-                    EmitByte((uint8_t)(optionalArg & 0xff));
-                } else if (GetOrganization() == 8) {
-                    if (GetEndian() == LITTLE) {
-                        EmitByte((uint8_t)(optionalArg & 0xff));
-                        EmitByte((uint8_t)((optionalArg >> 8) & 0xff));
-                    } else {
-                        EmitByte((uint8_t)((optionalArg >> 8) & 0xff));
-                        EmitByte((uint8_t)(optionalArg & 0xff));
-                    }
-                }
-
-                i += 3;
-                continue;
-            }
-
-            Messaging::Error("Malformed instruction byte stream constant", 0, 0, 0, 0);
-            return;
-        }
 
         if (stream[i] == '%') {
             if (GetOrganization() == 8) {
@@ -206,7 +162,7 @@ void Binary_t::EmitInstruction(const char *stream, uint64_t optionalArg)
 
         for (j = 0; j < (GetOrganization() / 4); j ++) {
             if (!((stream[i + j] >= 'a' && stream[i + j] <= 'f') || (stream[i + j] >= '0' && stream[i + j] <= '9'))) {
-                Messaging::Error("Incorrect hex characcter in byte stream output", 0, 0, 0, 0);
+                Messaging::Error("Incorrect hex character in byte stream output digit %d", 0, 0, 0, 0, j);
             }
 
             if (stream[i + j] >= 'a' && stream[i + j] <= 'f') {
@@ -307,17 +263,9 @@ void Binary_t::DumpBinary(uint64_t from, uint64_t to)
 //
 // -- Given a 16-bit machine instruction, go find its human readable form
 //    -------------------------------------------------------------------
-const char *Binary_t::GetOpCode16(uint8_t byte1, uint8_t byte2)
+const std::string Binary_t::GetOpCode16(uint8_t byte1, uint8_t byte2)
 {
-    char *rv;
-
-    if (GetOrganization() == 8) {
-        return "";
-    } else if (GetOrganization() == 16) {
-        rv = opTable16[(byte1 << 8) | byte2];
-        return (rv?rv:"");
-    }
-    return "";
+    return OpCodes::Lookup((byte1 << 8) | byte2).c_str();
 }
 
 
@@ -335,17 +283,20 @@ void Binary_t::OutputListing(void)
         if (GetOrganization() == 8) {
 
         } else if (GetOrganization() == 16) {
-            PrintLocationLabels(Parser_t::GetListingFile(), i / 2);
-            fprintf(Parser_t::GetListingFile(), "%04.4x: %02.2x%02.2x (%-19.19s)", i, bin[i], bin[i + 1],
+            Labels::PrintLocationLabels(Parser_t::GetListingFile(), i);
+
+            fprintf(Parser_t::GetListingFile(), "%04.4x: %02.2x%02.2x (%-19.19s)",
+                        i / (Binary_t::GetOrganization() / 8),
+                        bin[i], bin[i + 1],
                         Binary16Bit(bin[i], bin[i + 1]));
 
             if (disasmSuppress) {
                 fprintf(Parser_t::GetListingFile(), "\n");
                 disasmSuppress = 0;
             } else {
-                const char *disasm = GetOpCode16(bin[i], bin[i + 1]);
-                fprintf(Parser_t::GetListingFile(), ":   %s\n", disasm);
-                disasmSuppress = (strchr(disasm, '$') != 0);
+                std::string disasm = GetOpCode16(bin[i], bin[i + 1]);
+                fprintf(Parser_t::GetListingFile(), ":   %s\n", disasm.c_str());
+                disasmSuppress = (strchr(disasm.c_str(), '#') != 0);
             }
         }
     }

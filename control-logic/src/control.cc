@@ -832,7 +832,7 @@ uint128_t GenerateControlSignals(int loc)
     case OPCODE_NOP:
         return nop;
 
-    case OPCODE_MOV_R1___16_:
+    case OPCODE_MOV_R1_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value
@@ -841,7 +841,7 @@ uint128_t GenerateControlSignals(int loc)
 
         return out | FETCH_ASSERT_MAIN | R1_LOAD;
 
-    case OPCODE_MOV_R2___16_:
+    case OPCODE_MOV_R2_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value
@@ -884,7 +884,7 @@ uint128_t GenerateControlSignals(int loc)
 
         return out | MAIN_BUS_ASSERT_R2 | R1_LOAD;
 
-    case OPCODE_ADD_R1___16_:
+    case OPCODE_ADD_R1_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value
@@ -894,7 +894,7 @@ uint128_t GenerateControlSignals(int loc)
         return out | CARRY_SELECT_0 | ALU_BUS_A_ASSERT_R1 | ALU_BUS_B_ASSERT_FETCH | MAIN_BUS_ASSERT_ALU_RESULT |
                 R1_LOAD | PGM_Z_LATCH | PGM_C_LATCH | PGM_N_LATCH | PGM_V_LATCH | PGM_L_LATCH;
 
-    case OPCODE_ADD_R2___16_:
+    case OPCODE_ADD_R2_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value
@@ -940,7 +940,7 @@ uint128_t GenerateControlSignals(int loc)
         return out | CARRY_SELECT_0 | ALU_BUS_A_ASSERT_R2 | ALU_BUS_B_ASSERT_R2 | MAIN_BUS_ASSERT_ALU_RESULT |
                 R2_LOAD | PGM_Z_LATCH | PGM_C_LATCH | PGM_N_LATCH | PGM_V_LATCH | PGM_L_LATCH;
 
-    case OPCODE_ADC_R1___16_:
+    case OPCODE_ADC_R1_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value
@@ -950,7 +950,7 @@ uint128_t GenerateControlSignals(int loc)
         return out | CARRY_SELECT_LAST | ALU_BUS_A_ASSERT_R1 | ALU_BUS_B_ASSERT_FETCH | MAIN_BUS_ASSERT_ALU_RESULT |
                 R1_LOAD | PGM_Z_LATCH | PGM_C_LATCH | PGM_N_LATCH | PGM_V_LATCH | PGM_L_LATCH;
 
-    case OPCODE_ADC_R2___16_:
+    case OPCODE_ADC_R2_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value
@@ -1014,7 +1014,7 @@ uint128_t GenerateControlSignals(int loc)
         return out | CARRY_SELECT_1 | ALU_BUS_A_ASSERT_R2 | ALU_BUS_B_ASSERT_NONE | MAIN_BUS_ASSERT_ALU_RESULT |
                 R2_LOAD | PGM_Z_LATCH | PGM_C_LATCH | PGM_N_LATCH | PGM_V_LATCH | PGM_L_LATCH;
 
-    case OPCODE_JMP___16_:
+    case OPCODE_JMP_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
         //    word in the instruction stream since it is a constant value

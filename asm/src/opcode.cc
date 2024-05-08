@@ -13,44 +13,180 @@
 
 #include "asm.hh"
 
+#include <algorithm>
+
 
 
 //
 // -- local members
 //    -------------
-OpCodes::OpCode_t *OpCodes::opcodeList[MAX_OPCODES] = { nullptr };
-std::string OpCodes::enumString = "";
+std::map<std::string, OpCode_t *> OpCodes::opcodes;
+std::map<int, std::string> OpCodes::lookup;
 OpCodes *OpCodes::singleton = nullptr;
+Operand_t *Operand_t::none = new Operand_t;
 
 
 
 //
-// -- Add a new opcode to the enum string
-//    -----------------------------------
-void OpCodes::AddEnum(const std::string &def, const std::string &bytes)
+// -- Construct an opcode with no operands
+//    ------------------------------------
+OpCode_t::OpCode_t(const std::string &m, const std::string &s, bool addEnum)
+        : mnenomic(m), op1(Operand_t::None()), op2(Operand_t::None()), op3(Operand_t::None()), byteStream(s)
 {
-    std::string opcode = "";
+    opcodeDef = m;
+    enumStr = "OPCODE_";
 
-    for (int i = 0; i < def.length(); i ++) {
-        char ch = toupper(def[i]);
-
-        if (ch < '0' || (ch > '9' && ch < 'A') || ch > 'Z') ch = '_';
-
-        opcode += ch;
+    for (int i = 0; i < opcodeDef.length(); i ++) {
+        if (opcodeDef[i] >= 'a' && opcodeDef[i] <= 'z') enumStr += std::toupper(opcodeDef[i]);
+        else if ((opcodeDef[i] >= '0' && opcodeDef[i] <= '9') || opcodeDef[i] == '_') enumStr += opcodeDef[i];
+        else if (enumStr[enumStr.length() - 1] != '_') enumStr += '_';
     }
 
-    enumString = enumString + "    OPCODE_" + opcode + " = 0x";
+    enumStr += " = 0x";
+    int num = 0;
 
-    for (int i = 0; i < bytes.length(); i ++) {
-        char ch = bytes[i];
+    for (int i = 0; i < byteStream.length(); i ++) {
+        char ch = byteStream[i];
 
         if (ch == ' ' || ch == '\t') break;
 
-        enumString += ch;
+        enumStr += ch;
+
+        if (ch >= '0' && ch <= '9') num = (num * 16) + (ch - '0');
+        else if (ch >= 'a' && ch <= 'f') num = (num * 16) + (ch - 'a' + 10);
     }
 
-    enumString += ",\n";
-};
+    OpCodes::AddLookup(num, opcodeDef);
+
+    if (addEnum) enumStr += ",\n";
+    else enumStr = "";
+}
+
+
+//
+// -- Construct an opcode with 1 operand
+//    ----------------------------------
+OpCode_t::OpCode_t(const std::string &m, const std::string &s, const Operand_t &o1, bool addEnum)
+        : mnenomic(m), op1(o1), op2(Operand_t::None()), op3(Operand_t::None()), byteStream(s)
+{
+    opcodeDef = m + ' ';
+
+    if (op1.type == Operand_t::OPND_REG) opcodeDef += o1.name;
+    else opcodeDef += '#';
+
+    enumStr = "OPCODE_";
+
+    for (int i = 0; i < opcodeDef.length(); i ++) {
+        if (opcodeDef[i] >= 'a' && opcodeDef[i] <= 'z') enumStr += std::toupper(opcodeDef[i]);
+        else if ((opcodeDef[i] >= '0' && opcodeDef[i] <= '9') || opcodeDef[i] == '_') enumStr += opcodeDef[i];
+        else if (opcodeDef[i] == '#') enumStr += "IMM";
+        else if (enumStr[enumStr.length() - 1] != '_') enumStr += '_';
+    }
+
+    enumStr += " = 0x";
+    int num = 0;
+
+    for (int i = 0; i < byteStream.length(); i ++) {
+        char ch = byteStream[i];
+
+        if (ch == ' ' || ch == '\t') break;
+
+        enumStr += ch;
+
+        if (ch >= '0' && ch <= '9') num = (num * 16) + (ch - '0');
+        else if (ch >= 'a' && ch <= 'f') num = (num * 16) + (ch - 'a' + 10);
+    }
+
+    OpCodes::AddLookup(num, opcodeDef);
+
+    if (addEnum) enumStr += ",\n";
+    else enumStr = "";
+}
+
+
+//
+// -- Construct an opcode with 2 operands
+//    -----------------------------------
+OpCode_t::OpCode_t(const std::string &m, const std::string &s, const Operand_t &o1, const Operand_t &o2,
+        bool addEnum)
+        : mnenomic(m), op1(o1), op2(o2), op3(Operand_t::None()), byteStream(s)
+{
+    opcodeDef = m + ' ' + op1.name + ',';
+
+    if (op2.type == Operand_t::OPND_REG) opcodeDef += op2.name;
+    else opcodeDef += '#';
+
+    enumStr = "OPCODE_";
+
+    for (int i = 0; i < opcodeDef.length(); i ++) {
+        if (opcodeDef[i] >= 'a' && opcodeDef[i] <= 'z') enumStr += std::toupper(opcodeDef[i]);
+        else if ((opcodeDef[i] >= '0' && opcodeDef[i] <= '9') || opcodeDef[i] == '_') enumStr += opcodeDef[i];
+        else if (opcodeDef[i] == '#') enumStr += "IMM";
+        else if (enumStr[enumStr.length() - 1] != '_') enumStr += '_';
+    }
+
+    enumStr += " = 0x";
+    int num = 0;
+
+    for (int i = 0; i < byteStream.length(); i ++) {
+        char ch = byteStream[i];
+
+        if (ch == ' ' || ch == '\t') break;
+
+        enumStr += ch;
+
+        if (ch >= '0' && ch <= '9') num = (num * 16) + (ch - '0');
+        else if (ch >= 'a' && ch <= 'f') num = (num * 16) + (ch - 'a' + 10);
+    }
+
+    OpCodes::AddLookup(num, opcodeDef);
+
+    if (addEnum) enumStr += ",\n";
+    else enumStr = "";
+}
+
+//
+// -- Construct an opcode with 3 operands
+//    -----------------------------------
+
+OpCode_t::OpCode_t(const std::string &m, const std::string &s, const Operand_t &o1, const Operand_t &o2,
+        const Operand_t &o3, bool addEnum)
+        : mnenomic(m), op1(o1), op2(o2), op3(o3), byteStream(s)
+{
+    opcodeDef = m + ' ' + op1.name + ',' + op2.name + ',';
+
+    if (op3.type == Operand_t::OPND_REG) opcodeDef += op3.name;
+    else opcodeDef += '#';
+
+    enumStr = "OPCODE_";
+
+    for (int i = 0; i < opcodeDef.length(); i ++) {
+        if (opcodeDef[i] >= 'a' && opcodeDef[i] <= 'z') enumStr += std::toupper(opcodeDef[i]);
+        else if ((opcodeDef[i] >= '0' && opcodeDef[i] <= '9') || opcodeDef[i] == '_') enumStr += opcodeDef[i];
+        else if (opcodeDef[i] == '#') enumStr += "IMM";
+        else if (enumStr[enumStr.length() - 1] != '_') enumStr += '_';
+    }
+
+    enumStr += " = 0x";
+    int num = 0;
+
+    for (int i = 0; i < byteStream.length(); i ++) {
+        char ch = byteStream[i];
+
+        if (ch == ' ' || ch == '\t') break;
+
+        enumStr += ch;
+
+        if (ch >= '0' && ch <= '9') num = (num * 16) + (ch - '0');
+        else if (ch >= 'a' && ch <= 'f') num = (num * 16) + (ch - 'a' + 10);
+    }
+
+    OpCodes::AddLookup(num, opcodeDef);
+
+    if (addEnum) enumStr += ",\n";
+    else enumStr = "";
+}
+
 
 
 //
@@ -73,7 +209,11 @@ void OpCodes::OutputEnum(void)
     }
 
     fprintf(fp, "%s", preamble.c_str());
-    fprintf(fp, "%s", enumString.c_str());
+
+    for (auto it = opcodes.begin(); it != opcodes.end(); it ++) {
+        fprintf(fp, "%s", it->second->enumStr.c_str());
+    }
+
     fprintf(fp, "};\n\n");
     fclose(fp);
 }
@@ -96,48 +236,18 @@ int OpCodes::hex2int(char h)
 
 
 //
-// -- add an opcode to the list.  opcodes can be duplicated, but later definitions will be unreachable.
-//    -------------------------------------------------------------------------------------------------
-void OpCodes::Add(const std::string &def, const std::string &bytes)
-{
-    for (int i = 0; i < MAX_OPCODES; i ++) {
-        if (opcodeList[i] == nullptr) {
-            opcodeList[i] = new OpCode_t(def, bytes);
-
-            int idx = 0;
-            int j;
-
-            for (j = 0; j < bytes.length(); j ++) {
-                if (bytes[j] == ' ') break;
-                idx = (idx << 4) + hex2int(bytes[j]);
-            }
-
-            if (j != Binary_t::GetOrganization() / 4) {
-                Messaging::Error("Machine Code does not match organization size", Parser_t::GetSourceFile(), yylineno, 0, 0);
-            }
-
-            if (opTable16[idx] == 0) opTable16[idx] = strdup(def.c_str());
-
-            return;
-        }
-    }
-
-    Messaging::Fatal("Too many opcode definitions", Parser_t::GetSourceFile(), yylineno, 0, 0);
-}
-
-
-//
 // -- Dump all known opcodes
 //    ----------------------
 void OpCodes::Dump(void)
 {
-    for (int i = 0; i < MAX_OPCODES; i ++) {
-        if (opcodeList[i] == nullptr) continue;
+    int i = 0;
 
-        Messaging::Msg("%04.4x: Opcode definition `%s` outputs bytes `%s`",
-                i,
-                opcodeList[i]->opcodeDef.c_str(),
-                opcodeList[i]->byteStream.c_str());
+    for (auto it = opcodes.begin(); it != opcodes.end(); it ++) {
+        Messaging::Msg("%04.4x: Key: `%s`: Opcode definition `%s` outputs bytes `%s`",
+                ++ i,
+                it->first.c_str(),
+                it->second->opcodeDef.c_str(),
+                it->second->byteStream.c_str());
     }
 }
 
@@ -212,73 +322,59 @@ int OpCodes::ParseNumber(const std::string &s, uint64_t *val, int base)
 //
 // -- Look up an opcode in the table and perform any substitution required
 //    --------------------------------------------------------------------
-OpCodes::OpCode_t *OpCodes::FindInstruction(const std::string &instr, uint64_t *val)
+OpCode_t *OpCodes::FindInstruction(const std::string &instr, const std::string &line, uint64_t *val)
 {
-    for (int i = 0; i < MAX_OPCODES; i ++) {
-        if (!opcodeList[i]) break;
+    auto it = opcodes.find(instr);
 
-        const char *mLoc = strstr(opcodeList[i]->opcodeDef.c_str(), "$(");
+    if (it == opcodes.end()) return nullptr;
+    else {
+        // -- do we have an optional numeric argument (or label)?
+        int pos = it->second->opcodeDef.find('#');
+        *val = 0;
 
+        if (pos == std::string::npos) return it->second;
 
-        if (mLoc == 0) {
-            if (strcmp(instr.c_str(), opcodeList[i]->opcodeDef.c_str()) == 0) {
-                return opcodeList[i];
-            }
+        // -- we do; substring the instruction to find the value or the label name
+        std::string num = line.substr(pos);
+
+        if (num[0] == '.' || isalpha(num[0])) {
+            Label_t *lbl = Labels::Find(num);
+
+            *val = lbl->location / 2;
         } else {
-            // -- get the position of the possible number in the instruction
-            size_t len = mLoc - &opcodeList[i]->opcodeDef[0];
-            if (strncmp(instr.c_str(), opcodeList[i]->opcodeDef.c_str(), len) != 0) continue;
-
-            // -- a number will start with, well, a digit; anything else is not a number
-            if (instr[len] < '0' || instr[len] > '9') {
-                continue;
-            }
-
             // -- well, we know we have a number to convert; what kind is it?
             int numDigits;
 
-            if (instr[len] != '0') {
-                numDigits = ParseDecimal(std::string(instr.c_str() + len), val);
-            } else if (instr[len + 1] == 'b') {
-                numDigits = ParseBinary(std::string(instr.c_str() + len), val);
-            } else if (instr[len + 1] == 'x') {
-                numDigits = ParseHex(std::string(instr.c_str() + len), val);
+            if (num[0] != '0') {
+                numDigits = ParseDecimal(num, val);
+            } else if (num[1] == 'b') {
+                numDigits = ParseBinary(num, val);
+            } else if (instr[1] == 'x') {
+                numDigits = ParseHex(num, val);
             } else {
-                numDigits = ParseOctal(std::string(instr.c_str() + len), val);
-            }
-
-            if (strncmp(mLoc, "$(8)", 4) == 0) {
-                if (strcmp(instr.c_str() + len + numDigits, opcodeList[i]->opcodeDef.c_str() + len + 4) == 0) {
-                    if ((*val & 0xff) == *val) {
-                        return opcodeList[i];
-                    }
-                } else continue;
-            }
-
-            if (strncmp(mLoc, "$(16)", 5) == 0) {
-                if (strcmp(instr.c_str() + len + numDigits, opcodeList[i]->opcodeDef.c_str() + len + 5) == 0) {
-                    if ((*val & 0xffff) == *val) {
-                        return opcodeList[i];
-                    }
-                } else continue;
+                numDigits = ParseOctal(num, val);
             }
         }
+
+        return it->second;
     }
-
-    Messaging::Error("Unknown instruction: %s", Parser_t::GetSourceFile(), yylineno, 0, 0, instr.c_str());
-
-    return nullptr;
 }
 
 
 //
 // -- Parse an instruction from the source code and emit its binary result
 //    --------------------------------------------------------------------
-void OpCodes::ParseInstruction(const std::string &line)
+void OpCodes::ProcessInstruction(const std::string &model, const std::string &line)
 {
     uint64_t val = 0;
 
-    OpCode_t *instr = FindInstruction(line, &val);
+    OpCode_t *instr = FindInstruction(model, line, &val);
+
+    if (!instr) {
+        Messaging::Error("Unknown instruction", Parser_t::GetSourceFile(), yylineno, line.c_str(), 0);
+        return;
+    }
+
     Binary_t::EmitInstruction(instr->byteStream.c_str(), val);
 }
 

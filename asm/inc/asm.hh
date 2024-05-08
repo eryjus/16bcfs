@@ -31,9 +31,7 @@
 //    ------------------------------------------------------
 #define MAX_REGISTERS   1024
 #define MAX_SEARCH_PATH 50
-#define MAX_OPERANDS    2
-#define MAX_OPCODES     65536
-#define MAX_LABELS      4096
+#define MAX_OPERANDS    3
 
 
 //
@@ -59,7 +57,6 @@ typedef union yylval_t {
 
 
 extern yylval_t yylval;
-extern char *opTable16[];
 
 
 //
@@ -73,7 +70,6 @@ enum {
     TOK_ARCH_NUMBER = 260,
     TOK_ARCH_MEMORY = 261,
     TOK_ARCH_OPCODE = 262,
-    TOK_OPCODE_DB = 263,
     TOK_OPCODE_DEF = 264,
     TOK_BYTE_STREAM_DEF = 265,
     TOK_ORG = 266,
@@ -91,6 +87,7 @@ enum {
     TOK_ARCH_COND_PREFIX = 278,
     TOK_ARCH_NAME_PREFIX = 279,
     TOK_ARCH_NAME_SUFFIX = 280,
+    TOK_NAME = 281,
 };
 
 
@@ -102,16 +99,8 @@ extern int yylineno;
 
 
 
-//
-// -- Keep track of labels, forward and backward (see labels.c)
-//    ---------------------------------------------------------
-void PrintLocationLabels(FILE *fp, uint64_t location);
-void NoteLabelLocation(void);
-void DumpLabelLocations(void);
-
-
-#include "cond.hh"
 #include "errors.hh"
+#include "cond.hh"
 #include "memory.hh"
 #include "register.hh"
 #include "opcode.hh"

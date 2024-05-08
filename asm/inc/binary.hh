@@ -66,7 +66,7 @@ public:
     static void OutputResults(void);
     static void OutputListing(void);
     static char *Binary16Bit(uint8_t byte1, uint8_t byte2);
-    static const char *GetOpCode16(uint8_t byte1, uint8_t byte2);
+    static const std::string GetOpCode16(uint8_t byte1, uint8_t byte2);
     static void SetPosition(uint64_t p);
     static void EmitInstruction(const char *stream, uint64_t optionalArg);
     static void SplitOutput(void);

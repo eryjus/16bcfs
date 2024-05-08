@@ -33,3 +33,12 @@ jobs:
       run: diff 16bcfs-tests/asm-00002/expected.txt 16bcfs-tests/asm-00002/output.txt
     - name: Check Test `asm-00003`
       run: diff 16bcfs-tests/asm-00003/expected.txt 16bcfs-tests/asm-00003/output.txt
+    - name: Check Test `asm-00004`
+      run: diff 16bcfs-tests/asm-00004/expected.txt 16bcfs-tests/asm-00004/output.txt
+    - name: Check Test `asm-00005`
+      run: diff 16bcfs-tests/asm-00005/expected.txt 16bcfs-tests/asm-00005/output.txt
+    - name: Check Test `asm-00006`
+      run: diff 16bcfs-tests/asm-00006/expected.txt 16bcfs-tests/asm-00006/output.txt
+    - name: Check Test `asm-00007`
+      run: diff 16bcfs-tests/asm-00007/expected.txt 16bcfs-tests/asm-00007/output.txt
+

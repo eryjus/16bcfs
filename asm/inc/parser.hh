@@ -57,6 +57,7 @@ protected:
     static char *StandardizeOpcodeDef(void);
     static void ParseMemoryDef(void);
     static void ParseRegisterDef(void);
+    static void ParseInstruction(const std::string opcode);
 };
 
 

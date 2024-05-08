@@ -56,8 +56,10 @@
 %x              path
 
 %x              opcode
+%x              operand
 %x              db
 %x              data
+%x              arg
 
 %x              architecture
 
@@ -233,31 +235,57 @@ BIN             [01]
 <architecture>^\:cond-suffix        { return TOK_ARCH_COND_SUFFIX; }
 
 
-<architecture>\:mc                  { yy_push_state(db); return TOK_OPCODE_MC; }
+<architecture>\:mc                  {
+                                        yy_push_state(db);
+                                        return TOK_OPCODE_MC;
+                                    }
 
 <architecture>.                     {
-                                        yylval.errorMsg = "Unexpected character in %arch definition file";
+                                        yylval.errorMsg = "Unexpected character in %%arch definition file";
                                         return TOK_ERROR;
                                     }
 
 
-<opcode>{WS}                        { }
-<opcode>[^:\n]+                     {
+<opcode>{WS}                        {}
+<opcode>{COMMENT}                   {}
+<opcode>[^: \t\n]+                  {
                                         yylval.name = strdup(yytext);
-                                        yy_pop_state();
+                                        yy_push_state(operand);
                                         return TOK_OPCODE_DEF;
                                     }
+
 <opcode>{NL}                        {
                                         yylval.errorMsg = "Unexpected newline in :opcode definition";
                                         yy_pop_state();
                                         return TOK_ERROR;
                                     }
 <opcode>.                           {
-                                        yylval.errorMsg = "Unexpected character in :opcode definition";
                                         yy_pop_state();
                                         return TOK_ERROR;
                                     }
 
+<operand>\:mc                       {
+                                        yy_pop_state();
+                                        yy_pop_state();
+                                        yy_push_state(db);
+                                        return TOK_OPCODE_MC;
+                                    }
+<operand>{WS}                       {}
+<operand>{COMMENT}                  {}
+<operand>{NL}                       {
+                                        yy_pop_state();
+                                        return TOK_EOL;
+                                    }
+<operand>,                          {
+                                        return ',';
+                                    }
+<operand>{LETTER}{ALPHA}+           {
+                                        yylval.name = strdup(yytext);
+                                        return TOK_ARCH_NAME;
+                                    }
+<operand>#                          {
+                                        return TOK_ARCH_NUMBER;
+                                    }
 
 
 <db>{COMMENT}                       {}
@@ -293,6 +321,41 @@ BIN             [01]
                                     }
 
 
+<arg>{WS}                           {}
+<arg>{COMMENT}                      {}
+<arg>{NL}                           {
+                                        yy_pop_state();
+                                        return TOK_EOL;
+                                    }
+<arg>,                              {
+                                        return ',';
+                                    }
+<arg>{LETTER}{ALPHA}+               {
+                                        yylval.name = strdup(yytext);
+                                        return TOK_NAME;
+                                    }
+<arg>\.{DIGIT}+                     {
+                                        yylval.name = strdup(yytext);
+                                        return TOK_NAME;
+                                    }
+<arg>0b{BIN}+                       {
+                                        yylval.number = BinNumber(yytext + 2);
+                                        return TOK_NUMBER;
+                                    }
+<arg>0{OCT}*                        {
+                                        yylval.number = OctNumber(yytext);
+                                        return TOK_NUMBER;
+                                    }
+<arg>[1-9]{DIGIT}*                  {
+                                        yylval.number = DecNumber(yytext);
+                                        return TOK_NUMBER;
+                                    }
+<arg>0[x]{HEX}+                     {
+                                        yylval.number = HexNumber(yytext + 2);
+                                        return TOK_NUMBER;
+                                    }
+
+
 {NL}                                { return TOK_EOL; }
 {WS}                                {}
 {COMMENT}                           {}
@@ -305,8 +368,14 @@ BIN             [01]
                                         yylval.name = strdup(yytext);
                                         return TOK_LABEL;
                                     }
-{LETTER}[^/\n]*                     {
+^\.{DIGIT}+\:                       {
                                         yylval.name = strdup(yytext);
+                                        return TOK_LABEL;
+                                    }
+{LETTER}[^/ \t\n]*                  {
+                                        yylval.name = strdup(yytext);
+                                        yy_push_state(arg);
+                                        BEGIN(arg);
                                         return TOK_INSTRUCTION;
                                     }
 

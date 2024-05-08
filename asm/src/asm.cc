@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
 
     OpenFile(Parser_t::GetSourceFile());
     Parser_t::Get()->ParseFile();
+//    Labels::DumpLabelLocations();
     Binary_t::OutputListing();
     Binary_t::OutputResults();
 

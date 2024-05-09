@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "opcode.hh"
+
 
 
 //
@@ -97,6 +99,9 @@ public:
     void AddPrefix(const std::string name, uint64_t prefix);
     void AddSuffix(const std::string name, uint64_t suffix);
     void AddOpcodes(const std::string name, const std::string bytes);
+    void AddOpcodes(const std::string name, const std::string bytes, Operand_t op1);
+    void AddOpcodes(const std::string name, const std::string bytes, Operand_t op1, Operand_t op2);
+    void AddOpcodes(const std::string name, const std::string bytes, Operand_t op1, Operand_t op2, Operand_t op3);
 };
 
 

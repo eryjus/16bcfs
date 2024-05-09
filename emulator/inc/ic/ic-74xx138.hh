@@ -1,5 +1,5 @@
 //===================================================================================================================
-// ic-74xx193.hh -- This header file defines a 74xx138 3:8 Demultiplexer
+// ic-74xx138.hh -- This header file defines a 74xx138 3:8 Demultiplexer
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware

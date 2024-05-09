@@ -169,9 +169,18 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     controlLayout->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     controlLayout->setContentsMargins(0, 0, 0, 0);
     controlLayout->setSpacing(0);
-    controlLayout->setColumnMinimumWidth(1, 10);
-    controlLayout->setColumnMinimumWidth(3, 10);
-    controlLayout->setColumnMinimumWidth(7, 10);
+    controlLayout->setColumnMinimumWidth(0, 12);
+    controlLayout->setColumnMinimumWidth(1, 12);
+    controlLayout->setColumnMinimumWidth(2, 12);
+    controlLayout->setColumnMinimumWidth(3, 12);
+    controlLayout->setColumnMinimumWidth(4, 12);
+    controlLayout->setColumnMinimumWidth(5, 12);
+    controlLayout->setColumnMinimumWidth(6, 12);
+    controlLayout->setColumnMinimumWidth(7, 12);
+    controlLayout->setColumnMinimumWidth(8, 12);
+    controlLayout->setColumnMinimumWidth(9, 12);
+    controlLayout->setColumnMinimumWidth(10, 12);
+    controlLayout->setColumnMinimumWidth(11, 12);
 
     controlLayout->addWidget(clk, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("clk"), 1, 0, Qt::AlignHCenter);
@@ -281,17 +290,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // pin 5 is the Q output pin
     // pin 6 is the #Q output pin
 
-/*
-    //
-    // -- Gate 2 is unused
-    //    ----------------
-    // pin 8 is the #Q output pin (unused)
-    // pin 9 is the Q output pin (unused)
-    resetting->ProcessUpdatePre2(HIGH);                                                             // pin 10: #PRE2
-    resetting->ProcessUpdateClk2(LOW);                                                              // pin 11: CLK2
-    resetting->ProcessUpdateD2(LOW);                                                                // pin 12: D2
-    resetting->ProcessUpdateClr2(HIGH);                                                             // pin 13: #CLR2
-*/
 
     //
     // -- Gate 2 is #Done
@@ -521,9 +519,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Gate 1 is (#Qc * #Qc)
     //    ---------------------
-//    connect(nand1, &IC_74xx00_t::SignalY1Updated, oNand1, &IC_74xx03_t::ProcessUpdateA1);            // pin 1: #Qc Input
-//    connect(nand1, &IC_74xx00_t::SignalY1Updated, oNand1, &IC_74xx03_t::ProcessUpdateB2);            // pin 2: #Qc Input
-
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, oNand1, &IC_74xx03_t::ProcessUpdateA1);          // pin 1: #Done Input
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, oNand1, &IC_74xx03_t::ProcessUpdateB1);          // pin 2: #Done Input
     // pin 3 is the output (#Qc + #Qc)
@@ -607,7 +602,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
 
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux0, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-//    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux0, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
     connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux0, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 0
     connect(addr0, &IC_74xx193_t::SignalQaUpdated, mux0, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 0
     // pin 4: Output Y1
@@ -627,7 +621,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up MUX4 -- the next least significant nibble
     //    ----------------------------------------------------
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux4, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-//    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux4, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
     connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux4, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 4
     connect(addr4, &IC_74xx193_t::SignalQaUpdated, mux4, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 4
     // pin 4: Output Y1
@@ -648,7 +641,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up MUX8 -- the next most significant nibble
     //    ---------------------------------------------------
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux8, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-//    connect(nand1, &IC_74xx00_t::SignalY1Updated, mux8, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
     connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux8, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 8
     connect(addr8, &IC_74xx193_t::SignalQaUpdated, mux8, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 8
     // pin 4: Output Y1
@@ -669,7 +661,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up MUXc -- the most significant nibble
     //    ----------------------------------------------
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, muxC, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-//    connect(nand1, &IC_74xx00_t::SignalY1Updated, muxC, &IC_74xx157_t::ProcessUpdateAB);            // pin 1: Qc
     connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, muxC, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 12
     connect(addrC, &IC_74xx193_t::SignalQaUpdated, muxC, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 12
     // pin 4: Output Y1
@@ -848,7 +839,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     connect(resetting, &IC_74xx74_t::SignalQ1Updated, this, &CtrlRomCtrlModule_t::SignalQrUpdated);
     connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, this, &CtrlRomCtrlModule_t::SignalQrbUpdated);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalQcUpdated);
-//    connect(nand1, &IC_74xx00_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::SignalQcbUpdated);
     connect(resetting, &IC_74xx74_t::SignalQ2bUpdated, this, &CtrlRomCtrlModule_t::SignalQcbUpdated);
     connect(nand1, &IC_74xx00_t::SignalY2Updated, this, &CtrlRomCtrlModule_t::ProcessQcb);
     connect(nand1, &IC_74xx00_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::SignalQsUpdated);
@@ -914,6 +904,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
 //    -------------------------------
 inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 {
+#if defined(PEDANTIC_COPY) && (PEDANTIC_COPY == 1)
     // -- This is still an active low signal!!!
 
     nand1->ProcessUpdateA1(state);          // SR Set
@@ -923,9 +914,27 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
     resetting->ProcessUpdatePre2(state);    // set the D-Latch
 
     if (state == HIGH) {
-        qDebug() << "Reset Complete!";
         clock->StartTimer();
     }
+#else
+    if (state != HIGH) emit CopyEeprom();
+    else {
+        // -- reset both D-Latches
+        resetting->ProcessUpdateClr1(LOW);
+        resetting->ProcessUpdateClr2(LOW);
+        resetting->ProcessUpdateClr1(HIGH);
+        resetting->ProcessUpdateClr2(HIGH);
+
+        // -- reset the bits counter
+        bits->ProcessUpdateClr(HIGH);
+        bits->ProcessUpdateClr(LOW);
+
+
+        // -- keep an eye on this: it may change at inopportune times
+        emit nand1->SignalY1Updated(LOW);
+    }
+
+#endif
 }
 
 

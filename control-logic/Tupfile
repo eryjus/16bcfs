@@ -19,4 +19,4 @@
 
 : src/*.cc | src/opcodes.h |> clang -o %o %f |> eeprom
 : eeprom |> ./eeprom |> ctrl0.bin ctrl1.bin ctrl2.bin ctrl3.bin ctrl4.bin ctrl5.bin ctrl6.bin ctrl7.bin \
-                        ctrl8.bin ctrl9.bin ctrla.bin ctrlb.bin
+                        ctrl8.bin ctrl9.bin ctrla.bin ctrlb.bin ctrlc.bin ctrld.bin ctrle.bin ctrlf.bin

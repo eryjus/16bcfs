@@ -228,8 +228,6 @@ void IC_AS6C62256_t::ProcessInput(void)
                     (pins[A0] == HIGH ? (1<<0) : 0);
 
 
-        if (addr == 0x7fff) qDebug() << "SRAM is processing input:" << Qt::hex << addr << "=" << Qt::hex << byte;
-
         contents[addr] = byte;
 
         return;
@@ -357,5 +355,18 @@ void IC_AS6C62256_t::ProcessSanityCheck(void)
     }
 }
 
+
+
+//
+// -- If we are not performing a pedantic copy of the EEPROM to SRAM, knock it out quickly here
+//    -----------------------------------------------------------------------------------------
+void IC_AS6C62256_t::CopyEeprom(void)
+{
+#if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
+    if (reference == nullptr) return;
+
+    memcpy(this->contents, reference->contents, 32*1024);
+#endif
+}
 
 

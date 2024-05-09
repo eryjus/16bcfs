@@ -19,6 +19,7 @@
 /*  -----------  -------  -------  ------------------------------------------------------------------------------- */
 /*  2023-Feb-28  Initial  v0.0.1   Initial Version                                                                 */
 /*  2023-Jun-26  Initial  v0.0.7   Add support for implied conditional execution opcodes                           */
+/*  2024-May-04  #65      v0098    Clean up the architecture and assembler directives and make them discernable    */
 /*                                                                                                                 */
 /*=================================================================================================================*/
 
@@ -55,15 +56,17 @@
 %x              path
 
 %x              opcode
+%x              operand
 %x              db
 %x              data
+%x              arg
 
 %x              architecture
 
 
 WS              [ \t]
 
-COMMENT         \;.*
+COMMENT         \/\/.*
 NL              (\n|\r|\n\r|\r\n)
 
 LETTER          [a-z_]
@@ -220,48 +223,73 @@ BIN             [01]
 <architecture>\+                    { return '+'; }
 <architecture>\-                    { return '-'; }
 
-<architecture>^\.register           { return TOK_ARCH_REGISTER; }
-<architecture>^\.memory             { return TOK_ARCH_MEMORY; }
-<architecture>^\.opcode             { yy_push_state(opcode); return TOK_ARCH_OPCODE; }
-<architecture>^\.organization       { return TOK_ARCH_ORGANIZATION; }
-<architecture>^\.big-endian         { return TOK_ARCH_BIG_ENDIAN; }
-<architecture>^\.little-endian      { return TOK_ARCH_LITTLE_ENDIAN; }
-<architecture>^\.cond-bits          { return TOK_ARCH_COND_BITS; }
-<architecture>^\.cond-default       { return TOK_ARCH_COND_DEFAULT; }
-<architecture>^\.cond-prefix        { return TOK_ARCH_COND_PREFIX; }
-<architecture>^\.cond-suffix        { return TOK_ARCH_COND_SUFFIX; }
+<architecture>^\:register           { return TOK_ARCH_REGISTER; }
+<architecture>^\:memory             { return TOK_ARCH_MEMORY; }
+<architecture>^\:opcode             { yy_push_state(opcode); return TOK_ARCH_OPCODE; }
+<architecture>^\:organization       { return TOK_ARCH_ORGANIZATION; }
+<architecture>^\:big-endian         { return TOK_ARCH_BIG_ENDIAN; }
+<architecture>^\:little-endian      { return TOK_ARCH_LITTLE_ENDIAN; }
+<architecture>^\:cond-bits          { return TOK_ARCH_COND_BITS; }
+<architecture>^\:cond-default       { return TOK_ARCH_COND_DEFAULT; }
+<architecture>^\:cond-prefix        { return TOK_ARCH_COND_PREFIX; }
+<architecture>^\:cond-suffix        { return TOK_ARCH_COND_SUFFIX; }
 
 
-<architecture>\.db                  { yy_push_state(db); return TOK_OPCODE_DB; }
-<architecture>\.mc                  { yy_push_state(db); return TOK_OPCODE_MC; }
+<architecture>\:mc                  {
+                                        yy_push_state(db);
+                                        return TOK_OPCODE_MC;
+                                    }
 
 <architecture>.                     {
-                                        yylval.errorMsg = "Unexpected character in .architecture definition file";
+                                        yylval.errorMsg = "Unexpected character in %%arch definition file";
                                         return TOK_ERROR;
                                     }
 
 
-<opcode>{WS}                        { }
-<opcode>[^.\n]+                     {
+<opcode>{WS}                        {}
+<opcode>{COMMENT}                   {}
+<opcode>[^: \t\n]+                  {
                                         yylval.name = strdup(yytext);
-                                        yy_pop_state();
+                                        yy_push_state(operand);
                                         return TOK_OPCODE_DEF;
                                     }
+
 <opcode>{NL}                        {
-                                        yylval.errorMsg = "Unexpected newline in .opcode definition";
+                                        yylval.errorMsg = "Unexpected newline in :opcode definition";
                                         yy_pop_state();
                                         return TOK_ERROR;
                                     }
 <opcode>.                           {
-                                        yylval.errorMsg = "Unexpected character in .opcode definition";
                                         yy_pop_state();
                                         return TOK_ERROR;
                                     }
 
+<operand>\:mc                       {
+                                        yy_pop_state();
+                                        yy_pop_state();
+                                        yy_push_state(db);
+                                        return TOK_OPCODE_MC;
+                                    }
+<operand>{WS}                       {}
+<operand>{COMMENT}                  {}
+<operand>{NL}                       {
+                                        yy_pop_state();
+                                        return TOK_EOL;
+                                    }
+<operand>,                          {
+                                        return ',';
+                                    }
+<operand>{LETTER}{ALPHA}+           {
+                                        yylval.name = strdup(yytext);
+                                        return TOK_ARCH_NAME;
+                                    }
+<operand>#                          {
+                                        return TOK_ARCH_NUMBER;
+                                    }
 
 
 <db>{COMMENT}                       {}
-<db>[^;\n]*                         {
+<db>[^/\n]*                         {
                                         yylval.name = strdup(yytext);
                                         yy_pop_state();
                                         return TOK_BYTE_STREAM_DEF;
@@ -293,20 +321,61 @@ BIN             [01]
                                     }
 
 
+<arg>{WS}                           {}
+<arg>{COMMENT}                      {}
+<arg>{NL}                           {
+                                        yy_pop_state();
+                                        return TOK_EOL;
+                                    }
+<arg>,                              {
+                                        return ',';
+                                    }
+<arg>{LETTER}{ALPHA}+               {
+                                        yylval.name = strdup(yytext);
+                                        return TOK_NAME;
+                                    }
+<arg>\.{DIGIT}+                     {
+                                        yylval.name = strdup(yytext);
+                                        return TOK_NAME;
+                                    }
+<arg>0b{BIN}+                       {
+                                        yylval.number = BinNumber(yytext + 2);
+                                        return TOK_NUMBER;
+                                    }
+<arg>0{OCT}*                        {
+                                        yylval.number = OctNumber(yytext);
+                                        return TOK_NUMBER;
+                                    }
+<arg>[1-9]{DIGIT}*                  {
+                                        yylval.number = DecNumber(yytext);
+                                        return TOK_NUMBER;
+                                    }
+<arg>0[x]{HEX}+                     {
+                                        yylval.number = HexNumber(yytext + 2);
+                                        return TOK_NUMBER;
+                                    }
+
+
 {NL}                                { return TOK_EOL; }
 {WS}                                {}
-{COMMENT}.*                         {}
+{COMMENT}                           {}
 
-^\.include                          { BEGIN(incl); }
-^\.path                             { BEGIN(path); }
-^\.arch                             { BEGIN(arch); }
+^\%include                          { BEGIN(incl); }
+^\%path                             { BEGIN(path); }
+^\%arch                             { BEGIN(arch); }
 
 ^{LETTER}{ALPHA}+\:                 {
                                         yylval.name = strdup(yytext);
                                         return TOK_LABEL;
                                     }
-{LETTER}[^;\n]*                     {
+^\.{DIGIT}+\:                       {
                                         yylval.name = strdup(yytext);
+                                        return TOK_LABEL;
+                                    }
+{LETTER}[^/ \t\n]*                  {
+                                        yylval.name = strdup(yytext);
+                                        yy_push_state(arg);
+                                        BEGIN(arg);
                                         return TOK_INSTRUCTION;
                                     }
 

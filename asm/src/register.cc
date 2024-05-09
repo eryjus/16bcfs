@@ -49,7 +49,7 @@ bool Registers_t::Add(const std::string &r, int b)
     Get();
 
     if (Search(r) != nullptr) {
-        Messaging::Error("Register %s already defined as %d bits wide", Parser_t::GetSourceFile(), yylineno, 0, 0, r.c_str(), b);
+        Messaging::Error("Register `%s` already defined as %d bits wide", Parser_t::GetSourceFile(), yylineno, 0, 0, r.c_str(), b);
 
         return false;
     }
@@ -81,7 +81,7 @@ void Registers_t::Dump(void)
     {
         if (registers[i] == nullptr) continue;
 
-        Messaging::Msg("Register %s is %d bytes wide\n", registers[i]->regName.c_str(), registers[i]->bits);
+        Messaging::Msg("Register `%s` is %d bytes wide\n", registers[i]->regName.c_str(), registers[i]->bits);
     }
 }
 

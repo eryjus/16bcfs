@@ -30,6 +30,7 @@ GUI_Led_t::GUI_Led_t(LedWiring_t wire, Qt::GlobalColor on, QWidget *parent) : QL
     setBackgroundRole(QPalette::Window);
     setPalette(offColor);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    setMaximumHeight(14);
 }
 
 

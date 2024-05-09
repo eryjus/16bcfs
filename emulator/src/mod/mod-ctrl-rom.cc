@@ -69,21 +69,21 @@ void CtrlRomModule_t::BuildGui(void)
 
 
     layout->addWidget(led7, 0, 0, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("128"), 1, 0, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("7"), 1, 0, Qt::AlignHCenter);
     layout->addWidget(led6, 0, 1, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("64 "), 1, 1, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("6"), 1, 1, Qt::AlignHCenter);
     layout->addWidget(led5, 0, 2, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("32 "), 1, 2, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("5"), 1, 2, Qt::AlignHCenter);
     layout->addWidget(led4, 0, 5, Qt::AlignHCenter);
-    layout->addWidget(new QLabel("16 "), 1, 5, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("4"), 1, 5, Qt::AlignHCenter);
     layout->addWidget(led3, 0, 6, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 8 "), 1, 6, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("3"), 1, 6, Qt::AlignHCenter);
     layout->addWidget(led2, 0, 7, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 4 "), 1, 7, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("2"), 1, 7, Qt::AlignHCenter);
     layout->addWidget(led1, 0, 8, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 2 "), 1, 8, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("1"), 1, 8, Qt::AlignHCenter);
     layout->addWidget(led0, 0, 9, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(" 1 "), 1, 9, Qt::AlignHCenter);
+    layout->addWidget(new QLabel("0"), 1, 9, Qt::AlignHCenter);
 }
 
 
@@ -269,10 +269,10 @@ void CtrlRomModule_t::WireUp(void)
     // -- Finally, connect up the Control ROM Control Circuit to drive the reset staste signals
     //    -------------------------------------------------------------------------------------
     CtrlRomCtrlModule_t *ctrlctrl = HW_Computer_t::GetCtrlCtrl();
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQrbUpdated, this, &CtrlRomModule_t::ProcessUpdateQrb);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalShiftClockUpdated, this, &CtrlRomModule_t::ProcessUpdateQcClk);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcUpdated, this, &CtrlRomModule_t::ProcessUpdateQc);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcbUpdated, this, &CtrlRomModule_t::ProcessUpdateQcb);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQrbUpdated, this, &CtrlRomModule_t::ProcessUpdateClear);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalShiftClockUpdated, this, &CtrlRomModule_t::ProcessUpdateShiftClk);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcUpdated, this, &CtrlRomModule_t::ProcessUpdateLatchOe);
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcbUpdated, this, &CtrlRomModule_t::ProcessUpdateDriverOe);
     connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalEepromCmdAddrUpdated, this, &CtrlRomModule_t::ProcessUpdateCmdAddr);
     connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalEepromCsUpdated, this, &CtrlRomModule_t::ProcessUpdateChipSelect);
 
@@ -281,5 +281,10 @@ void CtrlRomModule_t::WireUp(void)
     connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalSramOeUpdated, this, &CtrlRomModule_t::ProcessUpdateOutputEnable);
 
     connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, this, &CtrlRomModule_t::ProcessUpdateClk);
+
+
+#if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
+    connect(ctrlctrl, &CtrlRomCtrlModule_t::CopyEeprom, sram, &IC_AS6C62256_t::CopyEeprom);
+#endif
 }
 

@@ -33,7 +33,24 @@ private:
     static ClockModule_t *clock;
 
     // -- The General Purpose Register Modules
-    static GpRegisterModule_t *pc;
+    static GpRegisterModule_t *r1;
+    static GpRegisterModule_t *r2;
+    static GpRegisterModule_t *r3;
+    static GpRegisterModule_t *r4;
+    static GpRegisterModule_t *r5;
+    static GpRegisterModule_t *r6;
+    static GpRegisterModule_t *r7;
+    static GpRegisterModule_t *r8;
+    static GpRegisterModule_t *r9;
+    static GpRegisterModule_t *r10;
+    static GpRegisterModule_t *r11;
+    static GpRegisterModule_t *r12;
+    static GpRegisterModule_t *pgmpc;
+    static GpRegisterModule_t *pgmra;
+    static GpRegisterModule_t *pgmsp;
+    static GpRegisterModule_t *intpc;
+    static GpRegisterModule_t *intra;
+    static GpRegisterModule_t *intsp;
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;
@@ -68,32 +85,21 @@ private:
     // -- the Control ROMS
     static CtrlRomCtrlModule_t *ctrlCtrl;
     static CtrlRomModule_t *ctrl0;
-
-
-    static IC_25lc256_t *ctrl1;
-    static IC_25lc256_t *ctrl2;
-    static IC_25lc256_t *ctrl3;
-    static IC_25lc256_t *ctrl4;
-    static IC_25lc256_t *ctrl5;
-    static IC_25lc256_t *ctrl6;
-    static IC_25lc256_t *ctrl7;
-    static IC_25lc256_t *ctrl8;
-    static IC_25lc256_t *ctrl9;
-    static IC_25lc256_t *ctrla;
-    static IC_25lc256_t *ctrlb;
-
-    // -- the Parallel Control RAMS
-    static IC_AS6C62256_t *ctrl1Ram;
-    static IC_AS6C62256_t *ctrl2Ram;
-    static IC_AS6C62256_t *ctrl3Ram;
-    static IC_AS6C62256_t *ctrl4Ram;
-    static IC_AS6C62256_t *ctrl5Ram;
-    static IC_AS6C62256_t *ctrl6Ram;
-    static IC_AS6C62256_t *ctrl7Ram;
-    static IC_AS6C62256_t *ctrl8Ram;
-    static IC_AS6C62256_t *ctrl9Ram;
-    static IC_AS6C62256_t *ctrlaRam;
-    static IC_AS6C62256_t *ctrlbRam;
+    static CtrlRomModule_t *ctrl1;
+    static CtrlRomModule_t *ctrl2;
+    static CtrlRomModule_t *ctrl3;
+    static CtrlRomModule_t *ctrl4;
+    static CtrlRomModule_t *ctrl5;
+    static CtrlRomModule_t *ctrl6;
+    static CtrlRomModule_t *ctrl7;
+    static CtrlRomModule_t *ctrl8;
+    static CtrlRomModule_t *ctrl9;
+    static CtrlRomModule_t *ctrla;
+    static CtrlRomModule_t *ctrlb;
+    static CtrlRomModule_t *ctrlc;
+    static CtrlRomModule_t *ctrld;
+    static CtrlRomModule_t *ctrle;
+    static CtrlRomModule_t *ctrlf;
 
 
     // -- Temporary elements for testing the ALU
@@ -103,10 +109,6 @@ private:
 
     static HW_MomentarySwitch_t *brk;
     static HW_MomentarySwitch_t *rst;
-    static HW_MomentarySwitch_t *clc;
-    static HW_MomentarySwitch_t *stc;
-    static HW_MomentarySwitch_t *clv;
-    static HW_MomentarySwitch_t *stv;
 
 
 private:
@@ -137,10 +139,24 @@ public:
 
     static CtrlRomCtrlModule_t *GetCtrlCtrl(void) { return ctrlCtrl; }
     static CtrlRomModule_t *GetCtrl0(void) { return ctrl0; }
+    static CtrlRomModule_t *GetCtrl1(void) { return ctrl1; }
+    static CtrlRomModule_t *GetCtrl2(void) { return ctrl2; }
+    static CtrlRomModule_t *GetCtrl3(void) { return ctrl3; }
+    static CtrlRomModule_t *GetCtrl4(void) { return ctrl4; }
+    static CtrlRomModule_t *GetCtrl5(void) { return ctrl5; }
+    static CtrlRomModule_t *GetCtrl6(void) { return ctrl6; }
+    static CtrlRomModule_t *GetCtrl7(void) { return ctrl7; }
+    static CtrlRomModule_t *GetCtrl8(void) { return ctrl8; }
+    static CtrlRomModule_t *GetCtrl9(void) { return ctrl9; }
+    static CtrlRomModule_t *GetCtrla(void) { return ctrla; }
+    static CtrlRomModule_t *GetCtrlb(void) { return ctrlb; }
+    static CtrlRomModule_t *GetCtrlc(void) { return ctrlc; }
+    static CtrlRomModule_t *GetCtrld(void) { return ctrld; }
+    static CtrlRomModule_t *GetCtrle(void) { return ctrle; }
+    static CtrlRomModule_t *GetCtrlf(void) { return ctrlf; }
 
 
     static QSettings *GetSettings(void) { return settings; }
-    static QWidget *BuildTestHarness(void);
 
 
 public:

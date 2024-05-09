@@ -249,27 +249,76 @@ exit:
 //    -----------------------------
 void Parser_t::ParseOpcodeDef(void)
 {
-    char *defn = StandardizeOpcodeDef();
+    std::string defn = StandardizeOpcodeDef();
     ADVANCE_TOKEN;
 
-    if(!MATCH(TOK_OPCODE_MC) && !MATCH(TOK_OPCODE_DB)) {
+    Operand_t op[MAX_OPERANDS] = { { Operand_t::None() } };
+    int o = 0;
+
+
+    //
+    // -- collect operands if exists
+    //    --------------------------
+    if (MATCH(TOK_ARCH_NUMBER) || MATCH(TOK_ARCH_NAME)) {
+        defn += ' ';
+    }
+
+    while (MATCH(TOK_ARCH_NUMBER) || MATCH(TOK_ARCH_NAME)) {
+        if (MATCH(TOK_ARCH_NUMBER)) {
+            op[o ++] = Operand_t(Binary_t::GetOrganization());
+            defn += '#';
+        } else /* MATCHes TOK_ARCH_NAME */ {
+            if (Registers_t::Find(yylval.name)) {
+                op[o ++] = Operand_t(std::string(yylval.name));
+                defn += yylval.name;
+            } else {
+                Messaging::Error("Register `%s` is not known", GetSourceFile(), yylineno, 0, 0, yylval.name);
+                RECOVERY;
+                return;
+            }
+        }
+
+        ADVANCE_TOKEN;
+
+        if (MATCH(',')) {
+            defn += ',';
+            ADVANCE_TOKEN;
+        }
+    }
+
+
+    if(!MATCH(TOK_OPCODE_MC)) {
         Messaging::Error("Opcode definition requires a byte stream to emit", sourceFile, yylineno, 0, 0);
         RECOVERY;
         return;
     }
 
-    if (MATCH(TOK_OPCODE_DB)) {
-        Messaging::Warning(".db in .opcode definition is deprecated.  .mc is assumed and .db will be removed in the future.", sourceFile, yylineno, 0, 0);
-    }
-
     ADVANCE_TOKEN;
 
     char *bytes = StandardizeByteStream();
+    std::string dftCond = "";
 
-    OpCodes::AddEnum(defn, bytes);
+    switch(o) {
+    case 0:
+        if (Conditionals::IsAlloc()) cond().AddOpcodes(defn, bytes);
+        else OpCodes::Get()->Add(defn, bytes, true);
+        break;
 
-    if (Conditionals::IsAlloc()) cond().AddOpcodes(defn, bytes);
-    else OpCodes::Add(defn, bytes);
+    case 1:
+        if (Conditionals::IsAlloc()) cond().AddOpcodes(defn, bytes, op[0]);
+        else OpCodes::Get()->Add(defn, bytes, op[0], true);
+        break;
+
+    case 2:
+        if (Conditionals::IsAlloc()) cond().AddOpcodes(defn, bytes, op[0], op[1]);
+        else OpCodes::Get()->Add(defn, bytes, op[0], op[1], true);
+        break;
+
+    case 3:
+        if (Conditionals::IsAlloc()) cond().AddOpcodes(defn, bytes, op[0], op[1], op[2]);
+        else OpCodes::Get()->Add(defn, bytes, op[0], op[1], op[2], true);
+        break;
+    }
 
     ADVANCE_TOKEN;
 }
@@ -282,13 +331,13 @@ void Parser_t::ParseOrganization(void)
 {
     if (!MATCH(TOK_ARCH_NUMBER))
     {
-        Messaging::Error("Expected a number in `.organization` directive", sourceFile, yylineno, 0, 0);
+        Messaging::Error("Expected a number in `:organization` directive", sourceFile, yylineno, 0, 0);
         RECOVERY;
         return;
     }
 
     if (yylval.number != 8 && yylval.number != 16) {
-        Messaging::Error("`.organization` directive must specify either 8 or 16 bits", sourceFile, yylineno, 0, 0);
+        Messaging::Error("`:organization` directive must specify either 8 or 16 bits", sourceFile, yylineno, 0, 0);
         RECOVERY;
         return;
     }
@@ -437,10 +486,64 @@ void Parser_t::ParseCondSuffix(void)
 
 
 //
+// -- Parse an instruction intended to be executed
+//    --------------------------------------------
+void Parser_t::ParseInstruction(const std::string opcode)
+{
+    ADVANCE_TOKEN;
+
+    std::string line = opcode;
+    std::string instr = opcode;
+    Label_t *lbl = nullptr;
+
+    if (MATCH(TOK_NAME) || MATCH(TOK_NUMBER)) {
+        line += ' ';
+        instr += ' ';
+    }
+
+    while (MATCH(TOK_NAME) || MATCH(TOK_NUMBER)) {
+        if (MATCH(TOK_NAME)) {
+            std::string name = yylval.name;
+            lbl = Labels::Find(name);
+
+            if (Registers_t::Find(name)) {
+                line += name;
+                instr += name;
+            } else if (lbl != nullptr) {
+                line += name;
+                instr += '#';
+
+                if (!lbl->known) Labels::NoteLabelReference();
+            } else {
+                line += name;
+                instr += '#';
+                Labels::NoteLabelReference();
+            }
+        } else if (MATCH(TOK_NUMBER)) {
+            line += std::to_string(yylval.number);
+            instr += '#';
+        }
+
+        ADVANCE_TOKEN;
+
+        if (MATCH(',')) {
+            line += ',';
+            instr += ',';
+            ADVANCE_TOKEN;
+        }
+    }
+
+    OpCodes::ProcessInstruction(OpCodes::NormalizeInstruction(instr), line);
+}
+
+
+
+//
 // -- Top level file parser
 //    ---------------------
 void Parser_t::ParseFile(void)
 {
+    bool debug = false;
     ADVANCE_TOKEN;
 
     while (CURRENT_TOKEN != 0) {
@@ -477,6 +580,7 @@ void Parser_t::ParseFile(void)
 
         case TOK_ORG:
             if (!Binary_t::IsInitialized()) Binary_t::BinaryInit();
+            debug = true;
 
             ADVANCE_TOKEN;
             GetNewLocation();
@@ -485,7 +589,7 @@ void Parser_t::ParseFile(void)
         case TOK_LABEL:
             if (!Binary_t::IsInitialized()) Binary_t::BinaryInit();
 
-            NoteLabelLocation();
+            Labels::NoteLabelLocation();
             ADVANCE_TOKEN;
             break;
 
@@ -499,14 +603,15 @@ void Parser_t::ParseFile(void)
         case TOK_INSTRUCTION:
             if (!Binary_t::IsInitialized()) Binary_t::BinaryInit();
 
-            OpCodes::ParseInstruction(OpCodes::NormalizeInstruction(yylval.name));
+            ParseInstruction(yylval.name);
+
             ADVANCE_TOKEN;
             break;
 
         case TOK_ARCH_ORGANIZATION:
             if (Binary_t::IsAlloc()) {
                 Messaging::Warning("Organization is initialized already; extra specification ignored\n"
-                        "This could have been an implicit initialization as `.organization` needs to be first\n",
+                        "This could have been an implicit initialization as `:organization` needs to be first\n",
                         GetSourceFile(), yylineno, "", 0);
             }
 

@@ -74,7 +74,7 @@ void Messaging::Output(const char *msg, const char *file, int lineNum, const cha
 //    -----------------------------------------------------------------------------------------
 void Messaging::Fatal(const char *msg, const char *file, int lineNum, const char *codeLine, int pos, ...)
 {
-    fprintf(stderr, "FATAL ");
+    fprintf(stderr, "FATAL");
 
     va_list _list;
     va_start(_list, pos);
@@ -92,7 +92,7 @@ void Messaging::Fatal(const char *msg, const char *file, int lineNum, const char
 //    ----------------------------------------------------------------------------------------------
 void Messaging::Error(const char *msg, const char *file, int lineNum, const char *codeLine, int pos, ...)
 {
-    fprintf(stderr, "ERROR ");
+    fprintf(stderr, "ERROR");
 
     va_list _list;
     va_start(_list, pos);
@@ -111,7 +111,7 @@ void Messaging::Error(const char *msg, const char *file, int lineNum, const char
 //    ---------------------------------------------------------------------------------------------------
 void Messaging::Warning(const char *msg, const char *file, int lineNum, const char *codeLine, int pos, ...)
 {
-    fprintf(stderr, "WARNING ");
+    fprintf(stderr, "WARNING");
 
     va_list _list;
     va_start(_list, pos);
@@ -131,7 +131,7 @@ void Messaging::Warning(const char *msg, const char *file, int lineNum, const ch
 //    -------------------------
 void Messaging::Info(const char *msg, const char *file, int lineNum, const char *codeLine, int pos, ...)
 {
-    fprintf(stderr, "INFO ");
+    fprintf(stderr, "INFO");
 
     va_list _list;
     va_start(_list, pos);
@@ -145,7 +145,7 @@ void Messaging::Info(const char *msg, const char *file, int lineNum, const char 
 //    -----------------------------------------------------------------------------------------
 void Messaging::Debug(const char *msg, const char *file, int lineNum, const char *codeLine, int pos, ...)
 {
-    fprintf(stderr, "DEBUG ");
+    fprintf(stderr, "DEBUG");
 
     va_list _list;
     va_start(_list, pos);

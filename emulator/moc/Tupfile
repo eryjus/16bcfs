@@ -7,3 +7,4 @@ export Qt6_DIR
 : foreach ../inc/ic/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
 : foreach ../inc/mod/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
 : foreach ../inc/sub/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc
+: foreach ../inc/planes/* |> $Qt6_DIR/../../$(QT_VERSION)/gcc_64/libexec/moc -I ../inc %f -o %o |> %B.moc.cc

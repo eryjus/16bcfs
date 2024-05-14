@@ -331,9 +331,9 @@ void IC_AS6C62256_t::UpdateAll(void)
 //
 // -- Do a sanity check by checking the contents of the RAM against the ROM when enabled
 //    ----------------------------------------------------------------------------------
-void IC_AS6C62256_t::ProcessSanityCheck(void)
+void IC_AS6C62256_t::ProcessSanityCheck(QString name)
 {
-    qDebug() << "Sanity Check:";
+    qDebug() << "Sanity Check for" << name << ':';
 
     if (reference == nullptr) return;
 

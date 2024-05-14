@@ -24,6 +24,7 @@ QSettings *HW_Computer_t::settings;
 // -- Static class members -- modules
 //    -------------------------------
 HW_Computer_t *HW_Computer_t::singleton = nullptr;
+ControlLogic_MidPlane_t *HW_Computer_t::ctrlLogic = nullptr;
 ClockModule_t *HW_Computer_t::clock = nullptr;
 AluFlagsModule_t *HW_Computer_t::pgmFlags = nullptr;
 AluFlagsModule_t *HW_Computer_t::intFlags = nullptr;
@@ -66,26 +67,6 @@ GpRegisterModule_t *HW_Computer_t::intra = nullptr;
 GpRegisterModule_t *HW_Computer_t::intsp = nullptr;
 
 
-// -- Control ROMs
-CtrlRomCtrlModule_t *HW_Computer_t::ctrlCtrl = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl0 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl1 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl2 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl3 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl4 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl5 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl6 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl7 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl8 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrl9 = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrla = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrlb = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrlc = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrld = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrle = nullptr;
-CtrlRomModule_t *HW_Computer_t::ctrlf = nullptr;
-
-
 
 // -- Widgets
 QWidget *HW_Computer_t::central = nullptr;
@@ -97,29 +78,6 @@ HW_BusDriver_t *HW_Computer_t::aluADriver = nullptr;
 HW_BusDriver_t *HW_Computer_t::aluBDriver = nullptr;
 HW_MomentarySwitch_t *HW_Computer_t::brk = nullptr;
 HW_MomentarySwitch_t *HW_Computer_t::rst = nullptr;
-
-
-enum {
-    TEST_MAIN_NONE,
-    TEST_MAIN_ALU,
-    TEST_MAIN_PC,
-    TEST_SWAP_ALU,
-    TEST_SWAP_PC,
-    TEST_ALUA_NONE,
-    TEST_ALUA_TEST,
-    TEST_ALUA_PC,
-    TEST_ALUB_NONE,
-    TEST_ALUB_TEST,
-    TEST_ALUB_PC,
-    TEST_ADDR1_NONE,
-    TEST_ADDR1_PC,
-    TEST_ADDR2_NONE,
-    TEST_ADDR2_PC,
-    TEST_PC_NONE,
-    TEST_PC_LOAD,
-    TEST_PC_INC,
-    TEST_PC_DEC,
-};
 
 
 
@@ -141,49 +99,6 @@ void HW_Computer_t::ProcessUpdateZLatch(int state) { pgmFlags->ProcessZLatch(sta
 void HW_Computer_t::ProcessUpdateCLatch(int state) { pgmFlags->ProcessCLatch(state==Qt::Unchecked?LOW:HIGH); }
 void HW_Computer_t::ProcessUpdateNVLLatch(int state) { pgmFlags->ProcessNVLLatch(state==Qt::Unchecked?LOW:HIGH); }
 
-
-//
-// -- Handle when a radio button is toggled
-//    -------------------------------------
-void HW_Computer_t::ProcessToggleButton(int id, bool checked)
-{
-    switch (id) {
-    case TEST_MAIN_NONE: break;
-    case TEST_ALUA_NONE: break;
-    case TEST_ALUA_PC: {
-        pgmpc->ProcessAssertAluA(checked?HIGH:LOW);
-        break;
-    }
-    case TEST_ALUB_NONE: break;
-    case TEST_ALUB_PC: {
-        pgmpc->ProcessAssertAluB(checked?HIGH:LOW);
-        break;
-    }
-    case TEST_ADDR1_NONE: break;
-    case TEST_ADDR1_PC: {
-        pgmpc->ProcessAssertAddr1(checked?HIGH:LOW);
-        break;
-    }
-    case TEST_ADDR2_NONE: break;
-    case TEST_ADDR2_PC: {
-        pgmpc->ProcessAssertAddr2(checked?HIGH:LOW);
-        break;
-    }
-    case TEST_PC_NONE: break;
-    case TEST_PC_LOAD: {
-        pgmpc->ProcessLoad(checked?HIGH:LOW);
-        break;
-    }
-    case TEST_PC_INC: {
-        pgmpc->ProcessInc(checked?HIGH:LOW);
-        break;
-    }
-    case TEST_PC_DEC: {
-        pgmpc->ProcessDec(checked?HIGH:LOW);
-        break;
-    }
-    }
-}
 
 
 //
@@ -208,25 +123,8 @@ void HW_Computer_t::InitGui(void)
     grid->addWidget(pgmFlags, 0, 11, 1, 1);
     grid->addWidget(intFlags, 0, 12, 1, 1);
 
-
-    grid->addWidget((ctrl0 = new CtrlRomModule_t("Ctrl0", "ctrl0.bin")), 2, 15, 1, 1);
-    grid->addWidget((ctrl1 = new CtrlRomModule_t("Ctrl1", "ctrl1.bin")), 3, 15, 1, 1);
-    grid->addWidget((ctrl2 = new CtrlRomModule_t("Ctrl2", "ctrl2.bin")), 4, 15, 1, 1);
-    grid->addWidget((ctrl3 = new CtrlRomModule_t("Ctrl3", "ctrl3.bin")), 5, 15, 1, 1);
-    grid->addWidget((ctrl4 = new CtrlRomModule_t("Ctrl4", "ctrl4.bin")), 6, 15, 1, 1);
-    grid->addWidget((ctrl5 = new CtrlRomModule_t("Ctrl5", "ctrl5.bin")), 7, 15, 1, 1);
-    grid->addWidget((ctrl6 = new CtrlRomModule_t("Ctrl6", "ctrl6.bin")), 8, 15, 1, 1);
-    grid->addWidget((ctrl7 = new CtrlRomModule_t("Ctrl7", "ctrl7.bin")), 9, 15, 1, 1);
-    grid->addWidget((ctrl8 = new CtrlRomModule_t("Ctrl8", "ctrl8.bin")), 2, 16, 1, 1);
-    grid->addWidget((ctrl9 = new CtrlRomModule_t("Ctrl9", "ctrl9.bin")), 3, 16, 1, 1);
-    grid->addWidget((ctrla = new CtrlRomModule_t("CtrlA", "ctrla.bin")), 4, 16, 1, 1);
-    grid->addWidget((ctrlb = new CtrlRomModule_t("CtrlB", "ctrlb.bin")), 5, 16, 1, 1);
-    grid->addWidget((ctrlc = new CtrlRomModule_t("CtrlC", "ctrlc.bin")), 6, 16, 1, 1);
-    grid->addWidget((ctrld = new CtrlRomModule_t("CtrlD", "ctrld.bin")), 7, 16, 1, 1);
-    grid->addWidget((ctrle = new CtrlRomModule_t("CtrlE", "ctrle.bin")), 8, 16, 1, 1);
-    grid->addWidget((ctrlf = new CtrlRomModule_t("CtrlF", "ctrlf.bin")), 9, 16, 1, 1);
-    grid->addWidget(ctrlCtrl, 0, 15, 2, 2);
-
+    // -- place the control logic mid-plane
+    grid->addWidget(ctrlLogic, 0, 15, 10, 2);
 
     grid->addWidget(clock, 12, 15, 2, 2);
 
@@ -275,7 +173,7 @@ void HW_Computer_t::InitGui(void)
     connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
     connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlCtrl, &CtrlRomCtrlModule_t::ProcessResetUpdate);
+    connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
 }
 
 
@@ -285,14 +183,14 @@ void HW_Computer_t::InitGui(void)
 void HW_Computer_t::Initialize(void)
 {
     //
-    // -- Place the oscillator
-    //    --------------------
+    // -- Place the oscillator first -- needed for buses
+    //    ----------------------------------------------
     clock = new ClockModule_t;
 
 
     //
-    // -- Create the various buses
-    //    ------------------------
+    // -- Create the various buses -- top priority to place
+    //    -------------------------------------------------
     rHld = new HW_Bus_1_t(clock);
     mainBus = new HW_Bus_16_t(clock);
     aluA = new HW_Bus_16_t(clock);
@@ -302,6 +200,12 @@ void HW_Computer_t::Initialize(void)
     instrBus = new HW_Bus_16_t(clock);
     ctrlBus = new HW_Bus_16_t(clock);
     AddrCopyBus = new HW_Bus_16_t(clock);
+
+
+    //
+    // -- Construct the Control Logic Mid-Plane
+    //    -------------------------------------
+    ctrlLogic = new ControlLogic_MidPlane_t;
 
 
     //
@@ -348,12 +252,6 @@ void HW_Computer_t::Initialize(void)
 
 
     //
-    // -- Create the Control ROM Control Module
-    //    -------------------------------------
-    ctrlCtrl = new CtrlRomCtrlModule_t;
-
-
-    //
     // -- Finally, build the GUI screen
     //    -----------------------------
     InitGui();
@@ -366,30 +264,8 @@ void HW_Computer_t::Initialize(void)
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
     HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
-    connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrl0, &CtrlRomModule_t::ProcessSanityCheck);
+    connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
 
-
-    ctrl0->TriggerFirstUpdate();
-    ctrl1->TriggerFirstUpdate();
-    ctrl2->TriggerFirstUpdate();
-    ctrl3->TriggerFirstUpdate();
-    ctrl4->TriggerFirstUpdate();
-    ctrl5->TriggerFirstUpdate();
-    ctrl6->TriggerFirstUpdate();
-    ctrl7->TriggerFirstUpdate();
-    ctrl8->TriggerFirstUpdate();
-    ctrl9->TriggerFirstUpdate();
-    ctrla->TriggerFirstUpdate();
-    ctrlb->TriggerFirstUpdate();
-    ctrlc->TriggerFirstUpdate();
-    ctrld->TriggerFirstUpdate();
-    ctrle->TriggerFirstUpdate();
-    ctrlf->TriggerFirstUpdate();
-
-//    stv->TriggerFirstUpdates();
-//    clv->TriggerFirstUpdates();
-//    stc->TriggerFirstUpdates();
-//    clc->TriggerFirstUpdates();
     brk->TriggerFirstUpdates();
     rst->TriggerFirstUpdates();         // must be last to reset everything
 }
@@ -419,24 +295,6 @@ void HW_Computer_t::PerformReset(void)
     intFlags->TriggerFirstUpdate();
     alu->TriggerFirstUpdate();
     pgmpc->TriggerFirstUpdate();
-    ctrlCtrl->TriggerFirstUpdate();
-    ctrl0->TriggerFirstUpdate();
-    ctrl1->TriggerFirstUpdate();
-    ctrl2->TriggerFirstUpdate();
-    ctrl3->TriggerFirstUpdate();
-    ctrl4->TriggerFirstUpdate();
-    ctrl5->TriggerFirstUpdate();
-    ctrl6->TriggerFirstUpdate();
-    ctrl7->TriggerFirstUpdate();
-    ctrl8->TriggerFirstUpdate();
-    ctrl9->TriggerFirstUpdate();
-    ctrla->TriggerFirstUpdate();
-    ctrlb->TriggerFirstUpdate();
-    ctrlc->TriggerFirstUpdate();
-    ctrld->TriggerFirstUpdate();
-    ctrle->TriggerFirstUpdate();
-    ctrlf->TriggerFirstUpdate();
-
     rst->Release();
 }
 

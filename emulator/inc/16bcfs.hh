@@ -128,6 +128,8 @@ class CtrlRomCtrlModule_t;
 class CtrlRomModule_t;
 class GpRegisterModule_t;
 
+class CtrlRomModule_t;
+
 
 //
 // -- I cannot see a way around this, app needs to be a global variable
@@ -161,6 +163,19 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "ic/ic-74xx541.hh"
 #include "ic/ic-74xx574.hh"
 #include "ic/ic-as6c62256.hh"
+#include "ic/ic-25lc256.hh"
+
+#include "sub/sub-demux-3.hh"
+#include "sub/sub-demux-4.hh"
+#include "sub/sub-demux-7.hh"
+
+#include "mod/mod-alu-flags.hh"
+#include "mod/mod-clock.hh"
+#include "mod/mod-ctrl-ctrl.hh"
+#include "mod/mod-ctrl-rom.hh"
+#include "mod/mod-gp-register.hh"
+
+#include "planes/ctrl-mid-plane.hh"
 
 #include "hw/hw-alu.hh"
 #include "hw/hw-alu-adder.hh"
@@ -181,18 +196,6 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "gui/gui-led.hh"
 #include "gui/gui-settings-dialog.hh"
 
-#include "sub/sub-demux-3.hh"
-#include "sub/sub-demux-4.hh"
-#include "sub/sub-demux-7.hh"
-
-#include "mod/mod-alu-flags.hh"
-#include "mod/mod-clock.hh"
-#include "mod/mod-ctrl-ctrl.hh"
-#include "mod/mod-gp-register.hh"
-
-// -- needs to be last
-#include "ic/ic-25lc256.hh"
-#include "mod/mod-ctrl-rom.hh"
 
 
 

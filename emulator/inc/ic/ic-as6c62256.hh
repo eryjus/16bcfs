@@ -116,7 +116,7 @@ public slots:
     void ProcessUpdateDq7(TriState_t state)  { pins[DQ7] = state; UpdateAll(); }
 
 
-    void ProcessSanityCheck(void);
+    void ProcessSanityCheck(QString name);
     void CopyEeprom(void);
 
 

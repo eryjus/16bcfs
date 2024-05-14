@@ -29,6 +29,10 @@ private:
     // -- The central widget
     static QWidget *central;
 
+    // -- Insert the Control Logic Mid-Plane
+    static ControlLogic_MidPlane_t *ctrlLogic;
+
+
     // -- The computer modules
     static ClockModule_t *clock;
 
@@ -82,26 +86,6 @@ private:
     static AluFlagsModule_t *pgmFlags;
     static AluFlagsModule_t *intFlags;
 
-    // -- the Control ROMS
-    static CtrlRomCtrlModule_t *ctrlCtrl;
-    static CtrlRomModule_t *ctrl0;
-    static CtrlRomModule_t *ctrl1;
-    static CtrlRomModule_t *ctrl2;
-    static CtrlRomModule_t *ctrl3;
-    static CtrlRomModule_t *ctrl4;
-    static CtrlRomModule_t *ctrl5;
-    static CtrlRomModule_t *ctrl6;
-    static CtrlRomModule_t *ctrl7;
-    static CtrlRomModule_t *ctrl8;
-    static CtrlRomModule_t *ctrl9;
-    static CtrlRomModule_t *ctrla;
-    static CtrlRomModule_t *ctrlb;
-    static CtrlRomModule_t *ctrlc;
-    static CtrlRomModule_t *ctrld;
-    static CtrlRomModule_t *ctrle;
-    static CtrlRomModule_t *ctrlf;
-
-
     // -- Temporary elements for testing the ALU
     static HW_BusDriver_t *aluADriver;
     static HW_BusDriver_t *aluBDriver;
@@ -137,25 +121,6 @@ public:
     static AluFlagsModule_t *GetPgmFlags(void) { return pgmFlags; }
     static AluFlagsModule_t *GetIntFlags(void) { return intFlags; }
 
-    static CtrlRomCtrlModule_t *GetCtrlCtrl(void) { return ctrlCtrl; }
-    static CtrlRomModule_t *GetCtrl0(void) { return ctrl0; }
-    static CtrlRomModule_t *GetCtrl1(void) { return ctrl1; }
-    static CtrlRomModule_t *GetCtrl2(void) { return ctrl2; }
-    static CtrlRomModule_t *GetCtrl3(void) { return ctrl3; }
-    static CtrlRomModule_t *GetCtrl4(void) { return ctrl4; }
-    static CtrlRomModule_t *GetCtrl5(void) { return ctrl5; }
-    static CtrlRomModule_t *GetCtrl6(void) { return ctrl6; }
-    static CtrlRomModule_t *GetCtrl7(void) { return ctrl7; }
-    static CtrlRomModule_t *GetCtrl8(void) { return ctrl8; }
-    static CtrlRomModule_t *GetCtrl9(void) { return ctrl9; }
-    static CtrlRomModule_t *GetCtrla(void) { return ctrla; }
-    static CtrlRomModule_t *GetCtrlb(void) { return ctrlb; }
-    static CtrlRomModule_t *GetCtrlc(void) { return ctrlc; }
-    static CtrlRomModule_t *GetCtrld(void) { return ctrld; }
-    static CtrlRomModule_t *GetCtrle(void) { return ctrle; }
-    static CtrlRomModule_t *GetCtrlf(void) { return ctrlf; }
-
-
     static QSettings *GetSettings(void) { return settings; }
 
 
@@ -170,7 +135,6 @@ signals:
 
 
 private slots:
-    void ProcessToggleButton(int id, bool checked);
     void ProcessUpdateZLatch(int state);
     void ProcessUpdateCLatch(int state);
     void ProcessUpdateNVLLatch(int state);

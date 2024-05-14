@@ -25,7 +25,7 @@
 // -- This is the class which will emulate the SPI EEPROM
 //    ---------------------------------------------------
 class IC_25lc256_t : public QObject {
-    friend void IC_AS6C62256_t::ProcessSanityCheck(void);
+    friend void IC_AS6C62256_t::ProcessSanityCheck(QString name);
 
 #if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
     friend void IC_AS6C62256_t::CopyEeprom(void);

@@ -38,7 +38,7 @@ HW_Bus_16_t *HW_Computer_t::aluB = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr1 = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr2 = nullptr;
 HW_Bus_16_t *HW_Computer_t::instrBus = nullptr;
-HW_Bus_16_t *HW_Computer_t::ctrlBus = nullptr;
+//HW_Bus_16_t *HW_Computer_t::ctrlBus = nullptr;
 HW_Bus_16_t *HW_Computer_t::AddrCopyBus = nullptr;
 
 
@@ -82,6 +82,21 @@ HW_MomentarySwitch_t *HW_Computer_t::rst = nullptr;
 
 
 //
+// -- Construct a Computer -- this is the backplane
+//    ---------------------------------------------
+void HW_Computer_t::Initialize(void)
+{
+    settings = new QSettings("eryjus", "16bcfs-emulator");
+
+    AllocateComponents();
+    BuildGui();
+    WireUp();
+    TriggerFirstUpdates();
+}
+
+
+
+//
 // -- Get the singleton instance, initializing it as needed
 //    -----------------------------------------------------
 HW_Computer_t *HW_Computer_t::Get(void)
@@ -95,16 +110,19 @@ HW_Computer_t *HW_Computer_t::Get(void)
 }
 
 
-void HW_Computer_t::ProcessUpdateZLatch(int state) { pgmFlags->ProcessZLatch(state==Qt::Unchecked?LOW:HIGH); }
-void HW_Computer_t::ProcessUpdateCLatch(int state) { pgmFlags->ProcessCLatch(state==Qt::Unchecked?LOW:HIGH); }
-void HW_Computer_t::ProcessUpdateNVLLatch(int state) { pgmFlags->ProcessNVLLatch(state==Qt::Unchecked?LOW:HIGH); }
+//
+// -- Some trivial implementations
+//    ----------------------------
+inline void HW_Computer_t::ProcessUpdateZLatch(int state) { pgmFlags->ProcessZLatch(state==Qt::Unchecked?LOW:HIGH); }
+inline void HW_Computer_t::ProcessUpdateCLatch(int state) { pgmFlags->ProcessCLatch(state==Qt::Unchecked?LOW:HIGH); }
+inline void HW_Computer_t::ProcessUpdateNVLLatch(int state) { pgmFlags->ProcessNVLLatch(state==Qt::Unchecked?LOW:HIGH); }
 
 
 
 //
 // -- Initialize the main application window for all the widgets
 //    ----------------------------------------------------------
-void HW_Computer_t::InitGui(void)
+void HW_Computer_t::BuildGui(void)
 {
     QGridLayout *grid;
 
@@ -180,7 +198,7 @@ void HW_Computer_t::InitGui(void)
 //
 // -- Initialize the computer by placing the components and hooking up the wires (signals/slots)
 //    ------------------------------------------------------------------------------------------
-void HW_Computer_t::Initialize(void)
+void HW_Computer_t::AllocateComponents(void)
 {
     //
     // -- Place the oscillator first -- needed for buses
@@ -198,7 +216,7 @@ void HW_Computer_t::Initialize(void)
     addr1 = new HW_Bus_16_t(clock);
     addr2 = new HW_Bus_16_t(clock);
     instrBus = new HW_Bus_16_t(clock);
-    ctrlBus = new HW_Bus_16_t(clock);
+//    ctrlBus = new HW_Bus_16_t(clock);
     AddrCopyBus = new HW_Bus_16_t(clock);
 
 
@@ -249,16 +267,16 @@ void HW_Computer_t::Initialize(void)
     intpc = new GpRegisterModule_t("INT PC");
     intra = new GpRegisterModule_t("INT RA");
     intsp = new GpRegisterModule_t("INT SP");
+}
 
 
-    //
-    // -- Finally, build the GUI screen
-    //    -----------------------------
-    InitGui();
 
-
+//
+// -- Wire-Up all the signals
+//    -----------------------
+void HW_Computer_t::WireUp(void)
+{
     // -- connect up the clock
-    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
     connect(clock, &ClockModule_t::SignalClockState, pgmFlags, &AluFlagsModule_t::ProcessClk);
 
     connect(clock, &ClockModule_t::SignalClockState, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
@@ -266,6 +284,29 @@ void HW_Computer_t::Initialize(void)
     HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
     connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
 
+
+    //
+    // -- Clock for the register module
+    //    -----------------------------
+    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
+
+
+
+    //
+    // -- Wire up the relevant pieces of the Control Logic Mid-Plane
+    //    ----------------------------------------------------------
+    connect(clock, &ClockModule_t::SignalClockState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessCpuClock);
+
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
+}
+
+
+//
+// -- Trigger first updates to put everything in sync
+//    -----------------------------------------------
+void HW_Computer_t::TriggerFirstUpdates(void)
+{
     brk->TriggerFirstUpdates();
     rst->TriggerFirstUpdates();         // must be last to reset everything
 }
@@ -294,7 +335,27 @@ void HW_Computer_t::PerformReset(void)
     pgmFlags->TriggerFirstUpdate();
     intFlags->TriggerFirstUpdate();
     alu->TriggerFirstUpdate();
+
+    r1->TriggerFirstUpdate();
+    r2->TriggerFirstUpdate();
+    r3->TriggerFirstUpdate();
+    r4->TriggerFirstUpdate();
+    r5->TriggerFirstUpdate();
+    r6->TriggerFirstUpdate();
+    r7->TriggerFirstUpdate();
+    r8->TriggerFirstUpdate();
+    r9->TriggerFirstUpdate();
+    r10->TriggerFirstUpdate();
+    r11->TriggerFirstUpdate();
+    r12->TriggerFirstUpdate();
     pgmpc->TriggerFirstUpdate();
+    pgmra->TriggerFirstUpdate();
+    pgmsp->TriggerFirstUpdate();
+    intpc->TriggerFirstUpdate();
+    intra->TriggerFirstUpdate();
+    intsp->TriggerFirstUpdate();
+    ctrlLogic->TriggerFirstUpdate();
+
     rst->Release();
 }
 

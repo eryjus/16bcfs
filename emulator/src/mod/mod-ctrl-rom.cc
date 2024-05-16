@@ -28,6 +28,12 @@ CtrlRomModule_t::CtrlRomModule_t(const QString &name, const QString &file) : QGr
     BuildGui();
     WireUp();
     TriggerFirstUpdate();
+
+    if (name == "Ctrl7") {
+        latch->setObjectName("debug");
+        sram->setObjectName("debug");
+        ctrl->setObjectName("debug");
+    }
 }
 
 
@@ -123,8 +129,7 @@ void CtrlRomModule_t::WireUp(void)
     //
     // -- handle the sram inputs
     //    ----------------------
-    HW_Bus_16_t *ctrlBus = HW_Computer_t::GetCtrlBus();
-
+    HW_Bus_16_t *ctrlBus = HW_Computer_t::GetCtrlMidPlane()->GetCtrlBus();
     connect(ctrlBus, &HW_Bus_16_t::SignalBitEUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA14);
     connect(ctrlBus, &HW_Bus_16_t::SignalBitCUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA12);
     connect(ctrlBus, &HW_Bus_16_t::SignalBit7Updated, sram, &IC_AS6C62256_t::ProcessUpdateA7);
@@ -263,12 +268,5 @@ void CtrlRomModule_t::WireUp(void)
     connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, led5, &GUI_Led_t::ProcessStateChange);
     connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, led6, &GUI_Led_t::ProcessStateChange);
     connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, led7, &GUI_Led_t::ProcessStateChange);
-
-
-
-    //
-    // -- Finally, connect up the Control ROM Control Circuit to drive the reset staste signals
-    //    -------------------------------------------------------------------------------------
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, this, &CtrlRomModule_t::ProcessUpdateClk);
 }
 

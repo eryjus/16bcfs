@@ -855,7 +855,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Connect up the outputs: Ctrl Logic Bus
     //    --------------------------------------
-    HW_Bus_16_t *ctrlBus = HW_Computer_t::Get()->GetCtrlBus();
+    HW_Bus_16_t *ctrlBus = HW_Computer_t::Get()->GetCtrlMidPlane()->GetCtrlBus();
     connect(mux0, &IC_74xx157_t::SignalY1Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit0);
     connect(mux0, &IC_74xx157_t::SignalY2Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit1);
     connect(mux0, &IC_74xx157_t::SignalY3Updated, ctrlBus, &HW_Bus_16_t::ProcessUpdateBit2);
@@ -919,6 +919,9 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 #else
     if (state != HIGH) emit CopyEeprom();
     else {
+        // -- disable #WE immediately
+        nand2->ProcessB2Low();
+
         // -- reset both D-Latches
         resetting->ProcessUpdateClr1(LOW);
         resetting->ProcessUpdateClr2(LOW);
@@ -928,7 +931,6 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
         // -- reset the bits counter
         bits->ProcessUpdateClr(HIGH);
         bits->ProcessUpdateClr(LOW);
-
 
         // -- keep an eye on this: it may change at inopportune times
         emit nand1->SignalY1Updated(LOW);

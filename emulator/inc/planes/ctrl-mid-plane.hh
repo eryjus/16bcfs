@@ -52,6 +52,8 @@ private:
     static SubDemux3_t *carrySelectDemux;
     static SubDemux3_t *shiftDemux;
 
+    static HW_Bus_16_t *ctrlBus;
+
 
 
     //
@@ -386,6 +388,10 @@ public:
     explicit ControlLogic_MidPlane_t(void);
     virtual ~ControlLogic_MidPlane_t() {}
 
+
+public:
+    // -- access functions
+    static HW_Bus_16_t *GetCtrlBus(void) { return ctrlBus; }
 
 
 public:

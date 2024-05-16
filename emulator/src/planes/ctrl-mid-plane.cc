@@ -49,6 +49,8 @@ SubDemux7_t *ControlLogic_MidPlane_t::mainDemux = nullptr;
 SubDemux3_t *ControlLogic_MidPlane_t::carrySelectDemux = nullptr;
 SubDemux3_t *ControlLogic_MidPlane_t::shiftDemux = nullptr;
 
+HW_Bus_16_t *ControlLogic_MidPlane_t::ctrlBus = nullptr;
+
 
 
 //
@@ -60,6 +62,8 @@ ControlLogic_MidPlane_t::ControlLogic_MidPlane_t(void) : QGroupBox("Control ROM 
     BuildGui();
     WireUp();
     TriggerFirstUpdate();
+
+    ctrlBus->setObjectName("debug");
 }
 
 
@@ -69,6 +73,8 @@ ControlLogic_MidPlane_t::ControlLogic_MidPlane_t(void) : QGroupBox("Control ROM 
 //    -------------------------------------------------------
 void ControlLogic_MidPlane_t::AllocateComponents(void)
 {
+    ctrlBus = new HW_Bus_16_t(HW_Computer_t::GetClock());
+
     ctrlCtrl = new CtrlRomCtrlModule_t;
     ctrl0 = new CtrlRomModule_t("Ctrl0", "ctrl0.bin");
     ctrl1 = new CtrlRomModule_t("Ctrl1", "ctrl1.bin");

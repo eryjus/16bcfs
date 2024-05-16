@@ -77,7 +77,7 @@ private:
     static HW_Bus_16_t *instrBus;
 
     // -- The control logic lookup bus
-    static HW_Bus_16_t *ctrlBus;
+//    static HW_Bus_16_t *ctrlBus;
 
     // -- The Address Copy Bus
     static HW_Bus_16_t *AddrCopyBus;
@@ -96,7 +96,7 @@ private:
 
 
 private:
-    explicit HW_Computer_t(void) { settings = new QSettings("eryjus", "16bcfs-emulator"); };
+    explicit HW_Computer_t(void) {}
     virtual ~HW_Computer_t() {};
 
     HW_Computer_t(const HW_Computer_t &) = delete;
@@ -113,7 +113,7 @@ public:
     static HW_Bus_16_t *GetAddr1Bus(void) { return addr1; }
     static HW_Bus_16_t *GetAddr2Bus(void) { return addr2; }
     static HW_Bus_16_t *GetInstrBus(void) { return instrBus; }
-    static HW_Bus_16_t *GetCtrlBus(void) { return ctrlBus; }
+    static ControlLogic_MidPlane_t *GetCtrlMidPlane(void) { return ctrlLogic; }
     static HW_Bus_16_t *GetAddrCopyBus(void) { return AddrCopyBus; }
 
     static ClockModule_t *GetClock(void) { return clock; }
@@ -125,9 +125,8 @@ public:
 
 
 public:
-    static void InitGui(void);
-    static void Initialize(void);
     static void PerformReset(void);
+    static void Initialize(void);
 
 
 signals:
@@ -139,6 +138,13 @@ private slots:
     void ProcessUpdateCLatch(int state);
     void ProcessUpdateNVLLatch(int state);
     void ProcessSettingsWindow(void);
+
+
+private:
+    static void AllocateComponents(void);
+    static void BuildGui(void);
+    static void WireUp(void);
+    static void TriggerFirstUpdates(void);
 };
 
 

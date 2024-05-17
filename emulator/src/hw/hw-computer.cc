@@ -38,7 +38,6 @@ HW_Bus_16_t *HW_Computer_t::aluB = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr1 = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr2 = nullptr;
 HW_Bus_16_t *HW_Computer_t::instrBus = nullptr;
-//HW_Bus_16_t *HW_Computer_t::ctrlBus = nullptr;
 HW_Bus_16_t *HW_Computer_t::AddrCopyBus = nullptr;
 
 
@@ -216,7 +215,6 @@ void HW_Computer_t::AllocateComponents(void)
     addr1 = new HW_Bus_16_t(clock);
     addr2 = new HW_Bus_16_t(clock);
     instrBus = new HW_Bus_16_t(clock);
-//    ctrlBus = new HW_Bus_16_t(clock);
     AddrCopyBus = new HW_Bus_16_t(clock);
 
 

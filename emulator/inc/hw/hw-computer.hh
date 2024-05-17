@@ -76,9 +76,6 @@ private:
     // -- The Insturuction Bus
     static HW_Bus_16_t *instrBus;
 
-    // -- The control logic lookup bus
-//    static HW_Bus_16_t *ctrlBus;
-
     // -- The Address Copy Bus
     static HW_Bus_16_t *AddrCopyBus;
 

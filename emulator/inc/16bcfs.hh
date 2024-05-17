@@ -13,7 +13,7 @@
 //
 // -- conditionally compile the emulator for a pedantic copy of the EEPROM into SRAM
 //    ------------------------------------------------------------------------------
-#define PEDANTIC_COPY 1
+#define PEDANTIC_COPY 0
 
 
 //

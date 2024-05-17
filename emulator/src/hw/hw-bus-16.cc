@@ -54,8 +54,9 @@ void HW_Bus_16_t::MaintainBit(int bit, TriState_t state)
     }
 
     // -- if nothing is being asserted, then default to low
-    if (asserts->isEmpty()) state = LOW;        // pull-down resistor
-    else {
+    if (asserts->isEmpty()) {
+        state = LOW;        // pull-down resistor
+    } else {
         auto it = asserts->find(obj);
         if (it == asserts->end()) state = asserts->first();
         else state = it.value();

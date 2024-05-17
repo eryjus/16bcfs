@@ -22,11 +22,18 @@ CtrlRomModule_t::CtrlRomModule_t(const QString &name, const QString &file) : QGr
 {
     setFixedWidth(95);
     setFixedHeight(50);
+    setObjectName(name);
 
     AllocateComponents();
     BuildGui();
     WireUp();
     TriggerFirstUpdate();
+
+    if (name == "Ctrl7") {
+        latch->setObjectName("debug");
+        sram->setObjectName("debug");
+        ctrl->setObjectName("debug");
+    }
 }
 
 
@@ -122,8 +129,7 @@ void CtrlRomModule_t::WireUp(void)
     //
     // -- handle the sram inputs
     //    ----------------------
-    HW_Bus_16_t *ctrlBus = HW_Computer_t::GetCtrlBus();
-
+    HW_Bus_16_t *ctrlBus = HW_Computer_t::GetCtrlMidPlane()->GetCtrlBus();
     connect(ctrlBus, &HW_Bus_16_t::SignalBitEUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA14);
     connect(ctrlBus, &HW_Bus_16_t::SignalBitCUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA12);
     connect(ctrlBus, &HW_Bus_16_t::SignalBit7Updated, sram, &IC_AS6C62256_t::ProcessUpdateA7);
@@ -262,29 +268,5 @@ void CtrlRomModule_t::WireUp(void)
     connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, led5, &GUI_Led_t::ProcessStateChange);
     connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, led6, &GUI_Led_t::ProcessStateChange);
     connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, led7, &GUI_Led_t::ProcessStateChange);
-
-
-
-    //
-    // -- Finally, connect up the Control ROM Control Circuit to drive the reset staste signals
-    //    -------------------------------------------------------------------------------------
-    CtrlRomCtrlModule_t *ctrlctrl = HW_Computer_t::GetCtrlCtrl();
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQrbUpdated, this, &CtrlRomModule_t::ProcessUpdateClear);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalShiftClockUpdated, this, &CtrlRomModule_t::ProcessUpdateShiftClk);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcUpdated, this, &CtrlRomModule_t::ProcessUpdateLatchOe);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalQcbUpdated, this, &CtrlRomModule_t::ProcessUpdateDriverOe);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalEepromCmdAddrUpdated, this, &CtrlRomModule_t::ProcessUpdateCmdAddr);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalEepromCsUpdated, this, &CtrlRomModule_t::ProcessUpdateChipSelect);
-
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalSramCeUpdated, this, &CtrlRomModule_t::ProcessUpdateChipEnable);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalSramWeUpdated, this, &CtrlRomModule_t::ProcessUpdateWriteEnable);
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::SignalSramOeUpdated, this, &CtrlRomModule_t::ProcessUpdateOutputEnable);
-
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, this, &CtrlRomModule_t::ProcessUpdateClk);
-
-
-#if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
-    connect(ctrlctrl, &CtrlRomCtrlModule_t::CopyEeprom, sram, &IC_AS6C62256_t::CopyEeprom);
-#endif
 }
 

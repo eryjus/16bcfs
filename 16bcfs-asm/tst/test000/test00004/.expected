@@ -1,0 +1,15 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; This test contains a jump back to the first instruction
+     2
+     3              .org 0000
+     4
+     5  Entry:
+     6  0000  00f0  jmp Entry
+     6  0001  0000
+     7

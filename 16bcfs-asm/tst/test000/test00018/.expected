@@ -1,0 +1,26 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ;;===================================================================================================================
+     2                                       ;; test-nop.s: initialize the Program memory (1 word) to be a `nop` instruction
+     3                                       ;;
+     4                                       ;;  This source is used to generate a single `nop` instruction, and then fill the rest of the program ROM with the
+     5                                       ;;  default encoding.  The purpose is to hae a single address (2^0 bit address space) for executing a `nop`
+     6                                       ;;  instruction.
+     7                                       ;;
+     8                                       ;;  -----------------------------------------------------------------------------------------------------------------
+     9                                       ;;
+    10                                       ;;     Date      Tracker  Version  Pgmr  Description
+    11                                       ;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+    12                                       ;;  2023-Feb-28  Initial  v0.0.1   ADCL  Initial version
+    13                                       ;;
+    14                                       ;;===================================================================================================================
+    15
+    16              .org 0000
+    17
+    18  entry:
+    19  0000  0000  nop

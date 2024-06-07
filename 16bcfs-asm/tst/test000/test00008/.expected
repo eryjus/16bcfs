@@ -1,0 +1,4 @@
+Welcome to the 16bcfs assembler
+Error: On line 4: Label must start in the first column
+Error: Unresolved location entry
+Assembly failed: 2 errors; 0 warnings

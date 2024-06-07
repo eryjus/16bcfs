@@ -1,0 +1,12 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; -- test00001.s -- test that missing a terminating EOL character now succeeds
+     2
+     3              .org 0000
+     4
+     5  0000  0000  nop

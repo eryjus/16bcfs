@@ -1,0 +1,20 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; This test exercises all number represetnations
+     2
+     3
+     4  entry:
+     5  0000  0001  mov r1,aaaa
+     5  0001  aaaa
+     6  0002  0001  mov r1,ffff
+     6  0003  ffff
+     7  0004  0001  mov r1,b6db
+     7  0005  b6db
+     8  0006  0001  mov r1,3039
+     8  0007  3039
+     9

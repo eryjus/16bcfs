@@ -1,0 +1,71 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ;;===================================================================================================================
+     2                                       ;;  test-carry.s: Test the ALU Carry Flag and conditional execution
+     3                                       ;;
+     4                                       ;;  This test will test the ability to manipulate the Carry Flag directly (STC/CLC) and some conditional execution
+     5                                       ;;  based on the status of the carry flag.
+     6                                       ;;
+     7                                       ;;  -----------------------------------------------------------------------------------------------------------------
+     8                                       ;;
+     9                                       ;;     Date      Tracker  Version  Pgmr  Description
+    10                                       ;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+    11                                       ;;  2023-Sep-16  Initial  v0.0.1   ADCL  Initial version
+    12                                       ;;
+    13                                       ;;===================================================================================================================
+    14
+    15              .org 0000
+    16
+    17  entry:
+    18  0000  000f  stc                      ;; set the carry flag
+    19  0001  0000  nop
+    20  0002  0000  nop
+    21
+    22  0003  000e  clc
+    23  0004  0000  nop
+    24  0005  0000  nop
+    25
+    26
+    27  0006  0001  mov r1,0000              ;; force R1 to be clear
+    27  0007  0000
+    28  0008  5001  mov-cc r1,ffff           ;; Carry should be clear, this should execute 100% of the time
+    28  0009  ffff
+    29  000a  4001  mov-cs r1,5555           ;; Carry should be clear, this should never execute
+    29  000b  5555
+    30
+    31  000c  000f  stc
+    32  000d  4001  mov-cs r1,aaaa           ;; this is a conditional move immediately after a change in C.  it should exec
+    32  000e  aaaa
+    33
+    34  000f  000e  clc
+    35  0010  4001  mov-cs r1,5a5a           ;; this is a conditional move immediately after a change.  this should not exec
+    35  0011  5a5a
+    36
+    37                                       ;;
+    38                                       ;; -- now for a string of conditionals which will all succeed
+    39                                       ;;    -------------------------------------------------------
+    40
+    41  0012  000f  stc
+    42  0013  4022  mov-cs r2,r1
+    43  0014  4002  mov-cs r2,0000
+    43  0015  0000
+    44  0016  400e  clc-cs
+    45
+    46                                       ;; -- and these should all fail (check that the instruction register is correct after each one!)
+    47  0017  4022  mov-cs r2,r1
+    48  0018  4002  mov-cs r2,0000
+    48  0019  0000
+    49  001a  400f  stc-cs
+    50
+    51  001b  40f0  jmp-cs 0000
+    51  001c  0000
+    52  001d  50f0  jmp-cc 0000
+    52  001e  0000
+    53
+    54  001f  00f0  jmp 0000                 ;; fetch assert main; pc load & latch; inc pc
+    54  0020  0000

@@ -1,0 +1,33 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ;;===================================================================================================================
+     2                                       ;;  test-r1.s: Test the R1 Register PCB
+     3                                       ;;
+     4                                       ;;  This test will go through all the functionality of the R1 Register.
+     5                                       ;;
+     6                                       ;;  -----------------------------------------------------------------------------------------------------------------
+     7                                       ;;
+     8                                       ;;     Date      Tracker  Version  Pgmr  Description
+     9                                       ;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+    10                                       ;;  2023-Jun-14  Initial  v0.0.1   ADCL  Initial version
+    11                                       ;;
+    12                                       ;;===================================================================================================================
+    13
+    14              .org 0000
+    15
+    16  entry:
+    17  0000  0001  mov r1,ffff              ;; not sure what is in the register, ensure it is initialized
+    17  0001  ffff
+    18  0002  0ff2  decr r1                  ;; decrement the R1 register without updating flags; value = 0xfffe
+    19  0003  0ff0  incr r1                  ;; increment the R1 register without updating flags; value = 0xffff
+    20  0004  0ff0  incr r1                  ;; increment the R1 register without updating flags; value = 0x0000
+    21  0005  0ff0  incr r1                  ;; increment the R1 register without updating flags; value = 0x0001
+    22  0006  0ff2  decr r1                  ;; decrement the R1 register without updating flags; value = 0x0000
+    23  0007  0ff2  decr r1                  ;; decrement the R1 register without updating flags; value = 0xffff
+    24
+    25  0008  00f1  jmp r1                   ;; jump to the R1 register location

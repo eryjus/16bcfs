@@ -1,0 +1,16 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; This test will make sure the registers all are case insensitive
+     2
+     3
+     4  entry:
+     5  0000  0110  add r1,r1
+     6  0001  011d  add r2,r2
+     7  0002  0101  add r1,3039
+     7  0003  3039
+     8

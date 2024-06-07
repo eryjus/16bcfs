@@ -1,0 +1,37 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ;;===================================================================================================================
+     2                                       ;; test-11.s: Test the first suspect conditional instruction.
+     3                                       ;;
+     4                                       ;;  This test will execute a single-byte instruction which prepares the condition, a 2-byte conditional instruction
+     5                                       ;;  which will not pass the condition, replacing the instruction with a NOP, and then followed by a 1-byte
+     6                                       ;;  instruction which is not conditional.
+     7                                       ;;
+     8                                       ;;  This test is required to pass, but is expected to fail at this point in the video series.
+     9                                       ;;
+    10                                       ;;  -----------------------------------------------------------------------------------------------------------------
+    11                                       ;;
+    12                                       ;;     Date      Tracker  Version  Pgmr  Description
+    13                                       ;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+    14                                       ;;  2023-May-07  Initial  v0.0.1   ADCL  Initial version
+    15                                       ;;
+    16                                       ;;===================================================================================================================
+    17
+    18              .org 0000
+    19
+    20  entry:
+    21  0000  000f  stc                      ;; Set the carry flag
+    22  0001  5001  mov-cc r1,0013           ;; If carry is clear, set r1 (the value here is carefully chosen as mov r1,<imm16>)
+    22  0002  0013
+    23  0003  000e  clc                      ;; Clear the carry flag again
+    24
+    25  0004  0000  nop
+    26  0005  0000  nop
+    27
+    28  0006  00f0  jmp 0000                 ;; loop back and execute the test again
+    28  0007  0000

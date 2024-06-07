@@ -1,0 +1,33 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ;;===================================================================================================================
+     2                                       ;;  test-ctrl.s: Test the new Control ROMs 2 & 3
+     3                                       ;;
+     4                                       ;;  This test will iterate through the available control signals from CTRL2 and CTRL3 at the time of this
+     5                                       ;;  video.
+     6                                       ;;
+     7                                       ;;  -----------------------------------------------------------------------------------------------------------------
+     8                                       ;;
+     9                                       ;;     Date      Tracker  Version  Pgmr  Description
+    10                                       ;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+    11                                       ;;  2023-Sep-08  Initial  v0.0.1   ADCL  Initial version
+    12                                       ;;
+    13                                       ;;===================================================================================================================
+    14
+    15              .org 0000
+    16
+    17  entry:
+    18  0000  0001  mov r1,8000              ;; fetch assert main; r1 load & latch; inc pc X 2
+    18  0001  8000
+    19  0002  0022  mov r2,r1                ;; r1 assert main; r2 load & latch; inc pc
+    20  0003  0002  mov r2,0001              ;; fetch assert main; r2 load & latch; inc pc X 2
+    20  0004  0001
+    21  0005  0031  mov r1,r2                ;; r2 assert main; r1 load & latch; inc pc
+    22
+    23  0006  00f0  jmp 0000                 ;; fetch assert main; pc load & latch; inc pc
+    23  0007  0000

@@ -1,0 +1,12 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; check for lots of white space
+     2
+     3  entry:
+     4  0000  0001  mov r1,2677
+     4  0001  2677

@@ -1,0 +1,16 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; check for intermediate labels, jumping backwards
+     2
+     3              .org 0000
+     4
+     5  entry:
+     6  0000  0000  nop
+     7  entry.1:
+     8  0001  00f0  jmp entry.1
+     8  0002  0001

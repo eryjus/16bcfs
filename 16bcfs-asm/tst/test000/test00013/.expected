@@ -1,0 +1,15 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; Test multiline comments
+     2                                       ; These comments start at the beginning of the line
+     3                                       ; The problem is making certain all of them print
+     4
+     5                                       ; now, we have some offset comments
+     6                                       ; these should also make it to the listing output
+     7                                       ; do they all work?
+     8

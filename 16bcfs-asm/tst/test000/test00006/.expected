@@ -1,0 +1,22 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; This test contains a forward jump to an undeclared label
+     2
+     3              .org 0000
+     4
+     5  entry:
+     6  0000  0000  nop
+     7  0001  00f0  jmp forward
+     7  0002  0004
+     8
+     9  0003  0000  nop
+    10
+    11  forward:
+    12  0004  00f0  jmp entry
+    12  0005  0000
+    13

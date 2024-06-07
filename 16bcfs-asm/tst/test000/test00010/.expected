@@ -1,0 +1,15 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; This test will make sure the opcodes are really case insensitive
+     2
+     3
+     4  entry:
+     5  0000  0000  nop
+     6  0001  0000  nop
+     7  0002  0000  nop
+     8

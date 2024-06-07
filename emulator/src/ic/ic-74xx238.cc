@@ -96,8 +96,6 @@ void IC_74xx238_t::ProcessUpdatesComplete(void)
     emit SignalY5Updated(pins[Y5]);
     emit SignalY6Updated(pins[Y6]);
     emit SignalY7Updated(pins[Y7]);
-
-    emit SignalAllUpdated();
 }
 
 

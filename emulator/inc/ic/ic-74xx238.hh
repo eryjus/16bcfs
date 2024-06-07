@@ -47,7 +47,7 @@ public:
 
 
 public:
-    void TriggerFirstUpdate(void) { emit SignalAllUpdated(); ProcessUpdatesComplete(); }
+    void TriggerFirstUpdate(void) { ProcessUpdatesComplete(); }
 
 
 public slots:
@@ -69,7 +69,6 @@ signals:
     void SignalY5Updated(TriState_t state);
     void SignalY6Updated(TriState_t state);
     void SignalY7Updated(TriState_t state);
-    void SignalAllUpdated(void);
 };
 
 

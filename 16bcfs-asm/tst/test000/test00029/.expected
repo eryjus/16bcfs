@@ -1,0 +1,313 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ;;===================================================================================================================
+     2                                       ;;  test-adder.s: Test the ALU Adder ADD, ADC, and INC functions with flags
+     3                                       ;;
+     4                                       ;;  This test will test the ALU Adder with the ADD, ADC, and INC instructions.  Included with this suite of tests
+     5                                       ;;  will include architected tests which will manipulate all the flags, testing the condition for each.
+     6                                       ;;
+     7                                       ;;  This test is expected to take more than the currently addressable 64 word address space in ROM memory, so
+     8                                       ;;  it is anticipated that an expansion is needed.
+     9                                       ;;
+    10                                       ;;  -----------------------------------------------------------------------------------------------------------------
+    11                                       ;;
+    12                                       ;;     Date      Tracker  Version  Pgmr  Description
+    13                                       ;;  -----------  -------  -------  ----  ---------------------------------------------------------------------------
+    14                                       ;;  2023-Sep-25  Initial  v0.0.1   ADCL  Initial version
+    15                                       ;;
+    16                                       ;;===================================================================================================================
+    17
+    18              .org 0000
+    19
+    20  entry:
+    21                                       ;; -- Test #1: Add 2 numbers together and store the result in R1
+    22  0000  0011  mov r1,rz
+    23  0001  0012  mov r2,rz
+    24  0002  0111  add r1,r2
+    25  0003  000f  stc
+    26  0004  0001  mov r1,aaaa
+    26  0005  aaaa
+    27  0006  0002  mov r2,5555
+    27  0007  5555
+    28  0008  0111  add r1,r2                ;; result 0xffff
+    29  0009  0000  nop
+    30
+    31                                       ;; -- Test #2: Add 2 numbers together and store the result in r2
+    32  000a  0011  mov r1,rz
+    33  000b  0012  mov r2,rz
+    34  000c  0111  add r1,r2
+    35  000d  000f  stc
+    36  000e  0001  mov r1,6666
+    36  000f  6666
+    37  0010  0002  mov r2,9999
+    37  0011  9999
+    38  0012  011c  add r2,r1                ;; result 0xffff
+    39  0013  0000  nop
+    40
+    41                                       ;; -- Test #3: Add an immediate to R1
+    42  0014  0011  mov r1,rz
+    43  0015  0012  mov r2,rz
+    44  0016  0111  add r1,r2
+    45  0017  000f  stc
+    46  0018  0001  mov r1,cccc
+    46  0019  cccc
+    47  001a  0101  add r1,3333              ;; result 0xffff
+    47  001b  3333
+    48  001c  0000  nop
+    49
+    50                                       ;; -- Test #4: Add an immediate to R2
+    51  001d  0011  mov r1,rz
+    52  001e  0012  mov r2,rz
+    53  001f  0111  add r1,r2
+    54  0020  000f  stc
+    55  0021  0002  mov r2,36c5
+    55  0022  36c5
+    56  0023  0102  add r2,c93a              ;; result 0xffff
+    56  0024  c93a
+    57
+    58                                       ;; -- Test #5: Add 2 numbers together with carry (set) => R1
+    59  0025  0011  mov r1,rz
+    60  0026  0012  mov r2,rz
+    61  0027  0111  add r1,r2
+    62  0028  000f  stc
+    63  0029  0001  mov r1,aaaa
+    63  002a  aaaa
+    64  002b  0002  mov r2,5555
+    64  002c  5555
+    65  002d  01c1  adc r1,r2                ;; result 0x0000 with C set
+    66  002e  0000  nop
+    67
+    68                                       ;; -- Test #6: Add 2 numbers together with carry (clear) => R1
+    69  002f  0011  mov r1,rz
+    70  0030  0012  mov r2,rz
+    71  0031  0111  add r1,r2
+    72  0032  000e  clc
+    73  0033  0001  mov r1,aaaa
+    73  0034  aaaa
+    74  0035  0002  mov r2,5555
+    74  0036  5555
+    75  0037  01c1  adc r1,r2                ;; result 0xffff with C clear
+    76  0038  0000  nop
+    77
+    78                                       ;; -- Test #7: Add 2 numbers together with carry (set) => R2
+    79  0039  0011  mov r1,rz
+    80  003a  0012  mov r2,rz
+    81  003b  0111  add r1,r2
+    82  003c  000f  stc
+    83  003d  0001  mov r1,6666
+    83  003e  6666
+    84  003f  0002  mov r2,9999
+    84  0040  9999
+    85  0041  01cc  adc r2,r1                ;; result 0x0000 with C set
+    86  0042  0000  nop
+    87
+    88                                       ;; -- Test #8: Add 2 numbers together with carry (clear) => R2
+    89  0043  0011  mov r1,rz
+    90  0044  0012  mov r2,rz
+    91  0045  0111  add r1,r2
+    92  0046  000e  clc
+    93  0047  0001  mov r1,6666
+    93  0048  6666
+    94  0049  0002  mov r2,9999
+    94  004a  9999
+    95  004b  01cc  adc r2,r1                ;; result 0xffff with C clear
+    96  004c  0000  nop
+    97
+    98                                       ;; -- Test #9: Add an immediate to R1 with carry set
+    99  004d  0011  mov r1,rz
+   100  004e  0012  mov r2,rz
+   101  004f  0111  add r1,r2
+   102  0050  000f  stc
+   103  0051  0001  mov r1,cccc
+   103  0052  cccc
+   104  0053  01b1  adc r1,3333              ;; result 0x0000 with C set
+   104  0054  3333
+   105  0055  0000  nop
+   106
+   107                                       ;; -- Test #10: Add an immediate to R1 with carry clear
+   108  0056  0011  mov r1,rz
+   109  0057  0012  mov r2,rz
+   110  0058  0111  add r1,r2
+   111  0059  000e  clc
+   112  005a  0001  mov r1,36c5
+   112  005b  36c5
+   113  005c  01b1  adc r1,c93a              ;; result 0xffff with C clear
+   113  005d  c93a
+   114
+   115                                       ;; -- Test #11: Add an immediate to R2 with carry set
+   116  005e  0011  mov r1,rz
+   117  005f  0012  mov r2,rz
+   118  0060  0111  add r1,r2
+   119  0061  000f  stc
+   120  0062  0001  mov r1,cccc
+   120  0063  cccc
+   121  0064  01b1  adc r1,3333              ;; result 0x0000 with C set
+   121  0065  3333
+   122  0066  0000  nop
+   123
+   124                                       ;; -- Test #12: Add an immediate to R2 with carry clear
+   125  0067  0011  mov r1,rz
+   126  0068  0012  mov r2,rz
+   127  0069  0111  add r1,r2
+   128  006a  000e  clc
+   129  006b  0002  mov r2,36c5
+   129  006c  36c5
+   130  006d  0102  add r2,c93a              ;; result 0xffff with C clear
+   130  006e  c93a
+   131
+   132                                       ;; -- Test #13: Increment R1
+   133  006f  0011  mov r1,rz
+   134  0070  0012  mov r2,rz
+   135  0071  0111  add r1,r2
+   136  0072  000f  stc
+   137  0073  0011  mov r1,rz                ;; clear r1
+   138  0074  0261  inc r1
+   139  0075  0261  inc r1
+   140  0076  0261  inc r1
+   141  0077  0000  nop
+   142
+   143                                       ;; -- Test #14: Increment R2
+   144  0078  0011  mov r1,rz
+   145  0079  0012  mov r2,rz
+   146  007a  0111  add r1,r2
+   147  007b  000f  stc
+   148  007c  0012  mov r2,rz                ;; clear r2
+   149  007d  0262  inc r2
+   150  007e  0262  inc r2
+   151  007f  0262  inc r2
+   152  0080  0000  nop
+   153
+   154                                       ;; -- Test #15: Add R1 to itself as in shift left into C
+   155  0081  0011  mov r1,rz
+   156  0082  0012  mov r2,rz
+   157  0083  0111  add r1,r2
+   158  0084  000e  clc
+   159  0085  0001  mov r1,aaaa
+   159  0086  aaaa
+   160  0087  0110  add r1,r1                ;; result 0x5554 with C set
+   161  0088  0000  nop
+   162
+   163                                       ;; -- Test #16: Add R2 to itself as in shift left into C
+   164  0089  0011  mov r1,rz
+   165  008a  0012  mov r2,rz
+   166  008b  0111  add r1,r2
+   167  008c  000e  clc
+   168  008d  0002  mov r2,5555
+   168  008e  5555
+   169  008f  011d  add r2,r2                ;; result 0xaaa8 with C clear
+   170  0090  0000  nop
+   171
+   172                                       ;; -- Test #17: Add R1 to itself as in shift left into C with C set
+   173  0091  0011  mov r1,rz
+   174  0092  0012  mov r2,rz
+   175  0093  0111  add r1,r2
+   176  0094  000f  stc
+   177  0095  0001  mov r1,aaaa
+   177  0096  aaaa
+   178  0097  01c0  adc r1,r1                ;; result 0x5555 with C set
+   179  0098  0000  nop
+   180
+   181                                       ;; -- Test #16: Add R2 to itself as in shift left into C with C set
+   182  0099  0011  mov r1,rz
+   183  009a  0012  mov r2,rz
+   184  009b  0111  add r1,r2
+   185  009c  000f  stc
+   186  009d  0002  mov r2,5555
+   186  009e  5555
+   187  009f  01cd  adc r2,r2                ;; result 0xaaa9 with C clear
+   188  00a0  0000  nop
+   189
+   190                                       ;;
+   191                                       ;; -- From here on, we assume C is fully exercised
+   192                                       ;;    --------------------------------------------
+   193
+   194                                       ;; -- Test #17: Add 2 numbers which do not result in 0
+   195  00a1  0011  mov r1,rz
+   196  00a2  0012  mov r2,rz
+   197  00a3  0111  add r1,r2
+   198  00a4  000f  stc
+   199  00a5  0001  mov r1,aaaa
+   199  00a6  aaaa
+   200  00a7  0101  add r1,5555              ;; Z clear
+   200  00a8  5555
+   201  00a9  0000  nop
+   202
+   203                                       ;; -- Test #18: Add 2 numbers which result in 0
+   204  00aa  0011  mov r1,rz
+   205  00ab  0012  mov r2,rz
+   206  00ac  0111  add r1,r2
+   207  00ad  000f  stc
+   208  00ae  0001  mov r1,aaaa
+   208  00af  aaaa
+   209  00b0  01b1  adc r1,5555              ;; Z set
+   209  00b1  5555
+   210  00b2  0000  nop
+   211
+   212                                       ;; -- Test #19: Add 2 numbers do not result in a negative number
+   213  00b3  0011  mov r1,rz
+   214  00b4  0012  mov r2,rz
+   215  00b5  0111  add r1,r2
+   216  00b6  000f  stc
+   217  00b7  0001  mov r1,2aaa
+   217  00b8  2aaa
+   218  00b9  0101  add r1,5555              ;; result is 0x7fff with N clear
+   218  00ba  5555
+   219  00bb  0000  nop
+   220
+   221                                       ;; -- Test #20: Add 2 numbers which result in a negative number
+   222  00bc  0011  mov r1,rz
+   223  00bd  0012  mov r2,rz
+   224  00be  0111  add r1,r2
+   225  00bf  000f  stc
+   226  00c0  0001  mov r1,aaaa
+   226  00c1  aaaa
+   227  00c2  01b1  adc r1,5555              ;; N set
+   227  00c3  5555
+   228  00c4  0000  nop
+   229
+   230                                       ;; -- Test #21: Add 2 numbers do not result in an Overflow
+   231  00c5  0011  mov r1,rz
+   232  00c6  0012  mov r2,rz
+   233  00c7  0111  add r1,r2
+   234  00c8  0001  mov r1,0aaa
+   234  00c9  0aaa
+   235  00ca  0101  add r1,0fff              ;; result is 0x1aa9 with V clear
+   235  00cb  0fff
+   236  00cc  0000  nop
+   237
+   238                                       ;; -- Test #22: Add 2 numbers which result in an overflow
+   239  00cd  0011  mov r1,rz
+   240  00ce  0012  mov r2,rz
+   241  00cf  0111  add r1,r2
+   242  00d0  0001  mov r1,7fff
+   242  00d1  7fff
+   243  00d2  0261  inc r1                   ;; result 0x8000 with V set
+   244  00d3  0000  nop
+   245
+   246                                       ;; -- Test #23: Add 2 numbers do not result in Less Than (or where N = V)
+   247  00d4  0011  mov r1,rz
+   248  00d5  0012  mov r2,rz
+   249  00d6  0111  add r1,r2
+   250  00d7  0001  mov r1,7fff
+   250  00d8  7fff
+   251  00d9  0261  inc r1                   ;; result 0x8000 with V, N set, L Clear
+   252  00da  0000  nop
+   253
+   254                                       ;; -- Test #24: Add 2 numbers which result in an overflow
+   255  00db  0011  mov r1,rz
+   256  00dc  0012  mov r2,rz
+   257  00dd  0111  add r1,r2
+   258  00de  0001  mov r1,7fff
+   258  00df  7fff
+   259  00e0  0101  add r1,ffff              ;; result 0x0xfffe with V, L set, N clear
+   259  00e1  ffff
+   260  00e2  0000  nop
+   261
+   262
+   263  00e3  00f0  jmp 0000                 ;; fetch assert main; pc load & latch; inc pc
+   263  00e4  0000

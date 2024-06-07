@@ -1,0 +1,13 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; -- test00002.s -- Simple NOP program (should assemble clean)
+     2
+     3              .org 0000
+     4
+     5  0000  0000  nop
+     6

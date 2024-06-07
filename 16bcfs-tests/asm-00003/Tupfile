@@ -1,1 +1,0 @@
-: *.s | ../../asm/bin/asm |> if ../../asm/bin/asm %f 2> output.txt ; then false; fi |> output.txt

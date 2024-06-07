@@ -1,0 +1,14 @@
+Welcome to the 16bcfs assembler
+
+                                Assembly Listing
+================================================================================
+
+LineNo  Addr  Bin   OpCode                   Comment
+------  ----  ----  -----------------------  -----------------------------------
+     1                                       ; This test will make sure that labels are not case sensitite
+     2
+     3  entry:
+     4  0000  0000  nop
+     5  0001  00f0  jmp ENTRY
+     5  0002  0000
+     6

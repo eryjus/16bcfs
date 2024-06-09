@@ -105,16 +105,16 @@ void FetchRegisterModule_t::BuildGui(void)
     controlLayout->setColumnMinimumWidth(7, 18);
     controlLayout->setColumnMinimumWidth(8, 18);
 
-    controlLayout->addWidget(assertMain, 0, 4, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("Mn"), 1, 4, Qt::AlignHCenter);
-    controlLayout->addWidget(assertAluB, 0, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("AB"), 1, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(assertAddr2, 0, 8, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("A2"), 1, 8, Qt::AlignHCenter);
-    controlLayout->addWidget(instrSuppress, 0, 10, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("IS"), 1, 10, Qt::AlignHCenter);
-    controlLayout->addWidget(fetchSuppress, 0, 12, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("FS"), 1, 12, Qt::AlignHCenter);
+    controlLayout->addWidget(assertMain, 0, 0, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("Mn"), 1, 0, Qt::AlignHCenter);
+    controlLayout->addWidget(assertAluB, 0, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("AB"), 1, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(assertAddr2, 0, 4, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("A2"), 1, 4, Qt::AlignHCenter);
+    controlLayout->addWidget(instrSuppress, 0, 6, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("IS"), 1, 6, Qt::AlignHCenter);
+    controlLayout->addWidget(fetchSuppress, 0, 8, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("FS"), 1, 8, Qt::AlignHCenter);
 
 
     controls->setLayout(controlLayout);

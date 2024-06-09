@@ -65,6 +65,7 @@ GpRegisterModule_t *HW_Computer_t::pgmsp = nullptr;
 GpRegisterModule_t *HW_Computer_t::intpc = nullptr;
 GpRegisterModule_t *HW_Computer_t::intra = nullptr;
 GpRegisterModule_t *HW_Computer_t::intsp = nullptr;
+FetchRegisterModule_t *HW_Computer_t::fetch = nullptr;
 
 
 
@@ -129,8 +130,8 @@ void HW_Computer_t::BuildGui(void)
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 11, 16);
-    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 11, 15);
+    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 14);
+    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 14, 14);
 
     grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 0, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 12, 3, 1, 3);
@@ -142,9 +143,10 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(intFlags, 0, 12, 1, 1);
 
     // -- place the control logic mid-plane
-    grid->addWidget(ctrlLogic, 0, 15, 10, 2);
+    grid->addWidget(ctrlLogic, 0, 15, 9, 2);
+    grid->addWidget(fetch, 11, 15, 2, 2);
 
-    grid->addWidget(clock, 12, 15, 2, 2);
+    grid->addWidget(clock, 13, 15, 2, 2);
 
     grid->addWidget(pgmpc, 0, 0, 2, 3);
     grid->addWidget(pgmra, 2, 0, 2, 3);
@@ -267,6 +269,7 @@ void HW_Computer_t::AllocateComponents(void)
     intpc = new GpRegisterModule_t("INT PC");
     intra = new GpRegisterModule_t("INT RA");
     intsp = new GpRegisterModule_t("INT SP");
+    fetch = new FetchRegisterModule_t;
 }
 
 
@@ -354,6 +357,7 @@ void HW_Computer_t::PerformReset(void)
     intpc->TriggerFirstUpdate();
     intra->TriggerFirstUpdate();
     intsp->TriggerFirstUpdate();
+    fetch->TriggerFirstUpdate();
     ctrlLogic->TriggerFirstUpdate();
 
     rst->Release();

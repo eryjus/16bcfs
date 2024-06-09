@@ -43,7 +43,7 @@ CtrlRomModule_t::CtrlRomModule_t(const QString &name, const QString &file) : QGr
 //    -----------------------------------
 void CtrlRomModule_t::AllocateComponents(void)
 {
-    ctrl = new HW_Bus_8_t(HW_Computer_t::GetClock());
+    ctrl = new HW_Bus_8_t(filename, HW_Computer_t::GetClock());
     eeprom = new IC_25lc256_t(filename);
     sram = new IC_AS6C62256_t(eeprom);
     shift = new IC_74xx164_t;

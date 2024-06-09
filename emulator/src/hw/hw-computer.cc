@@ -211,15 +211,15 @@ void HW_Computer_t::AllocateComponents(void)
     //
     // -- Create the various buses -- top priority to place
     //    -------------------------------------------------
-    rHld = new HW_Bus_1_t(clock);
-    mainBus = new HW_Bus_16_t(clock);
-    aluA = new HW_Bus_16_t(clock);
-    aluB = new HW_Bus_16_t(clock);
-    addr1 = new HW_Bus_16_t(clock);
-    addr2 = new HW_Bus_16_t(clock);
-    instrBus = new HW_Bus_16_t(clock);
-    AddrCopyBus = new HW_Bus_16_t(clock);
-    fetchBus = new HW_Bus_16_t(clock);
+    rHld = new HW_Bus_1_t("Reset", clock);
+    mainBus = new HW_Bus_16_t("Main", clock);
+    aluA = new HW_Bus_16_t("ALU A", clock);
+    aluB = new HW_Bus_16_t("ALU B", clock);
+    addr1 = new HW_Bus_16_t("Addr 1", clock);
+    addr2 = new HW_Bus_16_t("Addr 2", clock);
+    instrBus = new HW_Bus_16_t("Instruction", clock);
+    AddrCopyBus = new HW_Bus_16_t("ROM Copy", clock);
+    fetchBus = new HW_Bus_16_t("Fetch", clock);
 
 
     //

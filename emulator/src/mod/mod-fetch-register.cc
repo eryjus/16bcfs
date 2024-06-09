@@ -184,7 +184,7 @@ void FetchRegisterModule_t::TriggerFirstUpdate(void)
 void FetchRegisterModule_t::WireUp(void)
 {
     // -- start with the inputs to the 74xx08 AND gate
-    //    A1 -- Fetch Suppress -- handled below
+    connect(inv1, &IC_74xx04_t::SignalY4Updated, and1, &IC_74xx08_t::ProcessUpdateA1);
     //    B1 -- CLK -- handled in header
     and1->ProcessA2Low();
     and1->ProcessB2Low();
@@ -198,7 +198,7 @@ void FetchRegisterModule_t::WireUp(void)
     //    A1 -- Main Assert -- handled below
     //    A2 -- ALUB Assert -- handled below
     //    A3 -- Addr2 Assert -- handled below
-    inv1->ProcessA4Low();
+    //    A4 -- InstrSuppress -- handled below
     inv1->ProcessA5Low();
     inv1->ProcessA6Low();
 
@@ -436,6 +436,16 @@ void FetchRegisterModule_t::WireUp(void)
     connect(addr21, &IC_74xx574_t::SignalQ6Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitD);
     connect(addr21, &IC_74xx574_t::SignalQ7Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitE);
     connect(addr21, &IC_74xx574_t::SignalQ8Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitF);
+
+
+    //
+    // -- Finally, we need a clock input
+    //    ------------------------------
+    ClockModule_t *clk = HW_Computer_t::GetClock();
+    connect(clk, &ClockModule_t::SignalClockState, this, &FetchRegisterModule_t::ProcessClk);
+
+
+// TODO: remove debugging code here
 }
 
 
@@ -474,7 +484,7 @@ void FetchRegisterModule_t::ProcessAssertAddr2(TriState_t state)
 //    ----------------------
 void FetchRegisterModule_t::ProcessFetchSuppress(TriState_t state)
 {
-    and1->ProcessUpdateA1(state);
+    inv1->ProcessUpdateA4(state);
     fetchSuppress->ProcessStateChange(state);
 }
 

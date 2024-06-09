@@ -73,6 +73,9 @@ private:
     // -- The Main Bus
     static HW_Bus_16_t *mainBus;
 
+    // -- The fetch bus from memory to the fetch register components
+    static HW_Bus_16_t *fetchBus;
+
     // -- The Insturuction Bus
     static HW_Bus_16_t *instrBus;
 
@@ -110,6 +113,7 @@ public:
     static HW_Bus_16_t *GetAddr1Bus(void) { return addr1; }
     static HW_Bus_16_t *GetAddr2Bus(void) { return addr2; }
     static HW_Bus_16_t *GetInstrBus(void) { return instrBus; }
+    static HW_Bus_16_t *GetFetchBus(void) { return fetchBus; }
     static ControlLogic_MidPlane_t *GetCtrlMidPlane(void) { return ctrlLogic; }
     static HW_Bus_16_t *GetAddrCopyBus(void) { return AddrCopyBus; }
 

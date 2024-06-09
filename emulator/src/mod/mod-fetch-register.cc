@@ -193,6 +193,18 @@ void FetchRegisterModule_t::TriggerFirstUpdate(void)
     led1->TriggerFirstUpdate();
     and1->TriggerFirstUpdate();
     inv1->TriggerFirstUpdate();
+
+    assertMainTest->setValue(1);
+    assertAluBTest->setValue(1);
+    assertAddr2Test->setValue(1);
+    instrSuppressTest->setValue(1);
+    fetchSuppressTest->setValue(1);
+
+    assertMainTest->setValue(0);
+    assertAluBTest->setValue(0);
+    assertAddr2Test->setValue(0);
+    instrSuppressTest->setValue(0);
+    fetchSuppressTest->setValue(0);
 }
 
 

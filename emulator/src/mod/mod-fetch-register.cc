@@ -14,6 +14,9 @@
 #include "../moc/mod-fetch-register.moc.cc"
 
 
+#define TEST
+
+
 //
 // -- construct a new General Purpose Register
 //    ----------------------------------------
@@ -67,6 +70,13 @@ void FetchRegisterModule_t::AllocateComponents(void)
     assertAddr2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
     instrSuppress = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
     fetchSuppress = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
+
+// TODO: Remove testing rig below.
+    assertMainTest = new GUI_DipSwitch_t;
+    assertAluBTest = new GUI_DipSwitch_t;
+    assertAddr2Test = new GUI_DipSwitch_t;
+    instrSuppressTest = new GUI_DipSwitch_t;
+    fetchSuppressTest = new GUI_DipSwitch_t;
 }
 
 
@@ -105,16 +115,25 @@ void FetchRegisterModule_t::BuildGui(void)
     controlLayout->setColumnMinimumWidth(7, 18);
     controlLayout->setColumnMinimumWidth(8, 18);
 
-    controlLayout->addWidget(assertMain, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("Mn"), 1, 0, Qt::AlignHCenter);
-    controlLayout->addWidget(assertAluB, 0, 2, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("AB"), 1, 2, Qt::AlignHCenter);
-    controlLayout->addWidget(assertAddr2, 0, 4, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("A2"), 1, 4, Qt::AlignHCenter);
-    controlLayout->addWidget(instrSuppress, 0, 6, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("IS"), 1, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(fetchSuppress, 0, 8, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("FS"), 1, 8, Qt::AlignHCenter);
+
+#ifdef TEST
+    controlLayout->addWidget(assertMainTest, 0, 0, Qt::AlignHCenter);
+    controlLayout->addWidget(assertAluBTest, 0, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(assertAddr2Test, 0, 4, Qt::AlignHCenter);
+    controlLayout->addWidget(instrSuppressTest, 0, 6, Qt::AlignHCenter);
+    controlLayout->addWidget(fetchSuppressTest, 0, 8, Qt::AlignHCenter);
+#else
+    controlLayout->addWidget(assertMain, 0, 0, Qt::AlignHCenter);
+    controlLayout->addWidget(assertAluB, 0, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(assertAddr2, 0, 4, Qt::AlignHCenter);
+    controlLayout->addWidget(instrSuppress, 0, 6, Qt::AlignHCenter);
+    controlLayout->addWidget(fetchSuppress, 0, 8, Qt::AlignHCenter);
+#endif
 
 
     controls->setLayout(controlLayout);
@@ -286,7 +305,7 @@ void FetchRegisterModule_t::WireUp(void)
 
 
     // -- Addr2 LSB
-    connect(inv1, &IC_74xx04_t::SignalY6Updated, addr20, &IC_74xx574_t::ProcessUpdateOE);
+    connect(inv1, &IC_74xx04_t::SignalY3Updated, addr20, &IC_74xx574_t::ProcessUpdateOE);
     connect(fetch, &HW_Bus_16_t::SignalBit0Updated, addr20, &IC_74xx574_t::ProcessUpdateD1);   // lsb
     connect(fetch, &HW_Bus_16_t::SignalBit1Updated, addr20, &IC_74xx574_t::ProcessUpdateD2);
     connect(fetch, &HW_Bus_16_t::SignalBit2Updated, addr20, &IC_74xx574_t::ProcessUpdateD3);
@@ -299,7 +318,7 @@ void FetchRegisterModule_t::WireUp(void)
 
 
     // -- Addr2 MSB
-    connect(inv1, &IC_74xx04_t::SignalY6Updated, addr21, &IC_74xx574_t::ProcessUpdateOE);
+    connect(inv1, &IC_74xx04_t::SignalY3Updated, addr21, &IC_74xx574_t::ProcessUpdateOE);
     connect(fetch, &HW_Bus_16_t::SignalBit8Updated, addr21, &IC_74xx574_t::ProcessUpdateD1);   // lsb
     connect(fetch, &HW_Bus_16_t::SignalBit9Updated, addr21, &IC_74xx574_t::ProcessUpdateD2);
     connect(fetch, &HW_Bus_16_t::SignalBitAUpdated, addr21, &IC_74xx574_t::ProcessUpdateD3);
@@ -446,6 +465,11 @@ void FetchRegisterModule_t::WireUp(void)
 
 
 // TODO: remove debugging code here
+    connect(assertMainTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertMain);
+    connect(assertAluBTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertAluB);
+    connect(assertAddr2Test, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertAddr2);
+    connect(instrSuppressTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessInstructionSuppress);
+    connect(fetchSuppressTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessFetchSuppress);
 }
 
 

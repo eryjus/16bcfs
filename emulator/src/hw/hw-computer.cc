@@ -37,7 +37,8 @@ HW_Bus_16_t *HW_Computer_t::aluA = nullptr;
 HW_Bus_16_t *HW_Computer_t::aluB = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr1 = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr2 = nullptr;
-HW_Bus_16_t *HW_Computer_t::instrBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::instrInBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::instrOutBus = nullptr;
 HW_Bus_16_t *HW_Computer_t::AddrCopyBus = nullptr;
 HW_Bus_16_t *HW_Computer_t::fetchBus = nullptr;
 
@@ -217,7 +218,8 @@ void HW_Computer_t::AllocateComponents(void)
     aluB = new HW_Bus_16_t("ALU B", clock);
     addr1 = new HW_Bus_16_t("Addr 1", clock);
     addr2 = new HW_Bus_16_t("Addr 2", clock);
-    instrBus = new HW_Bus_16_t("Instruction", clock);
+    instrInBus = new HW_Bus_16_t("Instruction In", clock);
+    instrOutBus = new HW_Bus_16_t("Instruction Out", clock);
     AddrCopyBus = new HW_Bus_16_t("ROM Copy", clock);
     fetchBus = new HW_Bus_16_t("Fetch", clock);
 

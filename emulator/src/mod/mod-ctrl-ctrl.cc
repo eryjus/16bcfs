@@ -599,7 +599,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Connect up MUX0 -- the least significant nibble
     //    -----------------------------------------------
-    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
+    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrOutBus();
 
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux0, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
     connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux0, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 0

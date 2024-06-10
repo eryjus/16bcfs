@@ -14,8 +14,6 @@
 #include "../moc/mod-fetch-register.moc.cc"
 
 
-#define TEST
-
 
 //
 // -- construct a new General Purpose Register
@@ -68,12 +66,6 @@ void FetchRegisterModule_t::AllocateComponents(void)
     assertAluB = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
     assertAddr2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
     instrSuppress = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
-
-// TODO: Remove testing rig below.
-    assertMainTest = new GUI_DipSwitch_t;
-    assertAluBTest = new GUI_DipSwitch_t;
-    assertAddr2Test = new GUI_DipSwitch_t;
-    instrSuppressTest = new GUI_DipSwitch_t;
 }
 
 
@@ -117,17 +109,10 @@ void FetchRegisterModule_t::BuildGui(void)
     controlLayout->addWidget(new QLabel("A2"), 1, 4, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("IS"), 1, 6, Qt::AlignHCenter);
 
-#ifdef TEST
-    controlLayout->addWidget(assertMainTest, 0, 0, Qt::AlignHCenter);
-    controlLayout->addWidget(assertAluBTest, 0, 2, Qt::AlignHCenter);
-    controlLayout->addWidget(assertAddr2Test, 0, 4, Qt::AlignHCenter);
-    controlLayout->addWidget(instrSuppressTest, 0, 6, Qt::AlignHCenter);
-#else
     controlLayout->addWidget(assertMain, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(assertAluB, 0, 2, Qt::AlignHCenter);
     controlLayout->addWidget(assertAddr2, 0, 4, Qt::AlignHCenter);
     controlLayout->addWidget(instrSuppress, 0, 6, Qt::AlignHCenter);
-#endif
 
 
     controls->setLayout(controlLayout);
@@ -186,16 +171,6 @@ void FetchRegisterModule_t::TriggerFirstUpdate(void)
     led0->TriggerFirstUpdate();
     led1->TriggerFirstUpdate();
     inv1->TriggerFirstUpdate();
-
-    assertMainTest->setValue(1);
-    assertAluBTest->setValue(1);
-    assertAddr2Test->setValue(1);
-    instrSuppressTest->setValue(1);
-
-    assertMainTest->setValue(0);
-    assertAluBTest->setValue(0);
-    assertAddr2Test->setValue(0);
-    instrSuppressTest->setValue(0);
 }
 
 
@@ -214,9 +189,7 @@ void FetchRegisterModule_t::WireUp(void)
     inv1->ProcessA6Low();
 
 
-//    HW_Bus_16_t *fetch = HW_Computer_t::GetFetchBus();
-// TODO: revert this back to the fetch bus
-    HW_Bus_16_t *fetch = HW_Computer_t::GetAddr1Bus();
+    HW_Bus_16_t *fetch = HW_Computer_t::GetFetchBus();
 
     // -- instruction Bus LSB
     // pin 1 (OE) -- handled below
@@ -368,7 +341,7 @@ void FetchRegisterModule_t::WireUp(void)
 
 
     // -- output to the instruction bus
-    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
+    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrInBus();
     connect(instrRegBus0, &IC_74xx574_t::SignalQ1Updated, instrBus, &HW_Bus_16_t::ProcessUpdateBit0);
     connect(instrRegBus0, &IC_74xx574_t::SignalQ2Updated, instrBus, &HW_Bus_16_t::ProcessUpdateBit1);
     connect(instrRegBus0, &IC_74xx574_t::SignalQ3Updated, instrBus, &HW_Bus_16_t::ProcessUpdateBit2);
@@ -454,13 +427,6 @@ void FetchRegisterModule_t::WireUp(void)
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
     connect(clk, &ClockModule_t::SignalClockState, this, &FetchRegisterModule_t::ProcessClk);
-
-
-// TODO: remove debugging code here
-    connect(assertMainTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertMain);
-    connect(assertAluBTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertAluB);
-    connect(assertAddr2Test, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertAddr2);
-    connect(instrSuppressTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessInstructionSuppress);
 }
 
 

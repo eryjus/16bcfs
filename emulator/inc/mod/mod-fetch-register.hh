@@ -69,12 +69,6 @@ private:
     GUI_Led_t *assertAddr2;
     GUI_Led_t *instrSuppress;
 
-// TODO: Remove testing rig below
-    GUI_DipSwitch_t *assertMainTest;
-    GUI_DipSwitch_t *assertAluBTest;
-    GUI_DipSwitch_t *assertAddr2Test;
-    GUI_DipSwitch_t *instrSuppressTest;
-
 
 
 public slots:

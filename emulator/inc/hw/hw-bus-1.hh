@@ -28,7 +28,7 @@ private:
 
 
 public:
-    HW_Bus_1_t(ClockModule_t *clk, QObject *parent = nullptr);
+    HW_Bus_1_t(const QString &name, ClockModule_t *clk, QObject *parent = nullptr);
     virtual ~HW_Bus_1_t() {}
 
 

@@ -254,13 +254,13 @@ void CtrlRomModule_t::WireUp(void)
     //
     // -- hook up the LEDs (to the output of the latch)
     //    ---------------------------------------------
-    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, led0, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, led1, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, led2, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, led3, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, led4, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, led5, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, led6, &GUI_Led_t::ProcessStateChange);
-    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, led7, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ1Updated, led0, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ2Updated, led1, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ3Updated, led2, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ4Updated, led3, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ5Updated, led4, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ6Updated, led5, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ7Updated, led6, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ8Updated, led7, &GUI_Led_t::ProcessStateChange);
 }
 

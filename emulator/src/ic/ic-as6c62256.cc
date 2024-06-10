@@ -162,6 +162,7 @@ void IC_AS6C62256_t::ProcessOutput(void)
     TriState_t dq5 = (outputValue & 0x20) != 0 ? HIGH : LOW;
     TriState_t dq6 = (outputValue & 0x40) != 0 ? HIGH : LOW;
     TriState_t dq7 = (outputValue & 0x80) != 0 ? HIGH : LOW;
+
     TriState_t nq0 = Z;
     TriState_t nq1 = Z;
     TriState_t nq2 = Z;
@@ -201,6 +202,7 @@ void IC_AS6C62256_t::ProcessOutput(void)
     nq1 = ((outputValue & (1<<1)) != 0) ? HIGH : LOW;
     nq0 = ((outputValue & (1<<0)) != 0) ? HIGH : LOW;
 
+#if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
     emit SignalDq0Updated(nq0);
     emit SignalDq1Updated(nq1);
     emit SignalDq2Updated(nq2);
@@ -209,6 +211,16 @@ void IC_AS6C62256_t::ProcessOutput(void)
     emit SignalDq5Updated(nq5);
     emit SignalDq6Updated(nq6);
     emit SignalDq7Updated(nq7);
+#else
+    if (dq0 != nq0) emit SignalDq0Updated(nq0);
+    if (dq1 != nq1) emit SignalDq1Updated(nq1);
+    if (dq2 != nq2) emit SignalDq2Updated(nq2);
+    if (dq3 != nq3) emit SignalDq3Updated(nq3);
+    if (dq4 != nq4) emit SignalDq4Updated(nq4);
+    if (dq5 != nq5) emit SignalDq5Updated(nq5);
+    if (dq6 != nq6) emit SignalDq6Updated(nq6);
+    if (dq7 != nq7) emit SignalDq7Updated(nq7);
+#endif
 }
 
 

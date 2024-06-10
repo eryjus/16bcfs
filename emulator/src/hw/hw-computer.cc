@@ -93,6 +93,7 @@ void HW_Computer_t::Initialize(void)
     AllocateComponents();
     BuildGui();
     WireUp();
+    FinalWireUp();
     TriggerFirstUpdates();
 }
 
@@ -290,20 +291,11 @@ void HW_Computer_t::WireUp(void)
     connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
 
 
-    //
-    // -- Clock for the register module
-    //    -----------------------------
-    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
-
-
 
     //
     // -- Wire up the relevant pieces of the Control Logic Mid-Plane
     //    ----------------------------------------------------------
     connect(clock, &ClockModule_t::SignalClockState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessCpuClock);
-
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
 }
 
 
@@ -364,5 +356,34 @@ void HW_Computer_t::PerformReset(void)
 
     rst->Release();
 }
+
+
+//
+// -- Now that all the planes are built, complete the final wire up between them
+//    --------------------------------------------------------------------------
+void HW_Computer_t::FinalWireUp(void)
+{
+    // -- Wire up the PC Register
+    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset);
+    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
+    pgmpc->ProcessDec(LOW);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertSwapPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertSwap);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertMain);
+    pgmpc->ProcessAssertAluA(LOW);
+    pgmpc->ProcessAssertAluB(LOW);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1);
+    pgmpc->ProcessAssertAddr2(LOW);
+
+
+    // -- Wire up the Fetch Register
+    connect(rst, &HW_MomentarySwitch_t::SignalState, fetch, &FetchRegisterModule_t::ProcessReset);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalInstructionSuppress, fetch, &FetchRegisterModule_t::ProcessInstructionSuppress);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAddr2);
+}
+
 
 

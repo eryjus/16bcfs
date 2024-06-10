@@ -149,6 +149,7 @@ private:
     static void AllocateComponents(void);
     static void BuildGui(void);
     static void WireUp(void);
+    static void FinalWireUp(void);
     static void TriggerFirstUpdates(void);
 };
 

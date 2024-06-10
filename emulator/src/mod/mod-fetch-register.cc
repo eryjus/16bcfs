@@ -47,7 +47,6 @@ void FetchRegisterModule_t::AllocateComponents(void)
     main1 = new IC_74xx574_t;
     led0 = new IC_74xx574_t;
     led1 = new IC_74xx574_t;
-    and1 = new IC_74xx08_t;
     inv1 = new IC_74xx04_t;
     bit0 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
     bit1 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
@@ -69,14 +68,12 @@ void FetchRegisterModule_t::AllocateComponents(void)
     assertAluB = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
     assertAddr2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
     instrSuppress = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
-    fetchSuppress = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
 
 // TODO: Remove testing rig below.
     assertMainTest = new GUI_DipSwitch_t;
     assertAluBTest = new GUI_DipSwitch_t;
     assertAddr2Test = new GUI_DipSwitch_t;
     instrSuppressTest = new GUI_DipSwitch_t;
-    fetchSuppressTest = new GUI_DipSwitch_t;
 }
 
 
@@ -119,20 +116,17 @@ void FetchRegisterModule_t::BuildGui(void)
     controlLayout->addWidget(new QLabel("AB"), 1, 2, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("A2"), 1, 4, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("IS"), 1, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("FS"), 1, 8, Qt::AlignHCenter);
 
 #ifdef TEST
     controlLayout->addWidget(assertMainTest, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(assertAluBTest, 0, 2, Qt::AlignHCenter);
     controlLayout->addWidget(assertAddr2Test, 0, 4, Qt::AlignHCenter);
     controlLayout->addWidget(instrSuppressTest, 0, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(fetchSuppressTest, 0, 8, Qt::AlignHCenter);
 #else
     controlLayout->addWidget(assertMain, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(assertAluB, 0, 2, Qt::AlignHCenter);
     controlLayout->addWidget(assertAddr2, 0, 4, Qt::AlignHCenter);
     controlLayout->addWidget(instrSuppress, 0, 6, Qt::AlignHCenter);
-    controlLayout->addWidget(fetchSuppress, 0, 8, Qt::AlignHCenter);
 #endif
 
 
@@ -191,20 +185,17 @@ void FetchRegisterModule_t::TriggerFirstUpdate(void)
     instrRegBus1->TriggerFirstUpdate();
     led0->TriggerFirstUpdate();
     led1->TriggerFirstUpdate();
-    and1->TriggerFirstUpdate();
     inv1->TriggerFirstUpdate();
 
     assertMainTest->setValue(1);
     assertAluBTest->setValue(1);
     assertAddr2Test->setValue(1);
     instrSuppressTest->setValue(1);
-    fetchSuppressTest->setValue(1);
 
     assertMainTest->setValue(0);
     assertAluBTest->setValue(0);
     assertAddr2Test->setValue(0);
     instrSuppressTest->setValue(0);
-    fetchSuppressTest->setValue(0);
 }
 
 
@@ -214,22 +205,11 @@ void FetchRegisterModule_t::TriggerFirstUpdate(void)
 //    ------------------------------------
 void FetchRegisterModule_t::WireUp(void)
 {
-    // -- start with the inputs to the 74xx08 AND gate
-    connect(inv1, &IC_74xx04_t::SignalY4Updated, and1, &IC_74xx08_t::ProcessUpdateA1);
-    //    B1 -- CLK -- handled in header
-    and1->ProcessA2Low();
-    and1->ProcessB2Low();
-    and1->ProcessA3Low();
-    and1->ProcessB3Low();
-    and1->ProcessA4Low();
-    and1->ProcessB4Low();
-
-
     // -- the 74xx04 inverter
     //    A1 -- Main Assert -- handled below
     //    A2 -- ALUB Assert -- handled below
     //    A3 -- Addr2 Assert -- handled below
-    //    A4 -- InstrSuppress -- handled below
+    inv1->ProcessA4Low();
     inv1->ProcessA5Low();
     inv1->ProcessA6Low();
 
@@ -248,7 +228,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBit5Updated, instrRegBus0, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBit6Updated, instrRegBus0, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBit7Updated, instrRegBus0, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, instrRegBus0, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- instruction Bus MSB
@@ -261,7 +241,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBitDUpdated, instrRegBus1, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBitEUpdated, instrRegBus1, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBitFUpdated, instrRegBus1, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, instrRegBus1, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- main Bus LSB
@@ -274,7 +254,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBit5Updated, main0, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBit6Updated, main0, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBit7Updated, main0, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, main0, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- main Bus MSB
@@ -287,7 +267,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBitDUpdated, main1, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBitEUpdated, main1, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBitFUpdated, main1, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, main1, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- ALU B LSB
@@ -300,7 +280,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBit5Updated, aluB0, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBit6Updated, aluB0, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBit7Updated, aluB0, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, aluB0, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- ALU B MSB
@@ -313,7 +293,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBitDUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBitEUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBitFUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, aluB1, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- Addr2 LSB
@@ -326,7 +306,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBit5Updated, addr20, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBit6Updated, addr20, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBit7Updated, addr20, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, addr20, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- Addr2 MSB
@@ -339,7 +319,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBitDUpdated, addr21, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBitEUpdated, addr21, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBitFUpdated, addr21, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, addr21, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- Led LSB
@@ -352,7 +332,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBit5Updated, led0, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBit6Updated, led0, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBit7Updated, led0, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, led0, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- Led MSB
@@ -365,7 +345,7 @@ void FetchRegisterModule_t::WireUp(void)
     connect(fetch, &HW_Bus_16_t::SignalBitDUpdated, led1, &IC_74xx574_t::ProcessUpdateD6);
     connect(fetch, &HW_Bus_16_t::SignalBitEUpdated, led1, &IC_74xx574_t::ProcessUpdateD7);
     connect(fetch, &HW_Bus_16_t::SignalBitFUpdated, led1, &IC_74xx574_t::ProcessUpdateD8);   // msb
-    connect(and1, &IC_74xx08_t::SignalY1Updated, led1, &IC_74xx574_t::ProcessUpdateClk);
+    // pin 11 (CLK) -- handled below
 
 
     // -- connect contents the LED inputs
@@ -481,7 +461,6 @@ void FetchRegisterModule_t::WireUp(void)
     connect(assertAluBTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertAluB);
     connect(assertAddr2Test, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessAssertAddr2);
     connect(instrSuppressTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessInstructionSuppress);
-    connect(fetchSuppressTest, &GUI_DipSwitch_t::SignalSwitchChanged, this, &FetchRegisterModule_t::ProcessFetchSuppress);
 }
 
 
@@ -516,16 +495,6 @@ void FetchRegisterModule_t::ProcessAssertAddr2(TriState_t state)
 
 
 //
-// -- Process Fetch Suppress
-//    ----------------------
-void FetchRegisterModule_t::ProcessFetchSuppress(TriState_t state)
-{
-    inv1->ProcessUpdateA4(state);
-    fetchSuppress->ProcessStateChange(state);
-}
-
-
-//
 // -- Suppress the assert to the instruction register
 //    -----------------------------------------------
 void FetchRegisterModule_t::ProcessInstructionSuppress(TriState_t state)
@@ -533,4 +502,23 @@ void FetchRegisterModule_t::ProcessInstructionSuppress(TriState_t state)
     instrRegBus0->ProcessUpdateOE(state);
     instrRegBus1->ProcessUpdateOE(state);
     instrSuppress->ProcessStateChange(state);
+}
+
+
+
+//
+// -- Handle the clock tick
+//    ---------------------
+void FetchRegisterModule_t::ProcessClk(TriState_t state)
+{
+    instrRegBus0->ProcessUpdateClk(state);
+    instrRegBus1->ProcessUpdateClk(state);
+    main0->ProcessUpdateClk(state);
+    main1->ProcessUpdateClk(state);
+    aluB0->ProcessUpdateClk(state);
+    aluB1->ProcessUpdateClk(state);
+    addr20->ProcessUpdateClk(state);
+    addr21->ProcessUpdateClk(state);
+    led0->ProcessUpdateClk(state);
+    led1->ProcessUpdateClk(state);
 }

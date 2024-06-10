@@ -45,7 +45,6 @@ private:
     IC_74xx574_t *led0;
     IC_74xx574_t *led1;
 
-    IC_74xx08_t *and1;
     IC_74xx04_t *inv1;
 
     GUI_Led_t *bit0;
@@ -69,26 +68,23 @@ private:
     GUI_Led_t *assertAluB;
     GUI_Led_t *assertAddr2;
     GUI_Led_t *instrSuppress;
-    GUI_Led_t *fetchSuppress;
 
 // TODO: Remove testing rig below
     GUI_DipSwitch_t *assertMainTest;
     GUI_DipSwitch_t *assertAluBTest;
     GUI_DipSwitch_t *assertAddr2Test;
     GUI_DipSwitch_t *instrSuppressTest;
-    GUI_DipSwitch_t *fetchSuppressTest;
 
 
 
 public slots:
     // -- these functions become the external inputs into this module from the backplane
     void ProcessReset(TriState_t state) { /* This board will take #RESET as a signal but will do nothing with it */ }
-    void ProcessClk(TriState_t state) { and1->ProcessUpdateB1(state); }
+    void ProcessClk(TriState_t state);
     void ProcessAssertMain(TriState_t state);
     void ProcessAssertAluB(TriState_t state);
     void ProcessAssertAddr2(TriState_t state);
     void ProcessInstructionSuppress(TriState_t state);
-    void ProcessFetchSuppress(TriState_t state);
 
 
 public:

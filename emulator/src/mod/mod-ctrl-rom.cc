@@ -28,12 +28,6 @@ CtrlRomModule_t::CtrlRomModule_t(const QString &name, const QString &file) : QGr
     BuildGui();
     WireUp();
     TriggerFirstUpdate();
-
-    if (name == "Ctrl7") {
-        latch->setObjectName("debug");
-        sram->setObjectName("debug");
-        ctrl->setObjectName("debug");
-    }
 }
 
 

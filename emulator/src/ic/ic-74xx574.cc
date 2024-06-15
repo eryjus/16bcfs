@@ -101,14 +101,14 @@ void IC_74xx574_t::ProcessUpdateClk(TriState_t state)
         pins[Q7] = pins[D7];
         pins[Q8] = pins[D8];
 
-        emit SignalQ1Updated(pins[OEb]==HIGH?Z:pins[Q1]);
-        emit SignalQ2Updated(pins[OEb]==HIGH?Z:pins[Q2]);
-        emit SignalQ3Updated(pins[OEb]==HIGH?Z:pins[Q3]);
-        emit SignalQ4Updated(pins[OEb]==HIGH?Z:pins[Q4]);
-        emit SignalQ5Updated(pins[OEb]==HIGH?Z:pins[Q5]);
-        emit SignalQ6Updated(pins[OEb]==HIGH?Z:pins[Q6]);
-        emit SignalQ7Updated(pins[OEb]==HIGH?Z:pins[Q7]);
-        emit SignalQ8Updated(pins[OEb]==HIGH?Z:pins[Q8]);
+        emit SignalQ1Updated((pins[OEb]==HIGH)?Z:pins[Q1]);
+        emit SignalQ2Updated((pins[OEb]==HIGH)?Z:pins[Q2]);
+        emit SignalQ3Updated((pins[OEb]==HIGH)?Z:pins[Q3]);
+        emit SignalQ4Updated((pins[OEb]==HIGH)?Z:pins[Q4]);
+        emit SignalQ5Updated((pins[OEb]==HIGH)?Z:pins[Q5]);
+        emit SignalQ6Updated((pins[OEb]==HIGH)?Z:pins[Q6]);
+        emit SignalQ7Updated((pins[OEb]==HIGH)?Z:pins[Q7]);
+        emit SignalQ8Updated((pins[OEb]==HIGH)?Z:pins[Q8]);
     }
 }
 

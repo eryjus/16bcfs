@@ -599,7 +599,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Connect up MUX0 -- the least significant nibble
     //    -----------------------------------------------
-    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
+    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrOutBus();
 
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux0, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
     connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux0, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 0
@@ -621,18 +621,18 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up MUX4 -- the next least significant nibble
     //    ----------------------------------------------------
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux4, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux4, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 4
+    connect(instrBus, &HW_Bus_16_t::SignalBit4Updated, mux4, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 4
     connect(addr4, &IC_74xx193_t::SignalQaUpdated, mux4, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 4
     // pin 4: Output Y1
-    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, mux4, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 5
+    connect(instrBus, &HW_Bus_16_t::SignalBit5Updated, mux4, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 5
     connect(addr4, &IC_74xx193_t::SignalQbUpdated, mux4, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 5
     // pin 6: Output Y2
     // pin 9: Output Y3
     connect(addr4, &IC_74xx193_t::SignalQcUpdated, mux4, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 6
-    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, mux4, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 6
+    connect(instrBus, &HW_Bus_16_t::SignalBit6Updated, mux4, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 6
     // pin 12: Output Y4
     connect(addr4, &IC_74xx193_t::SignalQdUpdated, mux4, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 7
-    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, mux4, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 7
+    connect(instrBus, &HW_Bus_16_t::SignalBit7Updated, mux4, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 7
     mux4->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
 
 
@@ -641,18 +641,18 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up MUX8 -- the next most significant nibble
     //    ---------------------------------------------------
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, mux8, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, mux8, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 8
+    connect(instrBus, &HW_Bus_16_t::SignalBit8Updated, mux8, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 8
     connect(addr8, &IC_74xx193_t::SignalQaUpdated, mux8, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 8
     // pin 4: Output Y1
-    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, mux8, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 9
+    connect(instrBus, &HW_Bus_16_t::SignalBit9Updated, mux8, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 9
     connect(addr8, &IC_74xx193_t::SignalQbUpdated, mux8, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 9
     // pin 6: Output Y2
     // pin 9: Output Y3
     connect(addr8, &IC_74xx193_t::SignalQcUpdated, mux8, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 10
-    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, mux8, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 10
+    connect(instrBus, &HW_Bus_16_t::SignalBitAUpdated, mux8, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 10
     // pin 12: Output Y4
     connect(addr8, &IC_74xx193_t::SignalQdUpdated, mux8, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 11
-    connect(instrBus, &HW_Bus_16_t::SignalBit3Updated, mux8, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 11
+    connect(instrBus, &HW_Bus_16_t::SignalBitBUpdated, mux8, &IC_74xx157_t::ProcessUpdateA4);       // pin 14: Input A4: bit 11
     mux8->ProcessUpdateGb(LOW);                                                                     // pin 15: Input /G
 
 
@@ -661,15 +661,15 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up MUXc -- the most significant nibble
     //    ----------------------------------------------
     connect(resetting, &IC_74xx74_t::SignalQ2Updated, muxC, &IC_74xx157_t::ProcessUpdateAB);        // pin 1: #Done
-    connect(instrBus, &HW_Bus_16_t::SignalBit0Updated, muxC, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 12
+    connect(instrBus, &HW_Bus_16_t::SignalBitCUpdated, muxC, &IC_74xx157_t::ProcessUpdateA1);       // pin 2: Input A1: bit 12
     connect(addrC, &IC_74xx193_t::SignalQaUpdated, muxC, &IC_74xx157_t::ProcessUpdateB1);           // pin 3: Input B1: bit 12
     // pin 4: Output Y1
-    connect(instrBus, &HW_Bus_16_t::SignalBit1Updated, muxC, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 13
+    connect(instrBus, &HW_Bus_16_t::SignalBitDUpdated, muxC, &IC_74xx157_t::ProcessUpdateA2);       // pin 5: Input A2: bit 13
     connect(addrC, &IC_74xx193_t::SignalQbUpdated, muxC, &IC_74xx157_t::ProcessUpdateB2);           // pin 6: Input B2: bit 13
     // pin 6: Output Y2
     // pin 9: Output Y3
     connect(addrC, &IC_74xx193_t::SignalQcUpdated, muxC, &IC_74xx157_t::ProcessUpdateB3);           // pin 10: Input B3: bit 14
-    connect(instrBus, &HW_Bus_16_t::SignalBit2Updated, muxC, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 14
+    connect(instrBus, &HW_Bus_16_t::SignalBitEUpdated, muxC, &IC_74xx157_t::ProcessUpdateA3);       // pin 11: Input A3: bit 14
     // pin 12: Output Y4
     connect(addrC, &IC_74xx193_t::SignalQdUpdated, muxC, &IC_74xx157_t::ProcessUpdateB4);           // pin 13: Input B4: bit 15
     muxC->ProcessUpdateA4(LOW);                                                                     // pin 14: Input A4: bit 15

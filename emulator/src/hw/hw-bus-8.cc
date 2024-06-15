@@ -18,8 +18,11 @@
 //
 // -- Construct a new 8-bit bus
 //    -------------------------
-HW_Bus_8_t::HW_Bus_8_t(ClockModule_t *clk, QObject *parent) : QObject(parent), assertedBits(new Map_t)
+HW_Bus_8_t::HW_Bus_8_t(const QString &name, ClockModule_t *clk, QObject *parent)
+        : QObject(parent), assertedBits(new Map_t)
 {
+    setObjectName(name);
+
     for (int i = BIT_0; i <= BIT_7; i ++) (*assertedBits)[i] = new Asserts_t;
 
     connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_8_t::ProcessSanityCheck);

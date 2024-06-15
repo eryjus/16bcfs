@@ -105,7 +105,7 @@ HW_AluAdder_t::HW_AluAdder_t(IC_74xx541_t *aluALsb, IC_74xx541_t *aluAMsb,
 
     // -- here are some temporary connections, which will be replaced later
     bits0->ProcessCInUpdate(LOW);
-    driver->ProcessUpdateOE1(LOW);
+    driver->ProcessUpdateOE1(HIGH);     // turn off the automatic assert to Main
     driver->ProcessUpdateOE2(LOW);
 
 

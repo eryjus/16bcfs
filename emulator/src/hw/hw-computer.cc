@@ -37,8 +37,10 @@ HW_Bus_16_t *HW_Computer_t::aluA = nullptr;
 HW_Bus_16_t *HW_Computer_t::aluB = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr1 = nullptr;
 HW_Bus_16_t *HW_Computer_t::addr2 = nullptr;
-HW_Bus_16_t *HW_Computer_t::instrBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::instrInBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::instrOutBus = nullptr;
 HW_Bus_16_t *HW_Computer_t::AddrCopyBus = nullptr;
+HW_Bus_16_t *HW_Computer_t::fetchBus = nullptr;
 
 
 // -- The ALU
@@ -64,6 +66,7 @@ GpRegisterModule_t *HW_Computer_t::pgmsp = nullptr;
 GpRegisterModule_t *HW_Computer_t::intpc = nullptr;
 GpRegisterModule_t *HW_Computer_t::intra = nullptr;
 GpRegisterModule_t *HW_Computer_t::intsp = nullptr;
+FetchRegisterModule_t *HW_Computer_t::fetch = nullptr;
 
 
 
@@ -90,6 +93,7 @@ void HW_Computer_t::Initialize(void)
     AllocateComponents();
     BuildGui();
     WireUp();
+    FinalWireUp();
     TriggerFirstUpdates();
 }
 
@@ -128,8 +132,8 @@ void HW_Computer_t::BuildGui(void)
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 11, 16);
-    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 11, 15);
+    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 14);
+    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 14, 14);
 
     grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 0, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 12, 3, 1, 3);
@@ -141,9 +145,10 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(intFlags, 0, 12, 1, 1);
 
     // -- place the control logic mid-plane
-    grid->addWidget(ctrlLogic, 0, 15, 10, 2);
+    grid->addWidget(ctrlLogic, 0, 15, 9, 2);
+    grid->addWidget(fetch, 11, 15, 2, 2);
 
-    grid->addWidget(clock, 12, 15, 2, 2);
+    grid->addWidget(clock, 13, 15, 2, 2);
 
     grid->addWidget(pgmpc, 0, 0, 2, 3);
     grid->addWidget(pgmra, 2, 0, 2, 3);
@@ -208,14 +213,16 @@ void HW_Computer_t::AllocateComponents(void)
     //
     // -- Create the various buses -- top priority to place
     //    -------------------------------------------------
-    rHld = new HW_Bus_1_t(clock);
-    mainBus = new HW_Bus_16_t(clock);
-    aluA = new HW_Bus_16_t(clock);
-    aluB = new HW_Bus_16_t(clock);
-    addr1 = new HW_Bus_16_t(clock);
-    addr2 = new HW_Bus_16_t(clock);
-    instrBus = new HW_Bus_16_t(clock);
-    AddrCopyBus = new HW_Bus_16_t(clock);
+    rHld = new HW_Bus_1_t("Reset", clock);
+    mainBus = new HW_Bus_16_t("Main", clock);
+    aluA = new HW_Bus_16_t("ALU A", clock);
+    aluB = new HW_Bus_16_t("ALU B", clock);
+    addr1 = new HW_Bus_16_t("Addr 1", clock);
+    addr2 = new HW_Bus_16_t("Addr 2", clock);
+    instrInBus = new HW_Bus_16_t("Instruction In", clock);
+    instrOutBus = new HW_Bus_16_t("Instruction Out", clock);
+    AddrCopyBus = new HW_Bus_16_t("ROM Copy", clock);
+    fetchBus = new HW_Bus_16_t("Fetch", clock);
 
 
     //
@@ -265,6 +272,7 @@ void HW_Computer_t::AllocateComponents(void)
     intpc = new GpRegisterModule_t("INT PC");
     intra = new GpRegisterModule_t("INT RA");
     intsp = new GpRegisterModule_t("INT SP");
+    fetch = new FetchRegisterModule_t;
 }
 
 
@@ -283,20 +291,11 @@ void HW_Computer_t::WireUp(void)
     connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
 
 
-    //
-    // -- Clock for the register module
-    //    -----------------------------
-    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
-
-
 
     //
     // -- Wire up the relevant pieces of the Control Logic Mid-Plane
     //    ----------------------------------------------------------
     connect(clock, &ClockModule_t::SignalClockState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessCpuClock);
-
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
 }
 
 
@@ -352,9 +351,39 @@ void HW_Computer_t::PerformReset(void)
     intpc->TriggerFirstUpdate();
     intra->TriggerFirstUpdate();
     intsp->TriggerFirstUpdate();
+    fetch->TriggerFirstUpdate();
     ctrlLogic->TriggerFirstUpdate();
 
     rst->Release();
 }
+
+
+//
+// -- Now that all the planes are built, complete the final wire up between them
+//    --------------------------------------------------------------------------
+void HW_Computer_t::FinalWireUp(void)
+{
+    // -- Wire up the PC Register
+    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset);
+    connect(clock, &ClockModule_t::SignalClockState, pgmpc, &GpRegisterModule_t::ProcessClk);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
+    pgmpc->ProcessDec(LOW);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertSwapPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertSwap);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertMain);
+    pgmpc->ProcessAssertAluA(LOW);
+    pgmpc->ProcessAssertAluB(LOW);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1);
+    pgmpc->ProcessAssertAddr2(LOW);
+
+
+    // -- Wire up the Fetch Register
+    connect(rst, &HW_MomentarySwitch_t::SignalState, fetch, &FetchRegisterModule_t::ProcessReset);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalInstructionSuppress, fetch, &FetchRegisterModule_t::ProcessInstructionSuppress);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAddr2);
+}
+
 
 

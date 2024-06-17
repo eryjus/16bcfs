@@ -341,7 +341,7 @@ void FetchRegisterModule_t::WireUp(void)
 
 
     // -- output to the instruction bus
-    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrInBus();
+    HW_Bus_16_t *instrBus = HW_Computer_t::Get()->GetInstrBus();
     connect(instrRegBus0, &IC_74xx574_t::SignalQ1Updated, instrBus, &HW_Bus_16_t::ProcessUpdateBit0);
     connect(instrRegBus0, &IC_74xx574_t::SignalQ2Updated, instrBus, &HW_Bus_16_t::ProcessUpdateBit1);
     connect(instrRegBus0, &IC_74xx574_t::SignalQ3Updated, instrBus, &HW_Bus_16_t::ProcessUpdateBit2);

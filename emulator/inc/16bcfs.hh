@@ -127,6 +127,7 @@ class ClockModule_t;
 class CtrlRomCtrlModule_t;
 class CtrlRomModule_t;
 class FetchRegisterModule_t;
+class InstructionRegisterModule_t;
 class GpRegisterModule_t;
 
 class CtrlRomModule_t;
@@ -175,6 +176,7 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "mod/mod-ctrl-ctrl.hh"
 #include "mod/mod-ctrl-rom.hh"
 #include "mod/mod-fetch-register.hh"
+#include "mod/mod-instr-register.hh"
 #include "mod/mod-gp-register.hh"
 
 #include "planes/ctrl-mid-plane.hh"

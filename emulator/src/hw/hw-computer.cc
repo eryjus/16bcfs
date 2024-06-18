@@ -66,6 +66,7 @@ GpRegisterModule_t *HW_Computer_t::intpc = nullptr;
 GpRegisterModule_t *HW_Computer_t::intra = nullptr;
 GpRegisterModule_t *HW_Computer_t::intsp = nullptr;
 FetchRegisterModule_t *HW_Computer_t::fetch = nullptr;
+InstructionRegisterModule_t *HW_Computer_t::instr = nullptr;
 
 
 
@@ -146,6 +147,7 @@ void HW_Computer_t::BuildGui(void)
     // -- place the control logic mid-plane
     grid->addWidget(ctrlLogic, 0, 15, 9, 2);
     grid->addWidget(fetch, 11, 15, 2, 2);
+    grid->addWidget(instr, 10, 15, 1, 2);
 
     grid->addWidget(clock, 13, 15, 2, 2);
 
@@ -270,6 +272,15 @@ void HW_Computer_t::AllocateComponents(void)
     intpc = new GpRegisterModule_t("INT PC");
     intra = new GpRegisterModule_t("INT RA");
     intsp = new GpRegisterModule_t("INT SP");
+
+
+    //
+    // -- The sequence of the allocations here are critical.  Since the signals and slots are processed in order
+    //    of their "connection", we need the instruction register's connections to exist before the fetch register's
+    //    connections so that the timing and sequencing are correct.  This is just a problems the this emulator's
+    //    choice of framework.
+    //    ----------------------------------------------------------------------------------------------------------
+    instr = new InstructionRegisterModule_t;
     fetch = new FetchRegisterModule_t;
 }
 

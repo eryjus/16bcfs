@@ -57,6 +57,7 @@ private:
     static GpRegisterModule_t *intsp;
 
     static FetchRegisterModule_t *fetch;
+    static InstructionRegisterModule_t *instr;
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;

@@ -1,0 +1,5 @@
+include_rules
+
+export Qt6_DIR
+
+: 16bcfs.hh | gui/* hw/* ic/* mod/* planes/* sub/* |> gcc -c -I ../inc -I ../moc -I $Qt6_DIR/../../$(QT_VERSION)/gcc_64/include -o %o %f  |> 16bcfs.hh.gch

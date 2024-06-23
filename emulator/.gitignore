@@ -6,3 +6,4 @@ src/16bcfs.cc
 .vscode
 doc
 emulator.pro
+inc/16bcfs.hh.gch

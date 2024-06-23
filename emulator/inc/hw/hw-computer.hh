@@ -57,6 +57,7 @@ private:
     static GpRegisterModule_t *intsp;
 
     static FetchRegisterModule_t *fetch;
+    static InstructionRegisterModule_t *instr;
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;
@@ -79,8 +80,7 @@ private:
     static HW_Bus_16_t *fetchBus;
 
     // -- The Insturuction Bus
-    static HW_Bus_16_t *instrInBus;
-    static HW_Bus_16_t *instrOutBus;
+    static HW_Bus_16_t *instrBus;
 
     // -- The Address Copy Bus
     static HW_Bus_16_t *AddrCopyBus;
@@ -115,8 +115,7 @@ public:
     static HW_Bus_16_t *GetAluBBus(void) { return aluB; }
     static HW_Bus_16_t *GetAddr1Bus(void) { return addr1; }
     static HW_Bus_16_t *GetAddr2Bus(void) { return addr2; }
-    static HW_Bus_16_t *GetInstrInBus(void) { return instrInBus; }
-    static HW_Bus_16_t *GetInstrOutBus(void) { return instrOutBus; }
+    static HW_Bus_16_t *GetInstrBus(void) { return instrBus; }
     static HW_Bus_16_t *GetFetchBus(void) { return fetchBus; }
     static ControlLogic_MidPlane_t *GetCtrlMidPlane(void) { return ctrlLogic; }
     static HW_Bus_16_t *GetAddrCopyBus(void) { return AddrCopyBus; }

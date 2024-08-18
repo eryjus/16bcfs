@@ -97,7 +97,8 @@ class IC_74xx283_t;
 class IC_74xx540_t;
 class IC_74xx541_t;
 class IC_74xx574_t;
-class IC_AS6C63256_t;
+class IC_AS6C62256_t;
+class IC_AT28C256_t;
 
 class HW_Alu_t;
 class HW_AluAdder_t;
@@ -138,7 +139,7 @@ class CtrlRomModule_t;
 //    -----------------------------------------------------------------
 extern GUI_Application_t *app;
 const QString key = "control-rom/folder";   // -- I expect the linker to handle the duplicate constants here
-
+const QString lastPgm = "pgm-rom/last-pgm";
 
 
 //
@@ -166,6 +167,7 @@ const QString key = "control-rom/folder";   // -- I expect the linker to handle 
 #include "ic/ic-74xx574.hh"
 #include "ic/ic-as6c62256.hh"
 #include "ic/ic-25lc256.hh"
+#include "ic/ic-at28c256.hh"
 
 #include "sub/sub-demux-3.hh"
 #include "sub/sub-demux-4.hh"

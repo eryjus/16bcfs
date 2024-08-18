@@ -1,12 +1,12 @@
 //===================================================================================================================
-// ic-as6c62256.hh -- This header file defines an AS6C62256 Parallel SRAM IC
+// ic-at28c256.hh -- This header file defines an AT28C256 Parallel EEPROM IC (Read Only)
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2024-Jan-17  Initial  v0.0.1   Initial Version
+//  2024-Aug-17  Initial  v0.0.1   Initial Version
 //===================================================================================================================
 
 
@@ -16,9 +16,9 @@
 
 
 //
-// -- This is the class which will emulate the SRAM
-//    ---------------------------------------------
-class IC_AS6C62256_t : public QObject {
+// -- This is the class which will emulate the EEPROM
+//    -----------------------------------------------
+class IC_AT28C256_t : public QObject {
     Q_OBJECT
 
 
@@ -50,11 +50,12 @@ public:
         A9  = 24,
         A8  = 25,
         A13 = 26,
-        WEb = 27,
+//  Pin #27 is disabled herein (WEb)
     };
 
 
 private:
+/*
     enum {
         ENAB_ALL    = 0b000,
         ENAB_CE_WE  = 0b001,
@@ -65,10 +66,11 @@ private:
         ENAB_OE     = 0b110,
         ENAB_NONE   = 0b111,
     };
+*/
 
 private:
-    IC_25lc256_t *reference;
-    bool outputting;
+//    IC_25lc256_t *reference;
+//    bool outputting;
     uint8_t outputValue;
 
 
@@ -78,7 +80,7 @@ private:
 
 
     // -- These hold the incoming value in case an update is needed later
-    TriState_t hold0;
+/*    TriState_t hold0;
     TriState_t hold1;
     TriState_t hold2;
     TriState_t hold3;
@@ -86,18 +88,18 @@ private:
     TriState_t hold5;
     TriState_t hold6;
     TriState_t hold7;
-
+*/
     TriState_t lastCE;
-    TriState_t lastWE;
+//    TriState_t lastWE;
     TriState_t lastOE;
 
-    bool updating;
+//    bool updating;
 
 
 
 public:
-    IC_AS6C62256_t(IC_25lc256_t *sanity = nullptr);
-    virtual ~IC_AS6C62256_t() {}
+    IC_AT28C256_t(const QString &file                                            );
+    virtual ~IC_AT28C256_t() {}
 
 
 
@@ -107,12 +109,12 @@ public:
 
 
 private:
-    void ProcessInput(void);
+//    void ProcessInput(void);
     void ProcessOutput(void);
     void UpdateAll(void);
     void OutputZ(void);
 
-    bool StatusChange(void) { return (pins[CEb] != lastCE) || (pins[WEb] != lastWE) || (pins[OEb] != lastOE); }
+    bool StatusChange(void) { return (pins[CEb] != lastCE) /*|| (pins[WEb] != lastWE)*/ || (pins[OEb] != lastOE); }
 
 
 
@@ -135,20 +137,20 @@ public slots:
 
     void ProcessUpdateCE(TriState_t state) { pins[CEb] = state; UpdateAll(); }
     void ProcessUpdateOE(TriState_t state) { pins[OEb] = state; UpdateAll(); }
-    void ProcessUpdateWE(TriState_t state) { pins[WEb] = state; UpdateAll(); }
+//    void ProcessUpdateWE(TriState_t state) { pins[WEb] = state; UpdateAll(); }
 
-    void ProcessUpdateDq0(TriState_t state)  { hold0 = state; UpdateAll(); }
-    void ProcessUpdateDq1(TriState_t state)  { hold1 = state; UpdateAll(); }
-    void ProcessUpdateDq2(TriState_t state)  { hold2 = state; UpdateAll(); }
-    void ProcessUpdateDq3(TriState_t state)  { hold3 = state; UpdateAll(); }
-    void ProcessUpdateDq4(TriState_t state)  { hold4 = state; UpdateAll(); }
-    void ProcessUpdateDq5(TriState_t state)  { hold5 = state; UpdateAll(); }
-    void ProcessUpdateDq6(TriState_t state)  { hold6 = state; UpdateAll(); }
-    void ProcessUpdateDq7(TriState_t state)  { hold7 = state; UpdateAll(); }
+//    void ProcessUpdateDq0(TriState_t state)  { hold0 = state; UpdateAll(); }
+//    void ProcessUpdateDq1(TriState_t state)  { hold1 = state; UpdateAll(); }
+//    void ProcessUpdateDq2(TriState_t state)  { hold2 = state; UpdateAll(); }
+//    void ProcessUpdateDq3(TriState_t state)  { hold3 = state; UpdateAll(); }
+//    void ProcessUpdateDq4(TriState_t state)  { hold4 = state; UpdateAll(); }
+//    void ProcessUpdateDq5(TriState_t state)  { hold5 = state; UpdateAll(); }
+//    void ProcessUpdateDq6(TriState_t state)  { hold6 = state; UpdateAll(); }
+//    void ProcessUpdateDq7(TriState_t state)  { hold7 = state; UpdateAll(); }
 
 
-    void ProcessSanityCheck(QString name);
-    void CopyEeprom(void);
+//    void ProcessSanityCheck(QString name);
+//    void CopyEeprom(void);
 
 
 signals:

@@ -23,14 +23,14 @@ HW_MomentarySwitch_t::HW_MomentarySwitch_t(QString name, HighWhen_t w, QWidget *
     connect(this, &QPushButton::pressed, this, &HW_MomentarySwitch_t::ProcessPressed);
     connect(this, &QPushButton::released, this, &HW_MomentarySwitch_t::ProcessReleased);
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
 //
 // -- Trigger the first updates to put the object in sync
 //    ---------------------------------------------------
-void HW_MomentarySwitch_t::TriggerFirstUpdates(void)
+void HW_MomentarySwitch_t::TriggerFirstUpdate(void)
 {
     emit pressed();
     emit released();

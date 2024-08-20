@@ -645,6 +645,10 @@ void ControlLogic_MidPlane_t::WireUp(void)
     connect(ctrlf, &CtrlRomModule_t::SignalBit2Updated, this, &ControlLogic_MidPlane_t::SignalCtl09Load);
     connect(ctrlf, &CtrlRomModule_t::SignalBit1Updated, this, &ControlLogic_MidPlane_t::SignalDev10Load);
     connect(ctrlf, &CtrlRomModule_t::SignalBit0Updated, this, &ControlLogic_MidPlane_t::SignalCtl10Load);
+
+
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, this, &ControlLogic_MidPlane_t::ProcessCpuClock);
+
 }
 
 

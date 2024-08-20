@@ -20,6 +20,10 @@ class HW_Computer_t : public QMainWindow {
     Q_OBJECT
 
 private:
+    static QString pgmRomFolder;
+
+
+private:
     // -- singleton instance
     static HW_Computer_t *singleton;
 
@@ -58,6 +62,9 @@ private:
 
     static FetchRegisterModule_t *fetch;
     static InstructionRegisterModule_t *instr;
+
+    static PgmRomModule_t *pgmRom;
+
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;
@@ -124,8 +131,13 @@ public:
     static HW_Alu_t *GetAlu(void) { return alu; }
     static AluFlagsModule_t *GetPgmFlags(void) { return pgmFlags; }
     static AluFlagsModule_t *GetIntFlags(void) { return intFlags; }
+    static PgmRomModule_t *GetPgmRom(void) { return pgmRom; }
 
-    static QSettings *GetSettings(void) { return settings; }
+    static QSettings *GetSettings(void) { if (!settings) settings = new QSettings("eryjus", "16bcfs-emulator"); return settings; }
+
+public:
+    static const QString &GetPgmRomFolder(void) { return pgmRomFolder; }
+    static void SetPgmRomFolder(const QString &f) { pgmRomFolder = f; }
 
 
 public:
@@ -149,7 +161,7 @@ private:
     static void BuildGui(void);
     static void WireUp(void);
     static void FinalWireUp(void);
-    static void TriggerFirstUpdates(void);
+    static void TriggerFirstUpdate(void);
 };
 
 

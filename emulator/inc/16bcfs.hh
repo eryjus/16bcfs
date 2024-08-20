@@ -97,8 +97,8 @@ class IC_74xx283_t;
 class IC_74xx540_t;
 class IC_74xx541_t;
 class IC_74xx574_t;
-class IC_AS6C62256_t;
-class IC_AT28C256_t;
+class IC_as6c62256_t;
+class IC_at28c256_t;
 
 class HW_Alu_t;
 class HW_AluAdder_t;
@@ -130,6 +130,7 @@ class CtrlRomModule_t;
 class FetchRegisterModule_t;
 class InstructionRegisterModule_t;
 class GpRegisterModule_t;
+class PgmRomModule_t;
 
 class CtrlRomModule_t;
 
@@ -180,6 +181,7 @@ const QString lastPgm = "pgm-rom/last-pgm";
 #include "mod/mod-fetch-register.hh"
 #include "mod/mod-instr-register.hh"
 #include "mod/mod-gp-register.hh"
+#include "mod/mod-pgm-rom.hh"
 
 #include "planes/ctrl-mid-plane.hh"
 

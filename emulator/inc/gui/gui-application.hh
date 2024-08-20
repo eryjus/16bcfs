@@ -17,16 +17,8 @@ class GUI_Application_t : public QApplication {
     Q_OBJECT;
 
 
-private:
-    QString pgmRomFolder;
-
-
 public:
     explicit GUI_Application_t(int &argc, char **argv);
     virtual ~GUI_Application_t() {}
-
-
-public:
-    const QString &GetPgmRomFolder(void) const { return pgmRomFolder; }
 };
 

@@ -26,7 +26,7 @@ private:
     const QString filename;
 
     IC_25lc256_t *eeprom;
-    IC_AS6C62256_t *sram;
+    IC_as6c62256_t *sram;
     IC_74xx164_t *shift;
     IC_74xx574_t *latch;
     IC_74xx541_t *driver;

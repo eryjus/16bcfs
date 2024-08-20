@@ -18,7 +18,7 @@
 //
 // -- This is the class which will emulate the EEPROM
 //    -----------------------------------------------
-class IC_AT28C256_t : public QObject {
+class IC_at28c256_t : public QObject {
     Q_OBJECT
 
 
@@ -55,22 +55,6 @@ public:
 
 
 private:
-/*
-    enum {
-        ENAB_ALL    = 0b000,
-        ENAB_CE_WE  = 0b001,
-        ENAB_CE_OE  = 0b010,
-        ENAB_CE     = 0b011,
-        ENAB_WE_OE  = 0b100,
-        ENAB_WE     = 0b101,
-        ENAB_OE     = 0b110,
-        ENAB_NONE   = 0b111,
-    };
-*/
-
-private:
-//    IC_25lc256_t *reference;
-//    bool outputting;
     uint8_t outputValue;
 
 
@@ -79,42 +63,27 @@ private:
     uint8_t contents[32*1024];  // this is the RAM contents
 
 
-    // -- These hold the incoming value in case an update is needed later
-/*    TriState_t hold0;
-    TriState_t hold1;
-    TriState_t hold2;
-    TriState_t hold3;
-    TriState_t hold4;
-    TriState_t hold5;
-    TriState_t hold6;
-    TriState_t hold7;
-*/
     TriState_t lastCE;
-//    TriState_t lastWE;
     TriState_t lastOE;
 
-//    bool updating;
+
+public:
+    IC_at28c256_t(const QString &file                                            );
+    virtual ~IC_at28c256_t() {}
 
 
 
 public:
-    IC_AT28C256_t(const QString &file                                            );
-    virtual ~IC_AT28C256_t() {}
-
-
-
-public:
-    void TriggerFirstUpdates(void);
+    void TriggerFirstUpdate(void);
 
 
 
 private:
-//    void ProcessInput(void);
     void ProcessOutput(void);
     void UpdateAll(void);
     void OutputZ(void);
 
-    bool StatusChange(void) { return (pins[CEb] != lastCE) /*|| (pins[WEb] != lastWE)*/ || (pins[OEb] != lastOE); }
+    bool StatusChange(void) { return (pins[CEb] != lastCE) || (pins[OEb] != lastOE); }
 
 
 
@@ -137,20 +106,6 @@ public slots:
 
     void ProcessUpdateCE(TriState_t state) { pins[CEb] = state; UpdateAll(); }
     void ProcessUpdateOE(TriState_t state) { pins[OEb] = state; UpdateAll(); }
-//    void ProcessUpdateWE(TriState_t state) { pins[WEb] = state; UpdateAll(); }
-
-//    void ProcessUpdateDq0(TriState_t state)  { hold0 = state; UpdateAll(); }
-//    void ProcessUpdateDq1(TriState_t state)  { hold1 = state; UpdateAll(); }
-//    void ProcessUpdateDq2(TriState_t state)  { hold2 = state; UpdateAll(); }
-//    void ProcessUpdateDq3(TriState_t state)  { hold3 = state; UpdateAll(); }
-//    void ProcessUpdateDq4(TriState_t state)  { hold4 = state; UpdateAll(); }
-//    void ProcessUpdateDq5(TriState_t state)  { hold5 = state; UpdateAll(); }
-//    void ProcessUpdateDq6(TriState_t state)  { hold6 = state; UpdateAll(); }
-//    void ProcessUpdateDq7(TriState_t state)  { hold7 = state; UpdateAll(); }
-
-
-//    void ProcessSanityCheck(QString name);
-//    void CopyEeprom(void);
 
 
 signals:

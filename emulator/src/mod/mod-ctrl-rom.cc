@@ -39,7 +39,7 @@ void CtrlRomModule_t::AllocateComponents(void)
 {
     ctrl = new HW_Bus_8_t(filename, HW_Computer_t::GetClock());
     eeprom = new IC_25lc256_t(filename);
-    sram = new IC_AS6C62256_t(eeprom);
+    sram = new IC_as6c62256_t(eeprom);
     shift = new IC_74xx164_t;
     latch = new IC_74xx574_t;
     driver = new IC_74xx541_t;
@@ -95,7 +95,7 @@ void CtrlRomModule_t::BuildGui(void)
 void CtrlRomModule_t::TriggerFirstUpdate(void)
 {
     eeprom->TriggerFirstUpdate();
-    sram->TriggerFirstUpdates();
+    sram->TriggerFirstUpdate();
     shift->TriggerFirstUpdate();
     latch->TriggerFirstUpdate();
     driver->TriggerFirstUpdate();
@@ -124,31 +124,31 @@ void CtrlRomModule_t::WireUp(void)
     // -- handle the sram inputs
     //    ----------------------
     HW_Bus_16_t *ctrlBus = HW_Computer_t::GetCtrlMidPlane()->GetCtrlBus();
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitEUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA14);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitCUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA12);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit7Updated, sram, &IC_AS6C62256_t::ProcessUpdateA7);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit6Updated, sram, &IC_AS6C62256_t::ProcessUpdateA6);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit5Updated, sram, &IC_AS6C62256_t::ProcessUpdateA5);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit4Updated, sram, &IC_AS6C62256_t::ProcessUpdateA4);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit3Updated, sram, &IC_AS6C62256_t::ProcessUpdateA3);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit2Updated, sram, &IC_AS6C62256_t::ProcessUpdateA2);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit1Updated, sram, &IC_AS6C62256_t::ProcessUpdateA1);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit0Updated, sram, &IC_AS6C62256_t::ProcessUpdateA0);
-    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq0);
-    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq1);
-    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq2);
-    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq3);
-    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq4);
-    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq5);
-    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq6);
-    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq7);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitEUpdated, sram, &IC_as6c62256_t::ProcessUpdateA14);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitCUpdated, sram, &IC_as6c62256_t::ProcessUpdateA12);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit7Updated, sram, &IC_as6c62256_t::ProcessUpdateA7);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit6Updated, sram, &IC_as6c62256_t::ProcessUpdateA6);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit5Updated, sram, &IC_as6c62256_t::ProcessUpdateA5);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit4Updated, sram, &IC_as6c62256_t::ProcessUpdateA4);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit3Updated, sram, &IC_as6c62256_t::ProcessUpdateA3);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit2Updated, sram, &IC_as6c62256_t::ProcessUpdateA2);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit1Updated, sram, &IC_as6c62256_t::ProcessUpdateA1);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit0Updated, sram, &IC_as6c62256_t::ProcessUpdateA0);
+    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, sram, &IC_as6c62256_t::ProcessUpdateDq0);
+    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, sram, &IC_as6c62256_t::ProcessUpdateDq1);
+    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, sram, &IC_as6c62256_t::ProcessUpdateDq2);
+    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, sram, &IC_as6c62256_t::ProcessUpdateDq3);
+    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, sram, &IC_as6c62256_t::ProcessUpdateDq4);
+    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, sram, &IC_as6c62256_t::ProcessUpdateDq5);
+    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, sram, &IC_as6c62256_t::ProcessUpdateDq6);
+    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, sram, &IC_as6c62256_t::ProcessUpdateDq7);
     // pin 20 handled below (#CE)
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitAUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA10);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitAUpdated, sram, &IC_as6c62256_t::ProcessUpdateA10);
     // pin 22 handled in the header (#OE)
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitBUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA11);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit9Updated, sram, &IC_AS6C62256_t::ProcessUpdateA9);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit8Updated, sram, &IC_AS6C62256_t::ProcessUpdateA8);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitDUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA13);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitBUpdated, sram, &IC_as6c62256_t::ProcessUpdateA11);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit9Updated, sram, &IC_as6c62256_t::ProcessUpdateA9);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit8Updated, sram, &IC_as6c62256_t::ProcessUpdateA8);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitDUpdated, sram, &IC_as6c62256_t::ProcessUpdateA13);
     // pin 27 handled in the header (#E)
 
 
@@ -226,14 +226,14 @@ void CtrlRomModule_t::WireUp(void)
 
 
     // -- be careful of infinite recursion for these bidirectional pins!!!
-    connect(sram, &IC_AS6C62256_t::SignalDq0Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit0);
-    connect(sram, &IC_AS6C62256_t::SignalDq1Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit1);
-    connect(sram, &IC_AS6C62256_t::SignalDq2Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit2);
-    connect(sram, &IC_AS6C62256_t::SignalDq3Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit3);
-    connect(sram, &IC_AS6C62256_t::SignalDq4Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit4);
-    connect(sram, &IC_AS6C62256_t::SignalDq5Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit5);
-    connect(sram, &IC_AS6C62256_t::SignalDq6Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit6);
-    connect(sram, &IC_AS6C62256_t::SignalDq7Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit7);
+    connect(sram, &IC_as6c62256_t::SignalDq0Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit0);
+    connect(sram, &IC_as6c62256_t::SignalDq1Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit1);
+    connect(sram, &IC_as6c62256_t::SignalDq2Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit2);
+    connect(sram, &IC_as6c62256_t::SignalDq3Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit3);
+    connect(sram, &IC_as6c62256_t::SignalDq4Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit4);
+    connect(sram, &IC_as6c62256_t::SignalDq5Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit5);
+    connect(sram, &IC_as6c62256_t::SignalDq6Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit6);
+    connect(sram, &IC_as6c62256_t::SignalDq7Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit7);
 
 
 

@@ -14,6 +14,13 @@
 #include "hw-computer.moc.cc"
 
 
+
+//
+// -- Program ROM Folder location
+//    ---------------------------
+QString HW_Computer_t::pgmRomFolder;
+
+
 //
 // -- The settings for the application
 //    --------------------------------
@@ -28,6 +35,7 @@ ControlLogic_MidPlane_t *HW_Computer_t::ctrlLogic = nullptr;
 ClockModule_t *HW_Computer_t::clock = nullptr;
 AluFlagsModule_t *HW_Computer_t::pgmFlags = nullptr;
 AluFlagsModule_t *HW_Computer_t::intFlags = nullptr;
+PgmRomModule_t *HW_Computer_t::pgmRom = nullptr;
 
 
 // -- Buses
@@ -88,13 +96,13 @@ HW_MomentarySwitch_t *HW_Computer_t::rst = nullptr;
 //    ---------------------------------------------
 void HW_Computer_t::Initialize(void)
 {
-    settings = new QSettings("eryjus", "16bcfs-emulator");
+    if (!settings) settings = new QSettings("eryjus", "16bcfs-emulator");
 
     AllocateComponents();
     BuildGui();
     WireUp();
     FinalWireUp();
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
@@ -145,8 +153,8 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(intFlags, 0, 12, 1, 1);
 
     // -- place the control logic mid-plane
-    grid->addWidget(ctrlLogic, 0, 15, 9, 2);
     grid->addWidget(fetch, 11, 15, 2, 2);
+    grid->addWidget(ctrlLogic, 0, 15, 9, 2);
     grid->addWidget(instr, 10, 15, 1, 2);
 
     grid->addWidget(clock, 13, 15, 2, 2);
@@ -169,6 +177,7 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(r10, 6, 6, 2, 3);
     grid->addWidget(r11, 8, 6, 2, 3);
     grid->addWidget(r12, 10, 6, 2, 3);
+    grid->addWidget(pgmRom, 14, 0, 1, 4);
 
 
     central = new QWidget;
@@ -197,6 +206,7 @@ void HW_Computer_t::BuildGui(void)
     connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset);
     connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
+    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmRom, &PgmRomModule_t::ProcessReset);
 }
 
 
@@ -277,11 +287,13 @@ void HW_Computer_t::AllocateComponents(void)
     //
     // -- The sequence of the allocations here are critical.  Since the signals and slots are processed in order
     //    of their "connection", we need the instruction register's connections to exist before the fetch register's
-    //    connections so that the timing and sequencing are correct.  This is just a problems the this emulator's
+    //    connections so that the timing and sequencing are correct.  This is just a problem with this emulator's
     //    choice of framework.
     //    ----------------------------------------------------------------------------------------------------------
     instr = new InstructionRegisterModule_t;
     fetch = new FetchRegisterModule_t;
+
+    pgmRom = new PgmRomModule_t(GetPgmRomFolder());
 }
 
 
@@ -298,23 +310,16 @@ void HW_Computer_t::WireUp(void)
 
     HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
     connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
-
-
-
-    //
-    // -- Wire up the relevant pieces of the Control Logic Mid-Plane
-    //    ----------------------------------------------------------
-    connect(clock, &ClockModule_t::SignalClockState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessCpuClock);
 }
 
 
 //
 // -- Trigger first updates to put everything in sync
 //    -----------------------------------------------
-void HW_Computer_t::TriggerFirstUpdates(void)
+void HW_Computer_t::TriggerFirstUpdate(void)
 {
-    brk->TriggerFirstUpdates();
-    rst->TriggerFirstUpdates();         // must be last to reset everything
+    brk->TriggerFirstUpdate();
+    rst->TriggerFirstUpdate();         // must be last to reset everything
 }
 
 

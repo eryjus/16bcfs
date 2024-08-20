@@ -189,9 +189,7 @@ void FetchRegisterModule_t::WireUp(void)
     inv1->ProcessA6Low();
 
 
-// TODO: Fix
-//    HW_Bus_16_t *fetch = HW_Computer_t::GetFetchBus();
-    HW_Bus_16_t *fetch = HW_Computer_t::GetAddr1Bus();
+    HW_Bus_16_t *fetch = HW_Computer_t::GetFetchBus();
 
     // -- instruction Bus LSB
     // pin 1 (OE) -- handled below

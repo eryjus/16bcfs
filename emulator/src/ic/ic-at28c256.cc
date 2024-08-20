@@ -19,7 +19,7 @@
 //
 // -- Consturct a RAM IC
 //    ------------------
-IC_AT28C256_t::IC_AT28C256_t(const QString &file)
+IC_at28c256_t::IC_at28c256_t(const QString &file)
 {
     pins[A0] = Z;
     pins[A1] = Z;
@@ -67,7 +67,7 @@ IC_AT28C256_t::IC_AT28C256_t(const QString &file)
     fread(contents, 1, sizeof(contents), fp);
     fclose(fp);
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
@@ -75,7 +75,7 @@ IC_AT28C256_t::IC_AT28C256_t(const QString &file)
 //
 // -- Emit the first signal updates to put everything in sync
 //    -------------------------------------------------------
-inline void IC_AT28C256_t::TriggerFirstUpdates(void)
+inline void IC_at28c256_t::TriggerFirstUpdate(void)
 {
     OutputZ();
 }
@@ -85,7 +85,7 @@ inline void IC_AT28C256_t::TriggerFirstUpdates(void)
 //
 // -- Set all output pins to be High-Z, taking care not to change the input state
 //    ---------------------------------------------------------------------------
-void IC_AT28C256_t::OutputZ(void)
+void IC_at28c256_t::OutputZ(void)
 {
     emit SignalDq0Updated(Z);
     emit SignalDq1Updated(Z);
@@ -102,7 +102,7 @@ void IC_AT28C256_t::OutputZ(void)
 //
 // -- Process Changes in output values
 //    --------------------------------
-void IC_AT28C256_t::ProcessOutput(void)
+void IC_at28c256_t::ProcessOutput(void)
 {
     TriState_t nq0 = Z;
     TriState_t nq1 = Z;
@@ -171,7 +171,7 @@ void IC_AT28C256_t::ProcessOutput(void)
 //    | !L  | !L  | OutputZ()       |
 //
 //    ----------------------------------------------------------------------------------
-void IC_AT28C256_t::UpdateAll(void)
+void IC_at28c256_t::UpdateAll(void)
 {
     lastCE = pins[CEb];
     lastOE = pins[OEb];

@@ -18,7 +18,7 @@
 //
 // -- This is the class which will emulate the SRAM
 //    ---------------------------------------------
-class IC_AS6C62256_t : public QObject {
+class IC_as6c62256_t : public QObject {
     Q_OBJECT
 
 
@@ -96,13 +96,13 @@ private:
 
 
 public:
-    IC_AS6C62256_t(IC_25lc256_t *sanity = nullptr);
-    virtual ~IC_AS6C62256_t() {}
+    IC_as6c62256_t(IC_25lc256_t *sanity = nullptr);
+    virtual ~IC_as6c62256_t() {}
 
 
 
 public:
-    void TriggerFirstUpdates(void);
+    void TriggerFirstUpdate(void);
 
 
 

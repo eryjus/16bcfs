@@ -20,17 +20,19 @@
 //    ------------------------------------------------
 GUI_Application_t::GUI_Application_t(int &argc, char **argv) : QApplication(argc, argv)
 {
-    app = this;
-    HW_Computer_t::Get();
-
     QSettings *settings = HW_Computer_t::GetSettings();
 
     if (argc == 2) {
-        pgmRomFolder = argv[1];
+        HW_Computer_t::SetPgmRomFolder(QString(argv[1]));
     } else {
-        pgmRomFolder = settings->value(lastPgm).toString();
+        HW_Computer_t::SetPgmRomFolder(settings->value(lastPgm).toString());
     }
 
-    settings->setValue(lastPgm, pgmRomFolder);
+    QString fldr = HW_Computer_t::GetPgmRomFolder();
+
+    settings->setValue(lastPgm, fldr);
     settings->sync();
+
+    app = this;
+    HW_Computer_t::Get();
 }

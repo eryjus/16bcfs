@@ -79,24 +79,24 @@ GUI_BusTester_t::GUI_BusTester_t(QString name, HW_BusDriver_t *driver, QGroupBox
 
     setLayout(layout);
 
-    connect(dipF, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitF);
-    connect(dipE, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitE);
-    connect(dipD, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitD);
-    connect(dipC, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitC);
-    connect(dipB, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitB);
-    connect(dipA, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitA);
-    connect(dip9, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit9);
-    connect(dip8, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit8);
-    connect(dip7, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit7);
-    connect(dip6, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit6);
-    connect(dip5, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit5);
-    connect(dip4, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit4);
-    connect(dip3, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit3);
-    connect(dip2, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit2);
-    connect(dip1, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit1);
-    connect(dip0, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit0);
+    connect(dipF, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitF, CNN_TYPE);
+    connect(dipE, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(dipD, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(dipC, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(dipB, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(dipA, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(dip9, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(dip8, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(dip7, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(dip6, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(dip5, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(dip4, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(dip3, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(dip2, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(dip1, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(dip0, &GUI_DipSwitch_t::SignalSwitchChanged, driver, &HW_BusDriver_t::ProcessUpdateBit0, CNN_TYPE);
 
-    connect(oe, &QCheckBox::stateChanged, this, &GUI_BusTester_t::ProcessOEChange);
-    connect(this, &GUI_BusTester_t::SignalOeUpdated, driver, &HW_BusDriver_t::ProcessUpdateOE1);
-    connect(this, &GUI_BusTester_t::SignalOeUpdated, driver, &HW_BusDriver_t::ProcessUpdateOE2);
+    connect(oe, &QCheckBox::stateChanged, this, &GUI_BusTester_t::ProcessOEChange, CNN_TYPE);
+    connect(this, &GUI_BusTester_t::SignalOeUpdated, driver, &HW_BusDriver_t::ProcessUpdateOE1, CNN_TYPE);
+    connect(this, &GUI_BusTester_t::SignalOeUpdated, driver, &HW_BusDriver_t::ProcessUpdateOE2, CNN_TYPE);
 }

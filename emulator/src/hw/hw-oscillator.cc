@@ -21,7 +21,7 @@ HW_Oscillator_t::HW_Oscillator_t(int interval)
 {
     state = LOW;
     ProcessSetInterval(500);
-    connect(this, &QTimer::timeout, this, &HW_Oscillator_t::ProcessTimerStateChange);
+    connect(this, &QTimer::timeout, this, &HW_Oscillator_t::ProcessTimerStateChange, CNN_TYPE);
 }
 
 

@@ -51,12 +51,12 @@ public:
 
 
 public slots:
-    void ProcessUpdateA(TriState_t state) { pins[A] = state; }
-    void ProcessUpdateB(TriState_t state) { pins[B] = state; }
-    void ProcessUpdateC(TriState_t state) { pins[C] = state; }
-    void ProcessUpdateG1(TriState_t state) { pins[G1] = state; }
-    void ProcessUpdateG2A(TriState_t state) { pins[G2Ab] = state; }
-    void ProcessUpdateG2B(TriState_t state) { pins[G2Bb] = state; }
+    void ProcessUpdateA(TriState_t state) { pins[A] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateB(TriState_t state) { pins[B] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateC(TriState_t state) { pins[C] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateG1(TriState_t state) { pins[G1] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateG2A(TriState_t state) { pins[G2Ab] = state; ProcessUpdatesComplete(); }
+    void ProcessUpdateG2B(TriState_t state) { pins[G2Bb] = state; ProcessUpdatesComplete(); }
     void ProcessUpdatesComplete(void);
 
 

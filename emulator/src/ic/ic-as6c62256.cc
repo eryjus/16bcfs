@@ -221,10 +221,6 @@ void IC_as6c62256_t::ProcessOutput(void)
     if (dq6 != nq6) emit SignalDq6Updated(nq6);
     if (dq7 != nq7) emit SignalDq7Updated(nq7);
 #endif
-
-    if (objectName() == "debug") {
-        qDebug() << "Asserting new value" << Qt::hex << outputValue;
-    }
 }
 
 

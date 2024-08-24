@@ -49,7 +49,8 @@ private:
 
 
 public slots:
-    void ProcessClk(TriState_t state);
+    void ProcessClockLatch(TriState_t state);
+    void ProcessClockOutput(TriState_t state);
 
 
 public:

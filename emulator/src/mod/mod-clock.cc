@@ -211,11 +211,13 @@ void ClockModule_t::WireUp(void)
 
 
     // -- connect up the inputs to the D-type latch
-    connect(timer, &HW_Oscillator_t::SignalStateChanged, latch, &IC_74xx74_t::ProcessUpdateClk1, CNN_TYPE);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, latch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, latch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
     connect(nand1, &IC_74xx00_t::SignalY4Updated, latch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
     latch->ProcessUpdateClr1(HIGH);
     latch->ProcessUpdatePre1(HIGH);
-    latch->ProcessUpdateClk2(LOW);
+    latch->ProcessUpdateClockLatch2(LOW);
+    latch->ProcessUpdateClockOutput2(LOW);
     latch->ProcessUpdateClr2(HIGH);
     latch->ProcessUpdateD2(LOW);
     latch->ProcessUpdatePre2(HIGH);
@@ -257,7 +259,8 @@ void ClockModule_t::WireUp(void)
 
 
     // -- Finally, trigger all external signals
-    connect(nor1, &IC_74xx02_t::SignalY1Updated, this, &ClockModule_t::SignalClockState, CNN_TYPE);
+    connect(nor1, &IC_74xx02_t::SignalY1Updated, this, &ClockModule_t::SignalClockStateLatch, CNN_TYPE);
+    connect(nor1, &IC_74xx02_t::SignalY1Updated, this, &ClockModule_t::SignalClockStateOutput, CNN_TYPE);
 
     // -- The last connection to make MUST be the sanity check
     connect(timer, &HW_Oscillator_t::SignalStateChanged, this, &ClockModule_t::SignalSanityCheck, CNN_TYPE);

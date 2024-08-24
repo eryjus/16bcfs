@@ -202,24 +202,49 @@ inline void ControlLogic_MidPlane_t::ProcessReset(TriState_t state)
 //
 // -- Process a clock tick from the main clock
 //    ----------------------------------------
-void ControlLogic_MidPlane_t::ProcessCpuClock(TriState_t state)
+void ControlLogic_MidPlane_t::ProcessCpuClockLatch(TriState_t state)
 {
-    ctrl0->ProcessUpdateClk(state);
-    ctrl1->ProcessUpdateClk(state);
-    ctrl2->ProcessUpdateClk(state);
-    ctrl3->ProcessUpdateClk(state);
-    ctrl4->ProcessUpdateClk(state);
-    ctrl5->ProcessUpdateClk(state);
-    ctrl6->ProcessUpdateClk(state);
-    ctrl7->ProcessUpdateClk(state);
-    ctrl8->ProcessUpdateClk(state);
-    ctrl9->ProcessUpdateClk(state);
-    ctrla->ProcessUpdateClk(state);
-    ctrlb->ProcessUpdateClk(state);
-    ctrlc->ProcessUpdateClk(state);
-    ctrld->ProcessUpdateClk(state);
-    ctrle->ProcessUpdateClk(state);
-    ctrlf->ProcessUpdateClk(state);
+    ctrl0->ProcessUpdateClockLatch(state);
+    ctrl1->ProcessUpdateClockLatch(state);
+    ctrl2->ProcessUpdateClockLatch(state);
+    ctrl3->ProcessUpdateClockLatch(state);
+    ctrl4->ProcessUpdateClockLatch(state);
+    ctrl5->ProcessUpdateClockLatch(state);
+    ctrl6->ProcessUpdateClockLatch(state);
+    ctrl7->ProcessUpdateClockLatch(state);
+    ctrl8->ProcessUpdateClockLatch(state);
+    ctrl9->ProcessUpdateClockLatch(state);
+    ctrla->ProcessUpdateClockLatch(state);
+    ctrlb->ProcessUpdateClockLatch(state);
+    ctrlc->ProcessUpdateClockLatch(state);
+    ctrld->ProcessUpdateClockLatch(state);
+    ctrle->ProcessUpdateClockLatch(state);
+    ctrlf->ProcessUpdateClockLatch(state);
+}
+
+
+
+//
+// -- Process a clock tick from the main clock
+//    ----------------------------------------
+void ControlLogic_MidPlane_t::ProcessCpuClockOutput(TriState_t state)
+{
+    ctrl0->ProcessUpdateClockOutput(state);
+    ctrl1->ProcessUpdateClockOutput(state);
+    ctrl2->ProcessUpdateClockOutput(state);
+    ctrl3->ProcessUpdateClockOutput(state);
+    ctrl4->ProcessUpdateClockOutput(state);
+    ctrl5->ProcessUpdateClockOutput(state);
+    ctrl6->ProcessUpdateClockOutput(state);
+    ctrl7->ProcessUpdateClockOutput(state);
+    ctrl8->ProcessUpdateClockOutput(state);
+    ctrl9->ProcessUpdateClockOutput(state);
+    ctrla->ProcessUpdateClockOutput(state);
+    ctrlb->ProcessUpdateClockOutput(state);
+    ctrlc->ProcessUpdateClockOutput(state);
+    ctrld->ProcessUpdateClockOutput(state);
+    ctrle->ProcessUpdateClockOutput(state);
+    ctrlf->ProcessUpdateClockOutput(state);
 }
 
 
@@ -647,8 +672,8 @@ void ControlLogic_MidPlane_t::WireUp(void)
     connect(ctrlf, &CtrlRomModule_t::SignalBit0Updated, this, &ControlLogic_MidPlane_t::SignalCtl10Load, CNN_TYPE);
 
 
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, this, &ControlLogic_MidPlane_t::ProcessCpuClock, CNN_TYPE);
-
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateLatch, this, &ControlLogic_MidPlane_t::ProcessCpuClockLatch, CNN_TYPE);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateOutput, this, &ControlLogic_MidPlane_t::ProcessCpuClockOutput, CNN_TYPE);
 }
 
 

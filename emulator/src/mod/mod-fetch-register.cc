@@ -426,7 +426,8 @@ void FetchRegisterModule_t::WireUp(void)
     // -- Finally, we need a clock input
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
-    connect(clk, &ClockModule_t::SignalClockState, this, &FetchRegisterModule_t::ProcessClk, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &FetchRegisterModule_t::ProcessClockLatch, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &FetchRegisterModule_t::ProcessClockOutput, CNN_TYPE);
 }
 
 
@@ -475,16 +476,38 @@ void FetchRegisterModule_t::ProcessInstructionSuppress(TriState_t state)
 //
 // -- Handle the clock tick
 //    ---------------------
-void FetchRegisterModule_t::ProcessClk(TriState_t state)
+void FetchRegisterModule_t::ProcessClockLatch(TriState_t state)
 {
-    instrRegBus0->ProcessUpdateClk(state);
-    instrRegBus1->ProcessUpdateClk(state);
-    main0->ProcessUpdateClk(state);
-    main1->ProcessUpdateClk(state);
-    aluB0->ProcessUpdateClk(state);
-    aluB1->ProcessUpdateClk(state);
-    addr20->ProcessUpdateClk(state);
-    addr21->ProcessUpdateClk(state);
-    led0->ProcessUpdateClk(state);
-    led1->ProcessUpdateClk(state);
+    instrRegBus0->ProcessUpdateClockLatch(state);
+    instrRegBus1->ProcessUpdateClockLatch(state);
+    main0->ProcessUpdateClockLatch(state);
+    main1->ProcessUpdateClockLatch(state);
+    aluB0->ProcessUpdateClockLatch(state);
+    aluB1->ProcessUpdateClockLatch(state);
+    addr20->ProcessUpdateClockLatch(state);
+    addr21->ProcessUpdateClockLatch(state);
+    led0->ProcessUpdateClockLatch(state);
+    led1->ProcessUpdateClockLatch(state);
 }
+
+
+
+//
+// -- Handle the clock tick
+//    ---------------------
+void FetchRegisterModule_t::ProcessClockOutput(TriState_t state)
+{
+    instrRegBus0->ProcessUpdateClockOutput(state);
+    instrRegBus1->ProcessUpdateClockOutput(state);
+    main0->ProcessUpdateClockOutput(state);
+    main1->ProcessUpdateClockOutput(state);
+    aluB0->ProcessUpdateClockOutput(state);
+    aluB1->ProcessUpdateClockOutput(state);
+    addr20->ProcessUpdateClockOutput(state);
+    addr21->ProcessUpdateClockOutput(state);
+    led0->ProcessUpdateClockOutput(state);
+    led1->ProcessUpdateClockOutput(state);
+}
+
+
+

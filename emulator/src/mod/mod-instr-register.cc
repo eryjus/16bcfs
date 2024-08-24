@@ -159,15 +159,29 @@ void InstructionRegisterModule_t::WireUp(void)
     // -- Finally, we need a clock input
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
-    connect(clk, &ClockModule_t::SignalClockState, this, &InstructionRegisterModule_t::ProcessClk, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &InstructionRegisterModule_t::ProcessClockLatch, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &InstructionRegisterModule_t::ProcessClockOutput, CNN_TYPE);
 }
 
 
 //
 // -- Handle the clock tick
 //    ---------------------
-void InstructionRegisterModule_t::ProcessClk(TriState_t state)
+void InstructionRegisterModule_t::ProcessClockLatch(TriState_t state)
 {
-    led0->ProcessUpdateClk(state);
-    led1->ProcessUpdateClk(state);
+    led0->ProcessUpdateClockLatch(state);
+    led1->ProcessUpdateClockLatch(state);
 }
+
+
+
+//
+// -- Handle the clock tick
+//    ---------------------
+void InstructionRegisterModule_t::ProcessClockOutput(TriState_t state)
+{
+    led0->ProcessUpdateClockOutput(state);
+    led1->ProcessUpdateClockOutput(state);
+}
+
+

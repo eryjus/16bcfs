@@ -82,28 +82,6 @@ entry:
     nop
 
 
-;; -- jump to an immediate address (0x00f0)
-    jmp     here
-here:
-    nop
-    nop
-    nop
-
-
-;; -- jump to the address at R1 (0x00f1)
-    jmp     r1
-    nop
-    nop
-    nop
-
-
-;; -- jump to the address at R2 (0x00f2)
-    jmp     r2
-    nop
-    nop
-    nop
-
-
 ;; -- add an immediate to R1 (0x0101)
     add     r1,0xaaaa
     nop
@@ -231,4 +209,32 @@ here:
 
 
     jmp     entry
+
+
+;;
+;; == THESE DO NOT WORK AND HAVE BEEN MOVED TO THE END
+;;    ================================================
+
+
+;; -- jump to an immediate address (0x00f0)
+    jmp     here
+here:
+    nop
+    nop
+    nop
+
+
+;; -- jump to the address at R1 (0x00f1)
+    jmp     r1
+    nop
+    nop
+    nop
+
+
+;; -- jump to the address at R2 (0x00f2)
+    jmp     r2
+    nop
+    nop
+    nop
+
 

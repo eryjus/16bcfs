@@ -117,23 +117,23 @@ void ControlLogic_MidPlane_t::BuildGui(void)
 //  -- before this can be enabled, we need to set a style sheet for just about every element
 //    setStyleSheet("background-color: #d0d0d0");
 
-    layout->addWidget(ctrlCtrl, 0, 0, 2, 2);
-    layout->addWidget(ctrl0, 2, 0, 1, 1);
-    layout->addWidget(ctrl1, 3, 0, 1, 1);
-    layout->addWidget(ctrl2, 4, 0, 1, 1);
-    layout->addWidget(ctrl3, 5, 0, 1, 1);
-    layout->addWidget(ctrl4, 6, 0, 1, 1);
-    layout->addWidget(ctrl5, 7, 0, 1, 1);
-    layout->addWidget(ctrl6, 8, 0, 1, 1);
-    layout->addWidget(ctrl7, 9, 0, 1, 1);
-    layout->addWidget(ctrl8, 2, 1, 1, 1);
-    layout->addWidget(ctrl9, 3, 1, 1, 1);
-    layout->addWidget(ctrla, 4, 1, 1, 1);
-    layout->addWidget(ctrlb, 5, 1, 1, 1);
-    layout->addWidget(ctrlc, 6, 1, 1, 1);
-    layout->addWidget(ctrld, 7, 1, 1, 1);
-    layout->addWidget(ctrle, 8, 1, 1, 1);
-    layout->addWidget(ctrlf, 9, 1, 1, 1);
+    layout->addWidget(ctrlCtrl, 0, 0, 1, 2);
+    layout->addWidget(ctrl0, 1, 0, 1, 1);
+    layout->addWidget(ctrl1, 2, 0, 1, 1);
+    layout->addWidget(ctrl2, 3, 0, 1, 1);
+    layout->addWidget(ctrl3, 4, 0, 1, 1);
+    layout->addWidget(ctrl4, 5, 0, 1, 1);
+    layout->addWidget(ctrl5, 6, 0, 1, 1);
+    layout->addWidget(ctrl6, 7, 0, 1, 1);
+    layout->addWidget(ctrl7, 8, 0, 1, 1);
+    layout->addWidget(ctrl8, 1, 1, 1, 1);
+    layout->addWidget(ctrl9, 2, 1, 1, 1);
+    layout->addWidget(ctrla, 3, 1, 1, 1);
+    layout->addWidget(ctrlb, 4, 1, 1, 1);
+    layout->addWidget(ctrlc, 5, 1, 1, 1);
+    layout->addWidget(ctrld, 6, 1, 1, 1);
+    layout->addWidget(ctrle, 7, 1, 1, 1);
+    layout->addWidget(ctrlf, 8, 1, 1, 1);
 }
 
 

@@ -97,23 +97,6 @@ private:
     GUI_Led_t *we;
     GUI_Led_t *ce;
 
-    GUI_Led_t *led0;
-    GUI_Led_t *led1;
-    GUI_Led_t *led2;
-    GUI_Led_t *led3;
-    GUI_Led_t *led4;
-    GUI_Led_t *led5;
-    GUI_Led_t *led6;
-    GUI_Led_t *led7;
-    GUI_Led_t *led8;
-    GUI_Led_t *led9;
-    GUI_Led_t *ledA;
-    GUI_Led_t *ledB;
-    GUI_Led_t *ledC;
-    GUI_Led_t *ledD;
-    GUI_Led_t *ledE;
-    GUI_Led_t *ledF;
-
     GUI_Led_t *bit0;
     GUI_Led_t *bit1;
     GUI_Led_t *bit2;

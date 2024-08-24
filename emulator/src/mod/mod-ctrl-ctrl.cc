@@ -119,23 +119,6 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     we = new GUI_Led_t(GUI_Led_t::OnWhenLow, Qt::yellow);
     ce = new GUI_Led_t(GUI_Led_t::OnWhenLow, Qt::yellow);
 
-    led0 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led1 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led3 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led4 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led5 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led6 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led7 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led8 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    led9 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    ledA = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    ledB = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    ledC = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    ledD = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    ledE = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-    ledF = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::red);
-
     bit0 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
     bit1 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
     bit2 = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::magenta);
@@ -149,22 +132,6 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
 //    ------------------------------------------------
 void CtrlRomCtrlModule_t::BuildGui(void)
 {
-    // -- the layout for this module will be a grid
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setAlignment(Qt::AlignHCenter);
-    layout->setContentsMargins(0, 0, 0, 0);
-    setAlignment(Qt::AlignHCenter);
-    layout->setSpacing(1);
-    setLayout(layout);
-
-
-    // -- Create a new Group Box for the control signals
-    QGroupBox *controls = new QGroupBox;
-    controls->setAlignment(Qt::AlignHCenter);
-    controls->setContentsMargins(0, 0, 0, 0);
-    controls->setFixedWidth(180);
-    controls->setFixedHeight(50);
-
     QGridLayout *controlLayout = new QGridLayout;
     controlLayout->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     controlLayout->setContentsMargins(0, 0, 0, 0);
@@ -201,44 +168,11 @@ void CtrlRomCtrlModule_t::BuildGui(void)
     controlLayout->addWidget(bit0, 0, 11, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel(" 1 "), 1, 11, Qt::AlignHCenter);
 
-
-    controls->setLayout(controlLayout);
-    layout->addWidget(controls);
-
-
-    // -- Create a new Group Box for the address contents
-    QGroupBox *contents = new QGroupBox;
-    contents->setAlignment(Qt::AlignHCenter);
-    contents->setFixedWidth(180);
-    contents->setFixedHeight(40);
-
-    QHBoxLayout *contentsLayout = new QHBoxLayout;
-    contentsLayout->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
-    contentsLayout->setContentsMargins(0, 0, 0, 0);
-    contentsLayout->setSpacing(1);
-
-    contentsLayout->addWidget(ledF, Qt::AlignHCenter);
-    contentsLayout->addWidget(ledE, Qt::AlignHCenter);
-    contentsLayout->addWidget(ledD, Qt::AlignHCenter);
-    contentsLayout->addWidget(ledC, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
-    contentsLayout->addWidget(ledB, Qt::AlignHCenter);
-    contentsLayout->addWidget(ledA, Qt::AlignHCenter);
-    contentsLayout->addWidget(led9, Qt::AlignHCenter);
-    contentsLayout->addWidget(led8, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
-    contentsLayout->addWidget(led7, Qt::AlignHCenter);
-    contentsLayout->addWidget(led6, Qt::AlignHCenter);
-    contentsLayout->addWidget(led5, Qt::AlignHCenter);
-    contentsLayout->addWidget(led4, Qt::AlignHCenter);
-    contentsLayout->addSpacerItem(new QSpacerItem(4, 10));
-    contentsLayout->addWidget(led3, Qt::AlignHCenter);
-    contentsLayout->addWidget(led2, Qt::AlignHCenter);
-    contentsLayout->addWidget(led1, Qt::AlignHCenter);
-    contentsLayout->addWidget(led0, Qt::AlignHCenter);
-
-    contents->setLayout(contentsLayout);
-    layout->addWidget(contents);
+    setAlignment(Qt::AlignHCenter);
+    controlLayout->setSpacing(1);
+    setLayout(controlLayout);
+    setFixedWidth(180);
+    setFixedHeight(60);
 }
 
 
@@ -805,24 +739,6 @@ void CtrlRomCtrlModule_t::WireUp(void)
     connect(nand1, &IC_74xx00_t::SignalY1Updated, oe, &GUI_Led_t::ProcessStateChange);
     connect(nand2, &IC_74xx00_t::SignalY3Updated, we, &GUI_Led_t::ProcessStateChange);
     connect(and3, &IC_74xx08_t::SignalY2Updated, ce, &GUI_Led_t::ProcessStateChange);
-
-    connect(mux0, &IC_74xx157_t::SignalY1Updated, led0, &GUI_Led_t::ProcessStateChange);
-    connect(mux0, &IC_74xx157_t::SignalY2Updated, led1, &GUI_Led_t::ProcessStateChange);
-    connect(mux0, &IC_74xx157_t::SignalY3Updated, led2, &GUI_Led_t::ProcessStateChange);
-    connect(mux0, &IC_74xx157_t::SignalY4Updated, led3, &GUI_Led_t::ProcessStateChange);
-    connect(mux4, &IC_74xx157_t::SignalY1Updated, led4, &GUI_Led_t::ProcessStateChange);
-    connect(mux4, &IC_74xx157_t::SignalY2Updated, led5, &GUI_Led_t::ProcessStateChange);
-    connect(mux4, &IC_74xx157_t::SignalY3Updated, led6, &GUI_Led_t::ProcessStateChange);
-    connect(mux4, &IC_74xx157_t::SignalY4Updated, led7, &GUI_Led_t::ProcessStateChange);
-    connect(mux8, &IC_74xx157_t::SignalY1Updated, led8, &GUI_Led_t::ProcessStateChange);
-    connect(mux8, &IC_74xx157_t::SignalY2Updated, led9, &GUI_Led_t::ProcessStateChange);
-    connect(mux8, &IC_74xx157_t::SignalY3Updated, ledA, &GUI_Led_t::ProcessStateChange);
-    connect(mux8, &IC_74xx157_t::SignalY4Updated, ledB, &GUI_Led_t::ProcessStateChange);
-    connect(muxC, &IC_74xx157_t::SignalY1Updated, ledC, &GUI_Led_t::ProcessStateChange);
-    connect(muxC, &IC_74xx157_t::SignalY2Updated, ledD, &GUI_Led_t::ProcessStateChange);
-    connect(muxC, &IC_74xx157_t::SignalY3Updated, ledE, &GUI_Led_t::ProcessStateChange);
-    connect(muxC, &IC_74xx157_t::SignalY4Updated, ledF, &GUI_Led_t::ProcessStateChange);
-
 
     connect(bits, &IC_74xx193_t::SignalQaUpdated, bit0, &GUI_Led_t::ProcessStateChange);
     connect(bits, &IC_74xx193_t::SignalQbUpdated, bit1, &GUI_Led_t::ProcessStateChange);

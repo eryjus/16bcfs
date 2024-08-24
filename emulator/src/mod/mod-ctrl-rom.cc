@@ -25,11 +25,6 @@ CtrlRomModule_t::CtrlRomModule_t(const QString &name, const QString &file) : QGr
     setObjectName(name);
 
     AllocateComponents();
-//    if (name == "Ctrl4") latch->setObjectName("debug");
-    if (name == "Ctrl9") {
-        latch->setObjectName("debug");
-        sram->setObjectName("debug");
-    }
     BuildGui();
     WireUp();
     TriggerFirstUpdate();

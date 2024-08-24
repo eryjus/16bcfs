@@ -62,8 +62,6 @@ ControlLogic_MidPlane_t::ControlLogic_MidPlane_t(void) : QGroupBox("Control ROM 
     BuildGui();
     WireUp();
     TriggerFirstUpdate();
-
-    ctrlBus->setObjectName("debug");
 }
 
 

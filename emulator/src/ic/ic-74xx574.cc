@@ -98,8 +98,6 @@ void IC_74xx574_t::ProcessUpdateOE(TriState_t state)
 //    ----------------------
 void IC_74xx574_t::ProcessUpdateClockLatch(TriState_t state)
 {
-    static int iter = 0;
-
     pins[CLK] = state;
 
     if (state == HIGH) {

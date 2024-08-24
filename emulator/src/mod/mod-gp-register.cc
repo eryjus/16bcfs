@@ -633,6 +633,8 @@ void GpRegisterModule_t::ProcessReset(TriState_t state)
 //    ---------------------
 void GpRegisterModule_t::ProcessClockLatch(TriState_t state)
 {
+    static int iter = 0;
+
     aluA0->ProcessUpdateClockLatch(state);
     aluA1->ProcessUpdateClockLatch(state);
     aluB0->ProcessUpdateClockLatch(state);
@@ -657,6 +659,7 @@ void GpRegisterModule_t::ProcessClockOutput(TriState_t state)
 {
     nand1->ProcessUpdateA1(state);
     nand1->ProcessUpdateA2(state);
+nand1->ProcessUpdateA3(state);
     aluA0->ProcessUpdateClockOutput(state);
     aluA1->ProcessUpdateClockOutput(state);
     aluB0->ProcessUpdateClockOutput(state);
@@ -680,7 +683,7 @@ void GpRegisterModule_t::ProcessClockOutput(TriState_t state)
 void GpRegisterModule_t::ProcessLoad(TriState_t state)
 {
     load->ProcessStateChange(state);
-    nand1->ProcessUpdateA3(state);
+//    nand1->ProcessUpdateA3(state);
     nand1->ProcessUpdateB3(state);
 }
 

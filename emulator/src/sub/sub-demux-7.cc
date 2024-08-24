@@ -188,14 +188,14 @@ void SubDemux7_t::WireUp(void)
     connect(demux07, &IC_74xx238_t::SignalY6Updated, this, &SubDemux7_t::SignalY076Updated, CNN_TYPE);
     connect(demux07, &IC_74xx238_t::SignalY7Updated, this, &SubDemux7_t::SignalY077Updated, CNN_TYPE);
 
-    connect(demux10, &IC_74xx238_t::SignalY0Updated, this, &SubDemux7_t::SignalY000Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY1Updated, this, &SubDemux7_t::SignalY001Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY2Updated, this, &SubDemux7_t::SignalY002Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY3Updated, this, &SubDemux7_t::SignalY003Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY4Updated, this, &SubDemux7_t::SignalY004Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY5Updated, this, &SubDemux7_t::SignalY005Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY6Updated, this, &SubDemux7_t::SignalY006Updated, CNN_TYPE);
-    connect(demux10, &IC_74xx238_t::SignalY7Updated, this, &SubDemux7_t::SignalY007Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY0Updated, this, &SubDemux7_t::SignalY100Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY1Updated, this, &SubDemux7_t::SignalY101Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY2Updated, this, &SubDemux7_t::SignalY102Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY3Updated, this, &SubDemux7_t::SignalY103Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY4Updated, this, &SubDemux7_t::SignalY104Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY5Updated, this, &SubDemux7_t::SignalY105Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY6Updated, this, &SubDemux7_t::SignalY106Updated, CNN_TYPE);
+    connect(demux10, &IC_74xx238_t::SignalY7Updated, this, &SubDemux7_t::SignalY107Updated, CNN_TYPE);
 
     connect(demux11, &IC_74xx238_t::SignalY0Updated, this, &SubDemux7_t::SignalY110Updated, CNN_TYPE);
     connect(demux11, &IC_74xx238_t::SignalY1Updated, this, &SubDemux7_t::SignalY111Updated, CNN_TYPE);

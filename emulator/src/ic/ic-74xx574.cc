@@ -89,6 +89,8 @@ void IC_74xx574_t::ProcessUpdateOE(TriState_t state)
 //    --------------------------------------------------------------------------
 void IC_74xx574_t::ProcessUpdateClk(TriState_t state)
 {
+    static int iter = 0;
+
     pins[CLK] = state;
 
     if (state == HIGH) {
@@ -109,6 +111,14 @@ void IC_74xx574_t::ProcessUpdateClk(TriState_t state)
         emit SignalQ6Updated((pins[OEb]==HIGH)?Z:pins[Q6]);
         emit SignalQ7Updated((pins[OEb]==HIGH)?Z:pins[Q7]);
         emit SignalQ8Updated((pins[OEb]==HIGH)?Z:pins[Q8]);
+
+
+        if (objectName() == "debug") {
+            qDebug() << ++ iter << "Asserting new value" << Qt::hex <<
+                (pins[Q8] << 7 | pins[Q7] << 6 | pins[Q6] << 5 | pins[Q5] << 4 |
+                pins[Q4] << 3 | pins[Q3] << 2 | pins[Q2] << 1 | pins[Q1] << 0);
+        }
+
     }
 }
 

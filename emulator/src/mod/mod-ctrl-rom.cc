@@ -25,6 +25,11 @@ CtrlRomModule_t::CtrlRomModule_t(const QString &name, const QString &file) : QGr
     setObjectName(name);
 
     AllocateComponents();
+//    if (name == "Ctrl4") latch->setObjectName("debug");
+    if (name == "Ctrl9") {
+        latch->setObjectName("debug");
+        sram->setObjectName("debug");
+    }
     BuildGui();
     WireUp();
     TriggerFirstUpdate();
@@ -207,7 +212,7 @@ void CtrlRomModule_t::WireUp(void)
     connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, latch, &IC_74xx574_t::ProcessUpdateD6);
     connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, latch, &IC_74xx574_t::ProcessUpdateD7);
     connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, latch, &IC_74xx574_t::ProcessUpdateD8);
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, latch, &IC_74xx574_t::ProcessUpdateClk);
+//    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, latch, &IC_74xx574_t::ProcessUpdateClk);
 
 
 

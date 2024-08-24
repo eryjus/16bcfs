@@ -140,8 +140,8 @@ void HW_Computer_t::BuildGui(void)
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 14);
-    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 14, 14);
+    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 13);
+    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 13, 12);
 
     grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 0, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 12, 3, 1, 3);
@@ -149,15 +149,14 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(new GUI_BusLeds_t("ALU A", aluA), 12, 9, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("ALU B", aluB), 12, 12, 1, 3);
 
-    grid->addWidget(pgmFlags, 0, 11, 1, 1);
-    grid->addWidget(intFlags, 0, 12, 1, 1);
+    grid->addWidget(pgmFlags, 0, 11);
+    grid->addWidget(intFlags, 0, 12);
 
     // -- place the control logic mid-plane
-    grid->addWidget(fetch, 11, 15, 2, 2);
-    grid->addWidget(ctrlLogic, 0, 15, 9, 2);
-    grid->addWidget(instr, 10, 15, 1, 2);
-
-    grid->addWidget(clock, 13, 15, 2, 2);
+    grid->addWidget(ctrlLogic, 0, 15, 8, 2);
+    grid->addWidget(instr, 8, 15, 1, 2);
+    grid->addWidget(fetch, 9, 15, 2, 2);
+    grid->addWidget(clock, 11, 15, 3, 2);
 
     grid->addWidget(pgmpc, 0, 0, 2, 3);
     grid->addWidget(pgmra, 2, 0, 2, 3);
@@ -177,7 +176,7 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(r10, 6, 6, 2, 3);
     grid->addWidget(r11, 8, 6, 2, 3);
     grid->addWidget(r12, 10, 6, 2, 3);
-    grid->addWidget(pgmRom, 14, 0, 1, 4);
+    grid->addWidget(pgmRom, 13, 0, 1, 4);
 
 
     central = new QWidget;
@@ -238,7 +237,6 @@ void HW_Computer_t::AllocateComponents(void)
     //
     // -- Construct the Control Logic Mid-Plane
     //    -------------------------------------
-    ctrlLogic = new ControlLogic_MidPlane_t;
 
 
     //
@@ -291,6 +289,7 @@ void HW_Computer_t::AllocateComponents(void)
     //    choice of framework.
     //    ----------------------------------------------------------------------------------------------------------
     instr = new InstructionRegisterModule_t;
+    ctrlLogic = new ControlLogic_MidPlane_t;
     fetch = new FetchRegisterModule_t;
 
     pgmRom = new PgmRomModule_t(GetPgmRomFolder());

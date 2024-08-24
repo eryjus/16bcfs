@@ -33,6 +33,12 @@ IC_74xx74_t::IC_74xx74_t(void)
     pins[Q2] = LOW;
     pins[Q2b] = HIGH;
 
+    d1 = LOW;
+    d2 = LOW;
+
+    lastClk1 = LOW;
+    lastClk2 = LOW;
+
     TriggerFirstUpdate();
 }
 
@@ -160,17 +166,28 @@ void IC_74xx74_t::ProcessUpdatePre2(TriState_t state)
 //
 // -- handle a clock tick
 //    -------------------
-void IC_74xx74_t::ProcessUpdateClk1(TriState_t state)
+void IC_74xx74_t::ProcessUpdateClockLatch1(TriState_t state)
 {
-    TriState_t last = pins[CLK1];
+    lastClk1 = pins[CLK1];
     pins[CLK1] = state;
 
     if (pins[CLR1b] == LOW || pins[PRE1b] == LOW) return;
 
     // -- rising edge
-    if (state == HIGH && last == LOW) {
-        if (pins[Q1] != pins[D1]) {
-            pins[Q1] = pins[D1];
+    if (state == HIGH && lastClk1 == LOW) {
+        d1 = pins[D1];
+    }
+}
+
+
+//
+// -- handle a clock tick
+//    -------------------
+void IC_74xx74_t::ProcessUpdateClockOutput1(TriState_t state)
+{
+    if (state == HIGH && lastClk1 == LOW) {
+        if (pins[Q1] != d1) {
+            pins[Q1] = d1;
             pins[Q1b] = pins[Q1]==HIGH?LOW:HIGH;
 
             emit SignalQ1Updated(pins[Q1]);
@@ -183,18 +200,29 @@ void IC_74xx74_t::ProcessUpdateClk1(TriState_t state)
 //
 // -- handle a clock tick
 //    -------------------
-void IC_74xx74_t::ProcessUpdateClk2(TriState_t state)
+void IC_74xx74_t::ProcessUpdateClockLatch2(TriState_t state)
 {
-    TriState_t last = pins[CLK2];
+    lastClk2 = pins[CLK2];
     pins[CLK2] = state;
 
     if (pins[CLR2b] == LOW || pins[PRE2b] == LOW) return;
 
     // -- rising edge
-    if (state == HIGH && last == LOW) {
-        if (pins[Q2] != pins[D2]) {
-            pins[Q2] = pins[D2];
-            pins[Q2b] = (pins[Q2]==HIGH?LOW:HIGH);
+    if (state == HIGH && lastClk2 == LOW) {
+        d2 = pins[D2];
+    }
+}
+
+
+//
+// -- handle a clock tick
+//    -------------------
+void IC_74xx74_t::ProcessUpdateClockOutput2(TriState_t state)
+{
+    if (state == HIGH && lastClk2 == LOW) {
+        if (pins[Q2] != d2) {
+            pins[Q2] = d2;
+            pins[Q2b] = pins[Q2]==HIGH?LOW:HIGH;
 
             emit SignalQ2Updated(pins[Q2]);
             emit SignalQ2bUpdated(pins[Q2b]);

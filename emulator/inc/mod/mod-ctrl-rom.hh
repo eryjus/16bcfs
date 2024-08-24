@@ -45,7 +45,8 @@ private:
 
 
 public slots:
-    void ProcessUpdateClk(TriState_t state) { if (objectName() == "Ctrl9" && state == HIGH) qDebug() << "latch"; latch->ProcessUpdateClk(state); }
+    void ProcessUpdateClockLatch(TriState_t state) { latch->ProcessUpdateClockLatch(state); }
+    void ProcessUpdateClockOutput(TriState_t state) { latch->ProcessUpdateClockOutput(state); }
 
     void ProcessUpdateCmdAddr(TriState_t state) { eeprom->ProcessUpdateSi(state); }
     void ProcessUpdateChipSelect(TriState_t state) { eeprom->ProcessUpdateCs(state); }

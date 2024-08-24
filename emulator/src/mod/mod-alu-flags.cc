@@ -201,7 +201,8 @@ void AluFlagsModule_t::WireUp(void)
     // -- now connect the z-side of the latch
     zcLatch->ProcessUpdateClr1(HIGH);
     connect(nor1, &IC_74xx02_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClk1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
     zcLatch->ProcessUpdatePre1(HIGH);
 
 
@@ -269,7 +270,8 @@ void AluFlagsModule_t::WireUp(void)
     // -- connect up the C-side signals to the latch
     connect(inv1, &IC_74xx04_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClr2, CNN_TYPE);
     connect(cMux, &IC_74xx151_t::SignalYUpdated, zcLatch, &IC_74xx74_t::ProcessUpdateD2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClk2, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockLatch2, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockOutput2, CNN_TYPE);
     connect(inv1, &IC_74xx04_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdatePre2, CNN_TYPE);
 
 
@@ -289,7 +291,8 @@ void AluFlagsModule_t::WireUp(void)
     //    -----------------------------------------------
     nvLatch->ProcessUpdateClr1(HIGH);
     connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, nvLatch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClk1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
     nvLatch->ProcessUpdatePre1(HIGH);
 
     // -- the N-related gate on and1
@@ -323,7 +326,8 @@ void AluFlagsModule_t::WireUp(void)
     // -- connect up the V-side signals to the latch
     connect(inv1, &IC_74xx04_t::SignalY4Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClr2, CNN_TYPE);
     connect(and1, &IC_74xx08_t::SignalY4Updated, nvLatch, &IC_74xx74_t::ProcessUpdateD2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClk2, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockLatch2, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockOutput2, CNN_TYPE);
     connect(inv1, &IC_74xx04_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdatePre2, CNN_TYPE);
 
     // -- the LED
@@ -340,11 +344,13 @@ void AluFlagsModule_t::WireUp(void)
     // -- connect up the L-side signals to the latch
     lLatch->ProcessUpdateClr1(HIGH);
     connect(xor1, &IC_74xx86_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClk1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
     lLatch->ProcessUpdatePre1(HIGH);
     lLatch->ProcessUpdateClr2(HIGH);
     lLatch->ProcessUpdateD2(LOW);
-    lLatch->ProcessUpdateClk2(LOW);
+    lLatch->ProcessUpdateClockLatch2(LOW);
+    lLatch->ProcessUpdateClockOutput2(LOW);
     lLatch->ProcessUpdatePre2(HIGH);
 
     // -- the LED
@@ -356,7 +362,16 @@ void AluFlagsModule_t::WireUp(void)
 //
 // -- Handle the inbound Clock
 //    ------------------------
-void AluFlagsModule_t::ProcessClk(TriState_t state)
+void AluFlagsModule_t::ProcessClockLatch(TriState_t state)
+{
+}
+
+
+
+//
+// -- Handle the inbound Clock
+//    ------------------------
+void AluFlagsModule_t::ProcessClockOutput(TriState_t state)
 {
     and1->ProcessUpdateA1(state);
     and1->ProcessUpdateA2(state);

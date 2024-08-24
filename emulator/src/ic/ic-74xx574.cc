@@ -37,6 +37,15 @@ IC_74xx574_t::IC_74xx574_t()
     pins[Q3] = Z;
     pins[Q2] = Z;
     pins[Q1] = Z;
+
+    d1 = LOW;
+    d2 = LOW;
+    d3 = LOW;
+    d4 = LOW;
+    d5 = LOW;
+    d6 = LOW;
+    d7 = LOW;
+    d8 = LOW;
 }
 
 
@@ -86,22 +95,41 @@ void IC_74xx574_t::ProcessUpdateOE(TriState_t state)
 
 //
 // -- latch the state of the
-//    --------------------------------------------------------------------------
-void IC_74xx574_t::ProcessUpdateClk(TriState_t state)
+//    ----------------------
+void IC_74xx574_t::ProcessUpdateClockLatch(TriState_t state)
 {
     static int iter = 0;
 
     pins[CLK] = state;
 
     if (state == HIGH) {
-        pins[Q1] = pins[D1];
-        pins[Q2] = pins[D2];
-        pins[Q3] = pins[D3];
-        pins[Q4] = pins[D4];
-        pins[Q5] = pins[D5];
-        pins[Q6] = pins[D6];
-        pins[Q7] = pins[D7];
-        pins[Q8] = pins[D8];
+        d1 = pins[D1];
+        d2 = pins[D2];
+        d3 = pins[D3];
+        d4 = pins[D4];
+        d5 = pins[D5];
+        d6 = pins[D6];
+        d7 = pins[D7];
+        d8 = pins[D8];
+    }
+}
+
+
+
+//
+// -- output the state of the register
+//    --------------------------------
+void IC_74xx574_t::ProcessUpdateClockOutput(TriState_t state)
+{
+    if (state == HIGH) {
+        pins[Q1] = d1;
+        pins[Q2] = d2;
+        pins[Q3] = d3;
+        pins[Q4] = d4;
+        pins[Q5] = d5;
+        pins[Q6] = d6;
+        pins[Q7] = d7;
+        pins[Q8] = d8;
 
         emit SignalQ1Updated((pins[OEb]==HIGH)?Z:pins[Q1]);
         emit SignalQ2Updated((pins[OEb]==HIGH)?Z:pins[Q2]);
@@ -111,14 +139,6 @@ void IC_74xx574_t::ProcessUpdateClk(TriState_t state)
         emit SignalQ6Updated((pins[OEb]==HIGH)?Z:pins[Q6]);
         emit SignalQ7Updated((pins[OEb]==HIGH)?Z:pins[Q7]);
         emit SignalQ8Updated((pins[OEb]==HIGH)?Z:pins[Q8]);
-
-
-        if (objectName() == "debug") {
-            qDebug() << ++ iter << "Asserting new value" << Qt::hex <<
-                (pins[Q8] << 7 | pins[Q7] << 6 | pins[Q6] << 5 | pins[Q5] << 4 |
-                pins[Q4] << 3 | pins[Q3] << 2 | pins[Q2] << 1 | pins[Q1] << 0);
-        }
-
     }
 }
 

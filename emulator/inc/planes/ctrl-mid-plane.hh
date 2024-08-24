@@ -83,7 +83,8 @@ private:
 
 public slots:
     void ProcessReset(TriState_t state);            // Main Reset Signal
-    void ProcessCpuClock(TriState_t state);         // Cpu Clock
+    void ProcessCpuClockLatch(TriState_t state);    // Cpu Clock
+    void ProcessCpuClockOutput(TriState_t state);   // Cpu Clock
     void ProcessRawSystemClock(TriState_t state);   // Main high-speed system clock
     void ProcessSanityCheck(TriState_t state);      // Check the consistenc of the RAM in the Control Modules
 

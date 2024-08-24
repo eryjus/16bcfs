@@ -631,24 +631,46 @@ void GpRegisterModule_t::ProcessReset(TriState_t state)
 //
 // -- Handle a clock signal
 //    ---------------------
-void GpRegisterModule_t::ProcessClk(TriState_t state)
+void GpRegisterModule_t::ProcessClockLatch(TriState_t state)
+{
+    aluA0->ProcessUpdateClockLatch(state);
+    aluA1->ProcessUpdateClockLatch(state);
+    aluB0->ProcessUpdateClockLatch(state);
+    aluB1->ProcessUpdateClockLatch(state);
+    addr10->ProcessUpdateClockLatch(state);
+    addr11->ProcessUpdateClockLatch(state);
+    addr20->ProcessUpdateClockLatch(state);
+    addr21->ProcessUpdateClockLatch(state);
+    main0->ProcessUpdateClockLatch(state);
+    main1->ProcessUpdateClockLatch(state);
+    swap0->ProcessUpdateClockLatch(state);
+    swap1->ProcessUpdateClockLatch(state);
+    led0->ProcessUpdateClockLatch(state);
+    led1->ProcessUpdateClockLatch(state);
+}
+
+
+//
+// -- Handle a clock signal
+//    ---------------------
+void GpRegisterModule_t::ProcessClockOutput(TriState_t state)
 {
     nand1->ProcessUpdateA1(state);
     nand1->ProcessUpdateA2(state);
-    aluA0->ProcessUpdateClk(state);
-    aluA1->ProcessUpdateClk(state);
-    aluB0->ProcessUpdateClk(state);
-    aluB1->ProcessUpdateClk(state);
-    addr10->ProcessUpdateClk(state);
-    addr11->ProcessUpdateClk(state);
-    addr20->ProcessUpdateClk(state);
-    addr21->ProcessUpdateClk(state);
-    main0->ProcessUpdateClk(state);
-    main1->ProcessUpdateClk(state);
-    swap0->ProcessUpdateClk(state);
-    swap1->ProcessUpdateClk(state);
-    led0->ProcessUpdateClk(state);
-    led1->ProcessUpdateClk(state);
+    aluA0->ProcessUpdateClockOutput(state);
+    aluA1->ProcessUpdateClockOutput(state);
+    aluB0->ProcessUpdateClockOutput(state);
+    aluB1->ProcessUpdateClockOutput(state);
+    addr10->ProcessUpdateClockOutput(state);
+    addr11->ProcessUpdateClockOutput(state);
+    addr20->ProcessUpdateClockOutput(state);
+    addr21->ProcessUpdateClockOutput(state);
+    main0->ProcessUpdateClockOutput(state);
+    main1->ProcessUpdateClockOutput(state);
+    swap0->ProcessUpdateClockOutput(state);
+    swap1->ProcessUpdateClockOutput(state);
+    led0->ProcessUpdateClockOutput(state);
+    led1->ProcessUpdateClockOutput(state);
 }
 
 

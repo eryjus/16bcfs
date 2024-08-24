@@ -219,7 +219,8 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //    -----------------------------------------
     resetting->ProcessUpdateClr1(HIGH);                                                             // pin 1: #CLR1
     connect(nand2, &IC_74xx00_t::SignalY4Updated, resetting, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);        // pin 2: D1
-    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClk1, CNN_TYPE);       // pin 3: CLK1 from local clock
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);       // pin 3: CLK1 from local clock
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);       // pin 3: CLK1 from local clock
     // pin 4 is handled in ProcessResetUpdate() -- below
     // pin 5 is the Q output pin
     // pin 6 is the #Q output pin
@@ -231,7 +232,8 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // pin 8 is the #Q pin (unused)
     // pin 9 is the Q pin (handled by its inputs)
     // pin 10 is handled in ProcessResetUpdate() -- below
-    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClk2, CNN_TYPE);       // pin 11: CLK2 from local clock
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClockLatch2, CNN_TYPE);       // pin 11: CLK2 from local clock
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateClockOutput2, CNN_TYPE);       // pin 11: CLK2 from local clock
     connect(nand1, &IC_74xx00_t::SignalY1Updated, resetting, &IC_74xx74_t::ProcessUpdateD2, CNN_TYPE);        // pin 12: D2
     resetting->ProcessUpdateClr2(HIGH);                                                             // pin 13: #CLR2
 

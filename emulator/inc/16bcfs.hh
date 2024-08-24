@@ -205,5 +205,5 @@ const QString lastPgm = "pgm-rom/last-pgm";
 #include "gui/gui-settings-dialog.hh"
 
 
-
+#define CNN_TYPE ((Qt::ConnectionType)(Qt::DirectConnection | Qt::UniqueConnection))
 

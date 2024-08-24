@@ -20,8 +20,8 @@
 HW_SpdtSwitch_t::HW_SpdtSwitch_t(QString name, HighWhen_t w, QWidget *parent)
         : QPushButton(name, parent), highWhen(w)
 {
-    connect(this, &QPushButton::pressed, this, &HW_SpdtSwitch_t::ProcessPressed);
-    connect(this, &QPushButton::released, this, &HW_SpdtSwitch_t::ProcessReleased);
+    connect(this, &QPushButton::pressed, this, &HW_SpdtSwitch_t::ProcessPressed, CNN_TYPE);
+    connect(this, &QPushButton::released, this, &HW_SpdtSwitch_t::ProcessReleased, CNN_TYPE);
 }
 
 

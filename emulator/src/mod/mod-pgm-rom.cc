@@ -129,81 +129,81 @@ void PgmRomModule_t::WireUp(void)
     HW_Bus_16_t *addr1 = HW_Computer_t::GetAddr1Bus();
 
     lsb->ProcessUpdateCE(LOW);
-    connect(addr1, &HW_Bus_16_t::SignalBit0Updated, lsb, &IC_at28c256_t::ProcessUpdateA0);
-    connect(addr1, &HW_Bus_16_t::SignalBit1Updated, lsb, &IC_at28c256_t::ProcessUpdateA1);
-    connect(addr1, &HW_Bus_16_t::SignalBit2Updated, lsb, &IC_at28c256_t::ProcessUpdateA2);
-    connect(addr1, &HW_Bus_16_t::SignalBit3Updated, lsb, &IC_at28c256_t::ProcessUpdateA3);
-    connect(addr1, &HW_Bus_16_t::SignalBit4Updated, lsb, &IC_at28c256_t::ProcessUpdateA4);
-    connect(addr1, &HW_Bus_16_t::SignalBit5Updated, lsb, &IC_at28c256_t::ProcessUpdateA5);
-    connect(addr1, &HW_Bus_16_t::SignalBit6Updated, lsb, &IC_at28c256_t::ProcessUpdateA6);
-    connect(addr1, &HW_Bus_16_t::SignalBit7Updated, lsb, &IC_at28c256_t::ProcessUpdateA7);
-    connect(addr1, &HW_Bus_16_t::SignalBit8Updated, lsb, &IC_at28c256_t::ProcessUpdateA8);
-    connect(addr1, &HW_Bus_16_t::SignalBit9Updated, lsb, &IC_at28c256_t::ProcessUpdateA9);
-    connect(addr1, &HW_Bus_16_t::SignalBitAUpdated, lsb, &IC_at28c256_t::ProcessUpdateA10);
-    connect(addr1, &HW_Bus_16_t::SignalBitBUpdated, lsb, &IC_at28c256_t::ProcessUpdateA11);
-    connect(addr1, &HW_Bus_16_t::SignalBitCUpdated, lsb, &IC_at28c256_t::ProcessUpdateA12);
-    connect(addr1, &HW_Bus_16_t::SignalBitDUpdated, lsb, &IC_at28c256_t::ProcessUpdateA13);
-    connect(addr1, &HW_Bus_16_t::SignalBitEUpdated, lsb, &IC_at28c256_t::ProcessUpdateA14);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, lsb, &IC_at28c256_t::ProcessUpdateOE);
+    connect(addr1, &HW_Bus_16_t::SignalBit0Updated, lsb, &IC_at28c256_t::ProcessUpdateA0, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit1Updated, lsb, &IC_at28c256_t::ProcessUpdateA1, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit2Updated, lsb, &IC_at28c256_t::ProcessUpdateA2, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit3Updated, lsb, &IC_at28c256_t::ProcessUpdateA3, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit4Updated, lsb, &IC_at28c256_t::ProcessUpdateA4, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit5Updated, lsb, &IC_at28c256_t::ProcessUpdateA5, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit6Updated, lsb, &IC_at28c256_t::ProcessUpdateA6, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit7Updated, lsb, &IC_at28c256_t::ProcessUpdateA7, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit8Updated, lsb, &IC_at28c256_t::ProcessUpdateA8, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit9Updated, lsb, &IC_at28c256_t::ProcessUpdateA9, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitAUpdated, lsb, &IC_at28c256_t::ProcessUpdateA10, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitBUpdated, lsb, &IC_at28c256_t::ProcessUpdateA11, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitCUpdated, lsb, &IC_at28c256_t::ProcessUpdateA12, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitDUpdated, lsb, &IC_at28c256_t::ProcessUpdateA13, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitEUpdated, lsb, &IC_at28c256_t::ProcessUpdateA14, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, lsb, &IC_at28c256_t::ProcessUpdateOE, CNN_TYPE);
 
 
     msb->ProcessUpdateCE(LOW);
-    connect(addr1, &HW_Bus_16_t::SignalBit0Updated, msb, &IC_at28c256_t::ProcessUpdateA0);
-    connect(addr1, &HW_Bus_16_t::SignalBit1Updated, msb, &IC_at28c256_t::ProcessUpdateA1);
-    connect(addr1, &HW_Bus_16_t::SignalBit2Updated, msb, &IC_at28c256_t::ProcessUpdateA2);
-    connect(addr1, &HW_Bus_16_t::SignalBit3Updated, msb, &IC_at28c256_t::ProcessUpdateA3);
-    connect(addr1, &HW_Bus_16_t::SignalBit4Updated, msb, &IC_at28c256_t::ProcessUpdateA4);
-    connect(addr1, &HW_Bus_16_t::SignalBit5Updated, msb, &IC_at28c256_t::ProcessUpdateA5);
-    connect(addr1, &HW_Bus_16_t::SignalBit6Updated, msb, &IC_at28c256_t::ProcessUpdateA6);
-    connect(addr1, &HW_Bus_16_t::SignalBit7Updated, msb, &IC_at28c256_t::ProcessUpdateA7);
-    connect(addr1, &HW_Bus_16_t::SignalBit8Updated, msb, &IC_at28c256_t::ProcessUpdateA8);
-    connect(addr1, &HW_Bus_16_t::SignalBit9Updated, msb, &IC_at28c256_t::ProcessUpdateA9);
-    connect(addr1, &HW_Bus_16_t::SignalBitAUpdated, msb, &IC_at28c256_t::ProcessUpdateA10);
-    connect(addr1, &HW_Bus_16_t::SignalBitBUpdated, msb, &IC_at28c256_t::ProcessUpdateA11);
-    connect(addr1, &HW_Bus_16_t::SignalBitCUpdated, msb, &IC_at28c256_t::ProcessUpdateA12);
-    connect(addr1, &HW_Bus_16_t::SignalBitDUpdated, msb, &IC_at28c256_t::ProcessUpdateA13);
-    connect(addr1, &HW_Bus_16_t::SignalBitEUpdated, msb, &IC_at28c256_t::ProcessUpdateA14);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, msb, &IC_at28c256_t::ProcessUpdateOE);
+    connect(addr1, &HW_Bus_16_t::SignalBit0Updated, msb, &IC_at28c256_t::ProcessUpdateA0, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit1Updated, msb, &IC_at28c256_t::ProcessUpdateA1, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit2Updated, msb, &IC_at28c256_t::ProcessUpdateA2, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit3Updated, msb, &IC_at28c256_t::ProcessUpdateA3, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit4Updated, msb, &IC_at28c256_t::ProcessUpdateA4, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit5Updated, msb, &IC_at28c256_t::ProcessUpdateA5, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit6Updated, msb, &IC_at28c256_t::ProcessUpdateA6, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit7Updated, msb, &IC_at28c256_t::ProcessUpdateA7, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit8Updated, msb, &IC_at28c256_t::ProcessUpdateA8, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBit9Updated, msb, &IC_at28c256_t::ProcessUpdateA9, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitAUpdated, msb, &IC_at28c256_t::ProcessUpdateA10, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitBUpdated, msb, &IC_at28c256_t::ProcessUpdateA11, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitCUpdated, msb, &IC_at28c256_t::ProcessUpdateA12, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitDUpdated, msb, &IC_at28c256_t::ProcessUpdateA13, CNN_TYPE);
+    connect(addr1, &HW_Bus_16_t::SignalBitEUpdated, msb, &IC_at28c256_t::ProcessUpdateA14, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, msb, &IC_at28c256_t::ProcessUpdateOE, CNN_TYPE);
 
 
     // -- connect the outputs to the fetch bus
     HW_Bus_16_t *fetch = HW_Computer_t::GetFetchBus();
-    connect(lsb, &IC_at28c256_t::SignalDq0Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(lsb, &IC_at28c256_t::SignalDq1Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(lsb, &IC_at28c256_t::SignalDq2Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(lsb, &IC_at28c256_t::SignalDq3Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(lsb, &IC_at28c256_t::SignalDq4Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(lsb, &IC_at28c256_t::SignalDq5Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(lsb, &IC_at28c256_t::SignalDq6Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(lsb, &IC_at28c256_t::SignalDq7Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit7);
+    connect(lsb, &IC_at28c256_t::SignalDq0Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq1Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq2Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq3Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq4Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq5Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq6Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq7Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
 
-    connect(msb, &IC_at28c256_t::SignalDq0Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(msb, &IC_at28c256_t::SignalDq1Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(msb, &IC_at28c256_t::SignalDq2Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(msb, &IC_at28c256_t::SignalDq3Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(msb, &IC_at28c256_t::SignalDq4Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(msb, &IC_at28c256_t::SignalDq5Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(msb, &IC_at28c256_t::SignalDq6Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(msb, &IC_at28c256_t::SignalDq7Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(msb, &IC_at28c256_t::SignalDq0Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq1Updated, fetch, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq2Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq3Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq4Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq5Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq6Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq7Updated, fetch, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 
 
     // -- finally connect up the LEDs
-    connect(lsb, &IC_at28c256_t::SignalDq0Updated, bit0, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq1Updated, bit1, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq2Updated, bit2, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq3Updated, bit3, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq4Updated, bit4, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq5Updated, bit5, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq6Updated, bit6, &GUI_Led_t::ProcessStateChange);
-    connect(lsb, &IC_at28c256_t::SignalDq7Updated, bit7, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq0Updated, bit8, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq1Updated, bit9, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq2Updated, bitA, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq3Updated, bitB, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq4Updated, bitC, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq5Updated, bitD, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq6Updated, bitE, &GUI_Led_t::ProcessStateChange);
-    connect(msb, &IC_at28c256_t::SignalDq7Updated, bitF, &GUI_Led_t::ProcessStateChange);
+    connect(lsb, &IC_at28c256_t::SignalDq0Updated, bit0, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq1Updated, bit1, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq2Updated, bit2, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq3Updated, bit3, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq4Updated, bit4, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq5Updated, bit5, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq6Updated, bit6, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lsb, &IC_at28c256_t::SignalDq7Updated, bit7, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq0Updated, bit8, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq1Updated, bit9, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq2Updated, bitA, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq3Updated, bitB, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq4Updated, bitC, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq5Updated, bitD, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq6Updated, bitE, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(msb, &IC_at28c256_t::SignalDq7Updated, bitF, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 }
 
 

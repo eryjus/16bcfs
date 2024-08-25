@@ -196,45 +196,47 @@ void ClockModule_t::TriggerFirstUpdate(void)
 void ClockModule_t::WireUp(void)
 {
     // -- connect up the oscillator inputs
-    connect(speedPot, &HW_Pot_t::SignalValueChanged, timer, &HW_Oscillator_t::ProcessRawInterval);
+    connect(speedPot, &HW_Pot_t::SignalValueChanged, timer, &HW_Oscillator_t::ProcessRawInterval, CNN_TYPE);
 
 
     // -- connect up the inputs to the NAND gates
-    connect(and1, &IC_74xx08_t::SignalY4Updated, nand1, &IC_74xx00_t::ProcessUpdateA1);
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, nand1, &IC_74xx00_t::ProcessUpdateB1);
+    connect(and1, &IC_74xx08_t::SignalY4Updated, nand1, &IC_74xx00_t::ProcessUpdateA1, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, nand1, &IC_74xx00_t::ProcessUpdateB1, CNN_TYPE);
     nand1->ProcessA2Low();
     nand1->ProcessB2Low();
     nand1->ProcessA3Low();
     nand1->ProcessB3Low();
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nand1, &IC_74xx00_t::ProcessUpdateA4);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, nand1, &IC_74xx00_t::ProcessUpdateB4);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nand1, &IC_74xx00_t::ProcessUpdateA4, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, nand1, &IC_74xx00_t::ProcessUpdateB4, CNN_TYPE);
 
 
     // -- connect up the inputs to the D-type latch
-    connect(timer, &HW_Oscillator_t::SignalStateChanged, latch, &IC_74xx74_t::ProcessUpdateClk1);
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, latch, &IC_74xx74_t::ProcessUpdateD1);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, latch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, latch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, latch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
     latch->ProcessUpdateClr1(HIGH);
     latch->ProcessUpdatePre1(HIGH);
-    latch->ProcessUpdateClk2(LOW);
+    latch->ProcessUpdateClockLatch2(LOW);
+    latch->ProcessUpdateClockOutput2(LOW);
     latch->ProcessUpdateClr2(HIGH);
     latch->ProcessUpdateD2(LOW);
     latch->ProcessUpdatePre2(HIGH);
 
 
     // -- connect up the inputs to the AND gates
-    connect(timer, &HW_Oscillator_t::SignalStateChanged, and1, &IC_74xx08_t::ProcessUpdateA1);
-    connect(latch, &IC_74xx74_t::SignalQ1Updated, and1, &IC_74xx08_t::ProcessUpdateB1);
-    connect(latch, &IC_74xx74_t::SignalQ1bUpdated, and1, &IC_74xx08_t::ProcessUpdateA2);
-    connect(singleStepDebounced, &HW_SpdtSwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB2);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, and1, &IC_74xx08_t::ProcessUpdateA1, CNN_TYPE);
+    connect(latch, &IC_74xx74_t::SignalQ1Updated, and1, &IC_74xx08_t::ProcessUpdateB1, CNN_TYPE);
+    connect(latch, &IC_74xx74_t::SignalQ1bUpdated, and1, &IC_74xx08_t::ProcessUpdateA2, CNN_TYPE);
+    connect(singleStepDebounced, &HW_SpdtSwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB2, CNN_TYPE);
     // ProcessUpdateA3 connected to Reset Slot
-    connect(runModeMomentary, &HW_MomentarySwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB3);
+    connect(runModeMomentary, &HW_MomentarySwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB3, CNN_TYPE);
     connect(nor1, &IC_74xx02_t::SignalY4Updated, and1, &IC_74xx08_t::ProcessUpdateA4);
-    connect(stepModeMomentary, &HW_MomentarySwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB4);
+    connect(stepModeMomentary, &HW_MomentarySwitch_t::SignalState, and1, &IC_74xx08_t::ProcessUpdateB4, CNN_TYPE);
 
 
     // -- connect up the inputs to the NOR gates
-    connect(and1, &IC_74xx08_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateA1);
-    connect(and1, &IC_74xx08_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateB1);
+    connect(and1, &IC_74xx08_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateA1, CNN_TYPE);
+    connect(and1, &IC_74xx08_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateB1, CNN_TYPE);
 
     nor1->ProcessA2Low();
     nor1->ProcessB2Low();
@@ -243,24 +245,25 @@ void ClockModule_t::WireUp(void)
 
 
     // -- connect up the oscillator output (LED?)
-    connect(timer, &HW_Oscillator_t::SignalStateChanged, this, &ClockModule_t::ProcessUpdateImage);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, this, &ClockModule_t::ProcessUpdateImage, CNN_TYPE);
 
 
     // -- connect the clock mode LEDs
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, runModeLed, &GUI_Led_t::ProcessStateChange);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, stepModeLed, &GUI_Led_t::ProcessStateChange);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, runModeLed, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, stepModeLed, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 
 
 
     // -- connect the final clock to its LED
-    connect(nor1, &IC_74xx02_t::SignalY1Updated, actualClock, &GUI_Led_t::ProcessStateChange);
+    connect(nor1, &IC_74xx02_t::SignalY1Updated, actualClock, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 
 
     // -- Finally, trigger all external signals
-    connect(nor1, &IC_74xx02_t::SignalY1Updated, this, &ClockModule_t::SignalClockState);
+    connect(nor1, &IC_74xx02_t::SignalY1Updated, this, &ClockModule_t::SignalClockStateLatch, CNN_TYPE);
+    connect(nor1, &IC_74xx02_t::SignalY1Updated, this, &ClockModule_t::SignalClockStateOutput, CNN_TYPE);
 
     // -- The last connection to make MUST be the sanity check
-    connect(timer, &HW_Oscillator_t::SignalStateChanged, this, &ClockModule_t::SignalSanityCheck);
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, this, &ClockModule_t::SignalSanityCheck, CNN_TYPE);
 }
 
 

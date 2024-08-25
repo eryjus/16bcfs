@@ -39,7 +39,7 @@ void CtrlRomModule_t::AllocateComponents(void)
 {
     ctrl = new HW_Bus_8_t(filename, HW_Computer_t::GetClock());
     eeprom = new IC_25lc256_t(filename);
-    sram = new IC_AS6C62256_t(eeprom);
+    sram = new IC_as6c62256_t(eeprom);
     shift = new IC_74xx164_t;
     latch = new IC_74xx574_t;
     driver = new IC_74xx541_t;
@@ -95,7 +95,7 @@ void CtrlRomModule_t::BuildGui(void)
 void CtrlRomModule_t::TriggerFirstUpdate(void)
 {
     eeprom->TriggerFirstUpdate();
-    sram->TriggerFirstUpdates();
+    sram->TriggerFirstUpdate();
     shift->TriggerFirstUpdate();
     latch->TriggerFirstUpdate();
     driver->TriggerFirstUpdate();
@@ -124,31 +124,31 @@ void CtrlRomModule_t::WireUp(void)
     // -- handle the sram inputs
     //    ----------------------
     HW_Bus_16_t *ctrlBus = HW_Computer_t::GetCtrlMidPlane()->GetCtrlBus();
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitEUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA14);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitCUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA12);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit7Updated, sram, &IC_AS6C62256_t::ProcessUpdateA7);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit6Updated, sram, &IC_AS6C62256_t::ProcessUpdateA6);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit5Updated, sram, &IC_AS6C62256_t::ProcessUpdateA5);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit4Updated, sram, &IC_AS6C62256_t::ProcessUpdateA4);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit3Updated, sram, &IC_AS6C62256_t::ProcessUpdateA3);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit2Updated, sram, &IC_AS6C62256_t::ProcessUpdateA2);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit1Updated, sram, &IC_AS6C62256_t::ProcessUpdateA1);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit0Updated, sram, &IC_AS6C62256_t::ProcessUpdateA0);
-    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq0);
-    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq1);
-    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq2);
-    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq3);
-    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq4);
-    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq5);
-    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq6);
-    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, sram, &IC_AS6C62256_t::ProcessUpdateDq7);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitEUpdated, sram, &IC_as6c62256_t::ProcessUpdateA14, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitCUpdated, sram, &IC_as6c62256_t::ProcessUpdateA12, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit7Updated, sram, &IC_as6c62256_t::ProcessUpdateA7, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit6Updated, sram, &IC_as6c62256_t::ProcessUpdateA6, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit5Updated, sram, &IC_as6c62256_t::ProcessUpdateA5, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit4Updated, sram, &IC_as6c62256_t::ProcessUpdateA4, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit3Updated, sram, &IC_as6c62256_t::ProcessUpdateA3, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit2Updated, sram, &IC_as6c62256_t::ProcessUpdateA2, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit1Updated, sram, &IC_as6c62256_t::ProcessUpdateA1, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit0Updated, sram, &IC_as6c62256_t::ProcessUpdateA0, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, sram, &IC_as6c62256_t::ProcessUpdateDq0, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, sram, &IC_as6c62256_t::ProcessUpdateDq1, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, sram, &IC_as6c62256_t::ProcessUpdateDq2, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, sram, &IC_as6c62256_t::ProcessUpdateDq3, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, sram, &IC_as6c62256_t::ProcessUpdateDq4, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, sram, &IC_as6c62256_t::ProcessUpdateDq5, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, sram, &IC_as6c62256_t::ProcessUpdateDq6, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, sram, &IC_as6c62256_t::ProcessUpdateDq7, CNN_TYPE);
     // pin 20 handled below (#CE)
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitAUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA10);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitAUpdated, sram, &IC_as6c62256_t::ProcessUpdateA10, CNN_TYPE);
     // pin 22 handled in the header (#OE)
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitBUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA11);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit9Updated, sram, &IC_AS6C62256_t::ProcessUpdateA9);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBit8Updated, sram, &IC_AS6C62256_t::ProcessUpdateA8);
-    connect(ctrlBus, &HW_Bus_16_t::SignalBitDUpdated, sram, &IC_AS6C62256_t::ProcessUpdateA13);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitBUpdated, sram, &IC_as6c62256_t::ProcessUpdateA11, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit9Updated, sram, &IC_as6c62256_t::ProcessUpdateA9, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBit8Updated, sram, &IC_as6c62256_t::ProcessUpdateA8, CNN_TYPE);
+    connect(ctrlBus, &HW_Bus_16_t::SignalBitDUpdated, sram, &IC_as6c62256_t::ProcessUpdateA13, CNN_TYPE);
     // pin 27 handled in the header (#E)
 
 
@@ -156,7 +156,7 @@ void CtrlRomModule_t::WireUp(void)
     //
     // -- connect up the shift register inputs
     //    ------------------------------------
-    connect(eeprom, &IC_25lc256_t::SignalSoUpdated, shift, &IC_74xx164_t::ProcessUpdateA);
+    connect(eeprom, &IC_25lc256_t::SignalSoUpdated, shift, &IC_74xx164_t::ProcessUpdateA, CNN_TYPE);
     shift->ProcessUpdateB(HIGH);
     // pin 3 is output Qa
     // pin 4 is output Qb
@@ -175,14 +175,14 @@ void CtrlRomModule_t::WireUp(void)
     // -- hook up the line driver
     //    -----------------------
     driver->ProcessUpdateOE1(LOW);
-    connect(shift, &IC_74xx164_t::SignalQAUpdated, driver, &IC_74xx541_t::ProcessUpdateD0);
-    connect(shift, &IC_74xx164_t::SignalQBUpdated, driver, &IC_74xx541_t::ProcessUpdateD1);
-    connect(shift, &IC_74xx164_t::SignalQCUpdated, driver, &IC_74xx541_t::ProcessUpdateD2);
-    connect(shift, &IC_74xx164_t::SignalQDUpdated, driver, &IC_74xx541_t::ProcessUpdateD3);
-    connect(shift, &IC_74xx164_t::SignalQEUpdated, driver, &IC_74xx541_t::ProcessUpdateD4);
-    connect(shift, &IC_74xx164_t::SignalQFUpdated, driver, &IC_74xx541_t::ProcessUpdateD5);
-    connect(shift, &IC_74xx164_t::SignalQGUpdated, driver, &IC_74xx541_t::ProcessUpdateD6);
-    connect(shift, &IC_74xx164_t::SignalQHUpdated, driver, &IC_74xx541_t::ProcessUpdateD7);
+    connect(shift, &IC_74xx164_t::SignalQAUpdated, driver, &IC_74xx541_t::ProcessUpdateD0, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQBUpdated, driver, &IC_74xx541_t::ProcessUpdateD1, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQCUpdated, driver, &IC_74xx541_t::ProcessUpdateD2, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQDUpdated, driver, &IC_74xx541_t::ProcessUpdateD3, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQEUpdated, driver, &IC_74xx541_t::ProcessUpdateD4, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQFUpdated, driver, &IC_74xx541_t::ProcessUpdateD5, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQGUpdated, driver, &IC_74xx541_t::ProcessUpdateD6, CNN_TYPE);
+    connect(shift, &IC_74xx164_t::SignalQHUpdated, driver, &IC_74xx541_t::ProcessUpdateD7, CNN_TYPE);
     // pin 11 is output Q7
     // pin 12 is output Q6
     // pin 13 is output Q5
@@ -199,68 +199,68 @@ void CtrlRomModule_t::WireUp(void)
     // -- connect in the latch from the internal bus to the output bus
     //    ------------------------------------------------------------
     // pin 1 is handled with the Qc signal in the header
-    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, latch, &IC_74xx574_t::ProcessUpdateD1);
-    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, latch, &IC_74xx574_t::ProcessUpdateD2);
-    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, latch, &IC_74xx574_t::ProcessUpdateD3);
-    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, latch, &IC_74xx574_t::ProcessUpdateD4);
-    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, latch, &IC_74xx574_t::ProcessUpdateD5);
-    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, latch, &IC_74xx574_t::ProcessUpdateD6);
-    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, latch, &IC_74xx574_t::ProcessUpdateD7);
-    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, latch, &IC_74xx574_t::ProcessUpdateD8);
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, latch, &IC_74xx574_t::ProcessUpdateClk);
+    connect(ctrl, &HW_Bus_8_t::SignalBit0Updated, latch, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit1Updated, latch, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit2Updated, latch, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit3Updated, latch, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit4Updated, latch, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit5Updated, latch, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit6Updated, latch, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(ctrl, &HW_Bus_8_t::SignalBit7Updated, latch, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);
+//    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockState, latch, &IC_74xx574_t::ProcessUpdateClk, CNN_TYPE);
 
 
 
     //
     // -- the internal bus has needs to have 2 inputs: driver and sram
     //    ------------------------------------------------------------
-    connect(driver, &IC_74xx541_t::SignalY0Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit0);
-    connect(driver, &IC_74xx541_t::SignalY1Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit1);
-    connect(driver, &IC_74xx541_t::SignalY2Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit2);
-    connect(driver, &IC_74xx541_t::SignalY3Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit3);
-    connect(driver, &IC_74xx541_t::SignalY4Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit4);
-    connect(driver, &IC_74xx541_t::SignalY5Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit5);
-    connect(driver, &IC_74xx541_t::SignalY6Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit6);
-    connect(driver, &IC_74xx541_t::SignalY7Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit7);
+    connect(driver, &IC_74xx541_t::SignalY0Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY1Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY2Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY3Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY4Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY5Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY6Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(driver, &IC_74xx541_t::SignalY7Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit7, CNN_TYPE);
 
 
 
     // -- be careful of infinite recursion for these bidirectional pins!!!
-    connect(sram, &IC_AS6C62256_t::SignalDq0Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit0);
-    connect(sram, &IC_AS6C62256_t::SignalDq1Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit1);
-    connect(sram, &IC_AS6C62256_t::SignalDq2Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit2);
-    connect(sram, &IC_AS6C62256_t::SignalDq3Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit3);
-    connect(sram, &IC_AS6C62256_t::SignalDq4Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit4);
-    connect(sram, &IC_AS6C62256_t::SignalDq5Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit5);
-    connect(sram, &IC_AS6C62256_t::SignalDq6Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit6);
-    connect(sram, &IC_AS6C62256_t::SignalDq7Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit7);
+    connect(sram, &IC_as6c62256_t::SignalDq0Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq1Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq2Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq3Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq4Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq5Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq6Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(sram, &IC_as6c62256_t::SignalDq7Updated, ctrl, &HW_Bus_8_t::ProcessUpdateBit7, CNN_TYPE);
 
 
 
     //
     // -- The latch needs to be passed off board
     //    --------------------------------------
-    connect(latch, &IC_74xx574_t::SignalQ1Updated, this, &CtrlRomModule_t::SignalBit0Updated);
-    connect(latch, &IC_74xx574_t::SignalQ2Updated, this, &CtrlRomModule_t::SignalBit1Updated);
-    connect(latch, &IC_74xx574_t::SignalQ3Updated, this, &CtrlRomModule_t::SignalBit2Updated);
-    connect(latch, &IC_74xx574_t::SignalQ4Updated, this, &CtrlRomModule_t::SignalBit3Updated);
-    connect(latch, &IC_74xx574_t::SignalQ5Updated, this, &CtrlRomModule_t::SignalBit4Updated);
-    connect(latch, &IC_74xx574_t::SignalQ6Updated, this, &CtrlRomModule_t::SignalBit5Updated);
-    connect(latch, &IC_74xx574_t::SignalQ7Updated, this, &CtrlRomModule_t::SignalBit6Updated);
-    connect(latch, &IC_74xx574_t::SignalQ8Updated, this, &CtrlRomModule_t::SignalBit7Updated);
+    connect(latch, &IC_74xx574_t::SignalQ1Updated, this, &CtrlRomModule_t::SignalBit0Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ2Updated, this, &CtrlRomModule_t::SignalBit1Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ3Updated, this, &CtrlRomModule_t::SignalBit2Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ4Updated, this, &CtrlRomModule_t::SignalBit3Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ5Updated, this, &CtrlRomModule_t::SignalBit4Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ6Updated, this, &CtrlRomModule_t::SignalBit5Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ7Updated, this, &CtrlRomModule_t::SignalBit6Updated, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ8Updated, this, &CtrlRomModule_t::SignalBit7Updated, CNN_TYPE);
 
 
 
     //
     // -- hook up the LEDs (to the output of the latch)
     //    ---------------------------------------------
-    connect(latch, &IC_74xx574_t::SignalQ1Updated, led0, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ2Updated, led1, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ3Updated, led2, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ4Updated, led3, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ5Updated, led4, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ6Updated, led5, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ7Updated, led6, &GUI_Led_t::ProcessStateChange);
-    connect(latch, &IC_74xx574_t::SignalQ8Updated, led7, &GUI_Led_t::ProcessStateChange);
+    connect(latch, &IC_74xx574_t::SignalQ1Updated, led0, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ2Updated, led1, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ3Updated, led2, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ4Updated, led3, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ5Updated, led4, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ6Updated, led5, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ7Updated, led6, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(latch, &IC_74xx574_t::SignalQ8Updated, led7, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 }
 

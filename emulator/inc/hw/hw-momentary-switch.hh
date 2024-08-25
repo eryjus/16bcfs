@@ -37,7 +37,7 @@ public:
 
 
 public:
-    void TriggerFirstUpdates(void);
+    void TriggerFirstUpdate(void);
     inline void Press(void) { ProcessPressed(); }
     inline void Release(void) { ProcessReleased(); }
 

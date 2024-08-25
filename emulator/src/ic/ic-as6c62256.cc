@@ -19,7 +19,7 @@
 //
 // -- Consturct a RAM IC
 //    ------------------
-IC_AS6C62256_t::IC_AS6C62256_t(IC_25lc256_t *sanity) : reference(sanity)
+IC_as6c62256_t::IC_as6c62256_t(IC_25lc256_t *sanity) : reference(sanity)
 {
     pins[A0] = Z;
     pins[A1] = Z;
@@ -65,7 +65,7 @@ IC_AS6C62256_t::IC_AS6C62256_t(IC_25lc256_t *sanity) : reference(sanity)
 
     memset(contents, -1, 32*1024);
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
@@ -73,7 +73,7 @@ IC_AS6C62256_t::IC_AS6C62256_t(IC_25lc256_t *sanity) : reference(sanity)
 //
 // -- Emit the first signal updates to put everything in sync
 //    -------------------------------------------------------
-inline void IC_AS6C62256_t::TriggerFirstUpdates(void)
+inline void IC_as6c62256_t::TriggerFirstUpdate(void)
 {
     OutputZ();
 }
@@ -83,7 +83,7 @@ inline void IC_AS6C62256_t::TriggerFirstUpdates(void)
 //
 // -- Set all output pins to be High-Z, taking care not to change the input state
 //    ---------------------------------------------------------------------------
-void IC_AS6C62256_t::OutputZ(void)
+void IC_as6c62256_t::OutputZ(void)
 {
     emit SignalDq0Updated(Z);
     emit SignalDq1Updated(Z);
@@ -100,7 +100,7 @@ void IC_AS6C62256_t::OutputZ(void)
 //
 // -- Process Changes in input values
 //    -------------------------------
-void IC_AS6C62256_t::ProcessInput(void)
+void IC_as6c62256_t::ProcessInput(void)
 {
     pins[DQ0] = hold0;
     pins[DQ1] = hold1;
@@ -151,7 +151,7 @@ void IC_AS6C62256_t::ProcessInput(void)
 //
 // -- Process Changes in output values
 //    --------------------------------
-void IC_AS6C62256_t::ProcessOutput(void)
+void IC_as6c62256_t::ProcessOutput(void)
 {
     // -- save the current state
     TriState_t dq0 = (outputValue & 0x01) != 0 ? HIGH : LOW;
@@ -243,7 +243,7 @@ void IC_AS6C62256_t::ProcessOutput(void)
 //    | !L  | !L  | !L  | OutputZ()
 //
 //    ----------------------------------------------------------------------------------
-void IC_AS6C62256_t::UpdateAll(void)
+void IC_as6c62256_t::UpdateAll(void)
 {
     if (updating) return;
     updating = true;
@@ -289,7 +289,7 @@ void IC_AS6C62256_t::UpdateAll(void)
 //
 // -- Do a sanity check by checking the contents of the RAM against the ROM when enabled
 //    ----------------------------------------------------------------------------------
-void IC_AS6C62256_t::ProcessSanityCheck(QString name)
+void IC_as6c62256_t::ProcessSanityCheck(QString name)
 {
     if (reference == nullptr) return;
 
@@ -315,7 +315,7 @@ void IC_AS6C62256_t::ProcessSanityCheck(QString name)
 //
 // -- If we are not performing a pedantic copy of the EEPROM to SRAM, knock it out quickly here
 //    -----------------------------------------------------------------------------------------
-void IC_AS6C62256_t::CopyEeprom(void)
+void IC_as6c62256_t::CopyEeprom(void)
 {
 #if !defined(PEDANTIC_COPY) || (PEDANTIC_COPY == 0)
     if (reference == nullptr) return;

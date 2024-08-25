@@ -56,7 +56,8 @@ public slots:
 
 signals:
     // -- these functions become the outputs from this module to other parts of the build
-    void SignalClockState(TriState_t state);
+    void SignalClockStateLatch(TriState_t state);
+    void SignalClockStateOutput(TriState_t state);
     void SignalSanityCheck(void);               // not a part of the physical build
 
 

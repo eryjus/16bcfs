@@ -88,7 +88,8 @@ private:
 public slots:
     // -- these functions become the external inputs into this module from the backplane
     void ProcessReset(TriState_t state);
-    void ProcessClk(TriState_t state);
+    void ProcessClockLatch(TriState_t state);
+    void ProcessClockOutput(TriState_t state);
     void ProcessLoad(TriState_t state);
     void ProcessInc(TriState_t state);
     void ProcessDec(TriState_t state);

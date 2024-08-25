@@ -18,7 +18,10 @@ class GUI_Application_t : public QApplication {
 
 
 public:
-    explicit GUI_Application_t(int &argc, char **argv) : QApplication(argc, argv) { app = this; HW_Computer_t::Get(); }
+    explicit GUI_Application_t(int &argc, char **argv);
     virtual ~GUI_Application_t() {}
+
+public slots:
+    void quit(void) { QApplication::quit(); }
 };
 

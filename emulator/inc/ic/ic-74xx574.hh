@@ -44,6 +44,16 @@ public:
 private:
     TriState_t pins[PIN_CNT(20)];
 
+    TriState_t d1;
+    TriState_t d2;
+    TriState_t d3;
+    TriState_t d4;
+    TriState_t d5;
+    TriState_t d6;
+    TriState_t d7;
+    TriState_t d8;
+
+
 public:
     IC_74xx574_t(void);
     virtual ~IC_74xx574_t() {};
@@ -63,7 +73,8 @@ public slots:
     void ProcessUpdateD6(TriState_t state) { pins[D6] = state; }
     void ProcessUpdateD7(TriState_t state) { pins[D7] = state; }
     void ProcessUpdateD8(TriState_t state) { pins[D8] = state; }
-    void ProcessUpdateClk(TriState_t state);
+    void ProcessUpdateClockLatch(TriState_t state);
+    void ProcessUpdateClockOutput(TriState_t state);
 
 
 signals:

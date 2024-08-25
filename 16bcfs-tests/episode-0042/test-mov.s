@@ -16,6 +16,8 @@
     .org    0x0000
 
 entry:
+    nop
+
     mov     r1,0x0001
     mov     r1,0x0002
     mov     r1,0x0004

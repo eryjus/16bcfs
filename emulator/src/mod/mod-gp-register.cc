@@ -233,247 +233,247 @@ void GpRegisterModule_t::WireUp(void)
 
     // -- 74xx193 counter 0
     //    B -- bit 1
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, counter0, &IC_74xx193_t::ProcessUpdateDown);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, counter0, &IC_74xx193_t::ProcessUpdateUp);
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, counter0, &IC_74xx193_t::ProcessUpdateDown, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, counter0, &IC_74xx193_t::ProcessUpdateUp, CNN_TYPE);
     //    D -- bit 3
     //    C -- bit 2
-    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter0, &IC_74xx193_t::ProcessUpdateLoad);
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter0, &IC_74xx193_t::ProcessUpdateClr);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter0, &IC_74xx193_t::ProcessUpdateLoad, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter0, &IC_74xx193_t::ProcessUpdateClr, CNN_TYPE);
     //    A -- bit 0
 
 
     // -- 74xx193 counter 1
     //    B -- bit 5
-    connect(counter0, &IC_74xx193_t::SignalBoUpdated, counter1, &IC_74xx193_t::ProcessUpdateDown);
-    connect(counter0, &IC_74xx193_t::SignalCoUpdated, counter1, &IC_74xx193_t::ProcessUpdateUp);
+    connect(counter0, &IC_74xx193_t::SignalBoUpdated, counter1, &IC_74xx193_t::ProcessUpdateDown, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalCoUpdated, counter1, &IC_74xx193_t::ProcessUpdateUp, CNN_TYPE);
     //    D -- bit 7
     //    C -- bit 6
-    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter1, &IC_74xx193_t::ProcessUpdateLoad);
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter1, &IC_74xx193_t::ProcessUpdateClr);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter1, &IC_74xx193_t::ProcessUpdateLoad, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter1, &IC_74xx193_t::ProcessUpdateClr, CNN_TYPE);
     //    A -- bit 4
 
 
     // -- 74xx193 counter 2
     //    B -- bit 5
-    connect(counter1, &IC_74xx193_t::SignalBoUpdated, counter2, &IC_74xx193_t::ProcessUpdateDown);
-    connect(counter1, &IC_74xx193_t::SignalCoUpdated, counter2, &IC_74xx193_t::ProcessUpdateUp);
+    connect(counter1, &IC_74xx193_t::SignalBoUpdated, counter2, &IC_74xx193_t::ProcessUpdateDown, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalCoUpdated, counter2, &IC_74xx193_t::ProcessUpdateUp, CNN_TYPE);
     //    D -- bit 7
     //    C -- bit 6
-    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter2, &IC_74xx193_t::ProcessUpdateLoad);
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter2, &IC_74xx193_t::ProcessUpdateClr);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter2, &IC_74xx193_t::ProcessUpdateLoad, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter2, &IC_74xx193_t::ProcessUpdateClr, CNN_TYPE);
     //    A -- bit 4
 
 
     // -- 74xx193 counter 3
     //    B -- bit 5
-    connect(counter2, &IC_74xx193_t::SignalBoUpdated, counter3, &IC_74xx193_t::ProcessUpdateDown);
-    connect(counter2, &IC_74xx193_t::SignalCoUpdated, counter3, &IC_74xx193_t::ProcessUpdateUp);
+    connect(counter2, &IC_74xx193_t::SignalBoUpdated, counter3, &IC_74xx193_t::ProcessUpdateDown, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalCoUpdated, counter3, &IC_74xx193_t::ProcessUpdateUp, CNN_TYPE);
     //    D -- bit 7
     //    C -- bit 6
-    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter3, &IC_74xx193_t::ProcessUpdateLoad);
-    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter3, &IC_74xx193_t::ProcessUpdateClr);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, counter3, &IC_74xx193_t::ProcessUpdateLoad, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, counter3, &IC_74xx193_t::ProcessUpdateClr, CNN_TYPE);
     //    A -- bit 4
 
 
     // -- swap Bus MSB
-    connect(inv1, &IC_74xx04_t::SignalY1Updated, swap1, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, swap1, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, swap1, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, swap1, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, swap1, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, swap1, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, swap1, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, swap1, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, swap1, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, swap1, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, swap1, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, swap1, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, swap1, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, swap1, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, swap1, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, swap1, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, swap1, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, swap1, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- swap Bus LSB
-    connect(inv1, &IC_74xx04_t::SignalY1Updated, swap0, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, swap0, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, swap0, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, swap0, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, swap0, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, swap0, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, swap0, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, swap0, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, swap0, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, swap0, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, swap0, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, swap0, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, swap0, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, swap0, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, swap0, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, swap0, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, swap0, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, swap0, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- main Bus MSB
-    connect(inv1, &IC_74xx04_t::SignalY2Updated, main1, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, main1, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, main1, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, main1, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, main1, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, main1, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, main1, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, main1, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, main1, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY2Updated, main1, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, main1, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, main1, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, main1, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, main1, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, main1, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, main1, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, main1, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, main1, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- main Bus LSB
-    connect(inv1, &IC_74xx04_t::SignalY2Updated, main0, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, main0, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, main0, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, main0, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, main0, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, main0, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, main0, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, main0, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, main0, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY2Updated, main0, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, main0, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, main0, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, main0, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, main0, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, main0, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, main0, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, main0, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, main0, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- ALU A MSB
-    connect(inv1, &IC_74xx04_t::SignalY3Updated, aluA1, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY3Updated, aluA1, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, aluA1, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- ALU A LSB
-    connect(inv1, &IC_74xx04_t::SignalY3Updated, aluA0, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY3Updated, aluA0, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, aluA0, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- ALU B MSB
-    connect(inv1, &IC_74xx04_t::SignalY4Updated, aluB1, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY4Updated, aluB1, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, aluB1, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- ALU B LSB
-    connect(inv1, &IC_74xx04_t::SignalY4Updated, aluB0, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY4Updated, aluB0, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, aluB0, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- Addr1 MSB
-    connect(inv1, &IC_74xx04_t::SignalY5Updated, addr11, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, addr11, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, addr11, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, addr11, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, addr11, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, addr11, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, addr11, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, addr11, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, addr11, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY5Updated, addr11, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, addr11, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, addr11, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, addr11, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, addr11, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, addr11, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, addr11, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, addr11, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, addr11, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- Addr1 LSB
-    connect(inv1, &IC_74xx04_t::SignalY5Updated, addr10, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, addr10, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, addr10, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, addr10, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, addr10, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, addr10, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, addr10, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, addr10, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, addr10, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY5Updated, addr10, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, addr10, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, addr10, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, addr10, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, addr10, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, addr10, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, addr10, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, addr10, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, addr10, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- Addr2 MSB
-    connect(inv1, &IC_74xx04_t::SignalY6Updated, addr21, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, addr21, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, addr21, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, addr21, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, addr21, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, addr21, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, addr21, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, addr21, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, addr21, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY6Updated, addr21, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, addr21, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, addr21, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, addr21, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, addr21, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, addr21, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, addr21, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, addr21, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, addr21, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- Addr2 LSB
-    connect(inv1, &IC_74xx04_t::SignalY6Updated, addr20, &IC_74xx574_t::ProcessUpdateOE);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, addr20, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, addr20, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, addr20, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, addr20, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, addr20, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, addr20, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, addr20, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, addr20, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(inv1, &IC_74xx04_t::SignalY6Updated, addr20, &IC_74xx574_t::ProcessUpdateOE, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, addr20, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, addr20, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, addr20, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, addr20, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, addr20, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, addr20, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, addr20, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, addr20, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- Led MSB
     led1->ProcessUpdateOE(LOW);
-    connect(counter2, &IC_74xx193_t::SignalQaUpdated, led1, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter2, &IC_74xx193_t::SignalQbUpdated, led1, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter2, &IC_74xx193_t::SignalQcUpdated, led1, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter2, &IC_74xx193_t::SignalQdUpdated, led1, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter3, &IC_74xx193_t::SignalQaUpdated, led1, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter3, &IC_74xx193_t::SignalQbUpdated, led1, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter3, &IC_74xx193_t::SignalQcUpdated, led1, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter3, &IC_74xx193_t::SignalQdUpdated, led1, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(counter2, &IC_74xx193_t::SignalQaUpdated, led1, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter2, &IC_74xx193_t::SignalQbUpdated, led1, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQcUpdated, led1, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter2, &IC_74xx193_t::SignalQdUpdated, led1, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQaUpdated, led1, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQbUpdated, led1, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQcUpdated, led1, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter3, &IC_74xx193_t::SignalQdUpdated, led1, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- Led LSB
     led0->ProcessUpdateOE(LOW);
-    connect(counter0, &IC_74xx193_t::SignalQaUpdated, led0, &IC_74xx574_t::ProcessUpdateD8);   // lsb
-    connect(counter0, &IC_74xx193_t::SignalQbUpdated, led0, &IC_74xx574_t::ProcessUpdateD7);
-    connect(counter0, &IC_74xx193_t::SignalQcUpdated, led0, &IC_74xx574_t::ProcessUpdateD6);
-    connect(counter0, &IC_74xx193_t::SignalQdUpdated, led0, &IC_74xx574_t::ProcessUpdateD5);
-    connect(counter1, &IC_74xx193_t::SignalQaUpdated, led0, &IC_74xx574_t::ProcessUpdateD4);
-    connect(counter1, &IC_74xx193_t::SignalQbUpdated, led0, &IC_74xx574_t::ProcessUpdateD3);
-    connect(counter1, &IC_74xx193_t::SignalQcUpdated, led0, &IC_74xx574_t::ProcessUpdateD2);
-    connect(counter1, &IC_74xx193_t::SignalQdUpdated, led0, &IC_74xx574_t::ProcessUpdateD1);   // msb
+    connect(counter0, &IC_74xx193_t::SignalQaUpdated, led0, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);   // lsb
+    connect(counter0, &IC_74xx193_t::SignalQbUpdated, led0, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQcUpdated, led0, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
+    connect(counter0, &IC_74xx193_t::SignalQdUpdated, led0, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQaUpdated, led0, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQbUpdated, led0, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQcUpdated, led0, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
+    connect(counter1, &IC_74xx193_t::SignalQdUpdated, led0, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);   // msb
     // -- Clock from below
 
 
     // -- connect contents the LED inputs
-    connect(led0, &IC_74xx574_t::SignalQ8Updated, bit0, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ7Updated, bit1, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ6Updated, bit2, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ5Updated, bit3, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ4Updated, bit4, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ3Updated, bit5, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ2Updated, bit6, &GUI_Led_t::ProcessStateChange);
-    connect(led0, &IC_74xx574_t::SignalQ1Updated, bit7, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ8Updated, bit8, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ7Updated, bit9, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ6Updated, bitA, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ5Updated, bitB, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ4Updated, bitC, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ3Updated, bitD, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ2Updated, bitE, &GUI_Led_t::ProcessStateChange);
-    connect(led1, &IC_74xx574_t::SignalQ1Updated, bitF, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ8Updated, bit0, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ7Updated, bit1, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ6Updated, bit2, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ5Updated, bit3, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ4Updated, bit4, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ3Updated, bit5, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ2Updated, bit6, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ1Updated, bit7, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ8Updated, bit8, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ7Updated, bit9, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ6Updated, bitA, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ5Updated, bitB, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ4Updated, bitC, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ3Updated, bitD, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ2Updated, bitE, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led1, &IC_74xx574_t::SignalQ1Updated, bitF, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 
 
     // -- Control LED inputs are handled below
@@ -481,140 +481,140 @@ void GpRegisterModule_t::WireUp(void)
 
     // -- connect the module to accept inputs from the main bus
     HW_Bus_16_t *mainBus = HW_Computer_t::Get()->GetMainBus();
-    connect(mainBus, &HW_Bus_16_t::SignalBit0Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit0);
-    connect(mainBus, &HW_Bus_16_t::SignalBit1Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit1);
-    connect(mainBus, &HW_Bus_16_t::SignalBit2Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit2);
-    connect(mainBus, &HW_Bus_16_t::SignalBit3Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit3);
-    connect(mainBus, &HW_Bus_16_t::SignalBit4Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit4);
-    connect(mainBus, &HW_Bus_16_t::SignalBit5Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit5);
-    connect(mainBus, &HW_Bus_16_t::SignalBit6Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit6);
-    connect(mainBus, &HW_Bus_16_t::SignalBit7Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit7);
-    connect(mainBus, &HW_Bus_16_t::SignalBit8Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit8);
-    connect(mainBus, &HW_Bus_16_t::SignalBit9Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit9);
-    connect(mainBus, &HW_Bus_16_t::SignalBitAUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitA);
-    connect(mainBus, &HW_Bus_16_t::SignalBitBUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitB);
-    connect(mainBus, &HW_Bus_16_t::SignalBitCUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitC);
-    connect(mainBus, &HW_Bus_16_t::SignalBitDUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitD);
-    connect(mainBus, &HW_Bus_16_t::SignalBitEUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitF);
+    connect(mainBus, &HW_Bus_16_t::SignalBit0Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit0, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit1Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit1, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit2Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit2, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit3Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit3, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit4Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit4, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit5Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit5, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit6Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit6, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit7Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit7, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit8Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit8, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit9Updated, this, &GpRegisterModule_t::ProcessUpdateMainBit9, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitAUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitA, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitBUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitB, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitCUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitC, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitDUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitD, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitEUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitE, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, this, &GpRegisterModule_t::ProcessUpdateMainBitF, CNN_TYPE);
 
 
     // -- Connect up to the Main Bus with the main bus assert
-    connect(main0, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(main0, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(main0, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(main0, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(main0, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(main0, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(main0, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(main0, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit7);
-    connect(main1, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(main1, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(main1, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(main1, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(main1, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(main1, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(main1, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(main1, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(main0, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(main0, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(main1, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 
 
     // -- Connect up to the Main Bus with the swap bus assert (already swapped)
-    connect(swap0, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(swap0, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(swap0, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(swap0, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(swap0, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(swap0, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(swap0, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(swap0, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit7);
-    connect(swap1, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(swap1, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(swap1, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(swap1, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(swap1, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(swap1, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(swap1, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(swap1, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(swap0, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(swap0, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ8Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ7Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ6Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ5Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ4Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ3Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ2Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(swap1, &IC_74xx574_t::SignalQ1Updated, mainBus, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 
 
     // -- Connect up to the ALU A Bus
     HW_Bus_16_t *aluABus = HW_Computer_t::Get()->GetAluABus();
-    connect(aluA0, &IC_74xx574_t::SignalQ8Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(aluA0, &IC_74xx574_t::SignalQ7Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(aluA0, &IC_74xx574_t::SignalQ6Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(aluA0, &IC_74xx574_t::SignalQ5Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(aluA0, &IC_74xx574_t::SignalQ4Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(aluA0, &IC_74xx574_t::SignalQ3Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(aluA0, &IC_74xx574_t::SignalQ2Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(aluA0, &IC_74xx574_t::SignalQ1Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit7);
-    connect(aluA1, &IC_74xx574_t::SignalQ8Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(aluA1, &IC_74xx574_t::SignalQ7Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(aluA1, &IC_74xx574_t::SignalQ6Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(aluA1, &IC_74xx574_t::SignalQ5Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(aluA1, &IC_74xx574_t::SignalQ4Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(aluA1, &IC_74xx574_t::SignalQ3Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(aluA1, &IC_74xx574_t::SignalQ2Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(aluA1, &IC_74xx574_t::SignalQ1Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(aluA0, &IC_74xx574_t::SignalQ8Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ7Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ6Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ5Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ4Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ3Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ2Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(aluA0, &IC_74xx574_t::SignalQ1Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ8Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ7Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ6Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ5Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ4Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ3Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ2Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(aluA1, &IC_74xx574_t::SignalQ1Updated, aluABus, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 
 
     // -- Connect up to the ALU B Bus
     HW_Bus_16_t *aluBBus = HW_Computer_t::Get()->GetAluBBus();
-    connect(aluB0, &IC_74xx574_t::SignalQ8Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(aluB0, &IC_74xx574_t::SignalQ7Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(aluB0, &IC_74xx574_t::SignalQ6Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(aluB0, &IC_74xx574_t::SignalQ5Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(aluB0, &IC_74xx574_t::SignalQ4Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(aluB0, &IC_74xx574_t::SignalQ3Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(aluB0, &IC_74xx574_t::SignalQ2Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(aluB0, &IC_74xx574_t::SignalQ1Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit7);
-    connect(aluB1, &IC_74xx574_t::SignalQ8Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(aluB1, &IC_74xx574_t::SignalQ7Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(aluB1, &IC_74xx574_t::SignalQ6Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(aluB1, &IC_74xx574_t::SignalQ5Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(aluB1, &IC_74xx574_t::SignalQ4Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(aluB1, &IC_74xx574_t::SignalQ3Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(aluB1, &IC_74xx574_t::SignalQ2Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(aluB1, &IC_74xx574_t::SignalQ1Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(aluB0, &IC_74xx574_t::SignalQ8Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ7Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ6Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ5Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ4Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ3Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ2Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(aluB0, &IC_74xx574_t::SignalQ1Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ8Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ7Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ6Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ5Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ4Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ3Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ2Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(aluB1, &IC_74xx574_t::SignalQ1Updated, aluBBus, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 
 
     // -- Connect up to the Addr1 Bus
     HW_Bus_16_t *addr1Bus = HW_Computer_t::Get()->GetAddr1Bus();
-    connect(addr10, &IC_74xx574_t::SignalQ8Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(addr10, &IC_74xx574_t::SignalQ7Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(addr10, &IC_74xx574_t::SignalQ6Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(addr10, &IC_74xx574_t::SignalQ5Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(addr10, &IC_74xx574_t::SignalQ4Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(addr10, &IC_74xx574_t::SignalQ3Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(addr10, &IC_74xx574_t::SignalQ2Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(addr10, &IC_74xx574_t::SignalQ1Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit7);
-    connect(addr11, &IC_74xx574_t::SignalQ8Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(addr11, &IC_74xx574_t::SignalQ7Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(addr11, &IC_74xx574_t::SignalQ6Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(addr11, &IC_74xx574_t::SignalQ5Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(addr11, &IC_74xx574_t::SignalQ4Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(addr11, &IC_74xx574_t::SignalQ3Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(addr11, &IC_74xx574_t::SignalQ2Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(addr11, &IC_74xx574_t::SignalQ1Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(addr10, &IC_74xx574_t::SignalQ8Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ7Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ6Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ5Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ4Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ3Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ2Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(addr10, &IC_74xx574_t::SignalQ1Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ8Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ7Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ6Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ5Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ4Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ3Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ2Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(addr11, &IC_74xx574_t::SignalQ1Updated, addr1Bus, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 
 
     // -- Connect up to the Addr1 Bus
     HW_Bus_16_t *addr2Bus = HW_Computer_t::Get()->GetAddr2Bus();
-    connect(addr20, &IC_74xx574_t::SignalQ8Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit0);
-    connect(addr20, &IC_74xx574_t::SignalQ7Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit1);
-    connect(addr20, &IC_74xx574_t::SignalQ6Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit2);
-    connect(addr20, &IC_74xx574_t::SignalQ5Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit3);
-    connect(addr20, &IC_74xx574_t::SignalQ4Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit4);
-    connect(addr20, &IC_74xx574_t::SignalQ3Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit5);
-    connect(addr20, &IC_74xx574_t::SignalQ2Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit6);
-    connect(addr20, &IC_74xx574_t::SignalQ1Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit7);
-    connect(addr21, &IC_74xx574_t::SignalQ8Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit8);
-    connect(addr21, &IC_74xx574_t::SignalQ7Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit9);
-    connect(addr21, &IC_74xx574_t::SignalQ6Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitA);
-    connect(addr21, &IC_74xx574_t::SignalQ5Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitB);
-    connect(addr21, &IC_74xx574_t::SignalQ4Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitC);
-    connect(addr21, &IC_74xx574_t::SignalQ3Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitD);
-    connect(addr21, &IC_74xx574_t::SignalQ2Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitE);
-    connect(addr21, &IC_74xx574_t::SignalQ1Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitF);
+    connect(addr20, &IC_74xx574_t::SignalQ8Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit0, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ7Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit1, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ6Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit2, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ5Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit3, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ4Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit4, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ3Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit5, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ2Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit6, CNN_TYPE);
+    connect(addr20, &IC_74xx574_t::SignalQ1Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit7, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ8Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit8, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ7Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBit9, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ6Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitA, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ5Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitB, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ4Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitC, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ3Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitD, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ2Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitE, CNN_TYPE);
+    connect(addr21, &IC_74xx574_t::SignalQ1Updated, addr2Bus, &HW_Bus_16_t::ProcessUpdateBitF, CNN_TYPE);
 }
 
 
@@ -631,24 +631,49 @@ void GpRegisterModule_t::ProcessReset(TriState_t state)
 //
 // -- Handle a clock signal
 //    ---------------------
-void GpRegisterModule_t::ProcessClk(TriState_t state)
+void GpRegisterModule_t::ProcessClockLatch(TriState_t state)
+{
+    static int iter = 0;
+
+    aluA0->ProcessUpdateClockLatch(state);
+    aluA1->ProcessUpdateClockLatch(state);
+    aluB0->ProcessUpdateClockLatch(state);
+    aluB1->ProcessUpdateClockLatch(state);
+    addr10->ProcessUpdateClockLatch(state);
+    addr11->ProcessUpdateClockLatch(state);
+    addr20->ProcessUpdateClockLatch(state);
+    addr21->ProcessUpdateClockLatch(state);
+    main0->ProcessUpdateClockLatch(state);
+    main1->ProcessUpdateClockLatch(state);
+    swap0->ProcessUpdateClockLatch(state);
+    swap1->ProcessUpdateClockLatch(state);
+    led0->ProcessUpdateClockLatch(state);
+    led1->ProcessUpdateClockLatch(state);
+}
+
+
+//
+// -- Handle a clock signal
+//    ---------------------
+void GpRegisterModule_t::ProcessClockOutput(TriState_t state)
 {
     nand1->ProcessUpdateA1(state);
     nand1->ProcessUpdateA2(state);
-    aluA0->ProcessUpdateClk(state);
-    aluA1->ProcessUpdateClk(state);
-    aluB0->ProcessUpdateClk(state);
-    aluB1->ProcessUpdateClk(state);
-    addr10->ProcessUpdateClk(state);
-    addr11->ProcessUpdateClk(state);
-    addr20->ProcessUpdateClk(state);
-    addr21->ProcessUpdateClk(state);
-    main0->ProcessUpdateClk(state);
-    main1->ProcessUpdateClk(state);
-    swap0->ProcessUpdateClk(state);
-    swap1->ProcessUpdateClk(state);
-    led0->ProcessUpdateClk(state);
-    led1->ProcessUpdateClk(state);
+nand1->ProcessUpdateA3(state);
+    aluA0->ProcessUpdateClockOutput(state);
+    aluA1->ProcessUpdateClockOutput(state);
+    aluB0->ProcessUpdateClockOutput(state);
+    aluB1->ProcessUpdateClockOutput(state);
+    addr10->ProcessUpdateClockOutput(state);
+    addr11->ProcessUpdateClockOutput(state);
+    addr20->ProcessUpdateClockOutput(state);
+    addr21->ProcessUpdateClockOutput(state);
+    main0->ProcessUpdateClockOutput(state);
+    main1->ProcessUpdateClockOutput(state);
+    swap0->ProcessUpdateClockOutput(state);
+    swap1->ProcessUpdateClockOutput(state);
+    led0->ProcessUpdateClockOutput(state);
+    led1->ProcessUpdateClockOutput(state);
 }
 
 
@@ -658,7 +683,7 @@ void GpRegisterModule_t::ProcessClk(TriState_t state)
 void GpRegisterModule_t::ProcessLoad(TriState_t state)
 {
     load->ProcessStateChange(state);
-    nand1->ProcessUpdateA3(state);
+//    nand1->ProcessUpdateA3(state);
     nand1->ProcessUpdateB3(state);
 }
 

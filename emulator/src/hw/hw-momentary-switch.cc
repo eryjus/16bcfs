@@ -20,17 +20,17 @@
 HW_MomentarySwitch_t::HW_MomentarySwitch_t(QString name, HighWhen_t w, QWidget *parent)
         : QPushButton(name, parent), highWhen(w)
 {
-    connect(this, &QPushButton::pressed, this, &HW_MomentarySwitch_t::ProcessPressed);
-    connect(this, &QPushButton::released, this, &HW_MomentarySwitch_t::ProcessReleased);
+    connect(this, &QPushButton::pressed, this, &HW_MomentarySwitch_t::ProcessPressed, CNN_TYPE);
+    connect(this, &QPushButton::released, this, &HW_MomentarySwitch_t::ProcessReleased, CNN_TYPE);
 
-    TriggerFirstUpdates();
+    TriggerFirstUpdate();
 }
 
 
 //
 // -- Trigger the first updates to put the object in sync
 //    ---------------------------------------------------
-void HW_MomentarySwitch_t::TriggerFirstUpdates(void)
+void HW_MomentarySwitch_t::TriggerFirstUpdate(void)
 {
     emit pressed();
     emit released();

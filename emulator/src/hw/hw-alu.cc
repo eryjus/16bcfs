@@ -42,41 +42,41 @@ HW_Alu_t::HW_Alu_t(HW_Bus_16_t *a, HW_Bus_16_t *b,
 
 
     // -- Connect the buses to the drivers
-    connect(a, &HW_Bus_16_t::SignalBit0Updated, lsbA, &IC_74xx541_t::ProcessUpdateD0);
-    connect(a, &HW_Bus_16_t::SignalBit1Updated, lsbA, &IC_74xx541_t::ProcessUpdateD1);
-    connect(a, &HW_Bus_16_t::SignalBit2Updated, lsbA, &IC_74xx541_t::ProcessUpdateD2);
-    connect(a, &HW_Bus_16_t::SignalBit3Updated, lsbA, &IC_74xx541_t::ProcessUpdateD3);
-    connect(a, &HW_Bus_16_t::SignalBit4Updated, lsbA, &IC_74xx541_t::ProcessUpdateD4);
-    connect(a, &HW_Bus_16_t::SignalBit5Updated, lsbA, &IC_74xx541_t::ProcessUpdateD5);
-    connect(a, &HW_Bus_16_t::SignalBit6Updated, lsbA, &IC_74xx541_t::ProcessUpdateD6);
-    connect(a, &HW_Bus_16_t::SignalBit7Updated, lsbA, &IC_74xx541_t::ProcessUpdateD7);
+    connect(a, &HW_Bus_16_t::SignalBit0Updated, lsbA, &IC_74xx541_t::ProcessUpdateD0, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit1Updated, lsbA, &IC_74xx541_t::ProcessUpdateD1, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit2Updated, lsbA, &IC_74xx541_t::ProcessUpdateD2, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit3Updated, lsbA, &IC_74xx541_t::ProcessUpdateD3, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit4Updated, lsbA, &IC_74xx541_t::ProcessUpdateD4, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit5Updated, lsbA, &IC_74xx541_t::ProcessUpdateD5, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit6Updated, lsbA, &IC_74xx541_t::ProcessUpdateD6, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit7Updated, lsbA, &IC_74xx541_t::ProcessUpdateD7, CNN_TYPE);
 
-    connect(a, &HW_Bus_16_t::SignalBit8Updated, msbA, &IC_74xx541_t::ProcessUpdateD0);
-    connect(a, &HW_Bus_16_t::SignalBit9Updated, msbA, &IC_74xx541_t::ProcessUpdateD1);
-    connect(a, &HW_Bus_16_t::SignalBitAUpdated, msbA, &IC_74xx541_t::ProcessUpdateD2);
-    connect(a, &HW_Bus_16_t::SignalBitBUpdated, msbA, &IC_74xx541_t::ProcessUpdateD3);
-    connect(a, &HW_Bus_16_t::SignalBitCUpdated, msbA, &IC_74xx541_t::ProcessUpdateD4);
-    connect(a, &HW_Bus_16_t::SignalBitDUpdated, msbA, &IC_74xx541_t::ProcessUpdateD5);
-    connect(a, &HW_Bus_16_t::SignalBitEUpdated, msbA, &IC_74xx541_t::ProcessUpdateD6);
-    connect(a, &HW_Bus_16_t::SignalBitFUpdated, msbA, &IC_74xx541_t::ProcessUpdateD7);
+    connect(a, &HW_Bus_16_t::SignalBit8Updated, msbA, &IC_74xx541_t::ProcessUpdateD0, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBit9Updated, msbA, &IC_74xx541_t::ProcessUpdateD1, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBitAUpdated, msbA, &IC_74xx541_t::ProcessUpdateD2, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBitBUpdated, msbA, &IC_74xx541_t::ProcessUpdateD3, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBitCUpdated, msbA, &IC_74xx541_t::ProcessUpdateD4, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBitDUpdated, msbA, &IC_74xx541_t::ProcessUpdateD5, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBitEUpdated, msbA, &IC_74xx541_t::ProcessUpdateD6, CNN_TYPE);
+    connect(a, &HW_Bus_16_t::SignalBitFUpdated, msbA, &IC_74xx541_t::ProcessUpdateD7, CNN_TYPE);
 
-    connect(b, &HW_Bus_16_t::SignalBit0Updated, lsbB, &IC_74xx541_t::ProcessUpdateD0);
-    connect(b, &HW_Bus_16_t::SignalBit1Updated, lsbB, &IC_74xx541_t::ProcessUpdateD1);
-    connect(b, &HW_Bus_16_t::SignalBit2Updated, lsbB, &IC_74xx541_t::ProcessUpdateD2);
-    connect(b, &HW_Bus_16_t::SignalBit3Updated, lsbB, &IC_74xx541_t::ProcessUpdateD3);
-    connect(b, &HW_Bus_16_t::SignalBit4Updated, lsbB, &IC_74xx541_t::ProcessUpdateD4);
-    connect(b, &HW_Bus_16_t::SignalBit5Updated, lsbB, &IC_74xx541_t::ProcessUpdateD5);
-    connect(b, &HW_Bus_16_t::SignalBit6Updated, lsbB, &IC_74xx541_t::ProcessUpdateD6);
-    connect(b, &HW_Bus_16_t::SignalBit7Updated, lsbB, &IC_74xx541_t::ProcessUpdateD7);
+    connect(b, &HW_Bus_16_t::SignalBit0Updated, lsbB, &IC_74xx541_t::ProcessUpdateD0, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit1Updated, lsbB, &IC_74xx541_t::ProcessUpdateD1, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit2Updated, lsbB, &IC_74xx541_t::ProcessUpdateD2, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit3Updated, lsbB, &IC_74xx541_t::ProcessUpdateD3, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit4Updated, lsbB, &IC_74xx541_t::ProcessUpdateD4, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit5Updated, lsbB, &IC_74xx541_t::ProcessUpdateD5, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit6Updated, lsbB, &IC_74xx541_t::ProcessUpdateD6, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit7Updated, lsbB, &IC_74xx541_t::ProcessUpdateD7, CNN_TYPE);
 
-    connect(b, &HW_Bus_16_t::SignalBit8Updated, msbB, &IC_74xx541_t::ProcessUpdateD0);
-    connect(b, &HW_Bus_16_t::SignalBit9Updated, msbB, &IC_74xx541_t::ProcessUpdateD1);
-    connect(b, &HW_Bus_16_t::SignalBitAUpdated, msbB, &IC_74xx541_t::ProcessUpdateD2);
-    connect(b, &HW_Bus_16_t::SignalBitBUpdated, msbB, &IC_74xx541_t::ProcessUpdateD3);
-    connect(b, &HW_Bus_16_t::SignalBitCUpdated, msbB, &IC_74xx541_t::ProcessUpdateD4);
-    connect(b, &HW_Bus_16_t::SignalBitDUpdated, msbB, &IC_74xx541_t::ProcessUpdateD5);
-    connect(b, &HW_Bus_16_t::SignalBitEUpdated, msbB, &IC_74xx541_t::ProcessUpdateD6);
-    connect(b, &HW_Bus_16_t::SignalBitFUpdated, msbB, &IC_74xx541_t::ProcessUpdateD7);
+    connect(b, &HW_Bus_16_t::SignalBit8Updated, msbB, &IC_74xx541_t::ProcessUpdateD0, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBit9Updated, msbB, &IC_74xx541_t::ProcessUpdateD1, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBitAUpdated, msbB, &IC_74xx541_t::ProcessUpdateD2, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBitBUpdated, msbB, &IC_74xx541_t::ProcessUpdateD3, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBitCUpdated, msbB, &IC_74xx541_t::ProcessUpdateD4, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBitDUpdated, msbB, &IC_74xx541_t::ProcessUpdateD5, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBitEUpdated, msbB, &IC_74xx541_t::ProcessUpdateD6, CNN_TYPE);
+    connect(b, &HW_Bus_16_t::SignalBitFUpdated, msbB, &IC_74xx541_t::ProcessUpdateD7, CNN_TYPE);
 
 
     // -- Perform the initial updates

@@ -26,7 +26,7 @@ private:
     const QString filename;
 
     IC_25lc256_t *eeprom;
-    IC_AS6C62256_t *sram;
+    IC_as6c62256_t *sram;
     IC_74xx164_t *shift;
     IC_74xx574_t *latch;
     IC_74xx541_t *driver;
@@ -45,7 +45,8 @@ private:
 
 
 public slots:
-    void ProcessUpdateClk(TriState_t state) { latch->ProcessUpdateClk(state); }
+    void ProcessUpdateClockLatch(TriState_t state) { latch->ProcessUpdateClockLatch(state); }
+    void ProcessUpdateClockOutput(TriState_t state) { latch->ProcessUpdateClockOutput(state); }
 
     void ProcessUpdateCmdAddr(TriState_t state) { eeprom->ProcessUpdateSi(state); }
     void ProcessUpdateChipSelect(TriState_t state) { eeprom->ProcessUpdateCs(state); }

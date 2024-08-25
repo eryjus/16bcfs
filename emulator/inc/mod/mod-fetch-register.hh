@@ -74,7 +74,8 @@ private:
 public slots:
     // -- these functions become the external inputs into this module from the backplane
     void ProcessReset(TriState_t state) { /* This board will take #RESET as a signal but will do nothing with it */ }
-    void ProcessClk(TriState_t state);
+    void ProcessClockLatch(TriState_t state);
+    void ProcessClockOutput(TriState_t state);
     void ProcessAssertMain(TriState_t state);
     void ProcessAssertAluB(TriState_t state);
     void ProcessAssertAddr2(TriState_t state);

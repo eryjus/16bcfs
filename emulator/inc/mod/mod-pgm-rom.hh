@@ -1,17 +1,18 @@
 //===================================================================================================================
-//  mod-instr-register.hh -- This class represents the entirety of the Instruction Register
+//  mod-pgm-rom.hh -- This class emulates the program ROM
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
-//  This class contains all the components necessary to construct a instruction-register module.  Ideally, this class
-//  would correlate 1:1 against the Instruction-Register Module KiCad design and its resulting PCB.  The interface
-//  point will only be the inputs from and outputs to the computer backplane.  All other connections in real hardware
-//  are represented here.
+//  This class contains all the components necessary to construct the program ROM.  This is a temporary incarnation,
+//  which will be augmented later down the road with a more robust 2-channel memory module.
+//
+//  Input bus for this module is Address Bus 1.
+//  Output bus from this module is the Fetch Bus.
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2024-Jun-17  Initial  v0.0.1   Initial version
+//  2024-Aug-18  Initial  v0.0.1   Initial version
 //===================================================================================================================
 
 
@@ -19,16 +20,21 @@
 
 
 //
-// -- The Instruction Register Module class.  It will be subclassed from QGroupBox
-//    ----------------------------------------------------------------------------
-class InstructionRegisterModule_t : public QGroupBox {
+// -- The Program ROM Module class.  It will be subclassed from QGroupBox
+//    -------------------------------------------------------------------
+class PgmRomModule_t : public QGroupBox {
     Q_OBJECT
 
 
 private:
+    QString folder;
+
+
     // -- this module contains the following components
-    IC_74xx574_t *led0;
-    IC_74xx574_t *led1;
+    IC_at28c256_t *lsb;
+    IC_at28c256_t *msb;
+    IC_74xx00_t *nand1;
+
 
     GUI_Led_t *bit0;
     GUI_Led_t *bit1;
@@ -48,15 +54,16 @@ private:
     GUI_Led_t *bitF;
 
 
+
 public slots:
-    void ProcessClockLatch(TriState_t state);
-    void ProcessClockOutput(TriState_t state);
+    // -- these functions become the external inputs into this module from the backplane
+    void ProcessReset(TriState_t state);
 
 
 public:
     // -- constructor/destructor
-    explicit InstructionRegisterModule_t(void);
-    virtual ~InstructionRegisterModule_t() {}
+    explicit PgmRomModule_t(const QString &folder);
+    virtual ~PgmRomModule_t() {}
 
 
 

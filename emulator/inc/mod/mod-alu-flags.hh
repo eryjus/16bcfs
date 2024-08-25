@@ -81,7 +81,8 @@ private:
 public slots:
     // -- these functions become the external inputs into this module from the backplane
     void ProcessReset(TriState_t state) {};     // all modules will have a reset, even when it is not needed
-    void ProcessClk(TriState_t state);
+    void ProcessClockLatch(TriState_t state);
+    void ProcessClockOutput(TriState_t state);
     void ProcessZLatch(TriState_t state);
     void ProcessAdderAssert(TriState_t state);
     void ProcessShifterAssert(TriState_t state);

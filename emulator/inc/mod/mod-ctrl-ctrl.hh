@@ -115,6 +115,14 @@ public slots:
     //    -----------------------------------------------------------
 
 
+    void DebugQr(TriState_t state) { DEBUG << "Qr is " << state; }
+    void DebugQc(TriState_t state) { DEBUG << "Qc is " << state; }
+    void DebugQl(TriState_t state) { DEBUG << "Ql is " << state; }
+    void DebugQs(TriState_t state) { DEBUG << "Qs is " << state; }
+    void DebugClock(TriState_t state) { if (state == HIGH) { static long c = 0; DEBUG << "CLK: " << Qt::hex << c; c ++; } }
+
+
+
 private slots:
     void ProcessQcb(TriState_t state) { /*if (state == HIGH) clock->stop();*/ }
 
@@ -158,6 +166,7 @@ private:
     // -- intenral functions
     void AllocateComponents(void);          // Get the component memory from heap
     void BuildGui(void);                    // place the components on the GUI
+    void SetDebug(void);                    // set up the debugging triggers
     void WireUp(void);                      // make all the necessary connections
 };
 

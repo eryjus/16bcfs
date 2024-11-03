@@ -28,6 +28,8 @@ ClockModule_t::ClockModule_t(void) : QGroupBox("Clock Module")
     hi = QPixmap("img/clk-hi.png");
     lo = QPixmap("img/clk-lo.png");
 
+    clockCount = 0;
+
     setFixedWidth(190);
     setFixedHeight(150);
 
@@ -195,6 +197,10 @@ void ClockModule_t::TriggerFirstUpdate(void)
 //    ------------------------------------
 void ClockModule_t::WireUp(void)
 {
+    // -- increment the clock counter first thing
+    connect(timer, &HW_Oscillator_t::SignalStateChanged, this, &ClockModule_t::IncrementClockCount, CNN_TYPE);
+
+
     // -- connect up the oscillator inputs
     connect(speedPot, &HW_Pot_t::SignalValueChanged, timer, &HW_Oscillator_t::ProcessRawInterval, CNN_TYPE);
 

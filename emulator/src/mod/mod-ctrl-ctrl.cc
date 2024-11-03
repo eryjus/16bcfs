@@ -80,6 +80,7 @@ CtrlRomCtrlModule_t::CtrlRomCtrlModule_t(void) : QGroupBox("Control ROM Control"
     AllocateComponents();
     BuildGui();
     WireUp();
+    SetDebug();
     TriggerFirstUpdate();
 
     clock->setInterval(0);
@@ -737,9 +738,9 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //    ----------------
     connect(clock, &HW_Oscillator_t::SignalStateChanged, clk, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 
-    connect(resetting, &IC_74xx74_t::SignalQ1Updated, rst, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, rst, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, oe, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(nand2, &IC_74xx00_t::SignalY3Updated, we, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(nand2, &IC_74xx00_t::SignalY1Updated, we, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
     connect(and3, &IC_74xx08_t::SignalY2Updated, ce, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 
     connect(bits, &IC_74xx193_t::SignalQaUpdated, bit0, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
@@ -753,7 +754,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Connect up the outputs: individual signals first
     //    ------------------------------------------------
     HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
-    connect(oNand1, &IC_74xx03_t::SignalY1Updated, rHld, &HW_Bus_1_t::SignalBit0Updated, CNN_TYPE);
+    connect(oNand1, &IC_74xx03_t::SignalY1Updated, rHld, &HW_Bus_1_t::ProcessUpdateBit0, CNN_TYPE);
     connect(resetting, &IC_74xx74_t::SignalQ1Updated, this, &CtrlRomCtrlModule_t::SignalQrUpdated, CNN_TYPE);
     connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, this, &CtrlRomCtrlModule_t::SignalQrbUpdated, CNN_TYPE);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalQcUpdated, CNN_TYPE);
@@ -825,6 +826,8 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 #if defined(PEDANTIC_COPY) && (PEDANTIC_COPY == 1)
     // -- This is still an active low signal!!!
 
+    DEBUG << "Reset is " << state;
+
     nand1->ProcessUpdateA1(state);          // SR Set
     nand2->ProcessUpdateA4(state);          // #Reset
     nand2->ProcessUpdateB4(state);          // #Reset
@@ -835,8 +838,12 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
         clock->StartTimer();
     }
 #else
-    if (state != HIGH) emit CopyEeprom();
-    else {
+    if (state != HIGH) {
+        HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
+        rHld->ProcessUpdateBit0(LOW);
+        emit CopyEeprom();
+        rHld->ProcessUpdateBit0(Z);
+    } else {
         // -- disable #WE immediately
         nand2->ProcessB2Low();
 
@@ -857,5 +864,21 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 #endif
 }
 
+
+
+
+//
+// -- A helper functions to set up the debugging connections
+//    ------------------------------------------------------
+void CtrlRomCtrlModule_t::SetDebug(void)
+{
+//    connect(resetting, &IC_74xx74_t::SignalQ1Updated, this, &CtrlRomCtrlModule_t::DebugQr, CNN_TYPE);
+//    connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::DebugQc, CNN_TYPE);
+//    connect(nand2, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::DebugQl, CNN_TYPE);
+//    connect(nand1, &IC_74xx00_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::DebugQs, CNN_TYPE);
+
+    // -- indicate the clock counts for copying the ROM
+//    connect(nand1, &IC_74xx00_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::DebugClock, CNN_TYPE);
+}
 
 

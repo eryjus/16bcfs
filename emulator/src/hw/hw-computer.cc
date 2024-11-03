@@ -15,6 +15,9 @@
 
 
 
+bool debug = false;
+
+
 //
 // -- Program ROM Folder location
 //    ---------------------------
@@ -36,6 +39,7 @@ ClockModule_t *HW_Computer_t::clock = nullptr;
 AluFlagsModule_t *HW_Computer_t::pgmFlags = nullptr;
 AluFlagsModule_t *HW_Computer_t::intFlags = nullptr;
 PgmRomModule_t *HW_Computer_t::pgmRom = nullptr;
+ResetModule_t *HW_Computer_t::reset = nullptr;
 
 
 // -- Buses
@@ -87,7 +91,6 @@ QWidget *HW_Computer_t::central = nullptr;
 HW_BusDriver_t *HW_Computer_t::aluADriver = nullptr;
 HW_BusDriver_t *HW_Computer_t::aluBDriver = nullptr;
 HW_MomentarySwitch_t *HW_Computer_t::brk = nullptr;
-HW_MomentarySwitch_t *HW_Computer_t::rst = nullptr;
 
 
 
@@ -140,8 +143,7 @@ void HW_Computer_t::BuildGui(void)
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
 
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 13);
-    grid->addWidget((rst = new HW_MomentarySwitch_t("Reset", HW_MomentarySwitch_t::HIGH_WHEN_RELEASED)), 13, 12);
+    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 9);
 
     grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 0, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 12, 3, 1, 3);
@@ -177,6 +179,7 @@ void HW_Computer_t::BuildGui(void)
     grid->addWidget(r11, 8, 6, 2, 3);
     grid->addWidget(r12, 10, 6, 2, 3);
     grid->addWidget(pgmRom, 13, 0, 1, 4);
+    grid->addWidget(reset, 13, 13, 1, 2);
 
 
     central = new QWidget;
@@ -202,10 +205,9 @@ void HW_Computer_t::BuildGui(void)
     singleton->show();
 
     connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak, CNN_TYPE);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessReset, CNN_TYPE);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset, CNN_TYPE);
-    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmRom, &PgmRomModule_t::ProcessReset, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, clock, &ClockModule_t::ProcessReset, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, pgmRom, &PgmRomModule_t::ProcessReset, CNN_TYPE);
 }
 
 
@@ -293,6 +295,8 @@ void HW_Computer_t::AllocateComponents(void)
     fetch = new FetchRegisterModule_t;
 
     pgmRom = new PgmRomModule_t(GetPgmRomFolder());
+
+    reset = new ResetModule_t;
 }
 
 
@@ -319,7 +323,6 @@ void HW_Computer_t::WireUp(void)
 void HW_Computer_t::TriggerFirstUpdate(void)
 {
     brk->TriggerFirstUpdate();
-    rst->TriggerFirstUpdate();         // must be last to reset everything
 }
 
 
@@ -341,8 +344,6 @@ void HW_Computer_t::ProcessSettingsWindow(void)
 //    --------------------------------------------------
 void HW_Computer_t::PerformReset(void)
 {
-    rst->Press();
-
     pgmFlags->TriggerFirstUpdate();
     intFlags->TriggerFirstUpdate();
     alu->TriggerFirstUpdate();
@@ -367,8 +368,9 @@ void HW_Computer_t::PerformReset(void)
     intsp->TriggerFirstUpdate();
     fetch->TriggerFirstUpdate();
     ctrlLogic->TriggerFirstUpdate();
+    reset->TriggerFirstUpdate();
 
-    rst->Release();
+    reset->PowerOnReset();
 }
 
 
@@ -378,7 +380,7 @@ void HW_Computer_t::PerformReset(void)
 void HW_Computer_t::FinalWireUp(void)
 {
     // -- Wire up the PC Register
-    connect(rst, &HW_MomentarySwitch_t::SignalState, pgmpc, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, pgmpc, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
     connect(clock, &ClockModule_t::SignalClockStateLatch, pgmpc, &GpRegisterModule_t::ProcessClockLatch, CNN_TYPE);
     connect(clock, &ClockModule_t::SignalClockStateOutput, pgmpc, &GpRegisterModule_t::ProcessClockOutput, CNN_TYPE);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad, CNN_TYPE);
@@ -393,7 +395,7 @@ void HW_Computer_t::FinalWireUp(void)
 
 
     // -- Wire up the R1 Register
-    connect(rst, &HW_MomentarySwitch_t::SignalState, r1, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, r1, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
     connect(clock, &ClockModule_t::SignalClockStateLatch, r1, &GpRegisterModule_t::ProcessClockLatch, CNN_TYPE);
     connect(clock, &ClockModule_t::SignalClockStateOutput, r1, &GpRegisterModule_t::ProcessClockOutput, CNN_TYPE);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalR1Load, r1, &GpRegisterModule_t::ProcessLoad, CNN_TYPE);
@@ -408,11 +410,14 @@ void HW_Computer_t::FinalWireUp(void)
 
 
     // -- Wire up the Fetch Register
-    connect(rst, &HW_MomentarySwitch_t::SignalState, fetch, &FetchRegisterModule_t::ProcessReset, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, fetch, &FetchRegisterModule_t::ProcessReset, CNN_TYPE);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalInstructionSuppress, fetch, &FetchRegisterModule_t::ProcessInstructionSuppress, CNN_TYPE);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain, CNN_TYPE);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB, CNN_TYPE);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAddr2, CNN_TYPE);
+
+
+    connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
 }
 
 

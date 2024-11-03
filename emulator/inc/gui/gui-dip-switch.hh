@@ -25,13 +25,20 @@ public:
     ~GUI_DipSwitch_t() {}
 
 
+
 public slots:
     void ProcessClick(void) { setSliderPosition(value()==1?0:1); }
     void ProcessStateChange(void) { emit SignalSwitchChanged(value()==1?HIGH:LOW); }
 
 
+
 signals:
     void SignalSwitchChanged(TriState_t state);
+
+
+
+public:
+    void TriggerFirstUpdate(void) { ProcessStateChange(); }
 };
 
 

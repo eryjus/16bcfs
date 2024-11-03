@@ -65,6 +65,8 @@ private:
 
     static PgmRomModule_t *pgmRom;
 
+    static ResetModule_t *reset;
+
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;
@@ -102,7 +104,6 @@ private:
 
 
     static HW_MomentarySwitch_t *brk;
-    static HW_MomentarySwitch_t *rst;
 
 
 private:
@@ -163,5 +164,7 @@ private:
     static void FinalWireUp(void);
     static void TriggerFirstUpdate(void);
 };
+
+
 
 

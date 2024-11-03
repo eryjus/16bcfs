@@ -20,6 +20,14 @@
 GUI_Application_t *app = nullptr;
 
 
+//
+// -- get the current clock count
+//    ---------------------------
+unsigned long Count(void)
+{
+    return HW_Computer_t::GetClock()->GetClockCount();
+}
+
 
 //
 // -- The main entry point for the application

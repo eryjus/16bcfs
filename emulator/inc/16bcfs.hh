@@ -102,6 +102,7 @@ class IC_74xx30_t;
 class IC_74xx32_t;
 class IC_74xx74_t;
 class IC_74xx86_t;
+class IC_74xx123_t;
 class IC_74xx138_t;
 class IC_74xx151_t;
 class IC_74xx157_t;
@@ -174,6 +175,7 @@ const QString lastPgm = "pgm-rom/last-pgm";
 #include "ic/ic-74xx32.hh"
 #include "ic/ic-74xx74.hh"
 #include "ic/ic-74xx86.hh"
+#include "ic/ic-74xx123.hh"
 #include "ic/ic-74xx138.hh"
 #include "ic/ic-74xx151.hh"
 #include "ic/ic-74xx157.hh"

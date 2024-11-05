@@ -455,7 +455,32 @@
       "version": 3
     },
     "net_colors": null,
-    "netclass_assignments": null,
+    "netclass_assignments": {
+      "/Post Reset Clocks/~{RUN}": "latch - Q1",
+      "CLOCKING": "nand3 - Y1",
+      "Net-(SW2-A)": "bit3",
+      "Net-(SW3-A)": "bit2",
+      "Net-(SW4-A)": "bit1",
+      "Net-(SW5-A)": "bit0",
+      "Net-(U1-Pad2)": "nand1-Y2",
+      "Net-(U1-Pad3)": "nand1-Y1",
+      "Net-(U1-Pad5)": "nand1-Y3",
+      "Net-(U11-~{BO})": "counter - ~{BO}",
+      "Net-(U2-Pad3)": "and1-Y1",
+      "Net-(U2-Pad6)": "and1-Y2",
+      "Net-(U4-Pad10)": "nand2 - Y4",
+      "Net-(U4-Pad2)": "nand2 - Y2",
+      "Net-(U4-Pad5)": "nor1 - Y1",
+      "Net-(U5A-D)": "nand2 - Y3",
+      "Net-(U6-Pad10)": "nand3 - Y4",
+      "Net-(U6-Pad13)": "nor1 - Y3",
+      "Net-(U6-Pad2)": "nand3 - Y2",
+      "Net-(U8A-~{Q})": "vib1 - ~{Q1}",
+      "Net-(U8B-~{Q})": "vib1 - ~{Q2}",
+      "RESETTING": "nand2 - Y1",
+      "RESET_CLK": "or1-Y1",
+      "RUNNING": "nand3 - Y3"
+    },
     "netclass_patterns": []
   },
   "pcbnew": {

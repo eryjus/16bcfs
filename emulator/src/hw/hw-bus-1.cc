@@ -26,6 +26,7 @@ HW_Bus_1_t::HW_Bus_1_t(const QString &name, ClockModule_t *clk, QObject *parent)
     (*assertedBits)[0] = new Asserts_t;
 
     connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_1_t::ProcessSanityCheck, CNN_TYPE);
+    emit SignalBit0Updated(HIGH);
 }
 
 

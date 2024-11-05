@@ -92,7 +92,7 @@ private:
 
     // -- set up for some hardware to check state
     GUI_Led_t *clk;
-    GUI_Led_t *rst;
+    GUI_Led_t *cpy;
     GUI_Led_t *oe;
     GUI_Led_t *we;
     GUI_Led_t *ce;

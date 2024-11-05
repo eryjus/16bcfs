@@ -77,8 +77,8 @@ private:
     // -- The Address Copy Bus providing output to the memory ROM->RAM copy
     /* static HW_Bus_16_t *AddrCopyBus; */
 
-    // -- Reset Hold control Bus (1-bit with pull-up) providing a reset-hold signal until reset is complete
-    /* static HW_Bus_1_t *rHld; */
+    // -- Copy Hold control Bus (1-bit with pull-up) providing a reset-hold signal until the copy is complete
+    /* static HW_Bus_1_t *cpyHld; */
 
 
 public slots:

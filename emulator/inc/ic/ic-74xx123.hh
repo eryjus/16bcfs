@@ -63,17 +63,31 @@ public:
 
 
 public slots:
-    void ProcessUpdateA1b(TriState_t state) { pins[A1b] = state; ProcessUpdates1Complete(); }
-    void ProcessUpdateB1(TriState_t state) { pins[B1] = state; ProcessUpdates1Complete(); }
-    void ProcessUpdateRD1b(TriState_t state) { pins[RD1b] = state; ProcessUpdates1Complete(); }
+    void ProcessUpdateA1b(TriState_t state) { DebugA1(state); pins[A1b] = state; ProcessUpdates1Complete(); }
+    void ProcessUpdateB1(TriState_t state) { DebugB1(state); pins[B1] = state; ProcessUpdates1Complete(); }
+    void ProcessUpdateRD1b(TriState_t state) { DebugRD1(state); pins[RD1b] = state; ProcessUpdates1Complete(); }
     void ProcessUpdateRCEXT1(void);
-    void ProcessUpdateA2b(TriState_t state) { pins[A2b] = state; ProcessUpdates2Complete(); }
-    void ProcessUpdateB2(TriState_t state) { pins[B2] = state; ProcessUpdates2Complete(); }
-    void ProcessUpdateRD2b(TriState_t state) { pins[RD2b] = state; ProcessUpdates2Complete(); }
+    void ProcessUpdateA2b(TriState_t state) { DebugA2(state); pins[A2b] = state; ProcessUpdates2Complete(); }
+    void ProcessUpdateB2(TriState_t state) { DebugB2(state); pins[B2] = state; ProcessUpdates2Complete(); }
+    void ProcessUpdateRD2b(TriState_t state) { DebugRD2(state); pins[RD2b] = state; ProcessUpdates2Complete(); }
     void ProcessUpdateRCEXT2(void);
     void ProcessUpdates1Complete(void);
     void ProcessUpdates2Complete(void);
 
+
+// -- Debugging slots
+    void DebugA1(TriState_t state) { DEBUG << "#A1 " << state; }
+    void DebugB1(TriState_t state) { DEBUG << "B1 " << state; }
+    void DebugRD1(TriState_t state) { DEBUG << "RD1 " << state; }
+    void DebugQ1(TriState_t state) { DEBUG << "Q1 " << state; }
+    void DebugQ1b(TriState_t state) { DEBUG << "#Q1 " << state; }
+    void DebugRC1(void) { DEBUG << "End of pulse 1"; }
+    void DebugA2(TriState_t state) { DEBUG << "#A2 " << state; }
+    void DebugB2(TriState_t state) { DEBUG << "B2 " << state; }
+    void DebugRD2(TriState_t state) { DEBUG << "RD2 " << state; }
+    void DebugQ2(TriState_t state) { DEBUG << "Q2 " << state; }
+    void DebugQ2b(TriState_t state) { DEBUG << "#Q2 " << state; }
+    void DebugRC2(void) { DEBUG << "End of pulse 2"; }
 
 
 signals:

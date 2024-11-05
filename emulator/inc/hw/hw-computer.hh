@@ -70,6 +70,7 @@ private:
 
     // -- Reset Hold control Bus (1-bit with pull-up)
     static HW_Bus_1_t *rHld;
+    static HW_Bus_1_t *cpyHld;
 
     // -- ALU-A and ALU-B Input buses
     static HW_Bus_16_t *aluA;
@@ -117,7 +118,8 @@ private:
 public:
     static HW_Computer_t *Get(void);
 
-    static HW_Bus_1_t *GetRhldBus(void) { return rHld; }
+    static HW_Bus_1_t *GetRHldBus(void) { return rHld; }
+    static HW_Bus_1_t *GetCpyHldBus(void) { return cpyHld; }
     static HW_Bus_16_t *GetMainBus(void) { return mainBus; }
     static HW_Bus_16_t *GetAluABus(void) { return aluA; }
     static HW_Bus_16_t *GetAluBBus(void) { return aluB; }

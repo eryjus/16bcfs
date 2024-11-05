@@ -44,6 +44,7 @@ ResetModule_t *HW_Computer_t::reset = nullptr;
 
 // -- Buses
 HW_Bus_1_t *HW_Computer_t::rHld = nullptr;
+HW_Bus_1_t *HW_Computer_t::cpyHld = nullptr;
 HW_Bus_16_t *HW_Computer_t::mainBus = nullptr;
 HW_Bus_16_t *HW_Computer_t::aluA = nullptr;
 HW_Bus_16_t *HW_Computer_t::aluB = nullptr;
@@ -225,7 +226,8 @@ void HW_Computer_t::AllocateComponents(void)
     //
     // -- Create the various buses -- top priority to place
     //    -------------------------------------------------
-    rHld = new HW_Bus_1_t("Reset", clock);
+    rHld = new HW_Bus_1_t("Reset Hold", clock);
+    cpyHld = new HW_Bus_1_t("Copy Hold", clock);
     mainBus = new HW_Bus_16_t("Main", clock);
     aluA = new HW_Bus_16_t("ALU A", clock);
     aluB = new HW_Bus_16_t("ALU B", clock);
@@ -312,8 +314,8 @@ void HW_Computer_t::WireUp(void)
 
     connect(clock, &ClockModule_t::SignalClockStateOutput, singleton, &HW_Computer_t::SignalOscillatorStateChanged, CNN_TYPE);
 
-    HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
-    connect(rHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck, CNN_TYPE);
+    HW_Bus_1_t *cpyHld = HW_Computer_t::GetCpyHldBus();
+    connect(cpyHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck, CNN_TYPE);
 }
 
 
@@ -367,7 +369,9 @@ void HW_Computer_t::PerformReset(void)
     intra->TriggerFirstUpdate();
     intsp->TriggerFirstUpdate();
     fetch->TriggerFirstUpdate();
+
     ctrlLogic->TriggerFirstUpdate();
+
     reset->TriggerFirstUpdate();
 
     reset->PowerOnReset();

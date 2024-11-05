@@ -32,6 +32,10 @@ private:
     IC_74xx32_t *or1;
     IC_74xx74_t *latch;
     IC_74xx193_t *counter;
+    IC_74xx00_t *nand3;
+    IC_74xx02_t *nor1;
+    IC_74xx123_t *vib1;
+    IC_74xx03_t *oNand1;
 
 
     GUI_Led_t *resetting;
@@ -52,12 +56,21 @@ public slots:
     void ProcessCpuClockOutput(TriState_t state);
     void PowerOnReset(void);
 
-    void DebugRun(TriState_t state) { DEBUG << "Run State is " << state; }
-    void DebugRunning(TriState_t state) { DEBUG << "Running is " << state; }
-    void DebugResetting(TriState_t state) { DEBUG << "Resetting is " << state; }
-    void DebugRHLD(TriState_t state) { DEBUG << "#RHLD " << state; }
     void DebugReset(TriState_t state) { DEBUG << "Reset is " << state; }
+    void DebugResetting(TriState_t state) { DEBUG << "Resetting is " << state; }
+    void DebugClocking(TriState_t state) { DEBUG << "Clocking is " << state; }
+    void DebugRunning(TriState_t state) { DEBUG << "Running is " << state; }
 
+    void DebugRHLD(TriState_t state) { DEBUG << "#RHLD " << state; }
+    void DebugCPYHLD(TriState_t state) { DEBUG << "#CPYHLD " << state; }
+    void DebugRun(TriState_t state) { DEBUG << "Run State is " << state; }
+
+    void DebugVibrator1(TriState_t state) { DEBUG << "Vibrator (Copy Complete) output is " << state; }
+    void DebugVibrator2(TriState_t state) { DEBUG << "Vibrator (Reset Complete) output is " << state; }
+
+
+    void DebugCounterLoad(TriState_t state) { DEBUG << "Counter Load " << state; }
+    void DebugCounterBorrow(TriState_t state) { DEBUG << "Counter #BO " << state; }
 
 
 // -- Outputs from this module to other destinations
@@ -65,6 +78,7 @@ signals:
     void SignalSystemClock(TriState_t state);           // TODO: known as the RESET_CLK on the schematic
     void SignalReset(TriState_t state);
     void SignalResetting(TriState_t state);
+    void SignalClocking(TriState_t state);
     void SignalRunning(TriState_t state);
 
 

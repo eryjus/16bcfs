@@ -115,7 +115,7 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     clock = new HW_Oscillator_t;
     clk = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
 
-    rst = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
+    cpy = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
     oe = new GUI_Led_t(GUI_Led_t::OnWhenLow, Qt::yellow);
     we = new GUI_Led_t(GUI_Led_t::OnWhenLow, Qt::yellow);
     ce = new GUI_Led_t(GUI_Led_t::OnWhenLow, Qt::yellow);
@@ -152,8 +152,8 @@ void CtrlRomCtrlModule_t::BuildGui(void)
 
     controlLayout->addWidget(clk, 0, 0, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("clk"), 1, 0, Qt::AlignHCenter);
-    controlLayout->addWidget(rst, 0, 2, Qt::AlignHCenter);
-    controlLayout->addWidget(new QLabel("rst"), 1, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(cpy, 0, 2, Qt::AlignHCenter);
+    controlLayout->addWidget(new QLabel("cp"), 1, 2, Qt::AlignHCenter);
     controlLayout->addWidget(oe, 0, 4, Qt::AlignHCenter);
     controlLayout->addWidget(new QLabel("oe"), 1, 4, Qt::AlignHCenter);
     controlLayout->addWidget(we, 0, 5, Qt::AlignHCenter);
@@ -738,7 +738,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //    ----------------
     connect(clock, &HW_Oscillator_t::SignalStateChanged, clk, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
 
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, rst, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, cpy, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, oe, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
     connect(nand2, &IC_74xx00_t::SignalY1Updated, we, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
     connect(and3, &IC_74xx08_t::SignalY2Updated, ce, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
@@ -753,8 +753,8 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Connect up the outputs: individual signals first
     //    ------------------------------------------------
-    HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
-    connect(oNand1, &IC_74xx03_t::SignalY1Updated, rHld, &HW_Bus_1_t::ProcessUpdateBit0, CNN_TYPE);
+    HW_Bus_1_t *cpyHld = HW_Computer_t::GetCpyHldBus();
+    connect(oNand1, &IC_74xx03_t::SignalY1Updated, cpyHld, &HW_Bus_1_t::ProcessUpdateBit0, CNN_TYPE);
     connect(resetting, &IC_74xx74_t::SignalQ1Updated, this, &CtrlRomCtrlModule_t::SignalQrUpdated, CNN_TYPE);
     connect(resetting, &IC_74xx74_t::SignalQ1bUpdated, this, &CtrlRomCtrlModule_t::SignalQrbUpdated, CNN_TYPE);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, this, &CtrlRomCtrlModule_t::SignalQcUpdated, CNN_TYPE);
@@ -839,7 +839,7 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
     }
 #else
     if (state != HIGH) {
-        HW_Bus_1_t *rHld = HW_Computer_t::GetRhldBus();
+        HW_Bus_1_t *rHld = HW_Computer_t::GetRHldBus();
         rHld->ProcessUpdateBit0(LOW);
         emit CopyEeprom();
         rHld->ProcessUpdateBit0(Z);

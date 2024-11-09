@@ -140,56 +140,56 @@ void AluFlagsModule_t::WireUp(void)
     // -- wire up the Z flag -- start with the MSB Inv from the bus
     //    ---------------------------------------------------------
     HW_Bus_16_t *mainBus = HW_Computer_t::GetMainBus();
-    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD7, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitEUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD6, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitDUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD5, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitCUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD4, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitBUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD3, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitAUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD2, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit9Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD1, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit8Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD0, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD7);
+    connect(mainBus, &HW_Bus_16_t::SignalBitEUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD6);
+    connect(mainBus, &HW_Bus_16_t::SignalBitDUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD5);
+    connect(mainBus, &HW_Bus_16_t::SignalBitCUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD4);
+    connect(mainBus, &HW_Bus_16_t::SignalBitBUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD3);
+    connect(mainBus, &HW_Bus_16_t::SignalBitAUpdated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD2);
+    connect(mainBus, &HW_Bus_16_t::SignalBit9Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD1);
+    connect(mainBus, &HW_Bus_16_t::SignalBit8Updated, zFlagInvMsb, &IC_74xx540_t::ProcessUpdateD0);
 
 
     // -- LSB Inv from the bus
-    connect(mainBus, &HW_Bus_16_t::SignalBit7Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD7, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit6Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD6, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit5Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD5, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit4Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD4, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit3Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD3, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit2Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD2, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit1Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD1, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBit0Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD0, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBit7Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD7);
+    connect(mainBus, &HW_Bus_16_t::SignalBit6Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD6);
+    connect(mainBus, &HW_Bus_16_t::SignalBit5Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD5);
+    connect(mainBus, &HW_Bus_16_t::SignalBit4Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD4);
+    connect(mainBus, &HW_Bus_16_t::SignalBit3Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD3);
+    connect(mainBus, &HW_Bus_16_t::SignalBit2Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD2);
+    connect(mainBus, &HW_Bus_16_t::SignalBit1Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD1);
+    connect(mainBus, &HW_Bus_16_t::SignalBit0Updated, zFlagInvLsb, &IC_74xx540_t::ProcessUpdateD0);
 
 
     // -- connect the inverting driver to the NAND Gates -- MSB
     zFlagInvMsb->ProcessUpdateOE1(LOW);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY7Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateH, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY6Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateG, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY5Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateF, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY4Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateE, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY3Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateD, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY2Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateC, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY1Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateB, CNN_TYPE);
-    connect(zFlagInvMsb, &IC_74xx540_t::SignalY0Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateA, CNN_TYPE);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY7Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateH);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY6Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateG);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY5Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateF);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY4Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateE);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY3Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateD);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY2Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateC);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY1Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateB);
+    connect(zFlagInvMsb, &IC_74xx540_t::SignalY0Updated, zFlagNandMsb, &IC_74xx30_t::ProcessUpdateA);
     zFlagInvMsb->ProcessUpdateOE2(LOW);
 
 
     // -- connect the inverting driver to the NAND Gates -- LSB
     zFlagInvLsb->ProcessUpdateOE1(LOW);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY7Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateH, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY6Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateG, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY5Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateF, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY4Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateE, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY3Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateD, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY2Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateC, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY1Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateB, CNN_TYPE);
-    connect(zFlagInvLsb, &IC_74xx540_t::SignalY0Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateA, CNN_TYPE);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY7Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateH);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY6Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateG);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY5Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateF);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY4Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateE);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY3Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateD);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY2Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateC);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY1Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateB);
+    connect(zFlagInvLsb, &IC_74xx540_t::SignalY0Updated, zFlagNandLsb, &IC_74xx30_t::ProcessUpdateA);
     zFlagInvLsb->ProcessUpdateOE2(LOW);
 
 
     // -- connect the outputs of the 2 8-input NAND gates to the 2 inputs of the NOR gate
-    connect(zFlagNandMsb, &IC_74xx30_t::SignalYUpdated, nor1, &IC_74xx02_t::ProcessUpdateA1, CNN_TYPE);
-    connect(zFlagNandLsb, &IC_74xx30_t::SignalYUpdated, nor1, &IC_74xx02_t::ProcessUpdateB1, CNN_TYPE);
+    connect(zFlagNandMsb, &IC_74xx30_t::SignalYUpdated, nor1, &IC_74xx02_t::ProcessUpdateA1);
+    connect(zFlagNandLsb, &IC_74xx30_t::SignalYUpdated, nor1, &IC_74xx02_t::ProcessUpdateB1);
     nor1->ProcessA2Low();
     nor1->ProcessB2Low();
     nor1->ProcessA3Low();
@@ -200,9 +200,9 @@ void AluFlagsModule_t::WireUp(void)
 
     // -- now connect the z-side of the latch
     zcLatch->ProcessUpdateClr1(HIGH);
-    connect(nor1, &IC_74xx02_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
+    connect(nor1, &IC_74xx02_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateD1);
+    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockLatch1);
+    connect(and1, &IC_74xx08_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockOutput1);
     zcLatch->ProcessUpdatePre1(HIGH);
 
 
@@ -218,7 +218,7 @@ void AluFlagsModule_t::WireUp(void)
 
 
     // -- connect up the LED
-    connect(zcLatch, &IC_74xx74_t::SignalQ1Updated, zFlag, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(zcLatch, &IC_74xx74_t::SignalQ1Updated, zFlag, &GUI_Led_t::ProcessStateChange);
 
 
     // -- Connect Set and Clear Carry signals
@@ -268,20 +268,20 @@ void AluFlagsModule_t::WireUp(void)
 
 
     // -- connect up the C-side signals to the latch
-    connect(inv1, &IC_74xx04_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClr2, CNN_TYPE);
-    connect(cMux, &IC_74xx151_t::SignalYUpdated, zcLatch, &IC_74xx74_t::ProcessUpdateD2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockLatch2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockOutput2, CNN_TYPE);
-    connect(inv1, &IC_74xx04_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdatePre2, CNN_TYPE);
+    connect(inv1, &IC_74xx04_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClr2);
+    connect(cMux, &IC_74xx151_t::SignalYUpdated, zcLatch, &IC_74xx74_t::ProcessUpdateD2);
+    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockLatch2);
+    connect(and1, &IC_74xx08_t::SignalY2Updated, zcLatch, &IC_74xx74_t::ProcessUpdateClockOutput2);
+    connect(inv1, &IC_74xx04_t::SignalY1Updated, zcLatch, &IC_74xx74_t::ProcessUpdatePre2);
 
 
     // -- connect up the LED
-    connect(zcLatch, &IC_74xx74_t::SignalQ2Updated, cFlag, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(zcLatch, &IC_74xx74_t::SignalQ2Updated, cFlag, &GUI_Led_t::ProcessStateChange);
 
 
     // -- Connect the ALU Carry outputs to the respective inputs
     connect(HW_Computer_t::GetAlu()->GetAluAdder(), &HW_AluAdder_t::SignalCarryOutUpdated,
-                    cMux, &IC_74xx151_t::ProcessUpdateD1, CNN_TYPE);
+                    cMux, &IC_74xx151_t::ProcessUpdateD1);
     // TODO: add the other inputs as they are built out
 
 
@@ -290,9 +290,9 @@ void AluFlagsModule_t::WireUp(void)
     // -- Wire up the N Flag signals; N-side of the latch
     //    -----------------------------------------------
     nvLatch->ProcessUpdateClr1(HIGH);
-    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, nvLatch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, nvLatch, &IC_74xx74_t::ProcessUpdateD1);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockLatch1);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockOutput1);
     nvLatch->ProcessUpdatePre1(HIGH);
 
     // -- the N-related gate on and1
@@ -300,7 +300,7 @@ void AluFlagsModule_t::WireUp(void)
     // B3 is the NVL-Latch signal, handled below
 
     // -- connect up the LED
-    connect(nvLatch, &IC_74xx74_t::SignalQ1Updated, nFlag, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(nvLatch, &IC_74xx74_t::SignalQ1Updated, nFlag, &GUI_Led_t::ProcessStateChange);
 
 
 
@@ -310,42 +310,42 @@ void AluFlagsModule_t::WireUp(void)
     HW_Bus_16_t *aluA = HW_Computer_t::GetAluABus();
     HW_Bus_16_t *aluB = HW_Computer_t::GetAluBBus();
 
-    connect(aluA, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA1, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB1, CNN_TYPE);
-    connect(aluB, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA2, CNN_TYPE);
-    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB2, CNN_TYPE);
+    connect(aluA, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA1);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB1);
+    connect(aluB, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA2);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateB2);
     // A3 is handled in the L flag calculation
     // B3 is handled in the L flag calculation
     xor1->ProcessA4Low();
     xor1->ProcessB4Low();
 
     // -- connect up the outputs to the AND1 gate
-    connect(xor1, &IC_74xx86_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateA4, CNN_TYPE);
-    connect(xor1, &IC_74xx86_t::SignalY2Updated, and1, &IC_74xx08_t::ProcessUpdateB4, CNN_TYPE);
+    connect(xor1, &IC_74xx86_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateA4);
+    connect(xor1, &IC_74xx86_t::SignalY2Updated, and1, &IC_74xx08_t::ProcessUpdateB4);
 
     // -- connect up the V-side signals to the latch
-    connect(inv1, &IC_74xx04_t::SignalY4Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClr2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY4Updated, nvLatch, &IC_74xx74_t::ProcessUpdateD2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockLatch2, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockOutput2, CNN_TYPE);
-    connect(inv1, &IC_74xx04_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdatePre2, CNN_TYPE);
+    connect(inv1, &IC_74xx04_t::SignalY4Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClr2);
+    connect(and1, &IC_74xx08_t::SignalY4Updated, nvLatch, &IC_74xx74_t::ProcessUpdateD2);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockLatch2);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdateClockOutput2);
+    connect(inv1, &IC_74xx04_t::SignalY3Updated, nvLatch, &IC_74xx74_t::ProcessUpdatePre2);
 
     // -- the LED
-    connect(nvLatch, &IC_74xx74_t::SignalQ2Updated, vFlag, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(nvLatch, &IC_74xx74_t::SignalQ2Updated, vFlag, &GUI_Led_t::ProcessStateChange);
 
 
     //
     // -- Wire up the L Flag signals; starting with an XOR
     //    ------------------------------------------------
-    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA3, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY4Updated, xor1, &IC_74xx86_t::ProcessUpdateB3, CNN_TYPE);
+    connect(mainBus, &HW_Bus_16_t::SignalBitFUpdated, xor1, &IC_74xx86_t::ProcessUpdateA3);
+    connect(and1, &IC_74xx08_t::SignalY4Updated, xor1, &IC_74xx86_t::ProcessUpdateB3);
 
 
     // -- connect up the L-side signals to the latch
     lLatch->ProcessUpdateClr1(HIGH);
-    connect(xor1, &IC_74xx86_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateD1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClockLatch1, CNN_TYPE);
-    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClockOutput1, CNN_TYPE);
+    connect(xor1, &IC_74xx86_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateD1);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClockLatch1);
+    connect(and1, &IC_74xx08_t::SignalY3Updated, lLatch, &IC_74xx74_t::ProcessUpdateClockOutput1);
     lLatch->ProcessUpdatePre1(HIGH);
     lLatch->ProcessUpdateClr2(HIGH);
     lLatch->ProcessUpdateD2(LOW);
@@ -354,7 +354,7 @@ void AluFlagsModule_t::WireUp(void)
     lLatch->ProcessUpdatePre2(HIGH);
 
     // -- the LED
-    connect(lLatch, &IC_74xx74_t::SignalQ1Updated, lFlag, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(lLatch, &IC_74xx74_t::SignalQ1Updated, lFlag, &GUI_Led_t::ProcessStateChange);
 }
 
 

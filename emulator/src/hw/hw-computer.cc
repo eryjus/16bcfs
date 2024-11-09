@@ -193,22 +193,22 @@ void HW_Computer_t::BuildGui(void)
     QAction *quitAction = new QAction("Quit");
     quitAction->setShortcuts(QKeySequence::Quit);
     quitAction->setStatusTip("Quit the emulator");
-    connect(quitAction, &QAction::triggered, app, &GUI_Application_t::quit, CNN_TYPE);
+    connect(quitAction, &QAction::triggered, app, &GUI_Application_t::quit);
     fileMenu->addAction(quitAction);
 
     QMenu *editMenu = singleton->menuBar()->addMenu("Edit");
     QAction *settings = new QAction("Settings");
     settings->setStatusTip("Edit the emulator settings");
-    connect(settings, &QAction::triggered, singleton, &HW_Computer_t::ProcessSettingsWindow, CNN_TYPE);
+    connect(settings, &QAction::triggered, singleton, &HW_Computer_t::ProcessSettingsWindow);
     editMenu->addAction(settings);
 
     singleton->setWindowTitle(tr("16bcfs Emulator"));
     singleton->show();
 
-    connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak, CNN_TYPE);
-    connect(reset, &ResetModule_t::SignalReset, clock, &ClockModule_t::ProcessReset, CNN_TYPE);
-    connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset, CNN_TYPE);
-    connect(reset, &ResetModule_t::SignalReset, pgmRom, &PgmRomModule_t::ProcessReset, CNN_TYPE);
+    connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
+    connect(reset, &ResetModule_t::SignalReset, clock, &ClockModule_t::ProcessReset);
+//    connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
+    connect(reset, &ResetModule_t::SignalReset, pgmRom, &PgmRomModule_t::ProcessReset);
 }
 
 
@@ -309,13 +309,13 @@ void HW_Computer_t::AllocateComponents(void)
 void HW_Computer_t::WireUp(void)
 {
     // -- connect up the clock
-    connect(clock, &ClockModule_t::SignalClockStateLatch, pgmFlags, &AluFlagsModule_t::ProcessClockLatch, CNN_TYPE);
-    connect(clock, &ClockModule_t::SignalClockStateOutput, pgmFlags, &AluFlagsModule_t::ProcessClockOutput, CNN_TYPE);
+    connect(clock, &ClockModule_t::SignalClockStateLatch, pgmFlags, &AluFlagsModule_t::ProcessClockLatch);
+    connect(clock, &ClockModule_t::SignalClockStateOutput, pgmFlags, &AluFlagsModule_t::ProcessClockOutput);
 
-    connect(clock, &ClockModule_t::SignalClockStateOutput, singleton, &HW_Computer_t::SignalOscillatorStateChanged, CNN_TYPE);
+    connect(clock, &ClockModule_t::SignalClockStateOutput, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
     HW_Bus_1_t *cpyHld = HW_Computer_t::GetCpyHldBus();
-    connect(cpyHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck, CNN_TYPE);
+    connect(cpyHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
 }
 
 
@@ -325,6 +325,8 @@ void HW_Computer_t::WireUp(void)
 void HW_Computer_t::TriggerFirstUpdate(void)
 {
     brk->TriggerFirstUpdate();
+    rHld->TriggerFirstUpdate();
+    cpyHld->TriggerFirstUpdate();
 }
 
 
@@ -384,41 +386,41 @@ void HW_Computer_t::PerformReset(void)
 void HW_Computer_t::FinalWireUp(void)
 {
     // -- Wire up the PC Register
-    connect(reset, &ResetModule_t::SignalReset, pgmpc, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
-    connect(clock, &ClockModule_t::SignalClockStateLatch, pgmpc, &GpRegisterModule_t::ProcessClockLatch, CNN_TYPE);
-    connect(clock, &ClockModule_t::SignalClockStateOutput, pgmpc, &GpRegisterModule_t::ProcessClockOutput, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, pgmpc, &GpRegisterModule_t::ProcessReset);
+    connect(clock, &ClockModule_t::SignalClockStateLatch, pgmpc, &GpRegisterModule_t::ProcessClockLatch);
+    connect(clock, &ClockModule_t::SignalClockStateOutput, pgmpc, &GpRegisterModule_t::ProcessClockOutput);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
     pgmpc->ProcessDec(LOW);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertSwapPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertSwap, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertMain, CNN_TYPE);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertSwapPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertSwap);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertMain);
     pgmpc->ProcessAssertAluA(LOW);
     pgmpc->ProcessAssertAluB(LOW);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1, CNN_TYPE);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus1AssertPgmPC, pgmpc, &GpRegisterModule_t::ProcessAssertAddr1);
     pgmpc->ProcessAssertAddr2(LOW);
 
 
     // -- Wire up the R1 Register
-    connect(reset, &ResetModule_t::SignalReset, r1, &GpRegisterModule_t::ProcessReset, CNN_TYPE);
-    connect(clock, &ClockModule_t::SignalClockStateLatch, r1, &GpRegisterModule_t::ProcessClockLatch, CNN_TYPE);
-    connect(clock, &ClockModule_t::SignalClockStateOutput, r1, &GpRegisterModule_t::ProcessClockOutput, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalR1Load, r1, &GpRegisterModule_t::ProcessLoad, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, r1, &GpRegisterModule_t::ProcessReset);
+    connect(clock, &ClockModule_t::SignalClockStateLatch, r1, &GpRegisterModule_t::ProcessClockLatch);
+    connect(clock, &ClockModule_t::SignalClockStateOutput, r1, &GpRegisterModule_t::ProcessClockOutput);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalR1Load, r1, &GpRegisterModule_t::ProcessLoad);
     r1->ProcessInc(LOW);
     r1->ProcessDec(LOW);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertSwapR1, r1, &GpRegisterModule_t::ProcessAssertSwap, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertR1, r1, &GpRegisterModule_t::ProcessAssertMain, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusAAssertR1, r1, &GpRegisterModule_t::ProcessAssertAluA, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertR1, r1, &GpRegisterModule_t::ProcessAssertAluB, CNN_TYPE);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertSwapR1, r1, &GpRegisterModule_t::ProcessAssertSwap);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertR1, r1, &GpRegisterModule_t::ProcessAssertMain);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusAAssertR1, r1, &GpRegisterModule_t::ProcessAssertAluA);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertR1, r1, &GpRegisterModule_t::ProcessAssertAluB);
     r1->ProcessAssertAddr1(LOW);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertR1, r1, &GpRegisterModule_t::ProcessAssertAddr2, CNN_TYPE);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertR1, r1, &GpRegisterModule_t::ProcessAssertAddr2);
 
 
     // -- Wire up the Fetch Register
-    connect(reset, &ResetModule_t::SignalReset, fetch, &FetchRegisterModule_t::ProcessReset, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalInstructionSuppress, fetch, &FetchRegisterModule_t::ProcessInstructionSuppress, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB, CNN_TYPE);
-    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAddr2, CNN_TYPE);
+    connect(reset, &ResetModule_t::SignalReset, fetch, &FetchRegisterModule_t::ProcessReset);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalInstructionSuppress, fetch, &FetchRegisterModule_t::ProcessInstructionSuppress);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAddr2);
 
 
     connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);

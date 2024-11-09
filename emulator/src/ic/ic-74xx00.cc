@@ -21,14 +21,14 @@ IC_74xx00_t::IC_74xx00_t(void)
 {
     pins[A1] = LOW;
     pins[B1] = LOW;
-    pins[Y1] = HIGH;
+    pins[Y1] = Z;
     pins[A2] = LOW;
     pins[B2] = LOW;
-    pins[Y2] = HIGH;
-    pins[Y3] = HIGH;
+    pins[Y2] = Z;
+    pins[Y3] = Z;
     pins[B3] = LOW;
     pins[A3] = LOW;
-    pins[Y4] = HIGH;
+    pins[Y4] = Z;
     pins[B4] = LOW;
     pins[A4] = LOW;
 }

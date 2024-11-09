@@ -24,7 +24,7 @@ GUI_DipSwitch_t::GUI_DipSwitch_t(QWidget *parent) : QSlider(Qt::Vertical, parent
     setMaximum(1);
     setFixedHeight(25);
 
-    connect(this, &GUI_DipSwitch_t::sliderPressed, this, &GUI_DipSwitch_t::ProcessClick, CNN_TYPE);
-    connect(this, &GUI_DipSwitch_t::valueChanged, this, &GUI_DipSwitch_t::ProcessStateChange, CNN_TYPE);
+    connect(this, &GUI_DipSwitch_t::sliderPressed, this, &GUI_DipSwitch_t::ProcessClick);
+    connect(this, &GUI_DipSwitch_t::valueChanged, this, &GUI_DipSwitch_t::ProcessStateChange);
 }
 

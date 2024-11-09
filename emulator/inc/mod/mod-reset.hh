@@ -65,12 +65,14 @@ public slots:
     void DebugCPYHLD(TriState_t state) { DEBUG << "#CPYHLD " << state; }
     void DebugRun(TriState_t state) { DEBUG << "Run State is " << state; }
 
-    void DebugVibrator1(TriState_t state) { DEBUG << "Vibrator (Copy Complete) output is " << state; }
-    void DebugVibrator2(TriState_t state) { DEBUG << "Vibrator (Reset Complete) output is " << state; }
+    void DebugVibrator1(TriState_t state) { DEBUG << "Vibrator 1 (Copy Complete) output is " << state; }
+    void DebugVibrator2(TriState_t state) { DEBUG << "Vibrator 2 (Reset Complete) output is " << state; }
 
 
     void DebugCounterLoad(TriState_t state) { DEBUG << "Counter Load " << state; }
     void DebugCounterBorrow(TriState_t state) { DEBUG << "Counter #BO " << state; }
+
+    void DebugLatchInput(TriState_t state) { DEBUG << "Latch Input " << state; }
 
 
 // -- Outputs from this module to other destinations

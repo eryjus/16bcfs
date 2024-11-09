@@ -19,19 +19,19 @@
 //    -------------------------
 IC_74xx74_t::IC_74xx74_t(void)
 {
-    pins[CLR1b] = HIGH;
+    pins[CLR1b] = LOW;
     pins[D1] = LOW;
     pins[CLK1] = LOW;
     pins[PRE1b] = HIGH;
-    pins[Q1] = LOW;
-    pins[Q1b] = HIGH;
+    pins[Q1] = Z;
+    pins[Q1b] = Z;
 
-    pins[CLR2b] = HIGH;
+    pins[CLR2b] = LOW;
     pins[D2] = LOW;
     pins[CLK2] = LOW;
     pins[PRE2b] = HIGH;
-    pins[Q2] = LOW;
-    pins[Q2b] = HIGH;
+    pins[Q2] = Z;
+    pins[Q2b] = Z;
 
     d1 = LOW;
     d2 = LOW;

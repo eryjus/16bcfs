@@ -47,23 +47,23 @@ void SubDemux4_t::WireUp(void)
     demuxHi->ProcessUpdateG2A(LOW);
     demuxHi->ProcessUpdateG2B(LOW);
 
-    connect(demuxLo, &IC_74xx238_t::SignalY0Updated, this, &SubDemux4_t::SignalY0Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY1Updated, this, &SubDemux4_t::SignalY1Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY2Updated, this, &SubDemux4_t::SignalY2Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY3Updated, this, &SubDemux4_t::SignalY3Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY4Updated, this, &SubDemux4_t::SignalY4Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY5Updated, this, &SubDemux4_t::SignalY5Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY6Updated, this, &SubDemux4_t::SignalY6Updated, CNN_TYPE);
-    connect(demuxLo, &IC_74xx238_t::SignalY7Updated, this, &SubDemux4_t::SignalY7Updated, CNN_TYPE);
+    connect(demuxLo, &IC_74xx238_t::SignalY0Updated, this, &SubDemux4_t::SignalY0Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY1Updated, this, &SubDemux4_t::SignalY1Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY2Updated, this, &SubDemux4_t::SignalY2Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY3Updated, this, &SubDemux4_t::SignalY3Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY4Updated, this, &SubDemux4_t::SignalY4Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY5Updated, this, &SubDemux4_t::SignalY5Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY6Updated, this, &SubDemux4_t::SignalY6Updated);
+    connect(demuxLo, &IC_74xx238_t::SignalY7Updated, this, &SubDemux4_t::SignalY7Updated);
 
-    connect(demuxHi, &IC_74xx238_t::SignalY0Updated, this, &SubDemux4_t::SignalY0Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY1Updated, this, &SubDemux4_t::SignalY1Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY2Updated, this, &SubDemux4_t::SignalY2Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY3Updated, this, &SubDemux4_t::SignalY3Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY4Updated, this, &SubDemux4_t::SignalY4Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY5Updated, this, &SubDemux4_t::SignalY5Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY6Updated, this, &SubDemux4_t::SignalY6Updated, CNN_TYPE);
-    connect(demuxHi, &IC_74xx238_t::SignalY7Updated, this, &SubDemux4_t::SignalY7Updated, CNN_TYPE);
+    connect(demuxHi, &IC_74xx238_t::SignalY0Updated, this, &SubDemux4_t::SignalY0Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY1Updated, this, &SubDemux4_t::SignalY1Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY2Updated, this, &SubDemux4_t::SignalY2Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY3Updated, this, &SubDemux4_t::SignalY3Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY4Updated, this, &SubDemux4_t::SignalY4Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY5Updated, this, &SubDemux4_t::SignalY5Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY6Updated, this, &SubDemux4_t::SignalY6Updated);
+    connect(demuxHi, &IC_74xx238_t::SignalY7Updated, this, &SubDemux4_t::SignalY7Updated);
 }
 
 

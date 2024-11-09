@@ -27,7 +27,7 @@ GUI_MomentarySwitch_t::GUI_MomentarySwitch_t(const QString &name, TriState_t p, 
 
     setFixedHeight(25);
 
-    connect(this, &GUI_MomentarySwitch_t::pressed, this, &GUI_MomentarySwitch_t::ProcessClick, CNN_TYPE);
-    connect(this, &GUI_MomentarySwitch_t::released, this, &GUI_MomentarySwitch_t::ProcessRelease, CNN_TYPE);
+    connect(this, &GUI_MomentarySwitch_t::pressed, this, &GUI_MomentarySwitch_t::ProcessClick);
+    connect(this, &GUI_MomentarySwitch_t::released, this, &GUI_MomentarySwitch_t::ProcessRelease);
 }
 

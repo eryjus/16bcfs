@@ -40,7 +40,6 @@ ClockModule_t::ClockModule_t(void) : QGroupBox("Clock Module")
 
     // -- start the oscillator as soon as it is placed
     timer->ProcessSetInterval(500);
-    timer->StartTimer();
 }
 
 
@@ -283,3 +282,5 @@ void ClockModule_t::ProcessBreak(TriState_t state) {
 }
 
 
+
+void ClockModule_t::StartClock(void) { timer->StartTimer(); }

@@ -6622,7 +6622,7 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "~{QL}" (shape input) (at 495.3 161.29 180) (fields_autoplaced)
+  (global_label "QL" (shape input) (at 495.3 161.29 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 39eba8cc-63e9-4b26-b967-919128ffaca0)
     (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 489.9562 161.29 0)

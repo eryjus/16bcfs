@@ -20,12 +20,21 @@
 GUI_Application_t *app = nullptr;
 
 
+//
+// -- get the current clock count
+//    ---------------------------
+unsigned long Count(void)
+{
+    return HW_Computer_t::GetClock()->GetClockCount();
+}
+
 
 //
 // -- The main entry point for the application
 //    ----------------------------------------
 int main(int argc, char *argv[])
 {
+    debug = true;
     new GUI_Application_t(argc, argv);
 
     // -- settings will use these if not provided explicitly; they will be relied upon

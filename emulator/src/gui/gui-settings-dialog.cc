@@ -51,20 +51,20 @@ void GUI_SettingsDialog_t::Init(void)
     QPushButton *folder = new QPushButton("...");
     folder->setFixedWidth(15);
     layout->addWidget(folder, 1, 3, 1, 1);
-    connect(folder, &QPushButton::pressed, this, &GUI_SettingsDialog_t::ProcessSelectDir, CNN_TYPE);
+    connect(folder, &QPushButton::pressed, this, &GUI_SettingsDialog_t::ProcessSelectDir);
 
 
     QPushButton *ok = new QPushButton("OK");
     ok->setDefault(true);
     ok->setFixedWidth(50);
     layout->addWidget(ok, 4, 2, 1, 1);
-    connect(ok, &QPushButton::clicked, this, &QDialog::accept, CNN_TYPE);
+    connect(ok, &QPushButton::clicked, this, &QDialog::accept);
 
 
     QPushButton *cancel = new QPushButton("Cancel");
     cancel->setFixedWidth(50);
     layout->addWidget(cancel, 4, 3, 1, 1);
-    connect(cancel, &QPushButton::clicked, this, &QDialog::reject, CNN_TYPE);
+    connect(cancel, &QPushButton::clicked, this, &QDialog::reject);
 
     setLayout(layout);
     setMinimumWidth(400);

@@ -48,10 +48,15 @@ private:
     QPixmap lo;
 
 
+    // -- a clock counter
+    unsigned long clockCount;
+
+
 public slots:
     // -- these functions become the external inputs into this module from the backplane
     void ProcessBreak(TriState_t state);
     void ProcessReset(TriState_t state);
+    void IncrementClockCount(TriState_t state) { if (state == HIGH) clockCount ++; }
 
 
 signals:
@@ -65,6 +70,16 @@ public:
     // -- constructor/destructor
     explicit ClockModule_t(void);
     virtual ~ClockModule_t() {}
+
+
+
+public:
+    void StartClock(void);
+
+
+
+public:
+    unsigned long GetClockCount(void) const { return clockCount; }
 
 
 private:

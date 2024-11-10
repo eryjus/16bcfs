@@ -25,7 +25,8 @@ HW_Bus_1_t::HW_Bus_1_t(const QString &name, ClockModule_t *clk, QObject *parent)
 
     (*assertedBits)[0] = new Asserts_t;
 
-    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_1_t::ProcessSanityCheck, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_1_t::ProcessSanityCheck);
+    MaintainBit(Z);
 }
 
 
@@ -35,6 +36,11 @@ HW_Bus_1_t::HW_Bus_1_t(const QString &name, ClockModule_t *clk, QObject *parent)
 //    ----------------------------------
 void HW_Bus_1_t::MaintainBit(TriState_t state)
 {
+    static int cnt = 0;
+    const int ITER = 25;
+
+    if (cnt < ITER) qDebug() << "Maintaining a bit" << objectName() << state;
+
     TriState_t old;
     QObject *obj = sender();        // do NOT de-reference this pointer!  It may not be valid
 
@@ -43,11 +49,13 @@ void HW_Bus_1_t::MaintainBit(TriState_t state)
 
     if (obj != nullptr) {
         if (state == Z) {
+            if (cnt < ITER) qDebug() << "Removing reference for" << obj;
             auto it = asserts->find(obj);
             if (it != asserts->end()) {
                 asserts->remove(obj);
             }
         } else {
+            if (cnt < ITER) qDebug() << "Adding reference for" << obj;
             auto it = asserts->find(obj);
             if (it != asserts->end()) {
                 (*asserts)[obj] = state;
@@ -58,15 +66,20 @@ void HW_Bus_1_t::MaintainBit(TriState_t state)
     }
 
     // -- if nothing is being asserted, then default to low
-    if (asserts->isEmpty()) state = HIGH;        // pull-up resistor
-    else {
+    if (asserts->isEmpty()) {
+        if (cnt < ITER) qDebug() << "Nothing connected; pulling high" << obj;
+        state = HIGH;        // pull-up resistor
+    } else {
         auto it = asserts->find(obj);
         if (it == asserts->end()) state = asserts->first();
         else state = it.value();
     }
 
+    if (cnt < ITER) qDebug() << "Final Bit State" << state;
+
     // -- emit the proper notifications
     emit SignalBit0Updated(state);
+    cnt ++;
 }
 
 

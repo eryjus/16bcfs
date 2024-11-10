@@ -219,7 +219,7 @@ void ResetModule_t::WireUp(void)
 
 
     // -- inputs into nand IC 3; gate 1
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, nand3, &IC_74xx00_t::ProcessUpdateA1);
+    connect(nand1, &IC_74xx00_t::SignalY3Updated, nand3, &IC_74xx00_t::ProcessUpdateA1);
     connect(nand3, &IC_74xx00_t::SignalY2Updated, nand3, &IC_74xx00_t::ProcessUpdateB1);
 
     // -- inputs into nand3; gate 2
@@ -227,7 +227,7 @@ void ResetModule_t::WireUp(void)
     connect(nor1, &IC_74xx02_t::SignalY2Updated, nand3, &IC_74xx00_t::ProcessUpdateB2);
 
     // -- inputs into nand3; gate 3
-    connect(nand3, &IC_74xx00_t::SignalY4Updated, nand3, &IC_74xx00_t::ProcessUpdateA3);
+    connect(nand1, &IC_74xx00_t::SignalY4Updated, nand3, &IC_74xx00_t::ProcessUpdateA3);
     connect(nand3, &IC_74xx00_t::SignalY4Updated, nand3, &IC_74xx00_t::ProcessUpdateB3);
 
     // -- inputs into nand3; gate 4
@@ -237,16 +237,16 @@ void ResetModule_t::WireUp(void)
 
 
     // -- inputs for nor1; gate 1
-    connect(nand3, &IC_74xx00_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateA1);
-    connect(nand3, &IC_74xx00_t::SignalY4Updated, nor1, &IC_74xx02_t::ProcessUpdateB1);
+    connect(nand3, &IC_74xx00_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateA1);
+    connect(nand3, &IC_74xx00_t::SignalY3Updated, nor1, &IC_74xx02_t::ProcessUpdateB1);
 
     // -- inputs for nor1; gate 2
-    connect(nand2, &IC_74xx00_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateA2);
-    connect(nand3, &IC_74xx00_t::SignalY4Updated, nor1, &IC_74xx02_t::ProcessUpdateB2);
+    connect(nand2, &IC_74xx00_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateA2);
+    connect(nand3, &IC_74xx00_t::SignalY3Updated, nor1, &IC_74xx02_t::ProcessUpdateB2);
 
     // -- inputs for nor1; gate 3
-    connect(nand2, &IC_74xx00_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateA3);
-    connect(nand3, &IC_74xx00_t::SignalY2Updated, nor1, &IC_74xx02_t::ProcessUpdateB3);
+    connect(nand2, &IC_74xx00_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateA3);
+    connect(nand3, &IC_74xx00_t::SignalY1Updated, nor1, &IC_74xx02_t::ProcessUpdateB3);
 
     // -- inputs for nor1; gate 4
     connect(copyHold, &HW_Bus_1_t::SignalBit0Updated, nor1, &IC_74xx02_t::ProcessUpdateA4);
@@ -255,8 +255,8 @@ void ResetModule_t::WireUp(void)
 
 
     // -- inputs for oNand1; gate 1
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, oNand1, &IC_74xx03_t::ProcessUpdateA1);
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, oNand1, &IC_74xx03_t::ProcessUpdateB1);
+    connect(nand3, &IC_74xx00_t::SignalY4Updated, oNand1, &IC_74xx03_t::ProcessUpdateA1);
+    connect(nand3, &IC_74xx00_t::SignalY4Updated, oNand1, &IC_74xx03_t::ProcessUpdateB1);
 
     // -- inputs for oNand1; gate 2
     oNand1->ProcessA2Low();
@@ -275,12 +275,12 @@ void ResetModule_t::WireUp(void)
     // -- inputs for the vibrator
     vib1->ProcessUpdateA1b(LOW);
     connect(copyHold, &HW_Bus_1_t::SignalBit0Updated, vib1, &IC_74xx123_t::ProcessUpdateB1);
-    vib1->ProcessUpdateRD1b(HIGH);
+    vib1->ProcessUpdateRD1b(LOW);
 //TODO    connect(reset, &GUI_MomentarySwitch_t::SignalSwitchChanged, vib1, &IC_74xx123_t::ProcessUpdateRD1b);
 
     vib1->ProcessUpdateA2b(LOW);
     connect(latch, &IC_74xx74_t::SignalQ1bUpdated, vib1, &IC_74xx123_t::ProcessUpdateB2);
-    vib1->ProcessUpdateRD2b(HIGH);
+    vib1->ProcessUpdateRD2b(LOW);
 //TODO    connect(reset, &GUI_MomentarySwitch_t::SignalSwitchChanged, vib1, &IC_74xx123_t::ProcessUpdateRD2b);
 
 

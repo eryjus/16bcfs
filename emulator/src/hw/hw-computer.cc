@@ -386,7 +386,7 @@ void HW_Computer_t::PerformReset(void)
 void HW_Computer_t::FinalWireUp(void)
 {
     // -- Wire up the PC Register
-    connect(reset, &ResetModule_t::SignalReset, pgmpc, &GpRegisterModule_t::ProcessReset);
+    connect(HW_Computer_t::GetRHldBus(), &HW_Bus_1_t::SignalBit0Updated, pgmpc, &GpRegisterModule_t::ProcessReset);
     connect(clock, &ClockModule_t::SignalClockStateLatch, pgmpc, &GpRegisterModule_t::ProcessClockLatch);
     connect(clock, &ClockModule_t::SignalClockStateOutput, pgmpc, &GpRegisterModule_t::ProcessClockOutput);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad);
@@ -401,7 +401,7 @@ void HW_Computer_t::FinalWireUp(void)
 
 
     // -- Wire up the R1 Register
-    connect(reset, &ResetModule_t::SignalReset, r1, &GpRegisterModule_t::ProcessReset);
+    connect(HW_Computer_t::GetRHldBus(), &HW_Bus_1_t::SignalBit0Updated, r1, &GpRegisterModule_t::ProcessReset);
     connect(clock, &ClockModule_t::SignalClockStateLatch, r1, &GpRegisterModule_t::ProcessClockLatch);
     connect(clock, &ClockModule_t::SignalClockStateOutput, r1, &GpRegisterModule_t::ProcessClockOutput);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalR1Load, r1, &GpRegisterModule_t::ProcessLoad);
@@ -416,7 +416,7 @@ void HW_Computer_t::FinalWireUp(void)
 
 
     // -- Wire up the Fetch Register
-    connect(reset, &ResetModule_t::SignalReset, fetch, &FetchRegisterModule_t::ProcessReset);
+    connect(HW_Computer_t::GetRHldBus(), &HW_Bus_1_t::SignalBit0Updated, fetch, &FetchRegisterModule_t::ProcessReset);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalInstructionSuppress, fetch, &FetchRegisterModule_t::ProcessInstructionSuppress);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB);

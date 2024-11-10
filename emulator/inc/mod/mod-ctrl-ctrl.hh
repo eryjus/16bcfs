@@ -49,7 +49,7 @@ private:
 
 
 
-    // -- we need an open drain AND gate for #RHLD
+    // -- we need an open drain AND gate for #CPYHLD
     IC_74xx03_t *oNand1;
 
 
@@ -145,7 +145,7 @@ signals:
     void SignalSramWeUpdated(TriState_t state);             // Qs
     void SignalSramCeUpdated(TriState_t state);             // Qs + #Qc
 
-    void SignalRHld(TriState_t state);                      // #RHLD
+//    void SignalRHld(TriState_t state);                      // #RHLD
     void CopyEeprom(void);
 
 

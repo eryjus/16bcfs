@@ -827,7 +827,7 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 #if defined(PEDANTIC_COPY) && (PEDANTIC_COPY == 1)
     // -- This is still an active low signal!!!
 
-//    DEBUG << "CtrlCtrl: Reset is " << state;
+    DEBUG << "CtrlCtrl: Reset is " << state;
 
     nand1->ProcessUpdateA1(state);          // SR Set
     nand2->ProcessUpdateA4(state);          // #Reset
@@ -840,10 +840,10 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
     }
 #else
     if (state != HIGH) {
-        HW_Bus_1_t *rHld = HW_Computer_t::GetRHldBus();
-        rHld->ProcessUpdateBit0(LOW);
+        HW_Bus_1_t *cpyHld = HW_Computer_t::GetCpyHldBus();
+        cpyHld->ProcessUpdateBit0(LOW);
         emit CopyEeprom();
-        rHld->ProcessUpdateBit0(Z);
+        cpyHld->ProcessUpdateBit0(Z);
     } else {
         // -- disable #WE immediately
         nand2->ProcessB2Low();

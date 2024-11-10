@@ -27,5 +27,5 @@ HW_Pot_t::HW_Pot_t(Qt::Orientation orient) : QSlider(orient)
     label = new QLabel("5");
     label->setAlignment(Qt::AlignHCenter);
 
-    connect(this, &QSlider::valueChanged, this, &HW_Pot_t::ProcessUpdateValue, CNN_TYPE);
+    connect(this, &QSlider::valueChanged, this, &HW_Pot_t::ProcessUpdateValue);
 }

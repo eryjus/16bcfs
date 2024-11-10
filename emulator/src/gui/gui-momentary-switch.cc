@@ -1,30 +1,33 @@
 //===================================================================================================================
-//  gui-dip-switch.cc -- A slider visualizing a dip switch with 2 possible states
+//  gui-mementary-switch.cc -- A button visualizing a pushbutton switch
 //
 //      Copyright (c) 2023-2024 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
-//  2023-Nov-07  Initial  v0.0.1   Reinvisioned initial version
+//  2024-Oct-29  Initial  v0.0.1   Initial version
 //===================================================================================================================
 
 
 #include "16bcfs.hh"
-#include "../moc/gui-dip-switch.moc.cc"
+#include "../moc/gui-momentary-switch.moc.cc"
 
 
 
 //
 // -- Construct a dip switch
 //    ----------------------
-GUI_DipSwitch_t::GUI_DipSwitch_t(QWidget *parent) : QSlider(Qt::Vertical, parent)
+GUI_MomentarySwitch_t::GUI_MomentarySwitch_t(const QString &name, TriState_t p, TriState_t r, QWidget *parent)
+        : QPushButton(name, parent)
 {
-    setMinimum(0);
-    setMaximum(1);
+    whenPressed = p;
+    whenReleased = r;
+    current = whenReleased;
+
     setFixedHeight(25);
 
-    connect(this, &GUI_DipSwitch_t::sliderPressed, this, &GUI_DipSwitch_t::ProcessClick);
-    connect(this, &GUI_DipSwitch_t::valueChanged, this, &GUI_DipSwitch_t::ProcessStateChange);
+    connect(this, &GUI_MomentarySwitch_t::pressed, this, &GUI_MomentarySwitch_t::ProcessClick);
+    connect(this, &GUI_MomentarySwitch_t::released, this, &GUI_MomentarySwitch_t::ProcessRelease);
 }
 

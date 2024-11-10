@@ -13,7 +13,7 @@
 //
 // -- conditionally compile the emulator for a pedantic copy of the EEPROM into SRAM
 //    ------------------------------------------------------------------------------
-#define PEDANTIC_COPY 0
+#define PEDANTIC_COPY 1
 
 
 //
@@ -39,6 +39,18 @@ typedef enum {
     VCC = 1,
     Z = -1,
 } TriState_t;
+
+
+//
+// -- an inline function to get the current clock counter
+//    ---------------------------------------------------
+extern bool debug;
+
+
+//
+// -- A helper macro for debugging
+//    ----------------------------
+#define DEBUG if (debug) qDebug().nospace() << Count() << ": "
 
 
 //
@@ -73,6 +85,10 @@ typedef enum {
 #include <QtWidgets/QStatusBar>
 
 
+
+extern unsigned long Count(void);
+
+
 //
 // --  forward declaration of all classes
 //     ----------------------------------
@@ -86,6 +102,7 @@ class IC_74xx30_t;
 class IC_74xx32_t;
 class IC_74xx74_t;
 class IC_74xx86_t;
+class IC_74xx123_t;
 class IC_74xx138_t;
 class IC_74xx151_t;
 class IC_74xx157_t;
@@ -111,11 +128,13 @@ class HW_MomentarySwitch_t;
 class HW_Oscillator_t;
 class HW_Pot_t;
 class HW_SpdtSwitch_t;
+class HW_PushButton_t;
 
 class GUI_Application_t;
 class GUI_BusLeds_t;
 class GUI_BusTester_t;
 class GUI_DipSwitch_t;
+class GUI_MomentarySwitch_t;
 class GUI_Led_t;
 class GUI_SettingsDialog_t;
 
@@ -131,6 +150,7 @@ class FetchRegisterModule_t;
 class InstructionRegisterModule_t;
 class GpRegisterModule_t;
 class PgmRomModule_t;
+class ResetModule_t;
 
 class CtrlRomModule_t;
 
@@ -155,6 +175,7 @@ const QString lastPgm = "pgm-rom/last-pgm";
 #include "ic/ic-74xx32.hh"
 #include "ic/ic-74xx74.hh"
 #include "ic/ic-74xx86.hh"
+#include "ic/ic-74xx123.hh"
 #include "ic/ic-74xx138.hh"
 #include "ic/ic-74xx151.hh"
 #include "ic/ic-74xx157.hh"
@@ -182,6 +203,7 @@ const QString lastPgm = "pgm-rom/last-pgm";
 #include "mod/mod-instr-register.hh"
 #include "mod/mod-gp-register.hh"
 #include "mod/mod-pgm-rom.hh"
+#include "mod/mod-reset.hh"
 
 #include "planes/ctrl-mid-plane.hh"
 
@@ -203,6 +225,7 @@ const QString lastPgm = "pgm-rom/last-pgm";
 #include "gui/gui-dip-switch.hh"
 #include "gui/gui-led.hh"
 #include "gui/gui-settings-dialog.hh"
+#include "gui/gui-momentary-switch.hh"
 
 
 #define CNN_TYPE ((Qt::ConnectionType)(Qt::DirectConnection | Qt::UniqueConnection))

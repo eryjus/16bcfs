@@ -19,18 +19,18 @@
 //    -------------------------------------------------------------
 IC_74xx03_t::IC_74xx03_t(void)
 {
-    pins[A1] = LOW;
-    pins[B1] = LOW;
-    pins[Y1] = LOW;
-    pins[A2] = LOW;
-    pins[B2] = LOW;
-    pins[Y2] = LOW;
-    pins[Y3] = LOW;
-    pins[B3] = LOW;
-    pins[A3] = LOW;
-    pins[Y4] = LOW;
-    pins[B4] = LOW;
-    pins[A4] = LOW;
+    pins[A1] = HIGH;
+    pins[B1] = HIGH;
+    pins[Y1] = Z;
+    pins[A2] = HIGH;
+    pins[B2] = HIGH;
+    pins[Y2] = Z;
+    pins[Y3] = Z;
+    pins[B3] = HIGH;
+    pins[A3] = HIGH;
+    pins[Y4] = Z;
+    pins[B4] = HIGH;
+    pins[A4] = HIGH;
 }
 
 

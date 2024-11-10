@@ -115,52 +115,52 @@ void InstructionRegisterModule_t::WireUp(void)
 
     // -- Connect the inputs for the LED latches
     led0->ProcessUpdateOE(LOW);
-    connect(instr, &HW_Bus_16_t::SignalBit0Updated, led0, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit1Updated, led0, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit2Updated, led0, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit3Updated, led0, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit4Updated, led0, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit5Updated, led0, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit6Updated, led0, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit7Updated, led0, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);
+    connect(instr, &HW_Bus_16_t::SignalBit0Updated, led0, &IC_74xx574_t::ProcessUpdateD1);
+    connect(instr, &HW_Bus_16_t::SignalBit1Updated, led0, &IC_74xx574_t::ProcessUpdateD2);
+    connect(instr, &HW_Bus_16_t::SignalBit2Updated, led0, &IC_74xx574_t::ProcessUpdateD3);
+    connect(instr, &HW_Bus_16_t::SignalBit3Updated, led0, &IC_74xx574_t::ProcessUpdateD4);
+    connect(instr, &HW_Bus_16_t::SignalBit4Updated, led0, &IC_74xx574_t::ProcessUpdateD5);
+    connect(instr, &HW_Bus_16_t::SignalBit5Updated, led0, &IC_74xx574_t::ProcessUpdateD6);
+    connect(instr, &HW_Bus_16_t::SignalBit6Updated, led0, &IC_74xx574_t::ProcessUpdateD7);
+    connect(instr, &HW_Bus_16_t::SignalBit7Updated, led0, &IC_74xx574_t::ProcessUpdateD8);
     // -- clock handled below
 
 
     led1->ProcessUpdateOE(LOW);
-    connect(instr, &HW_Bus_16_t::SignalBit8Updated, led1, &IC_74xx574_t::ProcessUpdateD1, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBit9Updated, led1, &IC_74xx574_t::ProcessUpdateD2, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBitAUpdated, led1, &IC_74xx574_t::ProcessUpdateD3, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBitBUpdated, led1, &IC_74xx574_t::ProcessUpdateD4, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBitCUpdated, led1, &IC_74xx574_t::ProcessUpdateD5, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBitDUpdated, led1, &IC_74xx574_t::ProcessUpdateD6, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBitEUpdated, led1, &IC_74xx574_t::ProcessUpdateD7, CNN_TYPE);
-    connect(instr, &HW_Bus_16_t::SignalBitFUpdated, led1, &IC_74xx574_t::ProcessUpdateD8, CNN_TYPE);
+    connect(instr, &HW_Bus_16_t::SignalBit8Updated, led1, &IC_74xx574_t::ProcessUpdateD1);
+    connect(instr, &HW_Bus_16_t::SignalBit9Updated, led1, &IC_74xx574_t::ProcessUpdateD2);
+    connect(instr, &HW_Bus_16_t::SignalBitAUpdated, led1, &IC_74xx574_t::ProcessUpdateD3);
+    connect(instr, &HW_Bus_16_t::SignalBitBUpdated, led1, &IC_74xx574_t::ProcessUpdateD4);
+    connect(instr, &HW_Bus_16_t::SignalBitCUpdated, led1, &IC_74xx574_t::ProcessUpdateD5);
+    connect(instr, &HW_Bus_16_t::SignalBitDUpdated, led1, &IC_74xx574_t::ProcessUpdateD6);
+    connect(instr, &HW_Bus_16_t::SignalBitEUpdated, led1, &IC_74xx574_t::ProcessUpdateD7);
+    connect(instr, &HW_Bus_16_t::SignalBitFUpdated, led1, &IC_74xx574_t::ProcessUpdateD8);
     // -- clock handled below
 
     // -- connect up the LEDs
-    connect(led0, &IC_74xx574_t::SignalQ1Updated, bit0, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ2Updated, bit1, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ3Updated, bit2, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ4Updated, bit3, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ5Updated, bit4, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ6Updated, bit5, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ7Updated, bit6, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led0, &IC_74xx574_t::SignalQ8Updated, bit7, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ1Updated, bit8, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ2Updated, bit9, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ3Updated, bitA, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ4Updated, bitB, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ5Updated, bitC, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ6Updated, bitD, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ7Updated, bitE, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
-    connect(led1, &IC_74xx574_t::SignalQ8Updated, bitF, &GUI_Led_t::ProcessStateChange, CNN_TYPE);
+    connect(led0, &IC_74xx574_t::SignalQ1Updated, bit0, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ2Updated, bit1, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ3Updated, bit2, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ4Updated, bit3, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ5Updated, bit4, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ6Updated, bit5, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ7Updated, bit6, &GUI_Led_t::ProcessStateChange);
+    connect(led0, &IC_74xx574_t::SignalQ8Updated, bit7, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ1Updated, bit8, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ2Updated, bit9, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ3Updated, bitA, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ4Updated, bitB, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ5Updated, bitC, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ6Updated, bitD, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ7Updated, bitE, &GUI_Led_t::ProcessStateChange);
+    connect(led1, &IC_74xx574_t::SignalQ8Updated, bitF, &GUI_Led_t::ProcessStateChange);
 
     //
     // -- Finally, we need a clock input
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
-    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &InstructionRegisterModule_t::ProcessClockLatch, CNN_TYPE);
-    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &InstructionRegisterModule_t::ProcessClockOutput, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &InstructionRegisterModule_t::ProcessClockLatch);
+    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &InstructionRegisterModule_t::ProcessClockOutput);
 }
 
 

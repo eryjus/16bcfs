@@ -25,7 +25,7 @@ HW_Bus_16_t::HW_Bus_16_t(const QString &name, ClockModule_t *clk, QObject *paren
 
     for (int i = BIT_0; i <= BIT_F; i ++) (*assertedBits)[i] = new Asserts_t;
 
-    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_16_t::ProcessSanityCheck, CNN_TYPE);
+    connect(clk, &ClockModule_t::SignalSanityCheck, this, &HW_Bus_16_t::ProcessSanityCheck);
 }
 
 

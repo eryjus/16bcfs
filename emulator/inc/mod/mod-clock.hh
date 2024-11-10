@@ -74,6 +74,11 @@ public:
 
 
 public:
+    void StartClock(void);
+
+
+
+public:
     unsigned long GetClockCount(void) const { return clockCount; }
 
 

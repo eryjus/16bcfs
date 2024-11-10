@@ -349,6 +349,8 @@ void ResetModule_t::PowerOnReset(void)
     DEBUG << "==================================";
 //    DEBUG << "Reset: Power on reset";
     reset->ProcessClick();
+    HW_Computer_t::GetClock()->StartClock();
+
     reset->ProcessRelease();
 //    DEBUG << "Reset: Power on Reset complete";
 }

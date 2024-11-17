@@ -467,8 +467,8 @@
       "Net-(U1-Pad3)": "nand1-Y1",
       "Net-(U1-Pad5)": "nor1-Y4",
       "Net-(U11-~{BO})": "counter - ~{BO}",
-      "Net-(U2-Pad3)": "and1-Y1",
-      "Net-(U2-Pad6)": "and1-Y2",
+      "Net-(U2-Pad11)": "and1-Y3",
+      "Net-(U2-Pad8)": "and1-Y3",
       "Net-(U4-Pad2)": "nand2 - Y2",
       "Net-(U4-Pad5)": "nor1 - Y1",
       "Net-(U5A-D)": "nand1 - Y3",
@@ -478,7 +478,7 @@
       "Net-(U8A-Q)": "vib1 - Q1",
       "Net-(U8B-Q)": "vib1 - ~{Q2}",
       "RESETTING": "nand2 - Y1",
-      "RESET_CLK": "or1-Y1",
+      "RESET_CLK": "or1-Y3",
       "RUNNING": "nand3 - Y3"
     },
     "netclass_patterns": []

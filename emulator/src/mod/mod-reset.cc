@@ -156,38 +156,38 @@ void ResetModule_t::WireUp(void)
 
 
     // -- inputs into and1; gate 1
-    // -- A1 below
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateB1);
+    and1->ProcessA1Low();
+    and1->ProcessB1Low();
 
     // -- inputs into and1; gate 2
-    connect(nand1, &IC_74xx00_t::SignalY2Updated, and1, &IC_74xx08_t::ProcessUpdateA2);
-    // -- B2 below
+    and1->ProcessA2Low();
+    and1->ProcessB2Low();
 
     // -- inputs into and1; gate 3
-    and1->ProcessA3Low();
-    and1->ProcessB3Low();
+    // -- A3 below
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateB3);
 
     // -- inputs into and1; gate 4
-    and1->ProcessA4Low();
-    and1->ProcessB4Low();
+    connect(nand1, &IC_74xx00_t::SignalY2Updated, and1, &IC_74xx08_t::ProcessUpdateA4);
+    // -- B2 below
 
 
 
     // -- inputs into or1; gate 1
-    connect(and1, &IC_74xx08_t::SignalY1Updated, or1, &IC_74xx32_t::ProcessUpdateA1);
-    connect(and1, &IC_74xx08_t::SignalY2Updated, or1, &IC_74xx32_t::ProcessUpdateB1);
+    or1->ProcessA1Low();
+    or1->ProcessB1Low();
 
     // -- inputs into or1; gate 2
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateA2);
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateB2);
+    or1->ProcessA2Low();
+    or1->ProcessB2Low();
 
     // -- inputs into or1; gate 3
-    or1->ProcessA3Low();
-    or1->ProcessB3Low();
+    connect(nand3, &IC_74xx00_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateA3);
+    connect(nand3, &IC_74xx00_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateB3);
 
     // -- inputs into or1; gate 4
-    or1->ProcessA4Low();
-    or1->ProcessB4Low();
+    connect(and1, &IC_74xx08_t::SignalY3Updated, or1, &IC_74xx32_t::ProcessUpdateA4);
+    connect(and1, &IC_74xx08_t::SignalY4Updated, or1, &IC_74xx32_t::ProcessUpdateB4);
 
 
 
@@ -313,7 +313,7 @@ void ResetModule_t::WireUp(void)
 //    ----------------------------------------
 void ResetModule_t::ProcessHighSpeedClockLatch(TriState_t state)
 {
-    and1->ProcessUpdateA1(state);
+    and1->ProcessUpdateA3(state);
 }
 
 void ResetModule_t::ProcessHighSpeedClockOutput(TriState_t state)
@@ -327,7 +327,7 @@ void ResetModule_t::ProcessHighSpeedClockOutput(TriState_t state)
 //    ---------------------------------
 void ResetModule_t::ProcessCpuClockLatch(TriState_t state)
 {
-    and1->ProcessUpdateB2(state);
+    and1->ProcessUpdateB4(state);
     latch->ProcessUpdateClockLatch1(state);
     counter->ProcessUpdateDown(state);
 }

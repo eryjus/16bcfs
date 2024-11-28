@@ -21,14 +21,14 @@ IC_74xx123_t::IC_74xx123_t(void)
 {
     pins[A1b] = LOW;
     pins[B1] = HIGH;
-    pins[RD1b] = LOW;
+    pins[RD1b] = HIGH;
     pins[Q1b] = HIGH;
     pins[Q2] = LOW;
     pins[CEXT2] = Z;
     pins[RCEXT2] = LOW;
     pins[A2b] = LOW;
     pins[B2] = HIGH;
-    pins[RD2b] = LOW;
+    pins[RD2b] = HIGH;
     pins[Q2b] = HIGH;
     pins[Q1] = LOW;
     pins[CEXT1] = Z;
@@ -57,8 +57,18 @@ IC_74xx123_t::IC_74xx123_t(void)
 //    -----------------------------------------------
 void IC_74xx123_t::ProcessUpdates1Complete(void)
 {
-    if (pins[A1b] == LOW && pins[B1] == HIGH && pins[RD1b] == LOW) {
-        if (a1 == HIGH || b1 == LOW || rd1 == HIGH) {
+    if (pins[RD1b] == LOW) {
+        pins[Q1] = LOW;
+        pins[Q1b] = HIGH;
+
+        emit SignalQ1Updated(LOW);
+        emit SignalQ1bUpdated(HIGH);
+
+        goto exit;
+    }
+
+    if (pins[A1b] == LOW && pins[B1] == HIGH && pins[RD1b] == HIGH) {
+        if (a1 == HIGH || b1 == LOW || rd1 == LOW) {
             if (!cycling1) {
                 DEBUG << "Triggering vibrator 1";
 
@@ -86,6 +96,7 @@ void IC_74xx123_t::ProcessUpdates1Complete(void)
     DEBUG << "  #rd1: " << rd1 << " -> " << pins[RD1b];
     DEBUG << "    Q1: " << pins[Q1];
 
+exit:
     a1 = pins[A1b];
     b1 = pins[B1];
     rd1 = pins[RD1b];
@@ -97,8 +108,18 @@ void IC_74xx123_t::ProcessUpdates1Complete(void)
 //    -----------------------------------------------
 void IC_74xx123_t::ProcessUpdates2Complete(void)
 {
-    if (pins[A2b] == LOW && pins[B2] == HIGH && pins[RD2b] == LOW) {
-        if (a2 == HIGH || b2 == LOW || rd2 == HIGH) {
+    if (pins[RD2b] == LOW) {
+        pins[Q2] = LOW;
+        pins[Q2b] = HIGH;
+
+        emit SignalQ2Updated(LOW);
+        emit SignalQ2bUpdated(HIGH);
+
+        goto exit;
+    }
+
+    if (pins[A2b] == LOW && pins[B2] == HIGH && pins[RD2b] == HIGH) {
+        if (a2 == HIGH || b2 == LOW || rd2 == LOW) {
             if (!cycling2) {
                 DEBUG << "Triggering vibrator 2";
 
@@ -126,6 +147,7 @@ void IC_74xx123_t::ProcessUpdates2Complete(void)
     DEBUG << "  #rd2: " << rd2 << " -> " << pins[RD2b];
     DEBUG << "    Q2: " << pins[Q2];
 
+exit:
     a2 = pins[A2b];
     b2 = pins[B2];
     rd2 = pins[RD2b];

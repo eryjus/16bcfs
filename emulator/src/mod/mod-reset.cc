@@ -275,22 +275,20 @@ void ResetModule_t::WireUp(void)
     // -- inputs for the vibrator
     vib1->ProcessUpdateA1b(LOW);
     connect(copyHold, &HW_Bus_1_t::SignalBit0Updated, vib1, &IC_74xx123_t::ProcessUpdateB1);
-    vib1->ProcessUpdateRD1b(LOW);
-//TODO    connect(reset, &GUI_MomentarySwitch_t::SignalSwitchChanged, vib1, &IC_74xx123_t::ProcessUpdateRD1b);
+    vib1->ProcessUpdateRD1b(HIGH);
 
     vib1->ProcessUpdateA2b(LOW);
     connect(latch, &IC_74xx74_t::SignalQ1bUpdated, vib1, &IC_74xx123_t::ProcessUpdateB2);
-    vib1->ProcessUpdateRD2b(LOW);
-//TODO    connect(reset, &GUI_MomentarySwitch_t::SignalSwitchChanged, vib1, &IC_74xx123_t::ProcessUpdateRD2b);
+    vib1->ProcessUpdateRD2b(HIGH);
 
 
 
     // -- connect the LED
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, resetting, &GUI_Led_t::ProcessStateChange);
+    connect(or1, &IC_74xx32_t::SignalY3Updated, resetting, &GUI_Led_t::ProcessStateChange);
 
 
     // -- connect the outputs
-    connect(or1, &IC_74xx32_t::SignalY2Updated, this, &ResetModule_t::SignalSystemClock);
+    connect(or1, &IC_74xx32_t::SignalY4Updated, this, &ResetModule_t::SignalSystemClock);
     connect(reset, &GUI_MomentarySwitch_t::SignalSwitchChanged, this, &ResetModule_t::SignalReset);
     connect(nand2, &IC_74xx00_t::SignalY1Updated, this, &ResetModule_t::SignalResetting);
     connect(nand3, &IC_74xx00_t::SignalY1Updated, this, &ResetModule_t::SignalClocking);

@@ -478,7 +478,7 @@
       "Net-(U8A-Q)": "vib1 - Q1",
       "Net-(U8B-Q)": "vib1 - ~{Q2}",
       "RESETTING": "nand2 - Y1",
-      "RESET_CLK": "or1-Y3",
+      "RESET_CLK": "or1-Y4",
       "RUNNING": "nand3 - Y3"
     },
     "netclass_patterns": []
@@ -546,10 +546,6 @@
     [
       "bb61786e-9a6f-43f1-ab22-9986a9d0f989",
       "Power-On Reset"
-    ],
-    [
-      "453050da-f061-41ea-8de6-e62b64039098",
-      "Manual Reset"
     ],
     [
       "cb5fc007-d820-4dc1-be0b-c81376ce29c0",

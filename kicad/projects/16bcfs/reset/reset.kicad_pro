@@ -478,8 +478,8 @@
       "Net-(U8A-Q)": "vib1 - Q1",
       "Net-(U8B-Q)": "vib1 - ~{Q2}",
       "RESETTING": "nand2 - Y1",
-      "RESET_CLK": "or1-Y4",
-      "RUNNING": "nand3 - Y3"
+      "RUNNING": "nand3 - Y3",
+      "SYS_CLK": "or1-Y4"
     },
     "netclass_patterns": []
   },

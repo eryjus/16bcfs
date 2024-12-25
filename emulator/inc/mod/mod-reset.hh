@@ -50,8 +50,8 @@ private:
 
 // -- Inputs into this module from External sources
 public slots:
-    void ProcessHighSpeedClockLatch(TriState_t state);       // TODO: known as SYSCLK on the schematic
-    void ProcessHighSpeedClockOutput(TriState_t state);       // TODO: known as SYSCLK on the schematic
+    void ProcessHighSpeedClockLatch(TriState_t state);
+    void ProcessHighSpeedClockOutput(TriState_t state);
     void ProcessCpuClockLatch(TriState_t state);
     void ProcessCpuClockOutput(TriState_t state);
     void PowerOnReset(void);
@@ -77,7 +77,7 @@ public slots:
 
 // -- Outputs from this module to other destinations
 signals:
-    void SignalSystemClock(TriState_t state);           // TODO: known as the RESET_CLK on the schematic
+    void SignalSystemClock(TriState_t state);
     void SignalReset(TriState_t state);
     void SignalResetting(TriState_t state);
     void SignalClocking(TriState_t state);

@@ -274,8 +274,8 @@ void ResetModule_t::WireUp(void)
 
     // -- inputs for the vibrator
     vib1->ProcessUpdateA1b(LOW);
-    connect(copyHold, &HW_Bus_1_t::SignalBit0Updated, vib1, &IC_74xx123_t::ProcessUpdateB1);
     vib1->ProcessUpdateRD1b(HIGH);
+    connect(copyHold, &HW_Bus_1_t::SignalBit0Updated, vib1, &IC_74xx123_t::ProcessUpdateRD1b);
 
     vib1->ProcessUpdateA2b(LOW);
     connect(latch, &IC_74xx74_t::SignalQ1bUpdated, vib1, &IC_74xx123_t::ProcessUpdateB2);

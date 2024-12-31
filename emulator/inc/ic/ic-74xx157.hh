@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx157.hh -- This header file defines a 74xx157 Quad 2:1 Multiplexer
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

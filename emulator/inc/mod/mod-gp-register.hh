@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-gp-register.hh -- This class represents the entirety of a general purpose register
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This class contains all the components necessary to construct a gp-register module.  Ideally, this class would

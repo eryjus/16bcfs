@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx32.hh -- This header file defines a 74xx32 Quad Two-Input OR Gate IC
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

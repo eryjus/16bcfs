@@ -5,7 +5,7 @@
 //  logical component.  The hope here is that when we get into real hardware, I have a better ability to test,
 //  bodge, and maintain the mid-sized modules.
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

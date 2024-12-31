@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  test-rom.cc -- Construct a test ROM for Control ROM tests
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This program builds a test ROM which can be used for testing different signal combinations on the Control

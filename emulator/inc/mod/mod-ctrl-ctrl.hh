@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-ctrl-ctrl.hh -- This class the control circuit for the Control ROMs, loading from EEPROM to SRAM
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This class contains all the control signals needed to load the Control ROM from EEPROM into SRAM.  Since all

@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx74.cc -- This class implements a 74xx74 Dual D-Type Latch
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

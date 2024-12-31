@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-25lc256.cc -- This header file defines a 25lc256 32KByte SPI EEPROM
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  CRITICAL NOTE:

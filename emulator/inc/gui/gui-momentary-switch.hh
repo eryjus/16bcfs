@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  gui-pushbutton.hh -- A button for a pushbutton switch
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

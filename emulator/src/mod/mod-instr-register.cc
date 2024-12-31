@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-instr-register.cc -- This class represents the entirety of a instruction register
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

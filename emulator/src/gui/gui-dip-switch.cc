@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  gui-dip-switch.cc -- A slider visualizing a dip switch with 2 possible states
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

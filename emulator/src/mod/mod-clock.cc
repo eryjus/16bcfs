@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-clock.cc -- This file implements the entirety of the clock module
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This class contains all the components necessary to construct a clock module.  Ideally, this class would

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-reset.cc -- This class the reset circuit, holding the system in reset until everything is ready
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

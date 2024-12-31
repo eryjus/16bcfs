@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  firmware.ino -- Arduino sketch to program an SPI Serial EEPROM
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This sketch will be used to ferret out the details for programming a 256 Kbit EEPROM using the SPI protocol.
@@ -77,7 +77,7 @@ void Welcome() {
   Serial.begin(115200);
   Serial.println();
   Serial.println(F("Welcome to the SPI 256 Kbit EEPROM Programmer"));
-  Serial.println(F("  Copyright (c) 2023-2024 -- Adam Clark under the Beerware License"));
+  Serial.println(F("  Copyright (c) 2023-2025 -- Adam Clark under the Beerware License"));
   Serial.println(F("  See https://github.com/eryjus/16bcfs/blob/master/LICENSE.md for complete details"));
   Serial.println(F("=================================================================================="));
 }

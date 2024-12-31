@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx165.hh -- This header file defines a 74xx165 Parallel load shift out register
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  Internally, this register will treat the most significant bit as Qh being shited out of the register.

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  sub-demux-3.hh -- This class represents a 3-bit demultiplexer
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  A 2-bit demultiplexer will use this 3-bit one and tie the most significant select digit to ground.

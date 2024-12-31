@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx03.hh -- This header file defines a 74xx03 Quad Two-Input AND Gate IC (Open Drain)
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

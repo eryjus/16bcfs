@@ -1,7 +1,7 @@
 ##===================================================================================================================
 ##  makefile -- a wrapper for tup
 ##
-##        Copyright (c)  2022-2024 -- Adam Clark
+##        Copyright (c)  2023-2025 -- Adam Clark
 ##        Licensed under "THE BEER-WARE LICENSE"
 ##        See License.md for details.
 ##

@@ -1,6 +1,6 @@
 # 16-Bit Computer From Scratch -- Assembler
 
-*Copyright (c)  2022-2024 -- Adam Clark*
+*Copyright (c)  2023-2025 -- Adam Clark*
 
 **"THE BEER-WARE LICENSE" (by Poul-Henning Kamp; Revision 42):**
 

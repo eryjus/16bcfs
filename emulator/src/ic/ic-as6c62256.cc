@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-as5lc62256.cc -- This header file defines an AS6C62256 Parallel SRAM IC
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

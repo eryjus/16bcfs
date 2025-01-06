@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-computer.cc -- This is the foundation of the computer build -- like a backplane or breadboard
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -205,7 +205,7 @@ void HW_Computer_t::BuildGui(void)
     singleton->setWindowTitle(tr("16bcfs Emulator"));
     singleton->show();
 
-    connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessBreak);
+    connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessSignalBreak);
     connect(reset, &ResetModule_t::SignalReset, clock, &ClockModule_t::ProcessReset);
 //    connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
     connect(reset, &ResetModule_t::SignalReset, pgmRom, &PgmRomModule_t::ProcessReset);
@@ -309,13 +309,16 @@ void HW_Computer_t::AllocateComponents(void)
 void HW_Computer_t::WireUp(void)
 {
     // -- connect up the clock
-    connect(clock, &ClockModule_t::SignalClockStateLatch, pgmFlags, &AluFlagsModule_t::ProcessClockLatch);
-    connect(clock, &ClockModule_t::SignalClockStateOutput, pgmFlags, &AluFlagsModule_t::ProcessClockOutput);
+    connect(clock, &ClockModule_t::SignalCpuClockLatch, pgmFlags, &AluFlagsModule_t::ProcessClockLatch);
+    connect(clock, &ClockModule_t::SignalCpuClockOutput, pgmFlags, &AluFlagsModule_t::ProcessClockOutput);
 
-    connect(clock, &ClockModule_t::SignalClockStateOutput, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
+    connect(clock, &ClockModule_t::SignalCpuClockOutput, singleton, &HW_Computer_t::SignalOscillatorStateChanged);
 
     HW_Bus_1_t *cpyHld = HW_Computer_t::GetCpyHldBus();
     connect(cpyHld, &HW_Bus_1_t::SignalBit0Updated, ctrlLogic, &ControlLogic_MidPlane_t::ProcessSanityCheck);
+    connect(cpyHld, &HW_Bus_1_t::SignalBit0Updated, clock, &ClockModule_t::ProcessCpyHld);
+
+    connect(clock, &ClockModule_t::SignalHighSpeedClockLatch, ctrlLogic, &ControlLogic_MidPlane_t::ProcessRawSystemClock);
 }
 
 
@@ -387,8 +390,8 @@ void HW_Computer_t::FinalWireUp(void)
 {
     // -- Wire up the PC Register
     connect(HW_Computer_t::GetRHldBus(), &HW_Bus_1_t::SignalBit0Updated, pgmpc, &GpRegisterModule_t::ProcessReset);
-    connect(clock, &ClockModule_t::SignalClockStateLatch, pgmpc, &GpRegisterModule_t::ProcessClockLatch);
-    connect(clock, &ClockModule_t::SignalClockStateOutput, pgmpc, &GpRegisterModule_t::ProcessClockOutput);
+    connect(clock, &ClockModule_t::SignalCpuClockLatch, pgmpc, &GpRegisterModule_t::ProcessClockLatch);
+    connect(clock, &ClockModule_t::SignalCpuClockOutput, pgmpc, &GpRegisterModule_t::ProcessClockOutput);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCLoad, pgmpc, &GpRegisterModule_t::ProcessLoad);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalPgmPCInc, pgmpc, &GpRegisterModule_t::ProcessInc);
     pgmpc->ProcessDec(LOW);
@@ -402,8 +405,8 @@ void HW_Computer_t::FinalWireUp(void)
 
     // -- Wire up the R1 Register
     connect(HW_Computer_t::GetRHldBus(), &HW_Bus_1_t::SignalBit0Updated, r1, &GpRegisterModule_t::ProcessReset);
-    connect(clock, &ClockModule_t::SignalClockStateLatch, r1, &GpRegisterModule_t::ProcessClockLatch);
-    connect(clock, &ClockModule_t::SignalClockStateOutput, r1, &GpRegisterModule_t::ProcessClockOutput);
+    connect(clock, &ClockModule_t::SignalCpuClockLatch, r1, &GpRegisterModule_t::ProcessClockLatch);
+    connect(clock, &ClockModule_t::SignalCpuClockOutput, r1, &GpRegisterModule_t::ProcessClockOutput);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalR1Load, r1, &GpRegisterModule_t::ProcessLoad);
     r1->ProcessInc(LOW);
     r1->ProcessDec(LOW);

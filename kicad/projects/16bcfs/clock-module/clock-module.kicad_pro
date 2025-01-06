@@ -455,7 +455,12 @@
       "version": 3
     },
     "net_colors": null,
-    "netclass_assignments": null,
+    "netclass_assignments": {
+      "Net-(SW1-A)": "bit3",
+      "Net-(SW2-A)": "bit2",
+      "Net-(SW3-A)": "bit1",
+      "Net-(SW4-A)": "bit0"
+    },
     "netclass_patterns": []
   },
   "pcbnew": {
@@ -503,7 +508,7 @@
       "workbook_filename": ""
     },
     "page_layout_descr_file": "",
-    "plot_directory": "",
+    "plot_directory": "./",
     "spice_adjust_passive_values": false,
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
@@ -517,6 +522,26 @@
     [
       "d0ae44e5-d74e-4df6-bf3d-e0535c5a7785",
       ""
+    ],
+    [
+      "17247281-d2e9-42e8-adcf-c7e0678ef791",
+      "Divided Oscillator"
+    ],
+    [
+      "918aa0c2-012c-4745-a619-00785069a849",
+      "Adjustable Oscilator"
+    ],
+    [
+      "003ae6b6-7615-49ae-a864-65e25920f8ee",
+      "Single Step Oscillator"
+    ],
+    [
+      "6e028883-4888-4a8b-8649-9d662d2e3c2c",
+      "State"
+    ],
+    [
+      "a6ceb695-9aed-4445-8c30-2b58b21d3a82",
+      "Transition"
     ]
   ],
   "text_variables": {}

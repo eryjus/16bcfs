@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx04.cc -- This file implementes the 74xx04 Hex Inverter IC
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

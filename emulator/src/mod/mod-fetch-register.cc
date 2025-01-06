@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-fetch-register.cc -- This class represents the entirety of a fetch register
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -426,8 +426,8 @@ void FetchRegisterModule_t::WireUp(void)
     // -- Finally, we need a clock input
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
-    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &FetchRegisterModule_t::ProcessClockLatch);
-    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &FetchRegisterModule_t::ProcessClockOutput);
+    connect(clk, &ClockModule_t::SignalCpuClockLatch, this, &FetchRegisterModule_t::ProcessClockLatch);
+    connect(clk, &ClockModule_t::SignalCpuClockOutput, this, &FetchRegisterModule_t::ProcessClockOutput);
 }
 
 

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-fetch-register.hh -- This class represents the entirety of the Fetch Register
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This class contains all the components necessary to construct a fetch-register module.  Ideally, this class

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  sub-demux-7.hh -- This class represents a 4-bit demultiplexer
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

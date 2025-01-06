@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx238.cc -- This file implementes the a 74xx238 3:8 Demultiplexer
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

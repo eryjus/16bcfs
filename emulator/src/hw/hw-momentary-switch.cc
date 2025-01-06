@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-momentary-switch.cc -- This class implements a momentary switch
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -32,8 +32,9 @@ HW_MomentarySwitch_t::HW_MomentarySwitch_t(QString name, HighWhen_t w, QWidget *
 //    ---------------------------------------------------
 void HW_MomentarySwitch_t::TriggerFirstUpdate(void)
 {
-    emit pressed();
-    emit released();
+    Release();
+//    emit pressed();
+//    emit released();
 }
 
 

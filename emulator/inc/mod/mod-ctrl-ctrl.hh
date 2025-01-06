@@ -86,7 +86,7 @@ private:
 
 
     // -- We are going to use our own clock for the copy to make sure it's fast
-    HW_Oscillator_t *clock;
+//    HW_Oscillator_t *clock;
 
 
 
@@ -107,6 +107,7 @@ private:
 public slots:
     // -- here are the external inputs into this module: note the instruction will have a bus
     void ProcessResetUpdate(TriState_t state);
+    void ProcessHighSpeedClock(TriState_t state);
 
 
     //

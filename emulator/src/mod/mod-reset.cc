@@ -298,10 +298,10 @@ void ResetModule_t::WireUp(void)
 
 
 
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateLatch, this, &ResetModule_t::ProcessCpuClockLatch);
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateLatch, this, &ResetModule_t::ProcessHighSpeedClockLatch);
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateOutput, this, &ResetModule_t::ProcessCpuClockOutput);
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateOutput, this, &ResetModule_t::ProcessHighSpeedClockOutput);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalCpuClockLatch, this, &ResetModule_t::ProcessCpuClockLatch);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalHighSpeedClockLatch, this, &ResetModule_t::ProcessHighSpeedClockLatch);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalCpuClockOutput, this, &ResetModule_t::ProcessCpuClockOutput);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalHighSpeedClockOutput, this, &ResetModule_t::ProcessHighSpeedClockOutput);
 }
 
 
@@ -343,8 +343,8 @@ void ResetModule_t::ProcessCpuClockOutput(TriState_t state)
 void ResetModule_t::PowerOnReset(void)
 {
     debug = true;
-    DEBUG << "Initialization Complete";
-    DEBUG << "==================================";
+//    DEBUG << "Initialization Complete";
+//    DEBUG << "==================================";
 //    DEBUG << "Reset: Power on reset";
     reset->ProcessClick();
     HW_Computer_t::GetClock()->StartClock();
@@ -362,19 +362,19 @@ void ResetModule_t::SetDebug(void)
 {
     // -- debugging connections
 //    connect(reset, &GUI_MomentarySwitch_t::SignalSwitchChanged, this, &ResetModule_t::DebugReset);
-    connect(nand2, &IC_74xx00_t::SignalY1Updated, this, &ResetModule_t::DebugResetting);
-    connect(HW_Computer_t::GetCpyHldBus(), &HW_Bus_1_t::SignalBit0Updated, this, &ResetModule_t::DebugCPYHLD);
-    connect(nand3, &IC_74xx00_t::SignalY1Updated, this, &ResetModule_t::DebugClocking);
-    connect(latch, &IC_74xx74_t::SignalQ1bUpdated, this, &ResetModule_t::DebugRun);
-    connect(nand3, &IC_74xx00_t::SignalY3Updated, this, &ResetModule_t::DebugRunning);
+//    connect(nand2, &IC_74xx00_t::SignalY1Updated, this, &ResetModule_t::DebugResetting);
+//    connect(HW_Computer_t::GetCpyHldBus(), &HW_Bus_1_t::SignalBit0Updated, this, &ResetModule_t::DebugCPYHLD);
+//    connect(nand3, &IC_74xx00_t::SignalY1Updated, this, &ResetModule_t::DebugClocking);
+//    connect(latch, &IC_74xx74_t::SignalQ1bUpdated, this, &ResetModule_t::DebugRun);
+//    connect(nand3, &IC_74xx00_t::SignalY3Updated, this, &ResetModule_t::DebugRunning);
 //    connect(HW_Computer_t::GetRHldBus(), &HW_Bus_1_t::SignalBit0Updated, this, &ResetModule_t::DebugRHLD);
 
-    connect(vib1, &IC_74xx123_t::SignalQ1Updated, this, &ResetModule_t::DebugVibrator1);
-    connect(vib1, &IC_74xx123_t::SignalQ2Updated, this, &ResetModule_t::DebugVibrator2);
+//    connect(vib1, &IC_74xx123_t::SignalQ1Updated, this, &ResetModule_t::DebugVibrator1);
+//    connect(vib1, &IC_74xx123_t::SignalQ2Updated, this, &ResetModule_t::DebugVibrator2);
 
-    connect(counter, &IC_74xx193_t::SignalBoUpdated, this , &ResetModule_t::DebugCounterBorrow);
+//    connect(counter, &IC_74xx193_t::SignalBoUpdated, this , &ResetModule_t::DebugCounterBorrow);
 //    connect(HW_Computer_t::GetCpyHldBus(), &HW_Bus_1_t::SignalBit0Updated, this, &ResetModule_t::DebugCounterLoad);
-    connect(nand2, &IC_74xx00_t::SignalY3Updated, this, &ResetModule_t::DebugLatchInput);
+//    connect(nand2, &IC_74xx00_t::SignalY3Updated, this, &ResetModule_t::DebugLatchInput);
 }
 
 

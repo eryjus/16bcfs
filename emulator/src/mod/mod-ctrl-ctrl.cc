@@ -83,7 +83,7 @@ CtrlRomCtrlModule_t::CtrlRomCtrlModule_t(void) : QGroupBox("Control ROM Control"
     SetDebug();
     TriggerFirstUpdate();
 
-    clock->setInterval(0);
+//    clock->setInterval(0);
 }
 
 
@@ -112,7 +112,7 @@ void CtrlRomCtrlModule_t::AllocateComponents(void)
     addr8 = new IC_74xx193_t;
     addrC = new IC_74xx193_t;
     shift = new IC_74xx165_t;
-    clock = new HW_Oscillator_t;
+//    clock = new HW_Oscillator_t;
     clk = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::blue);
 
     cpy = new GUI_Led_t(GUI_Led_t::OnWhenHigh, Qt::yellow);
@@ -309,7 +309,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     // -- Gate 1 is used for (Qc * CLK)
     //    -----------------------------
     connect(nand1, &IC_74xx00_t::SignalY1Updated, and1, &IC_74xx08_t::ProcessUpdateA1);             // pin 1: Qc input
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, and1, &IC_74xx08_t::ProcessUpdateB1);      // pin 2: CLK input
+//    connect(clock, &HW_Oscillator_t::SignalStateChanged, and1, &IC_74xx08_t::ProcessUpdateB1);      // pin 2: CLK input
     // pin 3 is the output (Qc * CLK)
 
 
@@ -493,7 +493,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Gate 1 is #CLK
     //    --------------
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, inv1, &IC_74xx04_t::ProcessUpdateA1);      // pin 1: CLK
+//    connect(clock, &HW_Oscillator_t::SignalStateChanged, inv1, &IC_74xx04_t::ProcessUpdateA1);      // pin 1: CLK
     // pin 2 is #CLK
 
 
@@ -620,7 +620,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     bits->ProcessUpdateB(LOW);                                                                      // pin 1: Input B
     // bit 2: output Bb
     // bit 3: output Ba
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, bits, &IC_74xx193_t::ProcessUpdateDown);   // pin 4: Down count clock
+//    connect(clock, &HW_Oscillator_t::SignalStateChanged, bits, &IC_74xx193_t::ProcessUpdateDown);   // pin 4: Down count clock
     bits->ProcessUpdateUp(HIGH);                                                                    // pin 5: Up Count clock (tied high)
     // bit 6: output Bc
     // bit 7: output Bd
@@ -736,7 +736,7 @@ void CtrlRomCtrlModule_t::WireUp(void)
     //
     // -- Wire up the LEDs
     //    ----------------
-    connect(clock, &HW_Oscillator_t::SignalStateChanged, clk, &GUI_Led_t::ProcessStateChange);
+//    connect(clock, &HW_Oscillator_t::SignalStateChanged, clk, &GUI_Led_t::ProcessStateChange);
 
     connect(nand1, &IC_74xx00_t::SignalY1Updated, cpy, &GUI_Led_t::ProcessStateChange);
     connect(nand1, &IC_74xx00_t::SignalY1Updated, oe, &GUI_Led_t::ProcessStateChange);
@@ -827,8 +827,6 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
 #if defined(PEDANTIC_COPY) && (PEDANTIC_COPY == 1)
     // -- This is still an active low signal!!!
 
-    DEBUG << "CtrlCtrl: Reset is " << state;
-
     nand1->ProcessUpdateA1(state);          // SR Set
     nand2->ProcessUpdateA4(state);          // #Reset
     nand2->ProcessUpdateB4(state);          // #Reset
@@ -836,7 +834,7 @@ inline void CtrlRomCtrlModule_t::ProcessResetUpdate(TriState_t state)
     resetting->ProcessUpdatePre2(state);    // set the D-Latch
 
     if (state == HIGH) {
-        clock->StartTimer();
+//        clock->StartTimer();
     }
 #else
     if (state != HIGH) {
@@ -881,5 +879,19 @@ void CtrlRomCtrlModule_t::SetDebug(void)
     // -- indicate the clock counts for copying the ROM
 //    connect(nand1, &IC_74xx00_t::SignalY4Updated, this, &CtrlRomCtrlModule_t::DebugClock);
 }
+
+
+
+//
+// -- handle the high-speed clock input
+//    ---------------------------------
+void CtrlRomCtrlModule_t::ProcessHighSpeedClock(TriState_t state)
+{
+    and1->ProcessUpdateB1(state);
+    inv1->ProcessUpdateA1(state);
+    bits->ProcessUpdateDown(state);
+    clk->ProcessStateChange(state);
+}
+
 
 

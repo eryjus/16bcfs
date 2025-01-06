@@ -257,7 +257,7 @@ inline void ControlLogic_MidPlane_t::ProcessRawSystemClock(TriState_t state)
     //    clock for this.  For now, just leave this commented out and if needed I will come back and address
     //    the missing slot in `ctrlCtrl`.
     //    --------------------------------------------------------------------------------------------------------
-//    ctrlCtrl->ProcessUpdateRawSystemClock(state);
+    ctrlCtrl->ProcessHighSpeedClock(state);
 }
 
 
@@ -670,8 +670,8 @@ void ControlLogic_MidPlane_t::WireUp(void)
     connect(ctrlf, &CtrlRomModule_t::SignalBit0Updated, this, &ControlLogic_MidPlane_t::SignalCtl10Load);
 
 
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateLatch, this, &ControlLogic_MidPlane_t::ProcessCpuClockLatch);
-    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalClockStateOutput, this, &ControlLogic_MidPlane_t::ProcessCpuClockOutput);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalCpuClockLatch, this, &ControlLogic_MidPlane_t::ProcessCpuClockLatch);
+    connect(HW_Computer_t::GetClock(), &ClockModule_t::SignalCpuClockOutput, this, &ControlLogic_MidPlane_t::ProcessCpuClockOutput);
 }
 
 

@@ -37,7 +37,7 @@ private:
 
 
 public slots:
-    void ProcessUpdateBit0(TriState_t state) { qDebug() << sender()->objectName() << state; MaintainBit(state); }
+    void ProcessUpdateBit0(TriState_t state) { MaintainBit(state); }
 
     void ProcessSanityCheck(void);
     void TriggerFirstUpdate(void) { MaintainBit(Z); }

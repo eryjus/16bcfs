@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-bus-1.hh -- This is a generic 1-bit bus
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -37,7 +37,7 @@ private:
 
 
 public slots:
-    void ProcessUpdateBit0(TriState_t state) { qDebug() << sender()->objectName() << state; MaintainBit(state); }
+    void ProcessUpdateBit0(TriState_t state) { MaintainBit(state); }
 
     void ProcessSanityCheck(void);
     void TriggerFirstUpdate(void) { MaintainBit(Z); }

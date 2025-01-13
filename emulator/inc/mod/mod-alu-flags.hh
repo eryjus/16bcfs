@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-alu-flags.hh -- This class represents the entirety of the ALU flags module
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This class contains all the components necessary to construct an ALU flags module.  Ideally, this class would

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  parser.hh -- This is the parser for the assembler
 //
-//      Copyright (c) 2024 - Adam Clark
+//      Copyright (c) 2024-2025  - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

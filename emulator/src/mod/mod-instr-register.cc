@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-instr-register.cc -- This class represents the entirety of a instruction register
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description
@@ -159,8 +159,8 @@ void InstructionRegisterModule_t::WireUp(void)
     // -- Finally, we need a clock input
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
-    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &InstructionRegisterModule_t::ProcessClockLatch);
-    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &InstructionRegisterModule_t::ProcessClockOutput);
+    connect(clk, &ClockModule_t::SignalCpuClockLatch, this, &InstructionRegisterModule_t::ProcessClockLatch);
+    connect(clk, &ClockModule_t::SignalCpuClockOutput, this, &InstructionRegisterModule_t::ProcessClockOutput);
 }
 
 

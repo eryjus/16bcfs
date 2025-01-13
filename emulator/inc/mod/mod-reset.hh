@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  mod-reset.hh -- This class emulates the system-reset circuitry
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //  This class will be used to handle the system reset.  This will be done both on demand and on power-on (first
@@ -26,6 +26,7 @@ class ResetModule_t : public QGroupBox {
 
 
 private:
+    // -- These are the bits that will do all the real work
     IC_74xx00_t *nand1;
     IC_74xx00_t *nand2;
     IC_74xx08_t *and1;

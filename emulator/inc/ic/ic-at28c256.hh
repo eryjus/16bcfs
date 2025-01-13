@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-at28c256.hh -- This header file defines an AT28C256 Parallel EEPROM IC (Read Only)
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

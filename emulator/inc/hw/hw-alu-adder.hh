@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  hw-alu-adder.hh -- This class represents the adder module in the ALU
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

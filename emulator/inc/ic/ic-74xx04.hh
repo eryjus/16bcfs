@@ -1,7 +1,7 @@
 //===================================================================================================================
 // ic-74xx04.hh -- This header file defines a 74xx04 Hex Inverter
 //
-//      Copyright (c) 2023-2024 - Adam Clark
+//      Copyright (c) 2023-2025 - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

@@ -1,7 +1,7 @@
 //===================================================================================================================
 //  binary.hh -- This is the output binary
 //
-//      Copyright (c) 2024 - Adam Clark
+//      Copyright (c) 2024-2025  - Adam Clark
 //      License: Beerware
 //
 //      Date     Tracker  Version  Description

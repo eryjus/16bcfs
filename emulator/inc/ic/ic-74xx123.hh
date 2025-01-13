@@ -81,17 +81,17 @@ public slots:
 
 
 // -- Debugging slots
-//    void DebugA1(TriState_t state) { DEBUG << objectName() << "#A1 " << state; }
-//    void DebugB1(TriState_t state) { DEBUG << objectName() << "B1 " << state; }
-//    void DebugRD1(TriState_t state) { DEBUG << objectName() << "RD1 " << state; }
-//    void DebugQ1(TriState_t state) { DEBUG << objectName() << "Q1 " << state; }
-//    void DebugQ1b(TriState_t state) { DEBUG << objectName() << "#Q1 " << state; }
+    void DebugA1(TriState_t state) { DEBUG << objectName() << "#A1 " << state; }
+    void DebugB1(TriState_t state) { DEBUG << objectName() << "B1 " << state; }
+    void DebugRD1(TriState_t state) { DEBUG << objectName() << "RD1 " << state; }
+    void DebugQ1(TriState_t state) { DEBUG << objectName() << "Q1 " << state; }
+    void DebugQ1b(TriState_t state) { DEBUG << objectName() << "#Q1 " << state; }
     void DebugRC1(void) { DEBUG << "vib1:1 End of pulse 1"; }
-//    void DebugA2(TriState_t state) { DEBUG << objectName() << "#A2 " << state; }
-//    void DebugB2(TriState_t state) { DEBUG << objectName() << "B2 " << state; }
-//    void DebugRD2(TriState_t state) { DEBUG << objectName() << "RD2 " << state; }
-//    void DebugQ2(TriState_t state) { DEBUG << objectName() << "Q2 " << state; }
-//    void DebugQ2b(TriState_t state) { DEBUG << objectName() << "#Q2 " << state; }
+    void DebugA2(TriState_t state) { DEBUG << objectName() << "#A2 " << state; }
+    void DebugB2(TriState_t state) { DEBUG << objectName() << "B2 " << state; }
+    void DebugRD2(TriState_t state) { DEBUG << objectName() << "RD2 " << state; }
+    void DebugQ2(TriState_t state) { DEBUG << objectName() << "Q2 " << state; }
+    void DebugQ2b(TriState_t state) { DEBUG << objectName() << "#Q2 " << state; }
     void DebugRC2(void) { DEBUG << "vib1:2 End of pulse 2"; }
 
 

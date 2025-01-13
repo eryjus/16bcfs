@@ -159,8 +159,8 @@ void InstructionRegisterModule_t::WireUp(void)
     // -- Finally, we need a clock input
     //    ------------------------------
     ClockModule_t *clk = HW_Computer_t::GetClock();
-    connect(clk, &ClockModule_t::SignalClockStateLatch, this, &InstructionRegisterModule_t::ProcessClockLatch);
-    connect(clk, &ClockModule_t::SignalClockStateOutput, this, &InstructionRegisterModule_t::ProcessClockOutput);
+    connect(clk, &ClockModule_t::SignalCpuClockLatch, this, &InstructionRegisterModule_t::ProcessClockLatch);
+    connect(clk, &ClockModule_t::SignalCpuClockOutput, this, &InstructionRegisterModule_t::ProcessClockOutput);
 }
 
 

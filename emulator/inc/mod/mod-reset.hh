@@ -26,6 +26,7 @@ class ResetModule_t : public QGroupBox {
 
 
 private:
+    // -- These are the bits that will do all the real work
     IC_74xx00_t *nand1;
     IC_74xx00_t *nand2;
     IC_74xx08_t *and1;

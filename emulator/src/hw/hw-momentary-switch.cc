@@ -32,8 +32,9 @@ HW_MomentarySwitch_t::HW_MomentarySwitch_t(QString name, HighWhen_t w, QWidget *
 //    ---------------------------------------------------
 void HW_MomentarySwitch_t::TriggerFirstUpdate(void)
 {
-    emit pressed();
-    emit released();
+    Release();
+//    emit pressed();
+//    emit released();
 }
 
 

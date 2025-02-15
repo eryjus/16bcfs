@@ -457,6 +457,7 @@
     "net_colors": null,
     "netclass_assignments": {
       "/Post Reset Clocks/~{RUN}": "latch - ~{Q1}",
+      "CLK": "or1-Y4",
       "CLOCKING": "nand3 - Y1",
       "Net-(SW2-A)": "bit3",
       "Net-(SW3-A)": "bit2",
@@ -478,8 +479,7 @@
       "Net-(U8A-Q)": "vib1 - Q1",
       "Net-(U8B-Q)": "vib1 - ~{Q2}",
       "RESETTING": "nand2 - Y1",
-      "RUNNING": "nand3 - Y3",
-      "SYS_CLK": "or1-Y4"
+      "RUNNING": "nand3 - Y3"
     },
     "netclass_patterns": []
   },

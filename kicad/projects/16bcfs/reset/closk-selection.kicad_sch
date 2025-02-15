@@ -1718,7 +1718,7 @@
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 56b781c8-e63c-4b67-b65a-8ba593fe4e00)
   )
-  (hierarchical_label "SYS_CLK" (shape output) (at 198.12 90.17 0) (fields_autoplaced)
+  (hierarchical_label "CLK" (shape output) (at 198.12 90.17 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 770fbaa6-9e32-42fe-adb2-98cd61c5fd3b)
   )

@@ -128,7 +128,7 @@ void PgmRomModule_t::WireUp(void)
     // -- for the lsb and the msb ICs, wire up the inputs
     HW_Bus_16_t *addr1 = HW_Computer_t::GetAddr1Bus();
 
-    lsb->ProcessUpdateCE(LOW);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, lsb, &IC_at28c256_t::ProcessUpdateCE);
     connect(addr1, &HW_Bus_16_t::SignalBit0Updated, lsb, &IC_at28c256_t::ProcessUpdateA0);
     connect(addr1, &HW_Bus_16_t::SignalBit1Updated, lsb, &IC_at28c256_t::ProcessUpdateA1);
     connect(addr1, &HW_Bus_16_t::SignalBit2Updated, lsb, &IC_at28c256_t::ProcessUpdateA2);
@@ -144,10 +144,10 @@ void PgmRomModule_t::WireUp(void)
     connect(addr1, &HW_Bus_16_t::SignalBitCUpdated, lsb, &IC_at28c256_t::ProcessUpdateA12);
     connect(addr1, &HW_Bus_16_t::SignalBitDUpdated, lsb, &IC_at28c256_t::ProcessUpdateA13);
     connect(addr1, &HW_Bus_16_t::SignalBitEUpdated, lsb, &IC_at28c256_t::ProcessUpdateA14);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, lsb, &IC_at28c256_t::ProcessUpdateOE);
+    // -- OE handled in Process Fetch Suppress
 
 
-    msb->ProcessUpdateCE(LOW);
+    connect(nand1, &IC_74xx00_t::SignalY1Updated, msb, &IC_at28c256_t::ProcessUpdateCE);
     connect(addr1, &HW_Bus_16_t::SignalBit0Updated, msb, &IC_at28c256_t::ProcessUpdateA0);
     connect(addr1, &HW_Bus_16_t::SignalBit1Updated, msb, &IC_at28c256_t::ProcessUpdateA1);
     connect(addr1, &HW_Bus_16_t::SignalBit2Updated, msb, &IC_at28c256_t::ProcessUpdateA2);
@@ -163,7 +163,7 @@ void PgmRomModule_t::WireUp(void)
     connect(addr1, &HW_Bus_16_t::SignalBitCUpdated, msb, &IC_at28c256_t::ProcessUpdateA12);
     connect(addr1, &HW_Bus_16_t::SignalBitDUpdated, msb, &IC_at28c256_t::ProcessUpdateA13);
     connect(addr1, &HW_Bus_16_t::SignalBitEUpdated, msb, &IC_at28c256_t::ProcessUpdateA14);
-    connect(nand1, &IC_74xx00_t::SignalY1Updated, msb, &IC_at28c256_t::ProcessUpdateOE);
+    // -- OE handled in Process Fetch Suppress
 
 
     // -- connect the outputs to the fetch bus
@@ -205,17 +205,5 @@ void PgmRomModule_t::WireUp(void)
     connect(msb, &IC_at28c256_t::SignalDq6Updated, bitE, &GUI_Led_t::ProcessStateChange);
     connect(msb, &IC_at28c256_t::SignalDq7Updated, bitF, &GUI_Led_t::ProcessStateChange);
 }
-
-
-
-//
-// -- Handle a reset signal
-//    ---------------------
-void PgmRomModule_t::ProcessReset(TriState_t state)
-{
-    nand1->ProcessUpdateA1(state);
-    nand1->ProcessUpdateB1(state);
-}
-
 
 

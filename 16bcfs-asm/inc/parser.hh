@@ -82,6 +82,7 @@ public:
     static int GetWarningCount(void) { return warnings; }
     static void IncErrors(void) { errors ++; }
     static void OutputHeader(void);
+    static size_t Count(void);
 };
 
 

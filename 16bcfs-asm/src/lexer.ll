@@ -95,6 +95,7 @@ intpc           { yylval.name = yytext; return TOK_REG; }
 
 adc{SUFFIX}?    { yylval.name = yytext; return TOK_OPCODE; }
 add{SUFFIX}?    { yylval.name = yytext; return TOK_OPCODE; }
+brk{SUFFIX}?    { yylval.name = yytext; return TOK_OPCODE; }
 clc{SUFFIX}?    { yylval.name = yytext; return TOK_OPCODE; }
 decr{SUFFIX}?   { yylval.name = yytext; return TOK_OPCODE; }
 inc{SUFFIX}?    { yylval.name = yytext; return TOK_OPCODE; }

@@ -36,12 +36,13 @@ void Parser_t::Initialize(void)
 
     entry = &table[i];
 
-    while (entry->mnemonic != "zzz") {
+    size_t count = Count();
+
+    for (int i = 0; i < count; i ++) {
+        entry = &table[i];
         char f = entry->mnemonic[0];
 
         if (opcodeStart[f - 'a'] == nullptr) opcodeStart[f - 'a'] = entry;
-
-        entry = &table[++ i];
     }
 }
 
@@ -577,7 +578,11 @@ void Parser_t::OutputHeader(void)
 
     fprintf(fp, "%s", preamble.c_str());
 
-    for (AssemblyTable_t *entry = table; entry->mnemonic != "zzz"; entry ++) {
+    size_t count = Count();
+
+    for (int i = 0; i < count; i ++) {
+        AssemblyTable_t *entry = &table[i];
+
         if (entry->mnemonic.find('-') == std::string::npos) {
             std::string opcode;
             std::string op1;
@@ -640,3 +645,6 @@ void Parser_t::OutputHeader(void)
 
     exit(EXIT_SUCCESS);
 }
+
+
+

@@ -57,7 +57,8 @@ private:
 
 public slots:
     // -- these functions become the external inputs into this module from the backplane
-    void ProcessReset(TriState_t state);
+    void ProcessRHld(TriState_t state) { nand1->ProcessUpdateA1(state); nand1->ProcessUpdateB1(state); }
+    void ProcessFetchSuppress(TriState_t state) { lsb->ProcessUpdateOE(state); msb->ProcessUpdateOE(state); }
 
 
 public:

@@ -104,9 +104,6 @@ private:
     static HW_BusDriver_t *aluBDriver;
 
 
-    static HW_MomentarySwitch_t *brk;
-
-
 private:
     explicit HW_Computer_t(void) {}
     virtual ~HW_Computer_t() {};

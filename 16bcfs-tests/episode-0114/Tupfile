@@ -1,0 +1,1 @@
+: test.s | ../../16bcfs-asm/bin/16bcfs-asm |> ../../16bcfs-asm/bin/16bcfs-asm %f > output.txt |> msb.bin lsb.bin output.txt

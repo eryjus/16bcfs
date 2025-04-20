@@ -12,7 +12,9 @@
 all:
 	tup
 
-test: all
+test: test-asm
+
+test-asm:
 	cd 16bcfs-asm && make -f makefile test
 
 

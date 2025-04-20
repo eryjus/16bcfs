@@ -7,6 +7,27 @@
 //      Copyright (c) 2024-2025  - Adam Clark
 //      License: Beerware
 //
+//  For reference, the table structure is included here:
+//
+//      typedef struct {
+//          std::string mnemonic;
+//          int argCount;
+//          int argMask;
+//          std::string a1Name;
+//          std::string a2Name;
+//          std::string a3Name;
+//          int binCount;
+//          int binMask;        -- where the immed is stuffed
+//          uint16_t b1Val;
+//          uint16_t b2Val;
+//          uint16_t b3Val;
+//          uint16_t b4Val;
+//          uint16_t b5Val;
+//          uint16_t b6Val;
+//          uint16_t b7Val;
+//          uint16_t b8Val;
+//      } AssemblyTable_t;
+//
 //      Date     Tracker  Version  Description
 //  -----------  -------  -------  ---------------------------------------------------------------------------------
 //  18-May-2024  Initial           Initial Version
@@ -18,11 +39,41 @@
 #include "asm.hh"
 
 
+//
+// -- Some helper macros to build the table
+//    -------------------------------------
+#define OPCODE_1W_NO_ARG(s,v) {std::string(s),0,0x00,"","","",1,0x00,v,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000}
+#define OPCODE_1W_JMP_IMMED(s,v)  {std::string(s),1,0x00,"","","",2,0x40,v,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000}
 
 //
 // -- This is the assembly table containing all the instructions
 //    ----------------------------------------------------------
 Parser_t::AssemblyTable_t Parser_t::table[] = {
+// -- brk
+    OPCODE_1W_NO_ARG("brk", 0x0001),
+
+// -- nop
+    OPCODE_1W_NO_ARG("nop", 0x0000),
+
+// -- jmp
+    OPCODE_1W_JMP_IMMED("jmp", 0x0002),
+};
+
+
+
+//
+// -- Calculate the size of the table in element counts
+//    -------------------------------------------------
+size_t Parser_t::Count(void)
+{
+    return sizeof(table) / sizeof(AssemblyTable_t);
+}
+
+
+
+
+#if 0
+// -- Save these entries for later
 // -- adc r1,#
     {"adc",     2, 0x80, "r1",  "",     "",     2, 0x40, 0x01b1, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
     {"adc-al",  2, 0x80, "r1",  "",     "",     2, 0x40, 0x01b1, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
@@ -583,10 +634,6 @@ Parser_t::AssemblyTable_t Parser_t::table[] = {
     {"mov-le",  2, 0xc0, "r1",  "r2",   "",     1, 0x40, 0xf031, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
 
 
-// -- nop
-    {"nop",     0, 0x00, "",    "",     "",     1, 0x00, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
-
-
 // -- stc
     {"stc",     0, 0x00, "",    "",     "",     1, 0x00, 0x000f, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
     {"stc-al",  0, 0x00, "",    "",     "",     1, 0x00, 0x000f, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
@@ -609,5 +656,6 @@ Parser_t::AssemblyTable_t Parser_t::table[] = {
 
 // -- zzz -- last entry in the table
     {"zzz",     0, 0x00, "",    "",     "",     0, 0x00, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000},
-};
 
+
+#endif

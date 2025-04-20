@@ -2,7 +2,7 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
   pull_request:
     branches: [ "master" ]
 
@@ -27,6 +27,6 @@ jobs:
       run: tup init
     - name: Build everything
       run: make
-    - name: Run Pre-Built tests
-      run: make test
+    - name: Run Assembler tests
+      run: make test-asm
 

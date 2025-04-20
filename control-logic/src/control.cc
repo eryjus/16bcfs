@@ -832,6 +832,15 @@ uint128_t GenerateControlSignals(int loc)
     case OPCODE_NOP:
         return nop;
 
+    case OPCODE_BRK:
+        return out | BREAK;
+
+    case OPCODE_JMP_IMM:
+        return FETCH_ASSERT_MAIN | PGM_PC_LOAD | ADDR_BUS_1_ASSERT_PGMPC | FETCH_SUPPRESS;
+
+
+
+#if 0
     case OPCODE_MOV_R1_IMM:
         //
         // -- If we do not meet the condition, we do nothing and skip the next
@@ -1014,15 +1023,6 @@ uint128_t GenerateControlSignals(int loc)
         return out | CARRY_SELECT_1 | ALU_BUS_A_ASSERT_R2 | ALU_BUS_B_ASSERT_NONE | MAIN_BUS_ASSERT_ALU_RESULT |
                 R2_LOAD | PGM_Z_LATCH | PGM_C_LATCH | PGM_N_LATCH | PGM_V_LATCH | PGM_L_LATCH;
 
-    case OPCODE_JMP_IMM:
-        //
-        // -- If we do not meet the condition, we do nothing and skip the next
-        //    word in the instruction stream since it is a constant value
-        //    ----------------------------------------------------------------
-        if (!CONDITION_MET(flags)) return nop | INSTRUCTION_SUPPRESS;
-
-        return FETCH_ASSERT_MAIN | PGM_PC_LOAD | ADDR_BUS_1_ASSERT_PGMPC;
-
     case OPCODE_JMP_R1:
         //
         // -- If we do not meet the condition, we do nothing
@@ -1054,7 +1054,7 @@ uint128_t GenerateControlSignals(int loc)
         if (!CONDITION_MET(flags)) return nop;
 
         return out | STC;
-
+#endif
     case 0xfff:
         return ~((uint128_t)0);
     }

@@ -91,7 +91,6 @@ QWidget *HW_Computer_t::central = nullptr;
 // -- Testing
 HW_BusDriver_t *HW_Computer_t::aluADriver = nullptr;
 HW_BusDriver_t *HW_Computer_t::aluBDriver = nullptr;
-HW_MomentarySwitch_t *HW_Computer_t::brk = nullptr;
 
 
 
@@ -143,8 +142,6 @@ void HW_Computer_t::BuildGui(void)
 
     grid = new QGridLayout;
     grid->setContentsMargins(0, 0, 0, 0);
-
-    grid->addWidget((brk = new HW_MomentarySwitch_t("Break", HW_MomentarySwitch_t::HIGH_WHEN_PRESSED)), 13, 9);
 
     grid->addWidget(new GUI_BusLeds_t("Addr1", addr1), 12, 0, 1, 3);
     grid->addWidget(new GUI_BusLeds_t("Addr2", addr2), 12, 3, 1, 3);
@@ -205,10 +202,9 @@ void HW_Computer_t::BuildGui(void)
     singleton->setWindowTitle(tr("16bcfs Emulator"));
     singleton->show();
 
-    connect(brk, &HW_MomentarySwitch_t::SignalState, clock, &ClockModule_t::ProcessSignalBreak);
     connect(reset, &ResetModule_t::SignalReset, clock, &ClockModule_t::ProcessReset);
-//    connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
-    connect(reset, &ResetModule_t::SignalReset, pgmRom, &PgmRomModule_t::ProcessReset);
+    connect(rHld, &HW_Bus_1_t::SignalBit0Updated, pgmRom, &PgmRomModule_t::ProcessRHld);
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalFetchSuppress, pgmRom, &PgmRomModule_t::ProcessFetchSuppress);
 }
 
 
@@ -327,7 +323,6 @@ void HW_Computer_t::WireUp(void)
 //    -----------------------------------------------
 void HW_Computer_t::TriggerFirstUpdate(void)
 {
-    brk->TriggerFirstUpdate();
     rHld->TriggerFirstUpdate();
     cpyHld->TriggerFirstUpdate();
 }
@@ -424,6 +419,12 @@ void HW_Computer_t::FinalWireUp(void)
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalMainBusAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertMain);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalALUBusBAssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAluB);
     connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalAddrBus2AssertFetch, fetch, &FetchRegisterModule_t::ProcessAssertAddr2);
+
+
+
+    // -- Control signals into the clock
+    connect(ctrlLogic, &ControlLogic_MidPlane_t::SignalBreak, clock, &ClockModule_t::ProcessSignalBreak);
+
 
 
     connect(reset, &ResetModule_t::SignalReset, ctrlLogic, &ControlLogic_MidPlane_t::ProcessReset);
